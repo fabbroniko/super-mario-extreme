@@ -32,20 +32,12 @@ public final class Game extends JFrame {
 	/**
 	 * Contructs the whole game
 	 */
-	private Game() {
+	public Game() {
 		this.setTitle(GAME_NAME);
 		this.setContentPane(new GamePanel(BASE_WINDOW_SIZE, ACTUAL_WINDOW_SIZE));
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.pack();
 		this.setVisible(true);
-	}
-	
-	/**
-	 * Starts the game.
-	 * @param arg main's arguments
-	 */
-	public static void main(final String[] arg) {
-		new Game();
 	}
 }

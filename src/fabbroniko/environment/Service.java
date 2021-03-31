@@ -51,8 +51,8 @@ public final class Service {
 	
 	public static BufferedImage getImageFromName(final String location) {
 		BufferedImage retImage;
-		final Object classLoader = new Object();
-		
+		final Object classLoader = new TemporaryClassPathClass();
+
 		try {
 			retImage = ImageIO.read(classLoader.getClass().getResourceAsStream(location));
 		} catch (Exception e) {
@@ -104,4 +104,14 @@ public final class Service {
 			throw new TileTypeError(index);
 		}
 	}
+
+	/*
+	 * This is a temporary fix for the class loader issue I was having once picking up the project after a while.
+	 * By using new Object to retrieve the class loader i was hitting the Bootstrap Class Loader and therefore I was unable to retrieve resources in my current ClassPath
+	 * By creating this temporary class getClass().getClassLoader() will retrieve the correct Application ClassLoader that
+	 * allows the application to find resources in the application classpath.
+	 *
+	 * TODO Refactor this once the code is cleaner and outside of a static method by using this.getClass() instead of creating an empty object.
+	 */
+	static class TemporaryClassPathClass {}
 }
