@@ -1,4 +1,4 @@
-package fabbroniko.gamestatemanager.gamestates;
+package fabbroniko.scene;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -15,11 +15,11 @@ import fabbroniko.gamestatemanager.IGameStateManager.State;
  * @author fabbroniko
  *
  */
-public final class SettingsState extends AbstractGameState {
+public final class SettingsMenuScene extends AbstractGameState {
 
 	private Background bg;
 	
-	private static final SettingsState MY_INSTANCE = new SettingsState();
+	private static final SettingsMenuScene MY_INSTANCE = new SettingsMenuScene();
 	private int currentSelection;
 	private boolean keyListening;
 	private boolean leftKeyListening;
@@ -54,7 +54,7 @@ public final class SettingsState extends AbstractGameState {
 	 * Constructs a new SettingsState
 	 * @param gsm Reference of the GameStateManager
 	 */
-	private SettingsState() {
+	private SettingsMenuScene() {
 		super();
 	}
 	
@@ -62,7 +62,7 @@ public final class SettingsState extends AbstractGameState {
 	 * Gets the single instance of this class.
 	 * @return The single instance of this class.
 	 */
-	public static SettingsState getInstance() {
+	public static SettingsMenuScene getInstance() {
 		return MY_INSTANCE;
 	}
 

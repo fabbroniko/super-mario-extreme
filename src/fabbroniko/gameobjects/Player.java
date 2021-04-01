@@ -12,8 +12,8 @@ import fabbroniko.environment.TileMap;
 import fabbroniko.gamestatemanager.GameStateManager;
 import fabbroniko.gamestatemanager.AbstractGenericLevel;
 import fabbroniko.gamestatemanager.IGameStateManager.State;
-import fabbroniko.gamestatemanager.gamestates.DeathState;
-import fabbroniko.gamestatemanager.gamestates.SettingsState;
+import fabbroniko.scene.LostScene;
+import fabbroniko.scene.SettingsMenuScene;
 
 /**
  * Represents the player's character.
@@ -51,7 +51,7 @@ public class Player extends AbstractGameObject {
 		super.update();
 		tileMap.setPosition(this.getObjectPosition().getX() - (int) (baseWindowSize.getWidth() / 2), this.getObjectPosition().getY() - (int) (baseWindowSize.getHeight() / 2));
 		if (death) {
-			DeathState.getInstance().incDeath();
+			LostScene.getInstance().incDeath();
 			GameStateManager.getInstance().setState(State.DEATH_STATE);
 		}
 		if (animationJump) {
@@ -96,17 +96,17 @@ public class Player extends AbstractGameObject {
 	
 	@Override
 	public void keyPressed(final KeyEvent e) {
-		if (e.getKeyCode() == SettingsState.getInstance().getLeftKeyCode()) {
+		if (e.getKeyCode() == SettingsMenuScene.getInstance().getLeftKeyCode()) {
 			left = true;
 			animationMove = true;
 			facingRight = false;
 		}
-		if (e.getKeyCode() == SettingsState.getInstance().getRightKey()) {
+		if (e.getKeyCode() == SettingsMenuScene.getInstance().getRightKey()) {
 			right = true;
 			animationMove = true;
 			facingRight = true;
 		}
-		if (e.getKeyCode() == SettingsState.getInstance().getJumpKey() && !jumping && groundHit) {
+		if (e.getKeyCode() == SettingsMenuScene.getInstance().getJumpKey() && !jumping && groundHit) {
 			jumping = true;
 			groundHit = false;
 			currentJump = 0;
@@ -117,15 +117,15 @@ public class Player extends AbstractGameObject {
  
 	@Override
 	public void keyReleased(final KeyEvent e) {
-		if (e.getKeyCode() == SettingsState.getInstance().getLeftKeyCode()) {
+		if (e.getKeyCode() == SettingsMenuScene.getInstance().getLeftKeyCode()) {
 			left = false; 
 			animationMove = false;
 		}
-		if (e.getKeyCode() == SettingsState.getInstance().getRightKey()) {
+		if (e.getKeyCode() == SettingsMenuScene.getInstance().getRightKey()) {
 			right = false; 	
 			animationMove = false;
 		}
-		if (e.getKeyCode() == SettingsState.getInstance().getJumpKey()) {
+		if (e.getKeyCode() == SettingsMenuScene.getInstance().getJumpKey()) {
 			jumping = false;
 		}
 	}

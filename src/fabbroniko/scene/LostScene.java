@@ -1,4 +1,4 @@
-package fabbroniko.gamestatemanager.gamestates;
+package fabbroniko.scene;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -22,9 +22,9 @@ import fabbroniko.resources.Sound;
  * Death Window, it should be shown when the player dies.
  * @author fabbroniko
  */
-public final class DeathState extends AbstractGameState implements MusicListener {
+public final class LostScene extends AbstractGameState implements MusicListener {
 	
-	private static final DeathState MY_INSTANCE = new DeathState();
+	private static final LostScene MY_INSTANCE = new LostScene();
 	
 	private int death;
 	private BufferedImage gameOver;
@@ -38,7 +38,7 @@ public final class DeathState extends AbstractGameState implements MusicListener
 	private static final Color BLACK = new Color(0x00000000);
 	private static final Color WHITE = new Color(0xffffffff);
 
-	private DeathState() {
+	private LostScene() {
 		super();
 	}
 
@@ -46,7 +46,7 @@ public final class DeathState extends AbstractGameState implements MusicListener
 	 * Gets the single instance of this class.
 	 * @return The single instance of this class.
 	 */
-	public static DeathState getInstance() {
+	public static LostScene getInstance() {
 		return MY_INSTANCE;
 	}
 
@@ -66,7 +66,7 @@ public final class DeathState extends AbstractGameState implements MusicListener
 
 	@Override
 	public void update() {
-		if (SettingsState.getInstance().musicIsActive() && musicFinished || !SettingsState.getInstance().musicIsActive() && currentDelayCount > DELAY_MAX_COUNT) {
+		if (SettingsMenuScene.getInstance().musicIsActive() && musicFinished || !SettingsMenuScene.getInstance().musicIsActive() && currentDelayCount > DELAY_MAX_COUNT) {
 			GameStateManager.getInstance().setState(State.LEVEL1_STATE);
 		}
 		currentDelayCount++;

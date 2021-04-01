@@ -1,10 +1,10 @@
 package fabbroniko.gamestatemanager;
 
-import fabbroniko.gamestatemanager.gamestates.DeathState;
-import fabbroniko.gamestatemanager.gamestates.Level1State;
-import fabbroniko.gamestatemanager.gamestates.MenuState;
-import fabbroniko.gamestatemanager.gamestates.SettingsState;
-import fabbroniko.gamestatemanager.gamestates.WinState;
+import fabbroniko.scene.LostScene;
+import fabbroniko.scene.GameScene;
+import fabbroniko.scene.MainMenuScene;
+import fabbroniko.scene.SettingsMenuScene;
+import fabbroniko.scene.WinScene;
 import fabbroniko.main.Drawable;
 
 public interface IGameStateManager extends Drawable{
@@ -19,11 +19,11 @@ public interface IGameStateManager extends Drawable{
 	* Represents a state of the game.
 	*/
 	public enum State {
-		MENU_STATE (MenuState.getInstance()),
-		SETTINGS_STATE (SettingsState.getInstance()),
-		LEVEL1_STATE (Level1State.getInstance()),
-		WIN_STATE (WinState.getInstance()),
-		DEATH_STATE (DeathState.getInstance()),
+		MENU_STATE (MainMenuScene.getInstance()),
+		SETTINGS_STATE (SettingsMenuScene.getInstance()),
+		LEVEL1_STATE (GameScene.getInstance()),
+		WIN_STATE (WinScene.getInstance()),
+		DEATH_STATE (LostScene.getInstance()),
 		NO_STATE (null);
 
 		private final AbstractGameState gameState;

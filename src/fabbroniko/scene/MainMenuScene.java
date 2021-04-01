@@ -1,4 +1,4 @@
-package fabbroniko.gamestatemanager.gamestates;
+package fabbroniko.scene;
 
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
@@ -23,7 +23,7 @@ import fabbroniko.main.KeyDependent;
  * @author fabbroniko
  *
  */
-public final class MenuState extends AbstractGameState {
+public final class MainMenuScene extends AbstractGameState {
 
 	// Oggetti da disegnare sullo schermo.
 	private Background bg;				// Background
@@ -41,8 +41,8 @@ public final class MenuState extends AbstractGameState {
 	private Position startOption;
 	private Position settingsOption;
 	private Position quitOption;
-	
-	private static final MenuState MY_INSTANCE = new MenuState();
+
+	private static final MainMenuScene MY_INSTANCE = new MainMenuScene();
 	
 	// Resources
 	private static final String RES_BG_IMAGE = "/fabbroniko/Menu/BaseBG.png";
@@ -68,15 +68,15 @@ public final class MenuState extends AbstractGameState {
 	 * Constructs a new MenuState
 	 * @param gsm Reference of the GameStateManager
 	 */
-	private MenuState() {
+	private MainMenuScene() {
 		super();
 	}
-	
+
 	/**
 	 * Gets the single instance of this class.
 	 * @return The single instance of this class.
 	 */
-	public static MenuState getInstance() {
+	public static MainMenuScene getInstance() {
 		return MY_INSTANCE;
 	}
 
