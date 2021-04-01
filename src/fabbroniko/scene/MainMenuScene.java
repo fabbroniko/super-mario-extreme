@@ -14,7 +14,6 @@ import fabbroniko.environment.Position;
 import fabbroniko.error.ResourceNotFoundError;
 import fabbroniko.gamestatemanager.AbstractGameState;
 import fabbroniko.gamestatemanager.GameStateManager;
-import fabbroniko.gamestatemanager.IGameStateManager.State;
 import fabbroniko.main.Drawable;
 import fabbroniko.main.KeyDependent;
 
@@ -66,19 +65,11 @@ public final class MainMenuScene extends AbstractGameState {
 	
 	/**
 	 * Constructs a new MenuState
-	 * @param gsm Reference of the GameStateManager
 	 */
-	private MainMenuScene() {
+	public MainMenuScene() {
 		super();
 	}
 
-	/**
-	 * Gets the single instance of this class.
-	 * @return The single instance of this class.
-	 */
-	public static MainMenuScene getInstance() {
-		return MY_INSTANCE;
-	}
 
 	/**
 	 * @see AbstractGameState#init()
@@ -134,9 +125,6 @@ public final class MainMenuScene extends AbstractGameState {
 		AudioManager.getInstance().stopCurrent();
 	}
 
-	/**
-	 * @see Drawable#draw(Graphics2D)
-	 */
 	@Override
 	public void draw(final Graphics2D g, final Dimension gDimension) {		
 		BufferedImage start = null;
@@ -191,9 +179,9 @@ public final class MainMenuScene extends AbstractGameState {
 			break;
 		case KeyEvent.VK_ENTER:
 			if (selectedOption == START_OPTION) {
-				GameStateManager.getInstance().setState(State.LEVEL1_STATE);
+				GameStateManager.getInstance().openScene(new GameScene());
 			} else if (selectedOption == SETTINGS_OPTION) {
-				GameStateManager.getInstance().setState(State.SETTINGS_STATE);
+				GameStateManager.getInstance().openScene(new SettingsMenuScene());
 			} else {
 				GameStateManager.getInstance().exit();
 			}

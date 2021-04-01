@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import fabbroniko.environment.Dimension;
+import fabbroniko.main.Drawable;
 import fabbroniko.main.IView;
 
 /**
@@ -12,7 +13,7 @@ import fabbroniko.main.IView;
  * @author nicola.fabbrini
  *
  */
-public final class GameStateManager implements IGameStateManager, KeyListener {
+public final class GameStateManager implements Drawable, KeyListener {
 	
 	private AbstractGameState currentState;
 	private final Object synchronize;
@@ -45,11 +46,10 @@ public final class GameStateManager implements IGameStateManager, KeyListener {
 	
 	/**
 	 * Sets the specified state that has to be displayed on the screen.
-	 * @param selectedState State that has to be draw on the screen
 	 */
-	public void setState(final State selectedState) {
+	public void openScene(final AbstractGameState abstractGameState) {
 		synchronized (synchronize) {
-			this.currentState = selectedState.getGameState();
+			this.currentState = abstractGameState;
 			currentState.init();
 		}
 	}
@@ -65,7 +65,6 @@ public final class GameStateManager implements IGameStateManager, KeyListener {
 	
 	/**	Draws the current state.
 	 * 	@param g Graphic Context
-	 * 	@see fabbroniko.main.Drawable#draw(Graphics2D)
 	 */
 	public void draw(final Graphics2D g, final Dimension gDimension) {
 		synchronized (synchronize) {

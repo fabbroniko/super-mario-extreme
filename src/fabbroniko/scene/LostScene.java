@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import fabbroniko.Settings;
 import fabbroniko.environment.AudioManager;
 import fabbroniko.environment.AudioManager.MusicListener;
 import fabbroniko.environment.Dimension;
@@ -14,7 +15,6 @@ import fabbroniko.environment.Service;
 import fabbroniko.error.ResourceNotFoundError;
 import fabbroniko.gamestatemanager.AbstractGameState;
 import fabbroniko.gamestatemanager.GameStateManager;
-import fabbroniko.gamestatemanager.IGameStateManager.State;
 import fabbroniko.main.Game;
 import fabbroniko.resources.Sound;
 
@@ -23,10 +23,8 @@ import fabbroniko.resources.Sound;
  * @author fabbroniko
  */
 public final class LostScene extends AbstractGameState implements MusicListener {
-	
-	private static final LostScene MY_INSTANCE = new LostScene();
-	
-	private int death;
+
+	private final int deathCount;
 	private BufferedImage gameOver;
 	private int currentDelayCount;
 	private boolean musicFinished;
@@ -38,16 +36,10 @@ public final class LostScene extends AbstractGameState implements MusicListener 
 	private static final Color BLACK = new Color(0x00000000);
 	private static final Color WHITE = new Color(0xffffffff);
 
-	private LostScene() {
+	public LostScene(final int deathCount) {
 		super();
-	}
 
-	/**
-	 * Gets the single instance of this class.
-	 * @return The single instance of this class.
-	 */
-	public static LostScene getInstance() {
-		return MY_INSTANCE;
+		this.deathCount = deathCount;
 	}
 
 	@Override
@@ -66,17 +58,10 @@ public final class LostScene extends AbstractGameState implements MusicListener 
 
 	@Override
 	public void update() {
-		if (SettingsMenuScene.getInstance().musicIsActive() && musicFinished || !SettingsMenuScene.getInstance().musicIsActive() && currentDelayCount > DELAY_MAX_COUNT) {
-			GameStateManager.getInstance().setState(State.LEVEL1_STATE);
+		if (Settings.GLOBAL_SETTINGS.isMusicActive() && musicFinished || !Settings.GLOBAL_SETTINGS.isMusicActive() && currentDelayCount > DELAY_MAX_COUNT) {
+			GameStateManager.getInstance().openScene(new GameScene());
 		}
 		currentDelayCount++;
-	}
-	
-	/**
-	 * Increments the number of deaths.
-	 */
-	public void incDeath() {
-		death++;
 	}
 
 	@Override
@@ -84,7 +69,7 @@ public final class LostScene extends AbstractGameState implements MusicListener 
 		g.setColor(BLACK);
 		g.fillRect(Service.ORIGIN.getX(), Service.ORIGIN.getY(), gDimension.getWidth(), gDimension.getHeight());
 		g.setColor(WHITE);
-		g.drawString("X " + death, gDimension.getWidth() / 2, gDimension.getHeight() / 2);
+		g.drawString("X " + deathCount, gDimension.getWidth() / 2, gDimension.getHeight() / 2);
 		g.drawImage(gameOver, Service.getXCentredPosition(new Dimension(gameOver.getWidth(), gameOver.getHeight())).getX(), gDimension.getHeight() / 2 - GAME_OVER_OFFSET, null);
 	}
 

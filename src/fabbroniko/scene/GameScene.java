@@ -9,15 +9,12 @@ import fabbroniko.gameobjects.InvisibleBlock;
 import fabbroniko.gameobjects.Player;
 import fabbroniko.gamestatemanager.AbstractGenericLevel;
 import fabbroniko.gamestatemanager.GameStateManager;
-import fabbroniko.gamestatemanager.IGameStateManager.State;
 
 /**
  * First Level.
  * @author fabbroniko
  */
 public final class GameScene extends AbstractGenericLevel {
-	
-	private static final GameScene MY_INSTANCE = new GameScene();
 	
 	private static final String RES_BACKGROUND_IMAGE = "/fabbroniko/Levels/LevelsBG.png";
 	private static final String RES_TILESET_IMAGE = "/fabbroniko/Levels/TileMap.png";
@@ -49,16 +46,8 @@ public final class GameScene extends AbstractGenericLevel {
 	
 	private static final int POSITION_OFFSET = 10;
 	
-	private GameScene() {
+	public GameScene() {
 		super(RES_BACKGROUND_IMAGE, RES_TILESET_IMAGE, RES_MAP_FILE);
-	}
-	
-	/**
-	 * Gets the single instance of this class.
-	 * @return The single instance of this class.
-	 */
-	public static GameScene getInstance() {
-		return MY_INSTANCE;
 	}
 
 	@Override
@@ -98,6 +87,6 @@ public final class GameScene extends AbstractGenericLevel {
 	
 	@Override
 	public void levelFinished() {
-		GameStateManager.getInstance().setState(State.WIN_STATE);
+		GameStateManager.getInstance().openScene(new WinScene());
 	}
 }

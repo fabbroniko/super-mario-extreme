@@ -2,6 +2,7 @@ package fabbroniko.gameobjects;
 
 import java.awt.event.KeyEvent;
 
+import fabbroniko.Settings;
 import fabbroniko.environment.Animation;
 import fabbroniko.environment.Animations;
 import fabbroniko.environment.AudioManager;
@@ -11,16 +12,15 @@ import fabbroniko.environment.ObjectType;
 import fabbroniko.environment.TileMap;
 import fabbroniko.gamestatemanager.GameStateManager;
 import fabbroniko.gamestatemanager.AbstractGenericLevel;
-import fabbroniko.gamestatemanager.IGameStateManager.State;
 import fabbroniko.scene.LostScene;
-import fabbroniko.scene.SettingsMenuScene;
 
 /**
  * Represents the player's character.
  * @author fabbroniko
  */
 public class Player extends AbstractGameObject {
-	
+
+	private int deathCount = 0;
 	private boolean animationJump;
 	private boolean animationMove;
 	private final AbstractGenericLevel currentLevel;
@@ -51,8 +51,7 @@ public class Player extends AbstractGameObject {
 		super.update();
 		tileMap.setPosition(this.getObjectPosition().getX() - (int) (baseWindowSize.getWidth() / 2), this.getObjectPosition().getY() - (int) (baseWindowSize.getHeight() / 2));
 		if (death) {
-			LostScene.getInstance().incDeath();
-			GameStateManager.getInstance().setState(State.DEATH_STATE);
+			GameStateManager.getInstance().openScene(new LostScene(++deathCount));
 		}
 		if (animationJump) {
 			this.currentAnimation = animationJumpA;
@@ -96,17 +95,17 @@ public class Player extends AbstractGameObject {
 	
 	@Override
 	public void keyPressed(final KeyEvent e) {
-		if (e.getKeyCode() == SettingsMenuScene.getInstance().getLeftKeyCode()) {
+		if (e.getKeyCode() == Settings.GLOBAL_SETTINGS.getLeftMovementKeyCode()) {
 			left = true;
 			animationMove = true;
 			facingRight = false;
 		}
-		if (e.getKeyCode() == SettingsMenuScene.getInstance().getRightKey()) {
+		if (e.getKeyCode() == Settings.GLOBAL_SETTINGS.getRightMovementKeyCode()) {
 			right = true;
 			animationMove = true;
 			facingRight = true;
 		}
-		if (e.getKeyCode() == SettingsMenuScene.getInstance().getJumpKey() && !jumping && groundHit) {
+		if (e.getKeyCode() == Settings.GLOBAL_SETTINGS.getJumpKeyCode() && !jumping && groundHit) {
 			jumping = true;
 			groundHit = false;
 			currentJump = 0;
@@ -117,15 +116,15 @@ public class Player extends AbstractGameObject {
  
 	@Override
 	public void keyReleased(final KeyEvent e) {
-		if (e.getKeyCode() == SettingsMenuScene.getInstance().getLeftKeyCode()) {
+		if (e.getKeyCode() == Settings.GLOBAL_SETTINGS.getLeftMovementKeyCode()) {
 			left = false; 
 			animationMove = false;
 		}
-		if (e.getKeyCode() == SettingsMenuScene.getInstance().getRightKey()) {
+		if (e.getKeyCode() == Settings.GLOBAL_SETTINGS.getRightMovementKeyCode()) {
 			right = false; 	
 			animationMove = false;
 		}
-		if (e.getKeyCode() == SettingsMenuScene.getInstance().getJumpKey()) {
+		if (e.getKeyCode() == Settings.GLOBAL_SETTINGS.getJumpKeyCode()) {
 			jumping = false;
 		}
 	}

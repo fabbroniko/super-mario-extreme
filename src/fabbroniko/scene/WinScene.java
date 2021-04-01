@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import fabbroniko.Settings;
 import fabbroniko.environment.AudioManager;
 import fabbroniko.environment.Dimension;
 import fabbroniko.environment.Service;
@@ -14,7 +15,6 @@ import fabbroniko.environment.AudioManager.MusicListener;
 import fabbroniko.error.ResourceNotFoundError;
 import fabbroniko.gamestatemanager.AbstractGameState;
 import fabbroniko.gamestatemanager.GameStateManager;
-import fabbroniko.gamestatemanager.IGameStateManager.State;
 import fabbroniko.main.Game;
 import fabbroniko.resources.Sound;
 
@@ -25,8 +25,7 @@ import fabbroniko.resources.Sound;
 public final class WinScene extends AbstractGameState implements MusicListener {
 
 	private BufferedImage win;
-	
-	private static final WinScene MY_INSTANCE = new WinScene();
+
 	private int currentDelayCount;
 	private boolean musicFinished;
 	
@@ -35,18 +34,6 @@ public final class WinScene extends AbstractGameState implements MusicListener {
 	private static final int DELAY_MAX_COUNT = TWO_SECONDS / Game.FPS_MILLIS;
 	private static final Color BLACK = new Color(0x00000000);
 	private static final int WIN_OFFSET = 50;
-	
-	private WinScene() {
-		super();
-	}
-	
-	/**
-	 * Gets the single instance of this class.
-	 * @return The single instance of this class.
-	 */
-	public static WinScene getInstance() {
-		return MY_INSTANCE;
-	}
 	
 	@Override
 	public void init() {
@@ -66,8 +53,8 @@ public final class WinScene extends AbstractGameState implements MusicListener {
 	public void update() {
 		super.update();
 		
-		if (SettingsMenuScene.getInstance().musicIsActive() && musicFinished || !SettingsMenuScene.getInstance().musicIsActive() && currentDelayCount > DELAY_MAX_COUNT) {
-			GameStateManager.getInstance().setState(State.MENU_STATE);
+		if (Settings.GLOBAL_SETTINGS.isMusicActive() && musicFinished || !Settings.GLOBAL_SETTINGS.isMusicActive() && currentDelayCount > DELAY_MAX_COUNT) {
+			GameStateManager.getInstance().openScene(new MainMenuScene());
 		}
 		currentDelayCount++;
 	}

@@ -14,8 +14,8 @@ import fabbroniko.environment.Service;
 import fabbroniko.environment.TileMap;
 import fabbroniko.gameobjects.AbstractGameObject;
 import fabbroniko.gameobjects.GameObjectBuilder;
-import fabbroniko.gamestatemanager.IGameStateManager.State;
-import fabbroniko.resources.Sound; 
+import fabbroniko.resources.Sound;
+import fabbroniko.scene.MainMenuScene;
 
 /**
  * Represents a generic level.
@@ -95,7 +95,7 @@ public abstract class AbstractGenericLevel extends AbstractGameState {
 	@Override
 	public void keyPressed(final KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			GameStateManager.getInstance().setState(State.MENU_STATE);
+			GameStateManager.getInstance().openScene(new MainMenuScene());
 			return;
 		}
 		for (final AbstractGameObject i:gameObjects) {
@@ -116,7 +116,6 @@ public abstract class AbstractGenericLevel extends AbstractGameState {
 	
 	/**
 	 * Adds a new {@link AbstractGameObject AbstractGameObject} in this level.
-	 * @param obj {@link AbstractGameObject AbstractGameObject} to be added.
 	 */
 	protected void addNewObject(final Class<? extends AbstractGameObject> objectClass, final Position position) {
 		gameObjects.add(gameObjectBuilder.newInstance(objectClass).setPosition(position).getInstance());

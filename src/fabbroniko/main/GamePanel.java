@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import fabbroniko.environment.Dimension;
 import fabbroniko.environment.Service;
 import fabbroniko.gamestatemanager.GameStateManager;
-import fabbroniko.gamestatemanager.IGameStateManager.State;
+import fabbroniko.scene.MainMenuScene;
 
 /**
  * Panel where the game will be drawn.
@@ -43,7 +43,7 @@ public final class GamePanel extends JPanel implements Runnable, IView {
 		this.requestFocus();
 		
 		gameStateManager = GameStateManager.setInstance(this);
-		gameStateManager.setState(State.MENU_STATE);
+		gameStateManager.openScene(new MainMenuScene());
 	}
 	
 	/**
