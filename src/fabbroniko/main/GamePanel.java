@@ -10,6 +10,7 @@ import fabbroniko.environment.Dimension;
 import fabbroniko.environment.Service;
 import fabbroniko.gamestatemanager.GameStateManager;
 import fabbroniko.scene.MainMenuScene;
+import fabbroniko.scene.WinScene;
 
 /**
  * Panel where the game will be drawn.
