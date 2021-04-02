@@ -5,7 +5,7 @@ import java.awt.*;
 import fabbroniko.environment.AudioManager;
 import fabbroniko.environment.Dimension;
 import fabbroniko.environment.Service;
-import fabbroniko.gamestatemanager.AbstractGameState;
+import fabbroniko.gamestatemanager.AbstractStaticScene;
 import fabbroniko.gamestatemanager.GameStateManager;
 import fabbroniko.resources.Sound;
 
@@ -13,7 +13,7 @@ import fabbroniko.resources.Sound;
  * Death Window, it should be shown when the player dies.
  * @author fabbroniko
  */
-public final class LostScene extends AbstractGameState {
+public final class LostScene extends AbstractStaticScene {
 
 	private static final String GAME_OVER_MAIN_TEXT = "Game Over";
 	private static final String DEATH_COUNT_TEXT = "Death count: ";
@@ -22,7 +22,6 @@ public final class LostScene extends AbstractGameState {
 	private final int deathCount;
 
 	private long initTime;
-	private boolean drawn = false;
 
 	public LostScene(final int deathCount) {
 		super();
@@ -51,10 +50,7 @@ public final class LostScene extends AbstractGameState {
 	 * @param gDimension The dimensions of the canvas.
 	 */
 	@Override
-	public void draw(final Graphics2D g, final Dimension gDimension) {
-		if(drawn)
-			return;
-
+	protected void drawOnce(final Graphics2D g, final Dimension gDimension) {
 		// Filling the whole canvas with Black
 		g.setColor(Color.BLACK);
 		g.fillRect(Service.ORIGIN.getX(), Service.ORIGIN.getY(), gDimension.getWidth(), gDimension.getHeight());
@@ -90,10 +86,5 @@ public final class LostScene extends AbstractGameState {
 
 		// Prevents this scene to be rendered again for subsequent frames and resets antialiasing
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-		drawn = true;
-	}
-
-	private int getCenteredXPositionForString(final String text, final Graphics2D g, final Dimension dimension) {
-		return (dimension.getWidth() - g.getFontMetrics().stringWidth(text)) / 2;
 	}
 }

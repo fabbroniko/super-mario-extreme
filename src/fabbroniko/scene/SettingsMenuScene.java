@@ -7,7 +7,7 @@ import java.awt.event.KeyEvent;
 import fabbroniko.Settings;
 import fabbroniko.environment.Background;
 import fabbroniko.environment.Dimension;
-import fabbroniko.gamestatemanager.AbstractGameState;
+import fabbroniko.gamestatemanager.AbstractScene;
 import fabbroniko.gamestatemanager.GameStateManager;
 
 /**
@@ -15,7 +15,7 @@ import fabbroniko.gamestatemanager.GameStateManager;
  * @author fabbroniko
  *
  */
-public final class SettingsMenuScene extends AbstractGameState {
+public final class SettingsMenuScene extends AbstractScene {
 
 	private Background bg;
 

@@ -12,9 +12,8 @@ import fabbroniko.environment.Dimension;
 import fabbroniko.environment.Service;
 import fabbroniko.environment.Position;
 import fabbroniko.error.ResourceNotFoundError;
-import fabbroniko.gamestatemanager.AbstractGameState;
+import fabbroniko.gamestatemanager.AbstractScene;
 import fabbroniko.gamestatemanager.GameStateManager;
-import fabbroniko.main.Drawable;
 import fabbroniko.main.KeyDependent;
 
 /**
@@ -22,7 +21,7 @@ import fabbroniko.main.KeyDependent;
  * @author fabbroniko
  *
  */
-public final class MainMenuScene extends AbstractGameState {
+public final class MainMenuScene extends AbstractScene {
 
 	// Oggetti da disegnare sullo schermo.
 	private Background bg;				// Background
@@ -72,7 +71,7 @@ public final class MainMenuScene extends AbstractGameState {
 
 
 	/**
-	 * @see AbstractGameState#init()
+	 * @see AbstractScene#init()
 	 */
 	@Override
 	public void init() {

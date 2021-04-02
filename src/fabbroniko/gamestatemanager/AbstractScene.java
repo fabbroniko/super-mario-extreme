@@ -7,15 +7,8 @@ import fabbroniko.environment.Dimension;
 import fabbroniko.main.Drawable;
 import fabbroniko.main.KeyDependent;
 
-/**
- * Represents a generic state.
- * @author nicola.fabbrini
- */
-public abstract class AbstractGameState implements Drawable, KeyDependent {
-	
-	/**
-	 * Initializes the current gameState.
-	 */
+public abstract class AbstractScene implements Drawable, KeyDependent {
+
 	public abstract void init();
 	
 	@Override
