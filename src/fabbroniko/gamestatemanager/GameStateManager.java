@@ -15,7 +15,7 @@ import fabbroniko.main.IView;
  */
 public final class GameStateManager implements Drawable, KeyListener {
 	
-	private AbstractGameState currentState;
+	private AbstractScene currentState;
 	private final Object synchronize;
 	private static IView view;
 	
@@ -47,9 +47,9 @@ public final class GameStateManager implements Drawable, KeyListener {
 	/**
 	 * Sets the specified state that has to be displayed on the screen.
 	 */
-	public void openScene(final AbstractGameState abstractGameState) {
+	public void openScene(final AbstractScene abstractScene) {
 		synchronized (synchronize) {
-			this.currentState = abstractGameState;
+			this.currentState = abstractScene;
 			currentState.init();
 		}
 	}

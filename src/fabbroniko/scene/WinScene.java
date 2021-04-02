@@ -13,7 +13,7 @@ import fabbroniko.environment.Dimension;
 import fabbroniko.environment.Service;
 import fabbroniko.environment.AudioManager.MusicListener;
 import fabbroniko.error.ResourceNotFoundError;
-import fabbroniko.gamestatemanager.AbstractGameState;
+import fabbroniko.gamestatemanager.AbstractScene;
 import fabbroniko.gamestatemanager.GameStateManager;
 import fabbroniko.main.GameWindow;
 import fabbroniko.resources.Sound;
@@ -22,7 +22,7 @@ import fabbroniko.resources.Sound;
  * Win Window, it should be shown when the player finishes every level.
  * @author fabbroniko
  */
-public final class WinScene extends AbstractGameState implements MusicListener {
+public final class WinScene extends AbstractScene implements MusicListener {
 
 	private BufferedImage win;
 

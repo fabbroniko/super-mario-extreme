@@ -22,7 +22,7 @@ import fabbroniko.scene.MainMenuScene;
  * @author fabbroniko
  *
  */
-public abstract class AbstractGenericLevel extends AbstractGameState {
+public abstract class AbstractGenericLevel extends AbstractScene {
 	
 	private Background bg;
 	

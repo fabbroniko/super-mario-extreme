@@ -5,7 +5,7 @@ import java.awt.*;
 import fabbroniko.environment.AudioManager;
 import fabbroniko.environment.Dimension;
 import fabbroniko.environment.Service;
-import fabbroniko.gamestatemanager.AbstractGameState;
+import fabbroniko.gamestatemanager.AbstractScene;
 import fabbroniko.gamestatemanager.GameStateManager;
 import fabbroniko.resources.Sound;
 
@@ -13,7 +13,7 @@ import fabbroniko.resources.Sound;
  * Death Window, it should be shown when the player dies.
  * @author fabbroniko
  */
-public final class LostScene extends AbstractGameState {
+public final class LostScene extends AbstractScene {
 
 	private static final String GAME_OVER_MAIN_TEXT = "Game Over";
 	private static final String DEATH_COUNT_TEXT = "Death count: ";

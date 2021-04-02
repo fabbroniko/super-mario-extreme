@@ -11,7 +11,7 @@ import fabbroniko.main.KeyDependent;
  * Represents a generic state.
  * @author nicola.fabbrini
  */
-public abstract class AbstractGameState implements Drawable, KeyDependent {
+public abstract class AbstractScene implements Drawable, KeyDependent {
 	
 	/**
 	 * Initializes the current gameState.
