@@ -12,7 +12,7 @@ import javax.swing.JFrame;
  * @author fabbroniko 
  *
  */
-public final class Game extends JFrame {
+public final class GameWindow extends JFrame {
 
 	private static final double SCALE_DIVISION = 2;
 	private static final String GAME_NAME = "Super Mario Bros Extreme Edition";
@@ -32,7 +32,7 @@ public final class Game extends JFrame {
 	/**
 	 * Contructs the whole game
 	 */
-	public Game() {
+	public GameWindow() {
 		this.setTitle(GAME_NAME);
 		this.setContentPane(new GamePanel(BASE_WINDOW_SIZE, ACTUAL_WINDOW_SIZE));
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

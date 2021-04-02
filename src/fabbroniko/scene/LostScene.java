@@ -7,31 +7,26 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import fabbroniko.Settings;
 import fabbroniko.environment.AudioManager;
-import fabbroniko.environment.AudioManager.MusicListener;
 import fabbroniko.environment.Dimension;
 import fabbroniko.environment.Service;
 import fabbroniko.error.ResourceNotFoundError;
 import fabbroniko.gamestatemanager.AbstractGameState;
 import fabbroniko.gamestatemanager.GameStateManager;
-import fabbroniko.main.Game;
 import fabbroniko.resources.Sound;
 
 /**
  * Death Window, it should be shown when the player dies.
  * @author fabbroniko
  */
-public final class LostScene extends AbstractGameState implements MusicListener {
+public final class LostScene extends AbstractGameState {
 
 	private final int deathCount;
 	private BufferedImage gameOver;
-	private int currentDelayCount;
-	private boolean musicFinished;
+	private long initTime;
 	
 	private static final String RES_GAMEOVER_IMAGE = "/fabbroniko/Menu/GameOver.png";
-	private static final int TWO_SECONDS = 2000;
-	private static final int DELAY_MAX_COUNT = TWO_SECONDS / Game.FPS_MILLIS;
+	private static final int SCENE_DURATION_MILLISECONDS = 3000;
 	private static final int GAME_OVER_OFFSET = 50;
 	private static final Color BLACK = new Color(0x00000000);
 	private static final Color WHITE = new Color(0xffffffff);
@@ -49,19 +44,17 @@ public final class LostScene extends AbstractGameState implements MusicListener 
 		} catch (IOException e) {
 			throw new ResourceNotFoundError(RES_GAMEOVER_IMAGE);
 		}
-		
-		musicFinished = false;
-		AudioManager.getInstance().setMusicListener(this);
+
 		AudioManager.getInstance().playSound(Sound.getSoundFromName("GameOverSound"));
-		currentDelayCount = 0;
+		initTime = System.currentTimeMillis();
 	}
 
 	@Override
 	public void update() {
-		if (Settings.GLOBAL_SETTINGS.isMusicActive() && musicFinished || !Settings.GLOBAL_SETTINGS.isMusicActive() && currentDelayCount > DELAY_MAX_COUNT) {
+		if((System.currentTimeMillis() - initTime) > SCENE_DURATION_MILLISECONDS) {
+			AudioManager.getInstance().stopCurrent();
 			GameStateManager.getInstance().openScene(new GameScene());
 		}
-		currentDelayCount++;
 	}
 
 	@Override
@@ -71,10 +64,5 @@ public final class LostScene extends AbstractGameState implements MusicListener 
 		g.setColor(WHITE);
 		g.drawString("X " + deathCount, gDimension.getWidth() / 2, gDimension.getHeight() / 2);
 		g.drawImage(gameOver, Service.getXCentredPosition(new Dimension(gameOver.getWidth(), gameOver.getHeight())).getX(), gDimension.getHeight() / 2 - GAME_OVER_OFFSET, null);
-	}
-
-	@Override
-	public void onStop() {
-		musicFinished = true;
 	}
 }

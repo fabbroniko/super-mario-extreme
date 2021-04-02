@@ -15,7 +15,7 @@ import fabbroniko.environment.AudioManager.MusicListener;
 import fabbroniko.error.ResourceNotFoundError;
 import fabbroniko.gamestatemanager.AbstractGameState;
 import fabbroniko.gamestatemanager.GameStateManager;
-import fabbroniko.main.Game;
+import fabbroniko.main.GameWindow;
 import fabbroniko.resources.Sound;
 
 /**
@@ -31,7 +31,7 @@ public final class WinScene extends AbstractGameState implements MusicListener {
 	
 	private static final String RES_WIN_IMAGE = "/fabbroniko/Menu/WinString.png";
 	private static final int TWO_SECONDS = 2000;
-	private static final int DELAY_MAX_COUNT = TWO_SECONDS / Game.FPS_MILLIS;
+	private static final int DELAY_MAX_COUNT = TWO_SECONDS / GameWindow.FPS_MILLIS;
 	private static final Color BLACK = new Color(0x00000000);
 	private static final int WIN_OFFSET = 50;
 	

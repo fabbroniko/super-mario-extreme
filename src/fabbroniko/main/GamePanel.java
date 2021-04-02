@@ -78,7 +78,7 @@ public final class GamePanel extends JPanel implements Runnable, IView {
 			this.draw(imgGraphics);
 			this.repaint();
 
-			wait = Game.FPS_MILLIS - (System.currentTimeMillis() - currentTime);
+			wait = GameWindow.FPS_MILLIS - (System.currentTimeMillis() - currentTime);
 			if (wait < 0) { 
 				wait = 0; 
 			}

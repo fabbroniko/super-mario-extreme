@@ -1,6 +1,6 @@
 package fabbroniko;
 
-import fabbroniko.main.Game;
+import fabbroniko.main.GameWindow;
 
 public class Application {
 
@@ -9,6 +9,6 @@ public class Application {
      * @param args No arguments are used for this application.
      */
     public static void main(final String[] args) {
-        new Game();
+        new GameWindow();
     }
 }
