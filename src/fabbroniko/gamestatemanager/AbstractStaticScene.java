@@ -19,8 +19,4 @@ public abstract class AbstractStaticScene extends AbstractScene {
     }
 
     protected abstract void drawOnce(final Graphics2D g, final Dimension d);
-
-    protected int getCenteredXPositionForString(final String text, final Graphics2D g, final Dimension dimension) {
-        return (dimension.getWidth() - g.getFontMetrics().stringWidth(text)) / 2;
-    }
 }

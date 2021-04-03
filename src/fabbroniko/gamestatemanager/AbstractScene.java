@@ -22,4 +22,12 @@ public abstract class AbstractScene implements Drawable, KeyDependent {
 	
 	@Override
 	public void keyReleased(final KeyEvent e) {}
+
+	protected int getCenteredXPositionForString(final String text, final Graphics2D g, final Dimension dimension) {
+		return (dimension.getWidth() - g.getFontMetrics().stringWidth(text)) / 2;
+	}
+
+	protected int getCenteredXPositionFromSize(final Dimension canvasDimension, final int secondaryWidth) {
+		return (canvasDimension.getWidth() - secondaryWidth) / 2;
+	}
 }
