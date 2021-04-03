@@ -95,17 +95,17 @@ public class Player extends AbstractGameObject {
 	
 	@Override
 	public void keyPressed(final KeyEvent e) {
-		if (e.getKeyCode() == Settings.GLOBAL_SETTINGS.getLeftMovementKeyCode()) {
+		if (e.getKeyCode() == GameManager.getInstance().getSettings().getLeftMovementKeyCode()) {
 			left = true;
 			animationMove = true;
 			facingRight = false;
 		}
-		if (e.getKeyCode() == Settings.GLOBAL_SETTINGS.getRightMovementKeyCode()) {
+		if (e.getKeyCode() == GameManager.getInstance().getSettings().getRightMovementKeyCode()) {
 			right = true;
 			animationMove = true;
 			facingRight = true;
 		}
-		if (e.getKeyCode() == Settings.GLOBAL_SETTINGS.getJumpKeyCode() && !jumping && groundHit) {
+		if (e.getKeyCode() == GameManager.getInstance().getSettings().getJumpKeyCode() && !jumping && groundHit) {
 			jumping = true;
 			groundHit = false;
 			currentJump = 0;
@@ -116,15 +116,15 @@ public class Player extends AbstractGameObject {
  
 	@Override
 	public void keyReleased(final KeyEvent e) {
-		if (e.getKeyCode() == Settings.GLOBAL_SETTINGS.getLeftMovementKeyCode()) {
+		if (e.getKeyCode() == GameManager.getInstance().getSettings().getLeftMovementKeyCode()) {
 			left = false; 
 			animationMove = false;
 		}
-		if (e.getKeyCode() == Settings.GLOBAL_SETTINGS.getRightMovementKeyCode()) {
+		if (e.getKeyCode() == GameManager.getInstance().getSettings().getRightMovementKeyCode()) {
 			right = false; 	
 			animationMove = false;
 		}
-		if (e.getKeyCode() == Settings.GLOBAL_SETTINGS.getJumpKeyCode()) {
+		if (e.getKeyCode() == GameManager.getInstance().getSettings().getJumpKeyCode()) {
 			jumping = false;
 		}
 	}

@@ -4,15 +4,13 @@ import java.awt.event.KeyEvent;
 
 public class Settings {
 
-    public static final Settings GLOBAL_SETTINGS = new Settings();
-
     private boolean musicActive;
     private boolean effectsAudioActive;
     private int rightMovementKeyCode;
     private int leftMovementKeyCode;
     private int jumpKeyCode;
 
-    private Settings() {
+    public Settings() {
         this.musicActive = true;
         this.effectsAudioActive = true;
         this.rightMovementKeyCode = KeyEvent.VK_RIGHT;
@@ -24,16 +22,16 @@ public class Settings {
         return musicActive;
     }
 
-    public void setMusicActive(final boolean musicActive) {
-        this.musicActive = musicActive;
+    public void invertMusicActive() {
+        this.musicActive ^= true;
     }
 
     public boolean isEffectsAudioActive() {
         return effectsAudioActive;
     }
 
-    public void setEffectsAudioActive(final boolean effectsAudioActive) {
-        this.effectsAudioActive = effectsAudioActive;
+    public void invertEffectActive() {
+        this.effectsAudioActive ^= true;
     }
 
     public int getRightMovementKeyCode() {

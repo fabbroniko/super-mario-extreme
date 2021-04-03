@@ -1,13 +1,10 @@
 package fabbroniko.scene;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 
-import fabbroniko.Settings;
 import fabbroniko.environment.Background;
 import fabbroniko.environment.Dimension;
-import fabbroniko.gamestatemanager.GameManager;
 
 /**
  * Handles and Draws the Settings State.
@@ -20,9 +17,6 @@ public final class SettingsMenuScene extends AbstractScene {
 
 	private int currentSelection;
 	private boolean keyListening;
-	private boolean leftKeyListening;
-	private boolean rightKeyListening;
-	private boolean jumpKeyListening;
 	
 	private static final Color WHITE = new Color(0xffffff);
 	private static final Color RED = new Color(0xff0000);
@@ -50,93 +44,121 @@ public final class SettingsMenuScene extends AbstractScene {
 	@Override
 	public void draw(final Graphics2D g, final Dimension gDimension) {
 		bg.draw(g, gDimension);
+
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
 		g.setColor((currentSelection == SELECTION_LEFT_KEY) ? RED : WHITE);
 		g.drawString("Left Key: ", ABSOLUTE_POSITION_30, ABSOLUTE_POSITION_30);
-		g.drawString("<" + getKeyString(Settings.GLOBAL_SETTINGS.getLeftMovementKeyCode()) + ">", ABSOLUTE_POSITION_200, ABSOLUTE_POSITION_30);
+		g.drawString("<" + getKeyString(gameManager.getSettings().getLeftMovementKeyCode()) + ">", ABSOLUTE_POSITION_200, ABSOLUTE_POSITION_30);
 		
 		g.setColor((currentSelection == SELECTION_RIGHT_KEY) ? RED : WHITE);
 		g.drawString("Right Key: ", ABSOLUTE_POSITION_30, ABSOLUTE_POSITION_60);
-		g.drawString("<" + getKeyString(Settings.GLOBAL_SETTINGS.getRightMovementKeyCode()) + ">", ABSOLUTE_POSITION_200, ABSOLUTE_POSITION_60);
+		g.drawString("<" + getKeyString(gameManager.getSettings().getRightMovementKeyCode()) + ">", ABSOLUTE_POSITION_200, ABSOLUTE_POSITION_60);
 		
 		g.setColor((currentSelection == SELECTION_JUMP_KEY) ? RED : WHITE);
 		g.drawString("Jump Key: ", ABSOLUTE_POSITION_30, ABSOLUTE_POSITION_90);
-		g.drawString("<" + getKeyString(Settings.GLOBAL_SETTINGS.getJumpKeyCode()) + ">", ABSOLUTE_POSITION_200, ABSOLUTE_POSITION_90);
+		g.drawString("<" + getKeyString(gameManager.getSettings().getJumpKeyCode()) + ">", ABSOLUTE_POSITION_200, ABSOLUTE_POSITION_90);
 		
 		g.setColor((currentSelection == SELECTION_MUSIC) ? RED : WHITE);
 		g.drawString("Music: ", ABSOLUTE_POSITION_30, ABSOLUTE_POSITION_120);
-		g.drawString("<" + (Settings.GLOBAL_SETTINGS.isMusicActive() ? "ON" : "OFF") + ">", ABSOLUTE_POSITION_200, ABSOLUTE_POSITION_120);
+		g.drawString("<" + (gameManager.getSettings().isMusicActive() ? "ON" : "OFF") + ">", ABSOLUTE_POSITION_200, ABSOLUTE_POSITION_120);
 		
 		g.setColor((currentSelection == SELECTION_EFFECTS) ? RED : WHITE);
 		g.drawString("Effects: ", ABSOLUTE_POSITION_30, ABSOLUTE_POSITION_150);
-		g.drawString("<" + (Settings.GLOBAL_SETTINGS.isEffectsAudioActive() ? "ON" : "OFF") + ">", ABSOLUTE_POSITION_200, ABSOLUTE_POSITION_150);
-	}
-	
-	private String getKeyString(final int keyCode) {
-		String tmp;
-		
-		if (keyCode == KeyEvent.VK_UP) { 
-			tmp = "UP"; 
-		} else if (keyCode == KeyEvent.VK_LEFT) { 
-			tmp = "LEFT";
-		} else if (keyCode == KeyEvent.VK_RIGHT) {
-			tmp = "RIGHT";
-		} else if (keyCode == KeyEvent.VK_DOWN) {
-			tmp = "DOWN";
-		} else if (keyCode == KeyEvent.VK_SPACE) { 
-			tmp = "SPACE";
-		} else {
-			tmp = "" + (char) keyCode;
-		}
-		
-		return tmp;
+		g.drawString("<" + (gameManager.getSettings().isEffectsAudioActive() ? "ON" : "OFF") + ">", ABSOLUTE_POSITION_200, ABSOLUTE_POSITION_150);
+
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 	}
 
 	@Override
 	public void keyPressed(final KeyEvent e) {
 		super.keyPressed(e);
-		
-		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			GameManager.getInstance().openScene(new MainMenuScene());
-		}
-		if (e.getKeyCode() == KeyEvent.VK_UP && !keyListening) {
-			currentSelection--;
-			currentSelection = currentSelection < 0 ? MAX_SELECTION : currentSelection;
-		}
-		if (e.getKeyCode() == KeyEvent.VK_DOWN && !keyListening) {
-			currentSelection++;
-			currentSelection = currentSelection > MAX_SELECTION ? 0 : currentSelection;
-		}
-		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-			switch(currentSelection) {
-			case SELECTION_LEFT_KEY:
-				keyListening ^= true;
-				leftKeyListening ^= true;
+
+		switch(e.getKeyCode()) {
+			case KeyEvent.VK_ESCAPE:
+				gameManager.openScene(new MainMenuScene());
 				break;
-			case SELECTION_RIGHT_KEY: 
-				keyListening ^= true;
-				rightKeyListening ^= true;
+			case KeyEvent.VK_UP:
+				specialKeyUpHandler();
 				break;
-			case SELECTION_JUMP_KEY:
-				keyListening ^= true;
-				jumpKeyListening ^= true;
+			case KeyEvent.VK_DOWN:
+				specialKeyDownHandler();
 				break;
-			case SELECTION_MUSIC:
-				Settings.GLOBAL_SETTINGS.setMusicActive(!Settings.GLOBAL_SETTINGS.isMusicActive());
-				break;
-			case SELECTION_EFFECTS:
-				Settings.GLOBAL_SETTINGS.setEffectsAudioActive(!Settings.GLOBAL_SETTINGS.isEffectsAudioActive());
+			case KeyEvent.VK_ENTER:
+				specialKeyEnterHandler();
 				break;
 			default:
-					break;
-			}
+				keyHandler(e);
+				break;
 		}
-		
-		if (leftKeyListening) {
-			Settings.GLOBAL_SETTINGS.setLeftMovementKeyCode(e.getKeyCode());
-		} else if (rightKeyListening) {
-			Settings.GLOBAL_SETTINGS.setRightMovementKeyCode(e.getKeyCode());
-		} else if (jumpKeyListening) {
-			Settings.GLOBAL_SETTINGS.setJumpKeyCode(e.getKeyCode());
+	}
+
+	private String getKeyString(final int keyCode) {
+		String tmp;
+
+		if (keyCode == KeyEvent.VK_UP) {
+			tmp = "UP";
+		} else if (keyCode == KeyEvent.VK_LEFT) {
+			tmp = "LEFT";
+		} else if (keyCode == KeyEvent.VK_RIGHT) {
+			tmp = "RIGHT";
+		} else if (keyCode == KeyEvent.VK_DOWN) {
+			tmp = "DOWN";
+		} else if (keyCode == KeyEvent.VK_SPACE) {
+			tmp = "SPACE";
+		} else {
+			tmp = "" + (char) keyCode;
+		}
+
+		return tmp;
+	}
+
+	private void specialKeyUpHandler() {
+		if(!keyListening) {
+			currentSelection--;
+			currentSelection = currentSelection < 0 ? MAX_SELECTION : currentSelection;
+			return;
+		}
+
+		keyHandler(KeyEvent.VK_UP);
+	}
+
+	private void specialKeyDownHandler() {
+		if (!keyListening) {
+			currentSelection++;
+			currentSelection = currentSelection > MAX_SELECTION ? 0 : currentSelection;
+			return;
+		}
+
+		keyHandler(KeyEvent.VK_DOWN);
+	}
+
+	private void specialKeyEnterHandler() {
+		if(currentSelection == SELECTION_EFFECTS)
+			gameManager.getSettings().invertEffectActive();
+		else if (currentSelection == SELECTION_MUSIC)
+			gameManager.getSettings().invertMusicActive();
+		else
+			keyListening ^= true;
+	}
+
+	private void keyHandler(final KeyEvent e) {
+		if(!keyListening)
+			return;
+
+		 keyHandler(e.getKeyCode());
+	}
+
+	private void keyHandler(final int keyCode) {
+		if(!keyListening)
+			return;
+
+		if(currentSelection == SELECTION_LEFT_KEY) {
+			gameManager.getSettings().setLeftMovementKeyCode(keyCode);
+		} else if (currentSelection == SELECTION_RIGHT_KEY) {
+			gameManager.getSettings().setRightMovementKeyCode(keyCode);
+		} else if (currentSelection == SELECTION_JUMP_KEY) {
+			gameManager.getSettings().setJumpKeyCode(keyCode);
 		}
 	}
 }
