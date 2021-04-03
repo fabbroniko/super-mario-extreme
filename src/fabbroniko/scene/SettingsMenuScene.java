@@ -6,11 +6,6 @@ import java.awt.event.KeyEvent;
 import fabbroniko.environment.Background;
 import fabbroniko.environment.Dimension;
 
-/**
- * Handles and Draws the Settings State.
- * @author fabbroniko
- *
- */
 public final class SettingsMenuScene extends AbstractScene {
 
 	private Background bg;
@@ -75,24 +70,31 @@ public final class SettingsMenuScene extends AbstractScene {
 		super.keyPressed(e);
 
 		switch(e.getKeyCode()) {
-			case KeyEvent.VK_ESCAPE:
+			case KeyEvent.VK_ESCAPE: // ESC
 				gameManager.openScene(new MainMenuScene());
 				break;
-			case KeyEvent.VK_UP:
+			case KeyEvent.VK_UP: // Arrow UP
 				specialKeyUpHandler();
 				break;
-			case KeyEvent.VK_DOWN:
+			case KeyEvent.VK_DOWN: // Arrow DOWN
 				specialKeyDownHandler();
 				break;
-			case KeyEvent.VK_ENTER:
+			case KeyEvent.VK_ENTER: // ENTER
 				specialKeyEnterHandler();
 				break;
-			default:
-				keyHandler(e);
+			default: // Any other key
+				keyHandler(e.getKeyCode());
 				break;
 		}
 	}
 
+	/**
+	 * Converts a key code into it's string representation.
+	 * This is used to convert the key code in a user friendly string displayed next to each option.
+	 *
+	 * @param keyCode The key code to convert
+	 * @return The string value associated to the key code.
+	 */
 	private String getKeyString(final int keyCode) {
 		String tmp;
 
@@ -113,6 +115,10 @@ public final class SettingsMenuScene extends AbstractScene {
 		return tmp;
 	}
 
+	/**
+	 * The up button is used to scroll between options in the settings menu unless we are listening for a key to
+	 * be entered. In that case we delegate the operation to the keyHandler method.
+	 */
 	private void specialKeyUpHandler() {
 		if(!keyListening) {
 			currentSelection--;
@@ -123,6 +129,10 @@ public final class SettingsMenuScene extends AbstractScene {
 		keyHandler(KeyEvent.VK_UP);
 	}
 
+	/**
+	 * The down button is used to scroll between options in the settings menu unless we are listening for a key to
+	 * be entered. In that case we delegate the operation to the keyHandler method.
+	 */
 	private void specialKeyDownHandler() {
 		if (!keyListening) {
 			currentSelection++;
@@ -133,6 +143,11 @@ public final class SettingsMenuScene extends AbstractScene {
 		keyHandler(KeyEvent.VK_DOWN);
 	}
 
+	/**
+	 * Handles the ENTER Key.
+	 * If one of the ON/OFF options is selected it simply swaps between the 2 options
+	 * otherwise invert whatever value keyListening has (either confirm a key selection or start typing the new selection)
+	 */
 	private void specialKeyEnterHandler() {
 		if(currentSelection == SELECTION_EFFECTS)
 			gameManager.getSettings().invertEffectActive();
@@ -142,17 +157,16 @@ public final class SettingsMenuScene extends AbstractScene {
 			keyListening ^= true;
 	}
 
-	private void keyHandler(final KeyEvent e) {
-		if(!keyListening)
-			return;
-
-		 keyHandler(e.getKeyCode());
-	}
-
+	/**
+	 * Saves the pressed key into the user settings object depending on what option is currently selected.
+	 * @param keyCode The key code to save into the user settings.
+	 */
 	private void keyHandler(final int keyCode) {
+		// Ignore the call if we are currently not listening for a user input  - this should never happen
 		if(!keyListening)
 			return;
 
+		// Checks what option is currently selected and saves the key code to the appropriate user setting variable.
 		if(currentSelection == SELECTION_LEFT_KEY) {
 			gameManager.getSettings().setLeftMovementKeyCode(keyCode);
 		} else if (currentSelection == SELECTION_RIGHT_KEY) {
