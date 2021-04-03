@@ -6,6 +6,12 @@ import java.awt.event.KeyEvent;
 import fabbroniko.environment.Background;
 import fabbroniko.environment.Dimension;
 
+/**
+ * The main menu shown as the first scene of the game.
+ * Here the user can select to either play, customize some settings or exit the game
+ *
+ * When an option is selected it's drawn in a different color to give the user a visual feedback of what's going on.
+ */
 public final class MainMenuScene extends AbstractScene {
 
 	// Strings
@@ -30,6 +36,9 @@ public final class MainMenuScene extends AbstractScene {
 	private static final int FONT_SIZE = 20;
 
 	private Background bg;
+
+	// Allows the program to keep track of what option is currently selected. This is used to execute an operation when
+	// the player hits ENTER and it allows the draw function to draw the option in a different color.
 	private int selectedOption;
 
 	/**
