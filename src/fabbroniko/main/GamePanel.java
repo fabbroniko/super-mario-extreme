@@ -8,9 +8,8 @@ import javax.swing.JPanel;
 
 import fabbroniko.environment.Dimension;
 import fabbroniko.environment.Service;
-import fabbroniko.gamestatemanager.GameStateManager;
+import fabbroniko.gamestatemanager.GameManager;
 import fabbroniko.scene.MainMenuScene;
-import fabbroniko.scene.WinScene;
 
 /**
  * Panel where the game will be drawn.
@@ -18,7 +17,7 @@ import fabbroniko.scene.WinScene;
  */
 public final class GamePanel extends JPanel implements Runnable, IView {
 	
-	private GameStateManager gameStateManager;
+	private GameManager gameManager;
 	private Thread gameThread;							// Thread che conterrà la gestione di ogni parte del gioco.
 	private boolean running;					// Campo booleano che serve ad uscire dal game loop.
 	private BufferedImage image;						// Buffer dell'immagine finale che dovrà essere visualizzata sullo schermo
@@ -43,8 +42,8 @@ public final class GamePanel extends JPanel implements Runnable, IView {
 		this.setFocusable(true);
 		this.requestFocus();
 		
-		gameStateManager = GameStateManager.setInstance(this);
-		gameStateManager.openScene(new MainMenuScene());
+		gameManager = GameManager.setInstance(this);
+		gameManager.openScene(new MainMenuScene());
 	}
 	
 	/**
@@ -55,7 +54,7 @@ public final class GamePanel extends JPanel implements Runnable, IView {
 		super.addNotify();
 		if (!threadInitialized) {
 			gameThread = new Thread(this);
-			this.addKeyListener(gameStateManager);
+			this.addKeyListener(gameManager);
 			gameThread.start();
 			threadInitialized = true;
 		}
@@ -97,7 +96,7 @@ public final class GamePanel extends JPanel implements Runnable, IView {
 	 * @see Drawable#update()
 	 */
 	private void update() {
-		GameStateManager.getInstance().update();
+		GameManager.getInstance().update();
 	}
 	
 	@Override
@@ -106,7 +105,7 @@ public final class GamePanel extends JPanel implements Runnable, IView {
 	}
 
 	private void draw(final Graphics2D g) {
-		GameStateManager.getInstance().draw(g, baseWindowSize);
+		GameManager.getInstance().draw(g, baseWindowSize);
 	}
 
 	/**

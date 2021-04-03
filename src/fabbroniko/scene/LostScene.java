@@ -2,16 +2,16 @@ package fabbroniko.scene;
 
 import java.awt.*;
 
-import fabbroniko.environment.AudioManager;
 import fabbroniko.environment.Dimension;
 import fabbroniko.environment.Service;
-import fabbroniko.gamestatemanager.AbstractStaticScene;
-import fabbroniko.gamestatemanager.GameStateManager;
 import fabbroniko.resources.Sound;
 
 /**
- * Death Window, it should be shown when the player dies.
- * @author fabbroniko
+ * The LostScene is a very simple scene, it just shows Game Over and the number of death on a simple background.
+ * It also plays a music track. The user is redirected back to the level after the music track is over.
+ *
+ * Given the static nature of this scene it uses the drawOnce method that allows the program to draw the canvas only once
+ * instead of drawing it for each frame.
  */
 public final class LostScene extends AbstractStaticScene {
 
@@ -20,7 +20,6 @@ public final class LostScene extends AbstractStaticScene {
 	private static final int SCENE_DURATION_MILLISECONDS = 3000;
 
 	private final int deathCount;
-
 	private long initTime;
 
 	public LostScene(final int deathCount) {
@@ -31,15 +30,17 @@ public final class LostScene extends AbstractStaticScene {
 
 	@Override
 	public void init() {
-		AudioManager.getInstance().playSound(Sound.getSoundFromName("GameOverSound"));
+		audioManager.playSound(Sound.getSoundFromName("GameOverSound"));
 		initTime = System.currentTimeMillis();
 	}
 
+	/**
+	 * On each frame check if enough time elapsed before opening the game scene.
+	 */
 	@Override
 	public void update() {
 		if((System.currentTimeMillis() - initTime) > SCENE_DURATION_MILLISECONDS) {
-			AudioManager.getInstance().stopCurrent();
-			GameStateManager.getInstance().openScene(new GameScene());
+			gameManager.openScene(new GameScene());
 		}
 	}
 

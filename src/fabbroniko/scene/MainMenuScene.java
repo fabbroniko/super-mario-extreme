@@ -1,171 +1,96 @@
 package fabbroniko.scene;
 
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
 
-import javax.imageio.ImageIO;
-
-import fabbroniko.environment.AudioManager;
 import fabbroniko.environment.Background;
 import fabbroniko.environment.Dimension;
-import fabbroniko.environment.Service;
-import fabbroniko.environment.Position;
-import fabbroniko.error.ResourceNotFoundError;
-import fabbroniko.gamestatemanager.AbstractScene;
-import fabbroniko.gamestatemanager.GameStateManager;
-import fabbroniko.main.KeyDependent;
 
 /**
- * Handles and Draws the main menu.
- * @author fabbroniko
+ * The main menu shown as the first scene of the game.
+ * Here the user can select to either play, customize some settings or exit the game
  *
+ * When an option is selected it's drawn in a different color to give the user a visual feedback of what's going on.
  */
 public final class MainMenuScene extends AbstractScene {
 
-	// Oggetti da disegnare sullo schermo.
-	private Background bg;				// Background
-	private BufferedImage titleImage;
-	private BufferedImage baseImage;	// Immagine di base di un'opzione del menu.
-	private BufferedImage startImage;
-	private BufferedImage settingsImage;
-	private BufferedImage quitImage;
-	private BufferedImage startImageS;
-	private BufferedImage settingsImageS;
-	private BufferedImage quitImageS;
-	
-	// Options position & dimension
-	private Position titlePosition;
-	private Position startOption;
-	private Position settingsOption;
-	private Position quitOption;
+	// Strings
+	private static final String TITLE = "Super Mario Extreme Edition";
+	private static final String START_GAME_OPTION = "Start";
+	private static final String SETTINGS_OPTION = "Settings";
+	private static final String QUIT_OPTION = "Quit";
 
-	private static final MainMenuScene MY_INSTANCE = new MainMenuScene();
-	
 	// Resources
 	private static final String RES_BG_IMAGE = "/fabbroniko/Menu/BaseBG.png";
-	private static final String RES_MENU_BASE = "/fabbroniko/Menu/BaseOption.png";
-	private static final String RES_TITLE_IMAGE = "/fabbroniko/Menu/Title.png";
-	private static final String RES_START_IMAGE = "/fabbroniko/Menu/StartString.png";
-	private static final String RES_START_IMAGE_SELECTED = "/fabbroniko/Menu/StartSelected.png";
-	private static final String RES_SETTINGS_IMAGE = "/fabbroniko/Menu/SettingsString.png";
-	private static final String RES_SETTINGS_IMAGE_SELECTED = "/fabbroniko/Menu/SettingsSelected.png";
-	private static final String RES_QUIT_IMAGE = "/fabbroniko/Menu/QuitString.png";
-	private static final String RES_QUIT_IMAGE_SELECTED = "/fabbroniko/Menu/QuitSelected.png";
-	
-	private static final int BOTTOM_OFFSET = 30;
-	private static final int OPTIONS_DISTACE = 20;
-	
-	private static final int START_OPTION = 0;
-	private static final int SETTINGS_OPTION = 1;
-	private static final int QUIT_OPTION = 2;
-	
+
+	// Indexes
+	private static final int START_OPTION_INDEX = 0;
+	private static final int SETTINGS_OPTION_INDEX = 1;
+	private static final int QUIT_OPTION_INDEX = 2;
+
+	// Magic numbers
+	private static final int STROKE_SIZE = 3;
+	private static final int OPTION_ARC_SIZE = 8;
+	private static final Dimension OPTION_RECTANGLE_DIMENSION = new Dimension(90, 30);
+	private static final int OPTION_RECT_TO_TEXT_OFFSET = 23;
+	private static final int FONT_SIZE = 20;
+
+	private Background bg;
+
+	// Allows the program to keep track of what option is currently selected. This is used to execute an operation when
+	// the player hits ENTER and it allows the draw function to draw the option in a different color.
 	private int selectedOption;
-	
-	/**
-	 * Constructs a new MenuState
-	 */
-	public MainMenuScene() {
-		super();
-	}
-
 
 	/**
-	 * @see AbstractScene#init()
+	 * Loads the resources loaded for this scene.
 	 */
 	@Override
 	public void init() {
-		String tmpImage = "";
-		
 		bg = new Background(RES_BG_IMAGE);
 		selectedOption = 0;
-		
-		// Inizializzazione immagine di base.
-		try {
-			tmpImage = RES_TITLE_IMAGE;
-			titleImage = ImageIO.read(getClass().getResourceAsStream(tmpImage));
-			tmpImage = RES_MENU_BASE;
-			baseImage = ImageIO.read(getClass().getResourceAsStream(tmpImage));
-			tmpImage = RES_START_IMAGE;
-			startImage = ImageIO.read(getClass().getResourceAsStream(tmpImage));
-			tmpImage = RES_SETTINGS_IMAGE;
-			settingsImage = ImageIO.read(getClass().getResourceAsStream(tmpImage));
-			tmpImage = RES_QUIT_IMAGE;
-			quitImage = ImageIO.read(getClass().getResourceAsStream(tmpImage));
-			tmpImage = RES_START_IMAGE_SELECTED;
-			startImageS = ImageIO.read(getClass().getResourceAsStream(tmpImage));
-			tmpImage = RES_SETTINGS_IMAGE_SELECTED;
-			settingsImageS = ImageIO.read(getClass().getResourceAsStream(tmpImage));
-			tmpImage = RES_QUIT_IMAGE_SELECTED;
-			quitImageS = ImageIO.read(getClass().getResourceAsStream(tmpImage));
-			
-		} catch (Exception e) {
-			throw new ResourceNotFoundError(tmpImage);
-		}
-		
-		Dimension baseImageDimension;
-		Dimension titleDimension;
-		
-		baseImageDimension = new Dimension(baseImage.getWidth(), baseImage.getHeight());
-		titleDimension = new Dimension(titleImage.getWidth(), titleImage.getHeight());
-		
-		quitOption = Service.getXCentredPosition(baseImageDimension);
-		quitOption.setY((int) (GameStateManager.getInstance().getBaseWindowSize().getHeight() - (BOTTOM_OFFSET + baseImageDimension.getHeight())));
-		
-		settingsOption = Service.getXCentredPosition(baseImageDimension);
-		settingsOption.setY(quitOption.getY() - (OPTIONS_DISTACE + baseImageDimension.getHeight()));
-		
-		startOption = Service.getXCentredPosition(baseImageDimension);
-		startOption.setY(settingsOption.getY() - (OPTIONS_DISTACE + baseImageDimension.getHeight()));
-		
-		titlePosition = Service.getXCentredPosition(titleDimension);
-		titlePosition.setY(startOption.getY() - (OPTIONS_DISTACE + titleDimension.getHeight()));
-		
-		AudioManager.getInstance().stopCurrent();
-	}
-
-	@Override
-	public void draw(final Graphics2D g, final Dimension gDimension) {		
-		BufferedImage start = null;
-		BufferedImage settings = null;
-		BufferedImage quit = null;
-		
-		bg.draw(g, gDimension);
-		
-		switch(selectedOption) {
-		case START_OPTION:
-			start = startImageS;
-			settings = settingsImage;
-			quit = quitImage;
-			break;
-		case SETTINGS_OPTION:
-			start = startImage;
-			settings = settingsImageS;
-			quit = quitImage;
-			break;
-		case QUIT_OPTION:
-			start = startImage;
-			settings = settingsImage;
-			quit = quitImageS;
-			break;
-		default:
-			break;
-		}
-		
-		g.drawImage(titleImage, titlePosition.getX(), titlePosition.getY(), null);
-		
-		g.drawImage(baseImage, startOption.getX(), startOption.getY(), null);
-		g.drawImage(start, startOption.getX(), startOption.getY(), null);
-		
-		g.drawImage(baseImage, settingsOption.getX(), settingsOption.getY(), null);
-		g.drawImage(settings, settingsOption.getX(), settingsOption.getY(), null);
-		
-		g.drawImage(baseImage, quitOption.getX(), quitOption.getY(), null);
-		g.drawImage(quit, quitOption.getX(), quitOption.getY(), null);
 	}
 
 	/**
-	 * @see KeyDependent#keyPressed(KeyEvent)
+	 * Handles what's gonna be drawn in the menu.
+	 *
+	 * The Background is drawn first as a first layer while the title and menu options are drawn after (resulting on drawing to top of the background)
+	 * @param g The canvas where the menu is drawn
+	 * @param canvasDimension The dimension of the canvas
+	 */
+	@Override
+	public void draw(final Graphics2D g, final Dimension canvasDimension) {
+		// Draw the background first
+		bg.draw(g, canvasDimension);
+
+		// Activating antialiasing to soften up the look of the strings
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+		// Setting up the parameters to draw the game title
+		g.setColor(Color.GREEN);
+		g.setFont(g.getFont().deriveFont(Font.BOLD, FONT_SIZE));
+		int centeredXPosition = getCenteredXPositionForString(TITLE, g, canvasDimension);
+
+		// Draw the game title
+		g.drawString(TITLE, centeredXPosition, 30);
+
+		// Print the menu options
+		printMenuOption(START_GAME_OPTION, 80, g, canvasDimension, selectedOption == START_OPTION_INDEX);
+		printMenuOption(SETTINGS_OPTION, 130, g, canvasDimension, selectedOption == SETTINGS_OPTION_INDEX);
+		printMenuOption(QUIT_OPTION, 180, g, canvasDimension, selectedOption == QUIT_OPTION_INDEX);
+
+		// Disabling antialiasing to make sure the next cycle doesn't apply it to the background or whatever is rendered next
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+	}
+
+	/**
+	 * Handles the keys pressed by the player.
+	 *
+	 * The allowed keys for this scene are:
+	 * Arrow UP to move the menu selection upwards
+	 * Arrow DOWN to move the menu selection downwards
+	 * Enter to open the selected option
+	 * ESC to close the game.
+	 * @param e The key event that triggered this call
 	 */
 	@Override
 	public void keyPressed(final KeyEvent e) {
@@ -177,24 +102,58 @@ public final class MainMenuScene extends AbstractScene {
 			selectedOption--;
 			break;
 		case KeyEvent.VK_ENTER:
-			if (selectedOption == START_OPTION) {
-				GameStateManager.getInstance().openScene(new GameScene());
-			} else if (selectedOption == SETTINGS_OPTION) {
-				GameStateManager.getInstance().openScene(new SettingsMenuScene());
+			if (selectedOption == START_OPTION_INDEX) {
+				gameManager.openScene(new GameScene());
+			} else if (selectedOption == SETTINGS_OPTION_INDEX) {
+				gameManager.openScene(new SettingsMenuScene());
 			} else {
-				GameStateManager.getInstance().exit();
+				gameManager.exit();
 			}
 			break;
 		case KeyEvent.VK_ESCAPE:
-			GameStateManager.getInstance().exit();
+			gameManager.exit();
 			break;
 		default:
 			break;
 		}
-		if (selectedOption < START_OPTION) {
-			selectedOption = QUIT_OPTION;
-		} else if (selectedOption > QUIT_OPTION) {
-			selectedOption = START_OPTION;
+
+		// Allows looping through the options
+		if (selectedOption < START_OPTION_INDEX) {
+			selectedOption = QUIT_OPTION_INDEX;
+		} else if (selectedOption > QUIT_OPTION_INDEX) {
+			selectedOption = START_OPTION_INDEX;
 		}
+	}
+
+	/**
+	 * Delegates the operation of drawing the a option to this method.
+	 * It will take care of drawing the rounded rectangle around the option name, the color in case it's currently selected
+	 * and the option name itself.
+	 *
+	 * @param g The canvas where the option will be drawn.
+	 * @param canvasDimension The dimension of the canvas.
+	 * @param isSelected Whether the option is currently selected or not
+	 * @param text The option name displayed within the rounded box
+	 * @param y The y origin coordinate of the option box
+	 */
+	private void printMenuOption(final String text, final int y, final Graphics2D g, final Dimension canvasDimension, final boolean isSelected) {
+		// Sets up the requirements to draw the rounded rectangle
+		g.setColor(Color.BLACK);
+		g.setStroke(new BasicStroke(STROKE_SIZE));
+		int x = getCenteredXPositionFromSize(canvasDimension, OPTION_RECTANGLE_DIMENSION.getWidth());
+
+		// Draws the rectangle
+		g.drawRoundRect(x, y, OPTION_RECTANGLE_DIMENSION.getWidth(), OPTION_RECTANGLE_DIMENSION.getHeight(), OPTION_ARC_SIZE, OPTION_ARC_SIZE);
+
+		// Sets up the requirements to draw the option name within the rectangle
+		if(isSelected)
+			g.setColor(Color.GREEN);
+
+		g.setFont(g.getFont().deriveFont(Font.PLAIN, FONT_SIZE));
+		x = getCenteredXPositionForString(text, g, canvasDimension);
+		int optionNameY = y + OPTION_RECT_TO_TEXT_OFFSET;
+
+		// Draws the option name within the rectangle
+		g.drawString(text, x, optionNameY);
 	}
 }

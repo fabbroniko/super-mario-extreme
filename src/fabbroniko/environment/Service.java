@@ -9,7 +9,7 @@ import javax.imageio.ImageIO;
 import fabbroniko.error.ErrorManager;
 import fabbroniko.error.ResourceNotFoundError;
 import fabbroniko.error.TileTypeError;
-import fabbroniko.gamestatemanager.GameStateManager;
+import fabbroniko.gamestatemanager.GameManager;
 
 /**
  * Service Class used to perform environmental-operations.
@@ -41,7 +41,7 @@ public final class Service {
 	 */
 	public static Position getXCentredPosition(final Dimension viewDimension) {
 		final Position centredPosition = ORIGIN.clone();
-		centredPosition.setX((GameStateManager.getInstance().getBaseWindowSize().getWidth() - viewDimension.getWidth()) / 2);
+		centredPosition.setX((GameManager.getInstance().getBaseWindowSize().getWidth() - viewDimension.getWidth()) / 2);
 		return centredPosition;
 	}
 	

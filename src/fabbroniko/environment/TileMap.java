@@ -13,7 +13,7 @@ import java.util.List;
 
 import fabbroniko.environment.Service.TileType;
 import fabbroniko.error.CorruptedFileError;
-import fabbroniko.gamestatemanager.GameStateManager;
+import fabbroniko.gamestatemanager.GameManager;
 import fabbroniko.main.Drawable;
 
 /**
@@ -50,7 +50,7 @@ public class TileMap implements Drawable {
 	public TileMap(final String tileSetP, final String mapP) {
 		tiles = new ArrayList<Tile>();
 		tileSize = Service.TILE_DIMENSION.clone();
-		baseWindowDimension = GameStateManager.getInstance().getBaseWindowSize();
+		baseWindowDimension = GameManager.getInstance().getBaseWindowSize();
 		
 		mapPosition = Service.ORIGIN.clone();
 		lastDrawablePosition = Service.ORIGIN.clone();

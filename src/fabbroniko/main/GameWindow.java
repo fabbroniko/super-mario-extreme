@@ -14,8 +14,9 @@ import javax.swing.JFrame;
  */
 public final class GameWindow extends JFrame {
 
-	private static final double SCALE_DIVISION = 2;
 	private static final String GAME_NAME = "Super Mario Bros Extreme Edition";
+
+	private static final double SCALE_DIVISION = 2;
 	private static final int FPS = 50;
 	
 	private static final Dimension BASE_WINDOW_SIZE = new Dimension(320, 240);
