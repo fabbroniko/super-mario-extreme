@@ -3,11 +3,8 @@ package fabbroniko.scene;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
-import fabbroniko.environment.AudioManager;
 import fabbroniko.environment.Background;
 import fabbroniko.environment.Dimension;
-import fabbroniko.gamestatemanager.AbstractScene;
-import fabbroniko.gamestatemanager.GameStateManager;
 
 public final class MainMenuScene extends AbstractScene {
 
@@ -25,35 +22,67 @@ public final class MainMenuScene extends AbstractScene {
 	private static final int SETTINGS_OPTION_INDEX = 1;
 	private static final int QUIT_OPTION_INDEX = 2;
 
+	// Magic numbers
+	private static final int STROKE_SIZE = 3;
+	private static final int OPTION_ARC_SIZE = 8;
+	private static final Dimension OPTION_RECTANGLE_DIMENSION = new Dimension(90, 30);
+	private static final int OPTION_RECT_TO_TEXT_OFFSET = 23;
+	private static final int FONT_SIZE = 20;
+
 	private Background bg;
 	private int selectedOption;
 
+	/**
+	 * Loads the resources loaded for this scene.
+	 */
 	@Override
 	public void init() {
 		bg = new Background(RES_BG_IMAGE);
 		selectedOption = 0;
-		
-		AudioManager.getInstance().stopCurrent();
 	}
 
+	/**
+	 * Handles what's gonna be drawn in the menu.
+	 *
+	 * The Background is drawn first as a first layer while the title and menu options are drawn after (resulting on drawing to top of the background)
+	 * @param g The canvas where the menu is drawn
+	 * @param canvasDimension The dimension of the canvas
+	 */
 	@Override
-	public void draw(final Graphics2D g, final Dimension gDimension) {
-		bg.draw(g, gDimension);
+	public void draw(final Graphics2D g, final Dimension canvasDimension) {
+		// Draw the background first
+		bg.draw(g, canvasDimension);
 
+		// Activating antialiasing to soften up the look of the strings
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
+		// Setting up the parameters to draw the game title
 		g.setColor(Color.GREEN);
-		g.setFont(g.getFont().deriveFont(Font.BOLD, 20));
-		int centeredXPosition = getCenteredXPositionForString(TITLE, g, gDimension);
+		g.setFont(g.getFont().deriveFont(Font.BOLD, FONT_SIZE));
+		int centeredXPosition = getCenteredXPositionForString(TITLE, g, canvasDimension);
+
+		// Draw the game title
 		g.drawString(TITLE, centeredXPosition, 30);
 
-		printStartMenuOption(g, gDimension, selectedOption == START_OPTION_INDEX);
-		printSettingsMenuOption(g, gDimension, selectedOption == SETTINGS_OPTION_INDEX);
-		printQuitMenuOption(g, gDimension, selectedOption == QUIT_OPTION_INDEX);
+		// Print the menu options
+		printMenuOption(START_GAME_OPTION, 80, g, canvasDimension, selectedOption == START_OPTION_INDEX);
+		printMenuOption(SETTINGS_OPTION, 130, g, canvasDimension, selectedOption == SETTINGS_OPTION_INDEX);
+		printMenuOption(QUIT_OPTION, 180, g, canvasDimension, selectedOption == QUIT_OPTION_INDEX);
 
+		// Disabling antialiasing to make sure the next cycle doesn't apply it to the background or whatever is rendered next
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 	}
 
+	/**
+	 * Handles the keys pressed by the player.
+	 *
+	 * The allowed keys for this scene are:
+	 * Arrow UP to move the menu selection upwards
+	 * Arrow DOWN to move the menu selection downwards
+	 * Enter to open the selected option
+	 * ESC to close the game.
+	 * @param e The key event that triggered this call
+	 */
 	@Override
 	public void keyPressed(final KeyEvent e) {
 		switch(e.getKeyCode()) {
@@ -65,19 +94,21 @@ public final class MainMenuScene extends AbstractScene {
 			break;
 		case KeyEvent.VK_ENTER:
 			if (selectedOption == START_OPTION_INDEX) {
-				GameStateManager.getInstance().openScene(new GameScene());
+				gameManager.openScene(new GameScene());
 			} else if (selectedOption == SETTINGS_OPTION_INDEX) {
-				GameStateManager.getInstance().openScene(new SettingsMenuScene());
+				gameManager.openScene(new SettingsMenuScene());
 			} else {
-				GameStateManager.getInstance().exit();
+				gameManager.exit();
 			}
 			break;
 		case KeyEvent.VK_ESCAPE:
-			GameStateManager.getInstance().exit();
+			gameManager.exit();
 			break;
 		default:
 			break;
 		}
+
+		// Allows looping through the options
 		if (selectedOption < START_OPTION_INDEX) {
 			selectedOption = QUIT_OPTION_INDEX;
 		} else if (selectedOption > QUIT_OPTION_INDEX) {
@@ -85,48 +116,35 @@ public final class MainMenuScene extends AbstractScene {
 		}
 	}
 
-	private void printStartMenuOption(final Graphics2D g, final Dimension canvasDimension, final boolean isSelected) {
+	/**
+	 * Delegates the operation of drawing the a option to this method.
+	 * It will take care of drawing the rounded rectangle around the option name, the color in case it's currently selected
+	 * and the option name itself.
+	 *
+	 * @param g The canvas where the option will be drawn.
+	 * @param canvasDimension The dimension of the canvas.
+	 * @param isSelected Whether the option is currently selected or not
+	 * @param text The option name displayed within the rounded box
+	 * @param y The y origin coordinate of the option box
+	 */
+	private void printMenuOption(final String text, final int y, final Graphics2D g, final Dimension canvasDimension, final boolean isSelected) {
+		// Sets up the requirements to draw the rounded rectangle
 		g.setColor(Color.BLACK);
-		g.setStroke(new BasicStroke(2));
-		g.drawRoundRect(getCenteredXPositionFromSize(canvasDimension, 90), 80, 90, 30, 8, 8);
+		g.setStroke(new BasicStroke(STROKE_SIZE));
+		int x = getCenteredXPositionFromSize(canvasDimension, OPTION_RECTANGLE_DIMENSION.getWidth());
 
-		Color textColor = Color.BLACK;
+		// Draws the rectangle
+		g.drawRoundRect(x, y, OPTION_RECTANGLE_DIMENSION.getWidth(), OPTION_RECTANGLE_DIMENSION.getHeight(), OPTION_ARC_SIZE, OPTION_ARC_SIZE);
+
+		// Sets up the requirements to draw the option name within the rectangle
 		if(isSelected)
-			textColor = Color.GREEN;
+			g.setColor(Color.GREEN);
 
-		g.setColor(textColor);
-		g.setFont(g.getFont().deriveFont(Font.PLAIN, 20));
+		g.setFont(g.getFont().deriveFont(Font.PLAIN, FONT_SIZE));
+		x = getCenteredXPositionForString(text, g, canvasDimension);
+		int optionNameY = y + OPTION_RECT_TO_TEXT_OFFSET;
 
-		g.drawString(START_GAME_OPTION, getCenteredXPositionForString(START_GAME_OPTION, g, canvasDimension), 103);
-	}
-
-	private void printSettingsMenuOption(final Graphics2D g, final Dimension canvasDimension, final boolean isSelected) {
-		g.setColor(Color.BLACK);
-		g.setStroke(new BasicStroke(2));
-		g.drawRoundRect(getCenteredXPositionFromSize(canvasDimension, 90), 130, 90, 30, 8, 8);
-
-		Color textColor = Color.BLACK;
-		if(isSelected)
-			textColor = Color.GREEN;
-
-		g.setColor(textColor);
-		g.setFont(g.getFont().deriveFont(Font.PLAIN, 20));
-
-		g.drawString(SETTINGS_OPTION, getCenteredXPositionForString(SETTINGS_OPTION, g, canvasDimension), 153);
-	}
-
-	private void printQuitMenuOption(final Graphics2D g, final Dimension canvasDimension, final boolean isSelected) {
-		g.setColor(Color.BLACK);
-		g.setStroke(new BasicStroke(2));
-		g.drawRoundRect(getCenteredXPositionFromSize(canvasDimension, 90), 180, 90, 30, 8, 8);
-
-		Color textColor = Color.BLACK;
-		if(isSelected)
-			textColor = Color.GREEN;
-
-		g.setColor(textColor);
-		g.setFont(g.getFont().deriveFont(Font.PLAIN, 20));
-
-		g.drawString(QUIT_OPTION, getCenteredXPositionForString(QUIT_OPTION, g, canvasDimension), 203);
+		// Draws the option name within the rectangle
+		g.drawString(text, x, optionNameY);
 	}
 }

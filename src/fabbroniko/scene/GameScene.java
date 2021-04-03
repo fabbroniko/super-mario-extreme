@@ -8,7 +8,7 @@ import fabbroniko.gameobjects.FallingBlock;
 import fabbroniko.gameobjects.InvisibleBlock;
 import fabbroniko.gameobjects.Player;
 import fabbroniko.gamestatemanager.AbstractGenericLevel;
-import fabbroniko.gamestatemanager.GameStateManager;
+import fabbroniko.gamestatemanager.GameManager;
 
 /**
  * First Level.
@@ -87,6 +87,6 @@ public final class GameScene extends AbstractGenericLevel {
 	
 	@Override
 	public void levelFinished() {
-		GameStateManager.getInstance().openScene(new WinScene());
+		GameManager.getInstance().openScene(new WinScene());
 	}
 }

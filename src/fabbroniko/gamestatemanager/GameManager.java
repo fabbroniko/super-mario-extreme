@@ -4,42 +4,47 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import fabbroniko.environment.AudioManager;
 import fabbroniko.environment.Dimension;
 import fabbroniko.main.Drawable;
 import fabbroniko.main.IView;
+import fabbroniko.scene.AbstractScene;
 
 /**
  * Handles the current state of the game (e.g. Menus, Levels, etc.)
  * @author nicola.fabbrini
  *
  */
-public final class GameStateManager implements Drawable, KeyListener {
-	
-	private AbstractScene currentState;
+public final class GameManager implements Drawable, KeyListener {
+
+	private static GameManager myInstance;
+
 	private final Object synchronize;
+	private final AudioManager audioManager;
+
 	private static IView view;
-	
-	private static GameStateManager myInstance;
+	private AbstractScene currentState;
 	
 	/**
 	 * Constructs a new GameStateManager
 	 */
-	private GameStateManager() {
+	private GameManager() {
 		synchronize = new Object();
+		audioManager = AudioManager.getInstance();
 	}
 	
 	/**
 	 * Gets the single instance of this class.
 	 * @return The single instance of this class.
 	 */
-	public static GameStateManager getInstance() {
+	public static GameManager getInstance() {
 		if(myInstance == null) {
-			myInstance = new GameStateManager();
+			myInstance = new GameManager();
 		}
 		return myInstance;
 	}
 	
-	public static GameStateManager setInstance(final IView viewParam) {
+	public static GameManager setInstance(final IView viewParam) {
 		view = viewParam;
 		return getInstance();
 	}
@@ -48,9 +53,15 @@ public final class GameStateManager implements Drawable, KeyListener {
 	 * Sets the specified state that has to be displayed on the screen.
 	 */
 	public void openScene(final AbstractScene abstractScene) {
+		abstractScene.attachGameManager(this);
+
 		synchronized (synchronize) {
+			if(currentState != null) {
+				currentState.detachScene();
+			}
+
 			this.currentState = abstractScene;
-			currentState.init();
+			this.currentState.init();
 		}
 	}
 	
@@ -61,6 +72,10 @@ public final class GameStateManager implements Drawable, KeyListener {
 		synchronized (synchronize) {
 			this.currentState.update();
 		}
+	}
+
+	public AudioManager getAudioManager() {
+		return this.audioManager;
 	}
 	
 	/**	Draws the current state.

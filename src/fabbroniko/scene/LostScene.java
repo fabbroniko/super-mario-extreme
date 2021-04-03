@@ -2,11 +2,8 @@ package fabbroniko.scene;
 
 import java.awt.*;
 
-import fabbroniko.environment.AudioManager;
 import fabbroniko.environment.Dimension;
 import fabbroniko.environment.Service;
-import fabbroniko.gamestatemanager.AbstractStaticScene;
-import fabbroniko.gamestatemanager.GameStateManager;
 import fabbroniko.resources.Sound;
 
 /**
@@ -31,15 +28,14 @@ public final class LostScene extends AbstractStaticScene {
 
 	@Override
 	public void init() {
-		AudioManager.getInstance().playSound(Sound.getSoundFromName("GameOverSound"));
+		audioManager.playSound(Sound.getSoundFromName("GameOverSound"));
 		initTime = System.currentTimeMillis();
 	}
 
 	@Override
 	public void update() {
 		if((System.currentTimeMillis() - initTime) > SCENE_DURATION_MILLISECONDS) {
-			AudioManager.getInstance().stopCurrent();
-			GameStateManager.getInstance().openScene(new GameScene());
+			gameManager.openScene(new GameScene());
 		}
 	}
 

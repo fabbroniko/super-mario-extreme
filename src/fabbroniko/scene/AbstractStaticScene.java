@@ -1,4 +1,4 @@
-package fabbroniko.gamestatemanager;
+package fabbroniko.scene;
 
 import fabbroniko.environment.Dimension;
 

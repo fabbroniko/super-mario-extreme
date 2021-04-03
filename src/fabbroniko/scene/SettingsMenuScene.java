@@ -7,8 +7,7 @@ import java.awt.event.KeyEvent;
 import fabbroniko.Settings;
 import fabbroniko.environment.Background;
 import fabbroniko.environment.Dimension;
-import fabbroniko.gamestatemanager.AbstractScene;
-import fabbroniko.gamestatemanager.GameStateManager;
+import fabbroniko.gamestatemanager.GameManager;
 
 /**
  * Handles and Draws the Settings State.
@@ -97,7 +96,7 @@ public final class SettingsMenuScene extends AbstractScene {
 		super.keyPressed(e);
 		
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			GameStateManager.getInstance().openScene(new MainMenuScene());
+			GameManager.getInstance().openScene(new MainMenuScene());
 		}
 		if (e.getKeyCode() == KeyEvent.VK_UP && !keyListening) {
 			currentSelection--;

@@ -10,7 +10,7 @@ import fabbroniko.environment.CollisionDirection;
 import fabbroniko.environment.Dimension;
 import fabbroniko.environment.ObjectType;
 import fabbroniko.environment.TileMap;
-import fabbroniko.gamestatemanager.GameStateManager;
+import fabbroniko.gamestatemanager.GameManager;
 import fabbroniko.gamestatemanager.AbstractGenericLevel;
 import fabbroniko.scene.LostScene;
 
@@ -43,7 +43,7 @@ public class Player extends AbstractGameObject {
 		facingRight = true;
 		this.objectType = ObjectType.TYPE_PLAYER;
 		this.currentLevel = level;
-		this.baseWindowSize = GameStateManager.getInstance().getBaseWindowSize();
+		this.baseWindowSize = GameManager.getInstance().getBaseWindowSize();
 	}
 	
 	@Override
@@ -51,7 +51,7 @@ public class Player extends AbstractGameObject {
 		super.update();
 		tileMap.setPosition(this.getObjectPosition().getX() - (int) (baseWindowSize.getWidth() / 2), this.getObjectPosition().getY() - (int) (baseWindowSize.getHeight() / 2));
 		if (death) {
-			GameStateManager.getInstance().openScene(new LostScene(++deathCount));
+			GameManager.getInstance().openScene(new LostScene(++deathCount));
 		}
 		if (animationJump) {
 			this.currentAnimation = animationJumpA;

@@ -2,11 +2,8 @@ package fabbroniko.scene;
 
 import java.awt.*;
 
-import fabbroniko.environment.AudioManager;
 import fabbroniko.environment.Dimension;
 import fabbroniko.environment.Service;
-import fabbroniko.gamestatemanager.AbstractStaticScene;
-import fabbroniko.gamestatemanager.GameStateManager;
 import fabbroniko.resources.Sound;
 
 public final class WinScene extends AbstractStaticScene {
@@ -18,15 +15,14 @@ public final class WinScene extends AbstractStaticScene {
 	
 	@Override
 	public void init() {
-		AudioManager.getInstance().playSound(Sound.getSoundFromName("WinSound"));
+		audioManager.playSound(Sound.getSoundFromName("WinSound"));
 		initTime = System.currentTimeMillis();
 	}
 
 	@Override
 	public void update() {
 		if((System.currentTimeMillis() - initTime) > SCENE_DURATION_MILLISECONDS) {
-			AudioManager.getInstance().stopCurrent();
-			GameStateManager.getInstance().openScene(new MainMenuScene());
+			gameManager.openScene(new MainMenuScene());
 		}
 	}
 

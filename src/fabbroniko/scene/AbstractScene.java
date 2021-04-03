@@ -1,13 +1,27 @@
-package fabbroniko.gamestatemanager;
+package fabbroniko.scene;
 
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 
+import fabbroniko.environment.AudioManager;
 import fabbroniko.environment.Dimension;
+import fabbroniko.gamestatemanager.GameManager;
 import fabbroniko.main.Drawable;
 import fabbroniko.main.KeyDependent;
 
 public abstract class AbstractScene implements Drawable, KeyDependent {
+
+	protected GameManager gameManager;
+	protected AudioManager audioManager;
+
+	public void attachGameManager(final GameManager gameManager) {
+		this.gameManager = gameManager;
+		this.audioManager = gameManager.getAudioManager();
+	}
+
+	public void detachScene() {
+		audioManager.stopCurrent();
+	}
 
 	public abstract void init();
 	

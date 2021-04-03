@@ -15,6 +15,7 @@ import fabbroniko.environment.TileMap;
 import fabbroniko.gameobjects.AbstractGameObject;
 import fabbroniko.gameobjects.GameObjectBuilder;
 import fabbroniko.resources.Sound;
+import fabbroniko.scene.AbstractScene;
 import fabbroniko.scene.MainMenuScene;
 
 /**
@@ -95,7 +96,7 @@ public abstract class AbstractGenericLevel extends AbstractScene {
 	@Override
 	public void keyPressed(final KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			GameStateManager.getInstance().openScene(new MainMenuScene());
+			GameManager.getInstance().openScene(new MainMenuScene());
 			return;
 		}
 		for (final AbstractGameObject i:gameObjects) {
