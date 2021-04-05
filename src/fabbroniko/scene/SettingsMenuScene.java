@@ -2,11 +2,12 @@ package fabbroniko.scene;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import fabbroniko.environment.Background;
 import fabbroniko.environment.Dimension;
 
-public final class SettingsMenuScene extends AbstractScene {
+public final class SettingsMenuScene extends AbstractScene implements KeyListener {
 
 	// Resources
 	private static final String RES_BACKGROUND_IMAGE = "/fabbroniko/Menu/BaseBG.png";
@@ -40,8 +41,15 @@ public final class SettingsMenuScene extends AbstractScene {
 	@Override
 	public void init() {
 		bg = new Background(RES_BACKGROUND_IMAGE);
+		gameManager.addKeyListener(this);
 	}
 
+	@Override
+	public void detachScene() {
+		super.detachScene();
+
+		gameManager.removeKeyListener(this);
+	}
 	@Override
 	public void draw(final Graphics2D g, final Dimension gDimension) {
 		// Drawing the background
@@ -86,8 +94,6 @@ public final class SettingsMenuScene extends AbstractScene {
 
 	@Override
 	public void keyPressed(final KeyEvent e) {
-		super.keyPressed(e);
-
 		switch(e.getKeyCode()) {
 			case KeyEvent.VK_ESCAPE: // ESC
 				gameManager.openScene(new MainMenuScene());
@@ -106,6 +112,12 @@ public final class SettingsMenuScene extends AbstractScene {
 				break;
 		}
 	}
+
+	@Override
+	public void keyReleased(final KeyEvent e) {}
+
+	@Override
+	public void keyTyped(final KeyEvent e) {}
 
 	/**
 	 * Prints a setting name in the screen in a new line into the specified canvas.

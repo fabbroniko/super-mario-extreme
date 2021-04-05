@@ -1,17 +1,16 @@
 package fabbroniko.scene;
 
-import java.awt.*;
-import java.awt.event.KeyEvent;
-
 import fabbroniko.environment.AudioManager;
 import fabbroniko.environment.Dimension;
 import fabbroniko.gamestatemanager.GameManager;
 import fabbroniko.main.Drawable;
-import fabbroniko.main.KeyDependent;
 
-import javax.swing.*;
+import javax.swing.JPanel;
 
-public abstract class AbstractScene implements Drawable, KeyDependent {
+import java.awt.Font;
+import java.awt.Graphics2D;
+
+public abstract class AbstractScene implements Drawable {
 
 	protected static final Font H1_FONT = new JPanel().getFont().deriveFont(Font.BOLD, 20);
 	protected static final Font P_XXXL_FONT = new JPanel().getFont().deriveFont(Font.PLAIN, 20);
@@ -37,12 +36,6 @@ public abstract class AbstractScene implements Drawable, KeyDependent {
 	
 	@Override
 	public abstract void draw(final Graphics2D g, final Dimension gDimension);
-	
-	@Override
-	public void keyPressed(final KeyEvent e) {}
-	
-	@Override
-	public void keyReleased(final KeyEvent e) {}
 
 	protected int getCenteredXPositionForString(final String text, final Graphics2D g, final Dimension dimension) {
 		return (dimension.getWidth() - g.getFontMetrics().stringWidth(text)) / 2;

@@ -6,7 +6,6 @@ import fabbroniko.gameobjects.Castle;
 import fabbroniko.gameobjects.Enemy;
 import fabbroniko.gameobjects.FallingBlock;
 import fabbroniko.gameobjects.InvisibleBlock;
-import fabbroniko.gameobjects.Player;
 import fabbroniko.gamestatemanager.AbstractGenericLevel;
 import fabbroniko.gamestatemanager.GameManager;
 
@@ -53,8 +52,7 @@ public final class GameScene extends AbstractGenericLevel {
 	@Override
 	public void init() {
 		super.init();
-		
-		this.addNewObject(Player.class, getPreferredStartPosition());
+
 		this.addNewObject(Block.class, BLOCK1_POSITION);
 		this.addNewObject(Block.class, BLOCK2_POSITION);
 		this.addNewObject(Enemy.class, ENEMY1_POSITION);

@@ -54,7 +54,6 @@ public final class GamePanel extends JPanel implements Runnable, IView {
 		super.addNotify();
 		if (!threadInitialized) {
 			gameThread = new Thread(this);
-			this.addKeyListener(gameManager);
 			gameThread.start();
 			threadInitialized = true;
 		}

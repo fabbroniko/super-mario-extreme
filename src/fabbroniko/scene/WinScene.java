@@ -1,6 +1,8 @@
 package fabbroniko.scene;
 
-import java.awt.*;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Color;
 
 import fabbroniko.environment.Dimension;
 import fabbroniko.environment.Service;

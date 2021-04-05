@@ -1,7 +1,6 @@
 package fabbroniko.gamestatemanager;
 
 import java.awt.Graphics2D;
-import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import fabbroniko.Settings;
@@ -16,7 +15,7 @@ import fabbroniko.scene.AbstractScene;
  * @author nicola.fabbrini
  *
  */
-public final class GameManager implements Drawable, KeyListener {
+public final class GameManager implements Drawable {
 
 	private static GameManager myInstance;
 
@@ -102,16 +101,11 @@ public final class GameManager implements Drawable, KeyListener {
 		return view.getBaseWindowSize();
 	}
 
-	@Override
-	public void keyPressed(final KeyEvent e) {
-		this.currentState.keyPressed(e);
+	public void addKeyListener(final KeyListener keyListener) {
+		view.addKeyListener(keyListener);
 	}
 
-	@Override
-	public void keyReleased(final KeyEvent e) {
-		this.currentState.keyReleased(e);
+	public void removeKeyListener(final KeyListener keyDependent) {
+		view.removeKeyListener(keyDependent);
 	}
-	
-	@Override
-	public void keyTyped(final KeyEvent e) {}
 }

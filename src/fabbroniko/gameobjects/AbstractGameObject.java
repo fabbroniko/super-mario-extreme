@@ -16,13 +16,12 @@ import fabbroniko.environment.Position;
 import fabbroniko.environment.TileMap;
 import fabbroniko.gamestatemanager.AbstractGenericLevel;
 import fabbroniko.main.Drawable;
-import fabbroniko.main.KeyDependent;
 
 /**
  * Abstract Class representing a generic GameObject.
  * @author fabbroniko
  */
-public abstract class AbstractGameObject implements Drawable, KeyDependent {
+public abstract class AbstractGameObject implements Drawable {
 	
 	protected GameObjectBiDimensionalSpace gameObjectBiDimensionalSpace;
 	/**
@@ -303,12 +302,6 @@ public abstract class AbstractGameObject implements Drawable, KeyDependent {
 			g.drawImage(currentAnimation.getImage(), myPosition.getX() - mapPosition.getX() + spriteDimension.getWidth(), myPosition.getY() - mapPosition.getY(),  -spriteDimension.getWidth(), spriteDimension.getHeight(), null);
 		}
 	}
-	
-	@Override
-	public void keyPressed(final KeyEvent e) {}
-	
-	@Override
-	public void keyReleased(final KeyEvent e) {}
 	
 	protected void log(final String msg) {
 		if(this.objectType.equals(ObjectType.TYPE_PLAYER))
