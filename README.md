@@ -10,4 +10,4 @@ For those interested in OpenGL I will create the same game using LWJGL once I'm 
 - Java 11 JDK Installed 
 - Your favourite IDE, I like IntelliJ IDEA
 
-If you see a ClassNotFound exception or a similar ClassLoader expeptions, just make sure both `src` and `resources` directories are in your building path.
+If you see a ClassNotFound exception or a similar ClassLoader expeptions, just make sure both `src` and `resources` directories are in your `Build Path`.
