@@ -1,46 +1,41 @@
 package fabbroniko.scene;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 
-import fabbroniko.Settings;
 import fabbroniko.environment.Background;
 import fabbroniko.environment.Dimension;
-import fabbroniko.gamestatemanager.GameManager;
 
-/**
- * Handles and Draws the Settings State.
- * @author fabbroniko
- *
- */
 public final class SettingsMenuScene extends AbstractScene {
 
-	private Background bg;
-
-	private int currentSelection;
-	private boolean keyListening;
-	private boolean leftKeyListening;
-	private boolean rightKeyListening;
-	private boolean jumpKeyListening;
-	
-	private static final Color WHITE = new Color(0xffffff);
-	private static final Color RED = new Color(0xff0000);
-	private static final int MAX_SELECTION = 4;
+	// Resources
 	private static final String RES_BACKGROUND_IMAGE = "/fabbroniko/Menu/BaseBG.png";
-	
-	private static final int ABSOLUTE_POSITION_30 = 30;
-	private static final int ABSOLUTE_POSITION_60 = 60;
-	private static final int ABSOLUTE_POSITION_90 = 90;
-	private static final int ABSOLUTE_POSITION_120 = 120;
-	private static final int ABSOLUTE_POSITION_150 = 150;
-	private static final int ABSOLUTE_POSITION_200 = 200;
-	
+
+	// Constant strings
+	private static final String HINT_1 = "Arrow UP/DOWN to navigate. ENTER to modify.";
+	private static final String HINT_2 = "Press a Key to select a new binding, then ENTER to confirm.";
+
+	// Absolute coordinates
+	private static final int FIRST_OPTION_Y = 0;
+	private static final int OPTIONS_Y_OFFSET = 30;
+	private static final int HINT_Y = 230;
+	private static final int OPTION_NAME_X = 10;
+	private static final int OPTION_VALUE_X = 250;
+
+	// Options Index
 	private static final int SELECTION_LEFT_KEY = 0;
 	private static final int SELECTION_RIGHT_KEY = 1;
 	private static final int SELECTION_JUMP_KEY = 2;
 	private static final int SELECTION_MUSIC = 3;
 	private static final int SELECTION_EFFECTS = 4;
+
+	private static final int MAX_SELECTION = 4;
+
+	// Fields
+	private Background bg;
+	private int currentlyDrawingOption;
+	private int currentSelection;
+	private boolean keyListening;
 
 	@Override
 	public void init() {
@@ -49,94 +44,210 @@ public final class SettingsMenuScene extends AbstractScene {
 
 	@Override
 	public void draw(final Graphics2D g, final Dimension gDimension) {
+		// Drawing the background
 		bg.draw(g, gDimension);
-		g.setColor((currentSelection == SELECTION_LEFT_KEY) ? RED : WHITE);
-		g.drawString("Left Key: ", ABSOLUTE_POSITION_30, ABSOLUTE_POSITION_30);
-		g.drawString("<" + getKeyString(Settings.GLOBAL_SETTINGS.getLeftMovementKeyCode()) + ">", ABSOLUTE_POSITION_200, ABSOLUTE_POSITION_30);
-		
-		g.setColor((currentSelection == SELECTION_RIGHT_KEY) ? RED : WHITE);
-		g.drawString("Right Key: ", ABSOLUTE_POSITION_30, ABSOLUTE_POSITION_60);
-		g.drawString("<" + getKeyString(Settings.GLOBAL_SETTINGS.getRightMovementKeyCode()) + ">", ABSOLUTE_POSITION_200, ABSOLUTE_POSITION_60);
-		
-		g.setColor((currentSelection == SELECTION_JUMP_KEY) ? RED : WHITE);
-		g.drawString("Jump Key: ", ABSOLUTE_POSITION_30, ABSOLUTE_POSITION_90);
-		g.drawString("<" + getKeyString(Settings.GLOBAL_SETTINGS.getJumpKeyCode()) + ">", ABSOLUTE_POSITION_200, ABSOLUTE_POSITION_90);
-		
-		g.setColor((currentSelection == SELECTION_MUSIC) ? RED : WHITE);
-		g.drawString("Music: ", ABSOLUTE_POSITION_30, ABSOLUTE_POSITION_120);
-		g.drawString("<" + (Settings.GLOBAL_SETTINGS.isMusicActive() ? "ON" : "OFF") + ">", ABSOLUTE_POSITION_200, ABSOLUTE_POSITION_120);
-		
-		g.setColor((currentSelection == SELECTION_EFFECTS) ? RED : WHITE);
-		g.drawString("Effects: ", ABSOLUTE_POSITION_30, ABSOLUTE_POSITION_150);
-		g.drawString("<" + (Settings.GLOBAL_SETTINGS.isEffectsAudioActive() ? "ON" : "OFF") + ">", ABSOLUTE_POSITION_200, ABSOLUTE_POSITION_150);
-	}
-	
-	private String getKeyString(final int keyCode) {
-		String tmp;
-		
-		if (keyCode == KeyEvent.VK_UP) { 
-			tmp = "UP"; 
-		} else if (keyCode == KeyEvent.VK_LEFT) { 
-			tmp = "LEFT";
-		} else if (keyCode == KeyEvent.VK_RIGHT) {
-			tmp = "RIGHT";
-		} else if (keyCode == KeyEvent.VK_DOWN) {
-			tmp = "DOWN";
-		} else if (keyCode == KeyEvent.VK_SPACE) { 
-			tmp = "SPACE";
+
+		// Setting up the shared parameters to all options
+		g.setFont(P_FONT);
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+		/* Printing the options into the screen. The currently drawing option field is used to automatically print
+		 * a option in a new line every time the printOption method is called. This is also used to check if the option
+		 * we are currently drawing is also the one currently selected by the user.
+		 */
+		currentlyDrawingOption = 1;
+		printOption("Left Key: ", gameManager.getSettings().getLeftMovementKeyCode(), g);
+		printOption("Right Key: ", gameManager.getSettings().getRightMovementKeyCode(), g);
+		printOption("Jump Key: ", gameManager.getSettings().getJumpKeyCode(), g);
+		printOption("Music: ", gameManager.getSettings().isMusicActive(), g);
+		printOption("Effects: ", gameManager.getSettings().isEffectsAudioActive(), g);
+
+		// Setting up the configuration for the bottom page hints.
+		g.setColor(Color.WHITE);
+		g.setFont(P_S_FONT);
+
+		// Printing a hint depending on what the user is doing.
+		int x;
+		String hint;
+		if(!keyListening) {
+			x = getCenteredXPositionForString(HINT_1, g, gDimension);
+			hint = HINT_1;
 		} else {
-			tmp = "" + (char) keyCode;
+			x = getCenteredXPositionForString(HINT_2, g, gDimension);
+			hint = HINT_2;
 		}
-		
-		return tmp;
+
+		// Draw the hint
+		g.drawString(hint, x, HINT_Y);
+
+		// Disabling antialiasing
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 	}
 
 	@Override
 	public void keyPressed(final KeyEvent e) {
 		super.keyPressed(e);
-		
-		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			GameManager.getInstance().openScene(new MainMenuScene());
+
+		switch(e.getKeyCode()) {
+			case KeyEvent.VK_ESCAPE: // ESC
+				gameManager.openScene(new MainMenuScene());
+				break;
+			case KeyEvent.VK_UP: // Arrow UP
+				specialKeyUpHandler();
+				break;
+			case KeyEvent.VK_DOWN: // Arrow DOWN
+				specialKeyDownHandler();
+				break;
+			case KeyEvent.VK_ENTER: // ENTER
+				specialKeyEnterHandler();
+				break;
+			default: // Any other key
+				keyHandler(e.getKeyCode());
+				break;
 		}
-		if (e.getKeyCode() == KeyEvent.VK_UP && !keyListening) {
+	}
+
+	/**
+	 * Prints a setting name in the screen in a new line into the specified canvas.
+	 * Used for key bindings.
+	 *
+	 * @param optionName The name of the option
+	 * @param keyCode The key code of the key associated to this setting
+	 * @param g The canvas we draw on
+	 */
+	private void printOption(final String optionName,
+							 final int keyCode,
+							 final Graphics2D g) {
+
+		printOption(optionName, getKeyString(keyCode), g);
+	}
+
+	/**
+	 * Print a setting name in the screen in a new line into the specified canvas.
+	 * Used for ON/OFF options
+	 *
+	 * @param optionName The name of the option
+	 * @param optionValue Whether the setting is ON (true) or OFF (false)
+	 * @param g The canvas we draw on
+	 */
+	private void printOption(final String optionName,
+							 final boolean optionValue,
+							 final Graphics2D g) {
+
+		final String sOptionValue = optionValue ? "ON" : "OFF";
+
+		printOption(optionName, sOptionValue, g);
+	}
+
+	/**
+	 * Print a setting name in the screen in a new line into the specified canvas.
+	 *
+	 * @param optionName The name of the option
+	 * @param optionValue The value of the option
+	 * @param g The canvas we draw on
+	 */
+	private void printOption(final String optionName,
+							 final String optionValue,
+							 final Graphics2D g) {
+
+		Color textColor = Color.WHITE;
+		if((currentSelection + 1) == currentlyDrawingOption)
+			textColor = Color.GREEN;
+
+		g.setColor(textColor);
+
+		int y = FIRST_OPTION_Y + (OPTIONS_Y_OFFSET * currentlyDrawingOption);
+		g.drawString(optionName, OPTION_NAME_X, y);
+		g.drawString(optionValue, OPTION_VALUE_X, y);
+
+		currentlyDrawingOption++;
+	}
+
+	/**
+	 * Converts a key code into its string representation.
+	 * This is used to convert the key code in a user friendly string displayed next to each option.
+	 *
+	 * @param keyCode The key code to convert
+	 * @return The string value associated to the key code.
+	 */
+	private String getKeyString(final int keyCode) {
+		String tmp;
+
+		if (keyCode == KeyEvent.VK_UP) {
+			tmp = "UP";
+		} else if (keyCode == KeyEvent.VK_LEFT) {
+			tmp = "LEFT";
+		} else if (keyCode == KeyEvent.VK_RIGHT) {
+			tmp = "RIGHT";
+		} else if (keyCode == KeyEvent.VK_DOWN) {
+			tmp = "DOWN";
+		} else if (keyCode == KeyEvent.VK_SPACE) {
+			tmp = "SPACE";
+		} else {
+			tmp = "" + (char) keyCode;
+		}
+
+		return tmp;
+	}
+
+	/**
+	 * The up button is used to scroll between options in the settings menu unless we are listening for a key to
+	 * be entered. In that case we delegate the operation to the keyHandler method.
+	 */
+	private void specialKeyUpHandler() {
+		if(!keyListening) {
 			currentSelection--;
 			currentSelection = currentSelection < 0 ? MAX_SELECTION : currentSelection;
+			return;
 		}
-		if (e.getKeyCode() == KeyEvent.VK_DOWN && !keyListening) {
+
+		keyHandler(KeyEvent.VK_UP);
+	}
+
+	/**
+	 * The down button is used to scroll between options in the settings menu unless we are listening for a key to
+	 * be entered. In that case we delegate the operation to the keyHandler method.
+	 */
+	private void specialKeyDownHandler() {
+		if (!keyListening) {
 			currentSelection++;
 			currentSelection = currentSelection > MAX_SELECTION ? 0 : currentSelection;
+			return;
 		}
-		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-			switch(currentSelection) {
-			case SELECTION_LEFT_KEY:
-				keyListening ^= true;
-				leftKeyListening ^= true;
-				break;
-			case SELECTION_RIGHT_KEY: 
-				keyListening ^= true;
-				rightKeyListening ^= true;
-				break;
-			case SELECTION_JUMP_KEY:
-				keyListening ^= true;
-				jumpKeyListening ^= true;
-				break;
-			case SELECTION_MUSIC:
-				Settings.GLOBAL_SETTINGS.setMusicActive(!Settings.GLOBAL_SETTINGS.isMusicActive());
-				break;
-			case SELECTION_EFFECTS:
-				Settings.GLOBAL_SETTINGS.setEffectsAudioActive(!Settings.GLOBAL_SETTINGS.isEffectsAudioActive());
-				break;
-			default:
-					break;
-			}
-		}
-		
-		if (leftKeyListening) {
-			Settings.GLOBAL_SETTINGS.setLeftMovementKeyCode(e.getKeyCode());
-		} else if (rightKeyListening) {
-			Settings.GLOBAL_SETTINGS.setRightMovementKeyCode(e.getKeyCode());
-		} else if (jumpKeyListening) {
-			Settings.GLOBAL_SETTINGS.setJumpKeyCode(e.getKeyCode());
+
+		keyHandler(KeyEvent.VK_DOWN);
+	}
+
+	/**
+	 * Handles the ENTER Key.
+	 * If one of the ON/OFF options is selected it simply swaps between the 2 options
+	 * otherwise invert whatever value keyListening has (either confirm a key selection or start typing the new selection)
+	 */
+	private void specialKeyEnterHandler() {
+		if(currentSelection == SELECTION_EFFECTS)
+			gameManager.getSettings().invertEffectActive();
+		else if (currentSelection == SELECTION_MUSIC)
+			gameManager.getSettings().invertMusicActive();
+		else
+			keyListening ^= true;
+	}
+
+	/**
+	 * Saves the pressed key into the user settings object depending on what option is currently selected.
+	 * @param keyCode The key code to save into the user settings.
+	 */
+	private void keyHandler(final int keyCode) {
+		// Ignore the call if we are currently not listening for a user input  - this should never happen
+		if(!keyListening)
+			return;
+
+		// Checks what option is currently selected and saves the key code to the appropriate user setting variable.
+		if(currentSelection == SELECTION_LEFT_KEY) {
+			gameManager.getSettings().setLeftMovementKeyCode(keyCode);
+		} else if (currentSelection == SELECTION_RIGHT_KEY) {
+			gameManager.getSettings().setRightMovementKeyCode(keyCode);
+		} else if (currentSelection == SELECTION_JUMP_KEY) {
+			gameManager.getSettings().setJumpKeyCode(keyCode);
 		}
 	}
 }

@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import fabbroniko.Settings;
 import fabbroniko.environment.AudioManager;
 import fabbroniko.environment.Dimension;
 import fabbroniko.main.Drawable;
@@ -21,6 +22,7 @@ public final class GameManager implements Drawable, KeyListener {
 
 	private final Object synchronize;
 	private final AudioManager audioManager;
+	private final Settings settings;
 
 	private static IView view;
 	private AbstractScene currentState;
@@ -31,6 +33,7 @@ public final class GameManager implements Drawable, KeyListener {
 	private GameManager() {
 		synchronize = new Object();
 		audioManager = AudioManager.getInstance();
+		settings = new Settings();
 	}
 	
 	/**
@@ -52,15 +55,15 @@ public final class GameManager implements Drawable, KeyListener {
 	/**
 	 * Sets the specified state that has to be displayed on the screen.
 	 */
-	public void openScene(final AbstractScene abstractScene) {
-		abstractScene.attachGameManager(this);
+	public void openScene(final AbstractScene newScene) {
+		newScene.attachGameManager(this);
 
 		synchronized (synchronize) {
 			if(currentState != null) {
 				currentState.detachScene();
 			}
 
-			this.currentState = abstractScene;
+			this.currentState = newScene;
 			this.currentState.init();
 		}
 	}
@@ -77,7 +80,11 @@ public final class GameManager implements Drawable, KeyListener {
 	public AudioManager getAudioManager() {
 		return this.audioManager;
 	}
-	
+
+	public Settings getSettings() {
+		return settings;
+	}
+
 	/**	Draws the current state.
 	 * 	@param g Graphic Context
 	 */

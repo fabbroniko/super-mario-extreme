@@ -65,7 +65,7 @@ public final class LostScene extends AbstractStaticScene {
 		 * Calculates the coordinate of the origin of the string in order to center it in the X axis
 		 */
 		g.setColor(Color.WHITE);
-		g.setFont(g.getFont().deriveFont(Font.BOLD, 20));
+		g.setFont(H1_FONT);
 		int centeredX = getCenteredXPositionForString(GAME_OVER_MAIN_TEXT, g, gDimension);
 		int y = (gDimension.getHeight() - g.getFontMetrics().getHeight()) / 2;
 
@@ -77,7 +77,7 @@ public final class LostScene extends AbstractStaticScene {
 		 * Sets the font
 		 * Calculates the coordinate of the origin of the string in order for it to be centered in the X axis and below the Game Over string by a certain padding
 		 */
-		g.setFont(g.getFont().deriveFont(Font.PLAIN, 12));
+		g.setFont(P_FONT);
 		final String composedDeathCount = DEATH_COUNT_TEXT + deathCount;
 		centeredX = getCenteredXPositionForString(composedDeathCount, g, gDimension);
 		y = (gDimension.getHeight() / 2) + (g.getFontMetrics().getHeight() / 2);

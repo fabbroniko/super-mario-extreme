@@ -54,7 +54,7 @@ public final class WinScene extends AbstractStaticScene {
 
 		// Setting up the parameters to draw the strings
 		g.setColor(Color.WHITE);
-		g.setFont(g.getFont().deriveFont(Font.BOLD, 20));
+		g.setFont(H1_FONT);
 		int centeredX = getCenteredXPositionForString(LEVEL_COMPLETED, g, gDimension);
 		int y = (gDimension.getHeight() - g.getFontMetrics().getHeight()) / 2;
 

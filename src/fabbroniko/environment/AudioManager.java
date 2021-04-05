@@ -11,6 +11,7 @@ import javax.sound.sampled.LineUnavailableException;
 
 import fabbroniko.Settings;
 import fabbroniko.error.ErrorManager;
+import fabbroniko.gamestatemanager.GameManager;
 import fabbroniko.resources.ResourceManager;
 import fabbroniko.resources.ResourceService;
 import fabbroniko.resources.Sound;
@@ -60,14 +61,14 @@ public final class AudioManager {
 	}
 	
 	private void setMusic(final Sound music) {
-		if (!Settings.GLOBAL_SETTINGS.isMusicActive()) {
+		if (!GameManager.getInstance().getSettings().isMusicActive()) {
 			return;
 		}
 		myMusic.setMusic(music);
 	}
 	
 	private void setEffect(final Sound effect) {
-		if (!Settings.GLOBAL_SETTINGS.isEffectsAudioActive()) {
+		if (!GameManager.getInstance().getSettings().isEffectsAudioActive()) {
 			return; 
 		}
 		
