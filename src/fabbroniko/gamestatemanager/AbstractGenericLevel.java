@@ -2,6 +2,7 @@ package fabbroniko.gamestatemanager;
 
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import fabbroniko.environment.Service;
 import fabbroniko.environment.TileMap;
 import fabbroniko.gameobjects.AbstractGameObject;
 import fabbroniko.gameobjects.GameObjectBuilder;
+import fabbroniko.gameobjects.Player;
 import fabbroniko.resources.Sound;
 import fabbroniko.scene.AbstractScene;
 import fabbroniko.scene.MainMenuScene;
@@ -23,7 +25,7 @@ import fabbroniko.scene.MainMenuScene;
  * @author fabbroniko
  *
  */
-public abstract class AbstractGenericLevel extends AbstractScene {
+public abstract class AbstractGenericLevel extends AbstractScene implements KeyListener {
 	
 	private Background bg;
 	
@@ -42,6 +44,7 @@ public abstract class AbstractGenericLevel extends AbstractScene {
 	private final String resMapFile;
 	private CollisionManager collisionManager;
 	private GameObjectBuilder gameObjectBuilder;
+	private Player player;
 	
 	/**
 	 * Constructs a new GenericLevel.
@@ -60,13 +63,25 @@ public abstract class AbstractGenericLevel extends AbstractScene {
 		bg = new Background(resBgImage);
 		tileMap = new TileMap(resTileSet, resMapFile);
 		tileMap.setPosition(Service.ORIGIN.clone());
-		gameObjects = new ArrayList<AbstractGameObject>();
+		gameObjects = new ArrayList<>();
 		
 		this.collisionManager = new CollisionManager(tileMap, gameObjects);
 		gameObjectBuilder = new GameObjectBuilder(tileMap, this);
 		
 		AudioManager.getInstance().playSound(Sound.getSoundFromName("BackgroundSound"));
-	} 
+
+		player = (Player) this.addNewObject(Player.class, getPreferredStartPosition());
+
+		gameManager.addKeyListener(player);
+		gameManager.addKeyListener(this);
+	}
+
+	@Override
+	public void detachScene() {
+		super.detachScene();
+
+		gameManager.removeKeyListener(this);
+	}
 	
 	@Override
 	public void update() {
@@ -97,20 +112,15 @@ public abstract class AbstractGenericLevel extends AbstractScene {
 	public void keyPressed(final KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			GameManager.getInstance().openScene(new MainMenuScene());
-			return;
-		}
-		for (final AbstractGameObject i:gameObjects) {
-			i.keyPressed(e);
 		}
 	}
 
 	@Override
-	public void keyReleased(final KeyEvent e) { 
-		for (final AbstractGameObject i:gameObjects) {
-			i.keyReleased(e);
-		} 
-	}
-	
+	public void keyReleased(final KeyEvent e) {}
+
+	@Override
+	public void keyTyped(final KeyEvent e) {}
+
 	public final void checkForCollisions(final AbstractGameObject obj, final Position offsetPosition) {
 		this.collisionManager.checkForCollisions(obj, offsetPosition);
 	}
@@ -118,8 +128,11 @@ public abstract class AbstractGenericLevel extends AbstractScene {
 	/**
 	 * Adds a new {@link AbstractGameObject AbstractGameObject} in this level.
 	 */
-	protected void addNewObject(final Class<? extends AbstractGameObject> objectClass, final Position position) {
-		gameObjects.add(gameObjectBuilder.newInstance(objectClass).setPosition(position).getInstance());
+	protected AbstractGameObject addNewObject(final Class<? extends AbstractGameObject> objectClass, final Position position) {
+		final AbstractGameObject newGameObject = gameObjectBuilder.newInstance(objectClass).setPosition(position).getInstance();
+		gameObjects.add(newGameObject);
+
+		return newGameObject;
 	}
 	
 	/**

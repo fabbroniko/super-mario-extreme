@@ -1,8 +1,8 @@
 package fabbroniko.gameobjects;
 
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-import fabbroniko.Settings;
 import fabbroniko.environment.Animation;
 import fabbroniko.environment.Animations;
 import fabbroniko.environment.AudioManager;
@@ -18,7 +18,7 @@ import fabbroniko.scene.LostScene;
  * Represents the player's character.
  * @author fabbroniko
  */
-public class Player extends AbstractGameObject {
+public class Player extends AbstractGameObject implements KeyListener {
 
 	private int deathCount = 0;
 	private boolean animationJump;
@@ -92,7 +92,7 @@ public class Player extends AbstractGameObject {
 			}
 		}
 	}
-	
+
 	@Override
 	public void keyPressed(final KeyEvent e) {
 		if (e.getKeyCode() == GameManager.getInstance().getSettings().getLeftMovementKeyCode()) {
@@ -128,4 +128,7 @@ public class Player extends AbstractGameObject {
 			jumping = false;
 		}
 	}
+
+	@Override
+	public void keyTyped(final KeyEvent e) {}
 }

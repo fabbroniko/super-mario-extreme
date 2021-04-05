@@ -2,6 +2,7 @@ package fabbroniko.scene;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import fabbroniko.environment.Background;
 import fabbroniko.environment.Dimension;
@@ -12,7 +13,7 @@ import fabbroniko.environment.Dimension;
  *
  * When an option is selected it's drawn in a different color to give the user a visual feedback of what's going on.
  */
-public final class MainMenuScene extends AbstractScene {
+public final class MainMenuScene extends AbstractScene implements KeyListener {
 
 	// Strings
 	private static final String TITLE = "Super Mario Extreme Edition";
@@ -52,6 +53,15 @@ public final class MainMenuScene extends AbstractScene {
 	public void init() {
 		bg = new Background(RES_BG_IMAGE);
 		selectedOption = 0;
+
+		gameManager.addKeyListener(this);
+	}
+
+	@Override
+	public void detachScene() {
+		super.detachScene();
+
+		gameManager.removeKeyListener(this);
 	}
 
 	/**
@@ -136,6 +146,12 @@ public final class MainMenuScene extends AbstractScene {
 			selectedOption = START_OPTION_INDEX;
 		}
 	}
+
+	@Override
+	public void keyReleased(final KeyEvent e) {}
+
+	@Override
+	public void keyTyped(final KeyEvent e) {}
 
 	/**
 	 * Delegates the operation of drawing the a option to this method.
