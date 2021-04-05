@@ -44,7 +44,6 @@ public abstract class AbstractGenericLevel extends AbstractScene implements KeyL
 	private final String resMapFile;
 	private CollisionManager collisionManager;
 	private GameObjectBuilder gameObjectBuilder;
-	private Player player;
 	
 	/**
 	 * Constructs a new GenericLevel.
@@ -70,7 +69,7 @@ public abstract class AbstractGenericLevel extends AbstractScene implements KeyL
 		
 		AudioManager.getInstance().playSound(Sound.getSoundFromName("BackgroundSound"));
 
-		player = (Player) this.addNewObject(Player.class, getPreferredStartPosition());
+		final Player player = (Player) this.addNewObject(Player.class, getPreferredStartPosition());
 
 		gameManager.addKeyListener(player);
 		gameManager.addKeyListener(this);

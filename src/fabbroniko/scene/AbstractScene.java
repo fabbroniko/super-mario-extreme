@@ -1,13 +1,14 @@
 package fabbroniko.scene;
 
-import java.awt.*;
-
 import fabbroniko.environment.AudioManager;
 import fabbroniko.environment.Dimension;
 import fabbroniko.gamestatemanager.GameManager;
 import fabbroniko.main.Drawable;
 
-import javax.swing.*;
+import javax.swing.JPanel;
+
+import java.awt.Font;
+import java.awt.Graphics2D;
 
 public abstract class AbstractScene implements Drawable {
 
