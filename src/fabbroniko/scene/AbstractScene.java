@@ -1,6 +1,6 @@
 package fabbroniko.scene;
 
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 
 import fabbroniko.environment.AudioManager;
@@ -9,7 +9,14 @@ import fabbroniko.gamestatemanager.GameManager;
 import fabbroniko.main.Drawable;
 import fabbroniko.main.KeyDependent;
 
+import javax.swing.*;
+
 public abstract class AbstractScene implements Drawable, KeyDependent {
+
+	protected static final Font H1_FONT = new JPanel().getFont().deriveFont(Font.BOLD, 20);
+	protected static final Font P_XXXL_FONT = new JPanel().getFont().deriveFont(Font.PLAIN, 20);
+	protected static final Font P_FONT = new JPanel().getFont().deriveFont(Font.PLAIN, 12);
+	protected static final Font P_S_FONT = new JPanel().getFont().deriveFont(Font.PLAIN, 10);
 
 	protected GameManager gameManager;
 	protected AudioManager audioManager;

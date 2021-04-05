@@ -55,15 +55,15 @@ public final class GameManager implements Drawable, KeyListener {
 	/**
 	 * Sets the specified state that has to be displayed on the screen.
 	 */
-	public void openScene(final AbstractScene abstractScene) {
-		abstractScene.attachGameManager(this);
+	public void openScene(final AbstractScene newScene) {
+		newScene.attachGameManager(this);
 
 		synchronized (synchronize) {
 			if(currentState != null) {
 				currentState.detachScene();
 			}
 
-			this.currentState = abstractScene;
+			this.currentState = newScene;
 			this.currentState.init();
 		}
 	}

@@ -8,28 +8,34 @@ import fabbroniko.environment.Dimension;
 
 public final class SettingsMenuScene extends AbstractScene {
 
-	private Background bg;
-
-	private int currentSelection;
-	private boolean keyListening;
-	
-	private static final Color WHITE = new Color(0xffffff);
-	private static final Color RED = new Color(0xff0000);
-	private static final int MAX_SELECTION = 4;
+	// Resources
 	private static final String RES_BACKGROUND_IMAGE = "/fabbroniko/Menu/BaseBG.png";
-	
-	private static final int ABSOLUTE_POSITION_30 = 30;
-	private static final int ABSOLUTE_POSITION_60 = 60;
-	private static final int ABSOLUTE_POSITION_90 = 90;
-	private static final int ABSOLUTE_POSITION_120 = 120;
-	private static final int ABSOLUTE_POSITION_150 = 150;
-	private static final int ABSOLUTE_POSITION_200 = 200;
-	
+
+	// Constant strings
+	private static final String HINT_1 = "Arrow UP/DOWN to navigate. ENTER to modify.";
+	private static final String HINT_2 = "Press a Key to select a new binding, then ENTER to confirm.";
+
+	// Absolute coordinates
+	private static final int FIRST_OPTION_Y = 0;
+	private static final int OPTIONS_Y_OFFSET = 30;
+	private static final int HINT_Y = 230;
+	private static final int OPTION_NAME_X = 10;
+	private static final int OPTION_VALUE_X = 250;
+
+	// Options Index
 	private static final int SELECTION_LEFT_KEY = 0;
 	private static final int SELECTION_RIGHT_KEY = 1;
 	private static final int SELECTION_JUMP_KEY = 2;
 	private static final int SELECTION_MUSIC = 3;
 	private static final int SELECTION_EFFECTS = 4;
+
+	private static final int MAX_SELECTION = 4;
+
+	// Fields
+	private Background bg;
+	private int currentlyDrawingOption;
+	private int currentSelection;
+	private boolean keyListening;
 
 	@Override
 	public void init() {
@@ -38,30 +44,43 @@ public final class SettingsMenuScene extends AbstractScene {
 
 	@Override
 	public void draw(final Graphics2D g, final Dimension gDimension) {
+		// Drawing the background
 		bg.draw(g, gDimension);
 
+		// Setting up the shared parameters to all options
+		g.setFont(P_FONT);
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-		g.setColor((currentSelection == SELECTION_LEFT_KEY) ? RED : WHITE);
-		g.drawString("Left Key: ", ABSOLUTE_POSITION_30, ABSOLUTE_POSITION_30);
-		g.drawString("<" + getKeyString(gameManager.getSettings().getLeftMovementKeyCode()) + ">", ABSOLUTE_POSITION_200, ABSOLUTE_POSITION_30);
-		
-		g.setColor((currentSelection == SELECTION_RIGHT_KEY) ? RED : WHITE);
-		g.drawString("Right Key: ", ABSOLUTE_POSITION_30, ABSOLUTE_POSITION_60);
-		g.drawString("<" + getKeyString(gameManager.getSettings().getRightMovementKeyCode()) + ">", ABSOLUTE_POSITION_200, ABSOLUTE_POSITION_60);
-		
-		g.setColor((currentSelection == SELECTION_JUMP_KEY) ? RED : WHITE);
-		g.drawString("Jump Key: ", ABSOLUTE_POSITION_30, ABSOLUTE_POSITION_90);
-		g.drawString("<" + getKeyString(gameManager.getSettings().getJumpKeyCode()) + ">", ABSOLUTE_POSITION_200, ABSOLUTE_POSITION_90);
-		
-		g.setColor((currentSelection == SELECTION_MUSIC) ? RED : WHITE);
-		g.drawString("Music: ", ABSOLUTE_POSITION_30, ABSOLUTE_POSITION_120);
-		g.drawString("<" + (gameManager.getSettings().isMusicActive() ? "ON" : "OFF") + ">", ABSOLUTE_POSITION_200, ABSOLUTE_POSITION_120);
-		
-		g.setColor((currentSelection == SELECTION_EFFECTS) ? RED : WHITE);
-		g.drawString("Effects: ", ABSOLUTE_POSITION_30, ABSOLUTE_POSITION_150);
-		g.drawString("<" + (gameManager.getSettings().isEffectsAudioActive() ? "ON" : "OFF") + ">", ABSOLUTE_POSITION_200, ABSOLUTE_POSITION_150);
+		/* Printing the options into the screen. The currently drawing option field is used to automatically print
+		 * a option in a new line every time the printOption method is called. This is also used to check if the option
+		 * we are currently drawing is also the one currently selected by the user.
+		 */
+		currentlyDrawingOption = 1;
+		printOption("Left Key: ", gameManager.getSettings().getLeftMovementKeyCode(), g);
+		printOption("Right Key: ", gameManager.getSettings().getRightMovementKeyCode(), g);
+		printOption("Jump Key: ", gameManager.getSettings().getJumpKeyCode(), g);
+		printOption("Music: ", gameManager.getSettings().isMusicActive(), g);
+		printOption("Effects: ", gameManager.getSettings().isEffectsAudioActive(), g);
 
+		// Setting up the configuration for the bottom page hints.
+		g.setColor(Color.WHITE);
+		g.setFont(P_S_FONT);
+
+		// Printing a hint depending on what the user is doing.
+		int x;
+		String hint;
+		if(!keyListening) {
+			x = getCenteredXPositionForString(HINT_1, g, gDimension);
+			hint = HINT_1;
+		} else {
+			x = getCenteredXPositionForString(HINT_2, g, gDimension);
+			hint = HINT_2;
+		}
+
+		// Draw the hint
+		g.drawString(hint, x, HINT_Y);
+
+		// Disabling antialiasing
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 	}
 
@@ -89,7 +108,63 @@ public final class SettingsMenuScene extends AbstractScene {
 	}
 
 	/**
-	 * Converts a key code into it's string representation.
+	 * Prints a setting name in the screen in a new line into the specified canvas.
+	 * Used for key bindings.
+	 *
+	 * @param optionName The name of the option
+	 * @param keyCode The key code of the key associated to this setting
+	 * @param g The canvas we draw on
+	 */
+	private void printOption(final String optionName,
+							 final int keyCode,
+							 final Graphics2D g) {
+
+		printOption(optionName, getKeyString(keyCode), g);
+	}
+
+	/**
+	 * Print a setting name in the screen in a new line into the specified canvas.
+	 * Used for ON/OFF options
+	 *
+	 * @param optionName The name of the option
+	 * @param optionValue Whether the setting is ON (true) or OFF (false)
+	 * @param g The canvas we draw on
+	 */
+	private void printOption(final String optionName,
+							 final boolean optionValue,
+							 final Graphics2D g) {
+
+		final String sOptionValue = optionValue ? "ON" : "OFF";
+
+		printOption(optionName, sOptionValue, g);
+	}
+
+	/**
+	 * Print a setting name in the screen in a new line into the specified canvas.
+	 *
+	 * @param optionName The name of the option
+	 * @param optionValue The value of the option
+	 * @param g The canvas we draw on
+	 */
+	private void printOption(final String optionName,
+							 final String optionValue,
+							 final Graphics2D g) {
+
+		Color textColor = Color.WHITE;
+		if((currentSelection + 1) == currentlyDrawingOption)
+			textColor = Color.GREEN;
+
+		g.setColor(textColor);
+
+		int y = FIRST_OPTION_Y + (OPTIONS_Y_OFFSET * currentlyDrawingOption);
+		g.drawString(optionName, OPTION_NAME_X, y);
+		g.drawString(optionValue, OPTION_VALUE_X, y);
+
+		currentlyDrawingOption++;
+	}
+
+	/**
+	 * Converts a key code into its string representation.
 	 * This is used to convert the key code in a user friendly string displayed next to each option.
 	 *
 	 * @param keyCode The key code to convert

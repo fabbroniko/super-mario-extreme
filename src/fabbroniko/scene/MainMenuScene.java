@@ -19,6 +19,7 @@ public final class MainMenuScene extends AbstractScene {
 	private static final String START_GAME_OPTION = "Start";
 	private static final String SETTINGS_OPTION = "Settings";
 	private static final String QUIT_OPTION = "Quit";
+	private static final String HINT = "Arrow UP/DOWN to navigate. ENTER to confirm.";
 
 	// Resources
 	private static final String RES_BG_IMAGE = "/fabbroniko/Menu/BaseBG.png";
@@ -33,7 +34,10 @@ public final class MainMenuScene extends AbstractScene {
 	private static final int OPTION_ARC_SIZE = 8;
 	private static final Dimension OPTION_RECTANGLE_DIMENSION = new Dimension(90, 30);
 	private static final int OPTION_RECT_TO_TEXT_OFFSET = 23;
-	private static final int FONT_SIZE = 20;
+	private static final int TITLE_Y = 30;
+	private static final int START_OPTION_Y = 65;
+	private static final int OPTIONS_OFFSET = 50;
+	private static final int HINT_Y = 230;
 
 	private Background bg;
 
@@ -67,16 +71,24 @@ public final class MainMenuScene extends AbstractScene {
 
 		// Setting up the parameters to draw the game title
 		g.setColor(Color.GREEN);
-		g.setFont(g.getFont().deriveFont(Font.BOLD, FONT_SIZE));
+		g.setFont(H1_FONT);
 		int centeredXPosition = getCenteredXPositionForString(TITLE, g, canvasDimension);
 
 		// Draw the game title
-		g.drawString(TITLE, centeredXPosition, 30);
+		g.drawString(TITLE, centeredXPosition, TITLE_Y);
 
 		// Print the menu options
-		printMenuOption(START_GAME_OPTION, 80, g, canvasDimension, selectedOption == START_OPTION_INDEX);
-		printMenuOption(SETTINGS_OPTION, 130, g, canvasDimension, selectedOption == SETTINGS_OPTION_INDEX);
-		printMenuOption(QUIT_OPTION, 180, g, canvasDimension, selectedOption == QUIT_OPTION_INDEX);
+		printMenuOption(START_GAME_OPTION, START_OPTION_Y, g, canvasDimension, selectedOption == START_OPTION_INDEX);
+		printMenuOption(SETTINGS_OPTION, START_OPTION_Y + OPTIONS_OFFSET, g, canvasDimension, selectedOption == SETTINGS_OPTION_INDEX);
+		printMenuOption(QUIT_OPTION, START_OPTION_Y + 2*OPTIONS_OFFSET, g, canvasDimension, selectedOption == QUIT_OPTION_INDEX);
+
+		// Setting up the configuration for the bottom page hints.
+		g.setColor(Color.WHITE);
+		g.setFont(P_S_FONT);
+		int x = getCenteredXPositionForString(HINT, g, canvasDimension);
+
+		// Draw the hint
+		g.drawString(HINT, x, HINT_Y);
 
 		// Disabling antialiasing to make sure the next cycle doesn't apply it to the background or whatever is rendered next
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
@@ -149,7 +161,7 @@ public final class MainMenuScene extends AbstractScene {
 		if(isSelected)
 			g.setColor(Color.GREEN);
 
-		g.setFont(g.getFont().deriveFont(Font.PLAIN, FONT_SIZE));
+		g.setFont(P_XXXL_FONT);
 		x = getCenteredXPositionForString(text, g, canvasDimension);
 		int optionNameY = y + OPTION_RECT_TO_TEXT_OFFSET;
 
