@@ -11,9 +11,6 @@ import javax.sound.sampled.LineUnavailableException;
 
 import com.fabbroniko.error.ErrorManager;
 import com.fabbroniko.gamestatemanager.GameManager;
-import com.fabbroniko.resources.ResourceManager;
-import com.fabbroniko.resources.ResourceService;
-import com.fabbroniko.resources.Sound;
 
 public final class AudioManager {
 	

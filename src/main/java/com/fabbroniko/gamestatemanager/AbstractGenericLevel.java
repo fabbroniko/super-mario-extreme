@@ -16,7 +16,6 @@ import com.fabbroniko.environment.TileMap;
 import com.fabbroniko.gameobjects.AbstractGameObject;
 import com.fabbroniko.gameobjects.GameObjectBuilder;
 import com.fabbroniko.gameobjects.Player;
-import com.fabbroniko.resources.Sound;
 import com.fabbroniko.scene.AbstractScene;
 import com.fabbroniko.scene.MainMenuScene;
 

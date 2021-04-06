@@ -7,7 +7,6 @@ import com.fabbroniko.environment.ObjectType;
 import com.fabbroniko.environment.TileMap;
 import com.fabbroniko.environment.Animation.AnimationListener;
 import com.fabbroniko.gamestatemanager.AbstractGenericLevel;
-import com.fabbroniko.resources.Sound;
 
 /**
  * Represents the simplest block in the game.
