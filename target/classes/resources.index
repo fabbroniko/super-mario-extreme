@@ -1,0 +1,16 @@
+<Audio>
+BackgroundSound=/Sounds/background_sound.res
+GameOverSound=/Sounds/game_over_sound.res
+WinSound=/Sounds/win_sound.res
+JumpSound=/Sounds/jump_sound.res
+HitSound=/Sounds/hit_sound.res
+BreakingBlockSound=/Sounds/breaking_block_sound.res
+</Audio>
+
+
+
+<Ciccio>
+Prova1=/Sounds/win_sound.wav
+Prova2=/Sounds/win_sound.wav
+Prova3=/Sounds/win_sound.wav
+</Ciccio>
