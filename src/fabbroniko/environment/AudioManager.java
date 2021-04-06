@@ -9,25 +9,17 @@ import javax.sound.sampled.LineEvent;
 import javax.sound.sampled.LineListener;
 import javax.sound.sampled.LineUnavailableException;
 
-import fabbroniko.Settings;
 import fabbroniko.error.ErrorManager;
 import fabbroniko.gamestatemanager.GameManager;
 import fabbroniko.resources.ResourceManager;
 import fabbroniko.resources.ResourceService;
 import fabbroniko.resources.Sound;
 
-/**
- * Handle the audio of the whole game. 
- * @author fabbroniko
- */
 public final class AudioManager {
 	
 	private final Music myMusic;
-	private MusicListener musicListener;
-	
 	
 	private static final AudioManager MY_INSTANCE = new AudioManager();
-	private static final int DELAY_TIME = 50;
 	private static final String ERROR_STOPPING_MUSIC = "Something went wrong trying to stop the actual running music.";
 	private static final String ERROR_STARTING_MUSIC = "Something went wrong trying to start a new Sound.";
 	private static final String ERROR_INITIALIZING_MUSIC = "Something went wrong trying to initialize the music instance.";
@@ -55,11 +47,7 @@ public final class AudioManager {
 			setEffect(sound);
 		}
 	}
-	
-	public void setMusicListener(final MusicListener musicListener) {
-		this.musicListener = musicListener;
-	}
-	
+
 	private void setMusic(final Sound music) {
 		if (!GameManager.getInstance().getSettings().isMusicActive()) {
 			return;
@@ -71,39 +59,22 @@ public final class AudioManager {
 		if (!GameManager.getInstance().getSettings().isEffectsAudioActive()) {
 			return; 
 		}
-		
-		new Thread(new Runnable() {
-			private Clip tmpClip;
-			private boolean exit;
-			
-			@Override
-			public void run() {
-				try {
-					tmpClip = AudioSystem.getClip();
-					tmpClip.open(AudioSystem.getAudioInputStream(getClass().getResourceAsStream(effect.getFileLocation())));
-					tmpClip.addLineListener(new LineListener() {	
-						@Override
-						public void update(final LineEvent event) {
-							if (event.getType().equals(LineEvent.Type.STOP)) {
-								tmpClip.close();
-								exit = true;
-							}
-						}
-					});
-					tmpClip.start();
-				} catch (Exception e) {
-					ErrorManager.getInstance().notifyError(ErrorManager.ERROR_STARTING_MUSIC, "Something went wrong trying to start a new effect: " + effect);
-				}
-				
-				while (!exit) {
-					try {
-						Thread.sleep(DELAY_TIME);
-					} catch (Exception e) {
-						ErrorManager.getInstance().notifyError(ErrorManager.ERROR_THREAD_SLEEP, e.getMessage());
+
+		try {
+			Clip tmpClip = AudioSystem.getClip();
+			tmpClip.open(AudioSystem.getAudioInputStream(getClass().getResourceAsStream(effect.getFileLocation())));
+
+			tmpClip.addLineListener(event -> {
+					if (event.getType().equals(LineEvent.Type.STOP)) {
+						((Clip)event.getSource()).close();
+						//tmpClip.close();
 					}
-				}
-			}
-		}).start();
+			});
+
+			tmpClip.start();
+		} catch (Exception e) {
+			ErrorManager.getInstance().notifyError(ErrorManager.ERROR_STARTING_MUSIC, "Something went wrong trying to start a new effect: " + effect);
+		}
 	}
 	
 	/**
@@ -113,7 +84,7 @@ public final class AudioManager {
 		myMusic.stopCurrent();
 	}
 	
-	private final class Music {
+	private static final class Music {
 		
 		private AudioInputStream audioInputStream;
 		private Clip clip;
@@ -142,11 +113,6 @@ public final class AudioManager {
 						@Override
 						public void update(final LineEvent event) {
 							if (event.getType().equals(LineEvent.Type.STOP)) {
-								if(musicListener != null && !hasBeenStopped)
-								{
-									musicListener.onStop();
-									musicListener = null;
-								}
 								hasBeenStopped = false;
 								clip.removeLineListener(this);
 							}
@@ -176,18 +142,5 @@ public final class AudioManager {
 		public String toString() {
 			return "[AudioInputStream: " + audioInputStream + ", Clip: " + clip + ", HasBeenStopped: " + hasBeenStopped + "]";
 		}
-	}
-	
-	/**
-	 * Represents a music listener, which notifies the listener when something change about the actual music.
-	 * @author fabbroniko
-	 *
-	 */
-	public interface MusicListener {
-		
-		/** 
-		 * Notifies whether the music ended or has been stopped.
-		 */
-		void onStop();
 	}
 }
