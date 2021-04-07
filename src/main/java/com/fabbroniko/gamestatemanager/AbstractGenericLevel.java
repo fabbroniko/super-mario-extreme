@@ -6,13 +6,7 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fabbroniko.environment.AudioManager;
-import com.fabbroniko.environment.Background;
-import com.fabbroniko.environment.CollisionManager;
-import com.fabbroniko.environment.Dimension;
-import com.fabbroniko.environment.Position;
-import com.fabbroniko.environment.Service;
-import com.fabbroniko.environment.TileMap;
+import com.fabbroniko.environment.*;
 import com.fabbroniko.gameobjects.AbstractGameObject;
 import com.fabbroniko.gameobjects.GameObjectBuilder;
 import com.fabbroniko.gameobjects.Player;
@@ -66,7 +60,7 @@ public abstract class AbstractGenericLevel extends AbstractScene implements KeyL
 		this.collisionManager = new CollisionManager(tileMap, gameObjects);
 		gameObjectBuilder = new GameObjectBuilder(tileMap, this);
 		
-		AudioManager.getInstance().playSound(Sound.getSoundFromName("BackgroundSound"));
+		audioManager.playBackgroundMusic("theme", true);
 
 		final Player player = (Player) this.addNewObject(Player.class, getPreferredStartPosition());
 
@@ -88,7 +82,7 @@ public abstract class AbstractGenericLevel extends AbstractScene implements KeyL
 		for (int i = 0; i < gameObjects.size(); i++) {
 			gameObjects.get(i).update();
 			if (gameObjects.get(i).isDead()) {
-				gameObjects.remove(i);
+				gameObjects.remove(i); // TODO refactor
 			}
 		}
 	}
@@ -151,4 +145,9 @@ public abstract class AbstractGenericLevel extends AbstractScene implements KeyL
 	 * Loads the next level or the win window.
 	 */
 	public abstract void levelFinished();
+
+	// TODO tmp to refactor
+	public AudioManager getAudioManager() {
+		return audioManager;
+	}
 }

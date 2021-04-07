@@ -2,7 +2,6 @@ package com.fabbroniko.gameobjects;
 
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Rectangle;
 
 import com.fabbroniko.environment.Animation;
 import com.fabbroniko.environment.Animations;
@@ -31,7 +30,7 @@ public abstract class AbstractGameObject implements Drawable {
 	/**
 	 * Object's type.
 	 */
-	protected ObjectType objectType = ObjectType.TYPE_NONE;
+	protected ObjectType objectType;
 	
 	/**
 	 * Object's current animation.
@@ -139,17 +138,7 @@ public abstract class AbstractGameObject implements Drawable {
 	 */
 	protected Point bottomRight;
 	
-	/**
-	 * Indicates that the animation has to be repeated indefinitely.
-	 */
-	protected static final boolean REPEAT = false;
-	
-	/**
-	 * Indicates that the animation has to be repeated once.
-	 */
-	protected static final boolean NO_REPEAT = true;
-	
-	private int objectID;
+	private final int objectID;
 	
 	/**
 	 * Constructs a new AbstractGameObject.
@@ -200,7 +189,6 @@ public abstract class AbstractGameObject implements Drawable {
 	/**
 	 * Handles collisions with other objects.
 	 * @param direction Collision's Direction.
-	 * @param objectTypeP Type of the object.
 	 */
 	public void handleObjectCollisions(final CollisionDirection direction, final AbstractGameObject obj) {
 		handleMapCollisions(direction);
@@ -237,15 +225,7 @@ public abstract class AbstractGameObject implements Drawable {
 	public void setObjectPosition(final Position position) {
 		this.gameObjectBiDimensionalSpace.setPosition(position.clone());
 	}
-	
-	/**
-	 * Gets the rectangle corresponding to this object.
-	 * @return Returns the rectangle corresponding to this object.
-	 */
-	public Rectangle getRectangle() {
-		return this.gameObjectBiDimensionalSpace.getRectangle();
-	}
-	
+
 	/**
 	 * Gets the object's type.
 	 * @return Returns the object's type.
@@ -256,7 +236,7 @@ public abstract class AbstractGameObject implements Drawable {
 	
 	@Override
 	public boolean equals(final Object gameObject) {
-		return gameObject != null && gameObject instanceof AbstractGameObject && this.objectID == ((AbstractGameObject)gameObject).objectID;
+		return gameObject instanceof AbstractGameObject && this.objectID == ((AbstractGameObject)gameObject).objectID;
 	}
 	
 	@Override
@@ -299,13 +279,6 @@ public abstract class AbstractGameObject implements Drawable {
 			g.drawImage(currentAnimation.getImage(), myPosition.getX() - mapPosition.getX(), myPosition.getY() - mapPosition.getY(), spriteDimension.getWidth(), spriteDimension.getHeight(), null);
 		} else {
 			g.drawImage(currentAnimation.getImage(), myPosition.getX() - mapPosition.getX() + spriteDimension.getWidth(), myPosition.getY() - mapPosition.getY(),  -spriteDimension.getWidth(), spriteDimension.getHeight(), null);
-		}
-	}
-	
-	protected void log(final String msg) {
-		if(this.objectType.equals(ObjectType.TYPE_PLAYER))
-		{
-			System.out.println(msg);
 		}
 	}
 }

@@ -24,7 +24,7 @@ public final class WinScene extends AbstractStaticScene {
 
 	@Override
 	public void init() {
-		audioManager.playSound(Sound.getSoundFromName("WinSound"));
+		audioManager.playBackgroundMusic("victory", false);
 		initTime = System.currentTimeMillis();
 	}
 

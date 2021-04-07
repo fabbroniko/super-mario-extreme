@@ -1,7 +1,6 @@
 package com.fabbroniko.gameobjects;
 
 import com.fabbroniko.environment.Animations;
-import com.fabbroniko.environment.AudioManager;
 import com.fabbroniko.environment.CollisionDirection;
 import com.fabbroniko.environment.ObjectType;
 import com.fabbroniko.environment.TileMap;
@@ -28,10 +27,10 @@ public class Block extends AbstractGameObject implements AnimationListener {
 	public void handleObjectCollisions(final CollisionDirection direction, final AbstractGameObject obj) {
 		super.handleObjectCollisions(direction, obj);
 		
-		if (obj.getObjectType().equals(ObjectType.TYPE_PLAYER) && direction.equals(CollisionDirection.BOTTOM_COLLISION) && !currentAnimation.equals(Animations.BLOCK_BREAKING)) {
+		if (obj.getObjectType().equals(ObjectType.TYPE_PLAYER) && direction.equals(CollisionDirection.BOTTOM_COLLISION) && !currentAnimation.equals(Animations.BLOCK_BREAKING)) { // TODO check this equals of 2 different classes
 			this.setAnimation(Animations.BLOCK_BREAKING);
 			currentAnimation.setAnimationListener(this);
-			AudioManager.getInstance().playSound(Sound.getSoundFromName("BreakingBlockSound"));
+			level.getAudioManager().playEffect("breaking");
 		}
 	}
 

@@ -28,7 +28,7 @@ public class InvisibleBlock extends AbstractGameObject {
 	{
 		if (obj.getObjectType().equals(ObjectType.TYPE_PLAYER) && direction.equals(CollisionDirection.BOTTOM_COLLISION)) {
 			this.setAnimation(Animations.INVISIBLEBLOCK_VISIBLE);
-			AudioManager.getInstance().playSound(Sound.getSoundFromName("HitSound"));
+			this.level.getAudioManager().playEffect("hit");
 		}
 	}
 }

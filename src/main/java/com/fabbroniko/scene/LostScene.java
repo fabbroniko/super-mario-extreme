@@ -29,7 +29,7 @@ public final class LostScene extends AbstractStaticScene {
 
 	@Override
 	public void init() {
-		audioManager.playSound(Sound.getSoundFromName("GameOverSound"));
+		audioManager.playBackgroundMusic("death", false);
 		initTime = System.currentTimeMillis();
 	}
 

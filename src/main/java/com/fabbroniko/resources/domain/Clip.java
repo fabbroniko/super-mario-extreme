@@ -1,5 +1,7 @@
 package com.fabbroniko.resources.domain;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -7,9 +9,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Clip {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String name;
-    private String type;
+
+    @JacksonXmlProperty(isAttribute = true)
     private boolean preload;
-    private boolean loop;
+
+    @JacksonXmlText
     private String path;
 }

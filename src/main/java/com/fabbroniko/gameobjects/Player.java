@@ -5,7 +5,6 @@ import java.awt.event.KeyListener;
 
 import com.fabbroniko.environment.Animation;
 import com.fabbroniko.environment.Animations;
-import com.fabbroniko.environment.AudioManager;
 import com.fabbroniko.environment.CollisionDirection;
 import com.fabbroniko.environment.Dimension;
 import com.fabbroniko.environment.ObjectType;
@@ -110,7 +109,7 @@ public class Player extends AbstractGameObject implements KeyListener {
 			groundHit = false;
 			currentJump = 0;
 			animationJump = true;
-			AudioManager.getInstance().playSound(com.fabbroniko.resources.Sound.getSoundFromName("JumpSound"));
+			level.getAudioManager().playEffect("jump");
 		}
 	}
  

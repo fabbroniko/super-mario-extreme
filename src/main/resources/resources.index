@@ -1,11 +1,11 @@
 <resource>
-    <Audio>
-        <Clip name="theme" type="Music" preload=true loop=true>/fabbroniko/sound/super-mario-theme.wav</Clip>
-        <Clip name="victory" type="Music" preload=true>/fabbroniko/sound/victory.wav</Clip>
-        <Clip name="death" type="Music" preload=true>/fabbroniko/sound/game_over.wav</Clip>
+    <audio>
+        <clip name="theme" preload="true">/sound/super-mario-theme.wav</clip>
+        <clip name="victory" preload="true">/sound/victory.wav</clip>
+        <clip name="death" preload="true">/sound/game-over.wav</clip>
 
-        <Clip name="jump" type="Effect" preload=true>/fabbroniko/sound/jump.wav</Clip>
-        <Clip name="hit" type="Effect" preload=true>/fabbroniko/sound/hit.wav</Clip>
-        <Clip name="breaking" type="Effect" preload=true>/fabbroniko/sound/breaking-block.wav</Clip>
-    </Audio>
+        <clip name="jump" preload="true">/sound/jump.wav</clip>
+        <clip name="hit" preload="true">/sound/hit.wav</clip>
+        <clip name="breaking" preload="true">/sound/breaking-block.wav</clip>
+    </audio>
 </resource>
