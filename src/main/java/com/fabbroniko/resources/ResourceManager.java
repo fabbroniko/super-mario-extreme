@@ -1,8 +1,8 @@
 package com.fabbroniko.resources;
 
 import com.fabbroniko.resources.domain.Resource;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import lombok.extern.log4j.Log4j2;
 
 import javax.sound.sampled.*;
 import java.io.IOException;
@@ -11,63 +11,119 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * The resource manager takes care of referencing, loading and caching resources such as audio clips, sprites and tilemap
+ *
+ * It uses a resource index as list of resources to load and what options are available to them.
+ */
+@Log4j2
 public class ResourceManager {
 
     private static final String RESOURCE_DESCRIPTOR_PATH = "/resources.index";
 
-    private final Resource resource;
-    private Map<String, Clip> preLoadedAudioClips;
+    private Resource resource;
+    private final Map<String, Clip> preLoadedAudioClips;
 
     public ResourceManager() {
-        final ObjectMapper mapper = new XmlMapper();
-
-        try {
-            resource = mapper.readValue(getClass().getResource(RESOURCE_DESCRIPTOR_PATH), Resource.class);
-        } catch (final IOException e) {
-            // TODO below
-            e.printStackTrace();
-            throw new RuntimeException();
-        }
         preLoadedAudioClips = new HashMap<>();
     }
 
     /**
-     * This method preloads all resources with preload=true in memory for faster access
+     * This method initializes the resource manager and preloads all resources with preload=true in memory for faster access.
+     * Concurrent access of this method should not be allowed
      */
-    public void preload() {
+    public synchronized void preload() {
+        if(resource != null)
+            return;
 
-    }
-
-    public Clip findAudioClipFromName(final String name) {
-        if(preLoadedAudioClips.containsKey(name)) {
-            System.out.println("Loading audio " + name + " from cache.");
-            return preLoadedAudioClips.get(name);
+        try {
+            // Using jackson to deserialize the resource index into its object representation
+            resource = new XmlMapper().readValue(getClass().getResource(RESOURCE_DESCRIPTOR_PATH), Resource.class);
+        } catch (final IOException e) {
+            log.fatal("Unable to initialize the resource manager. {}", e.getMessage());
+            throw new RuntimeException(); // TODO handle this properly once error management is refactored
         }
 
-        System.out.println("Loading audio " + name + " from disk.");
-        return getAudioClipFromDisk(name);
+        log.info("Pre-loading audio clips from disk.");
+
+        resource.getAudio().getClip().forEach(clip -> {
+            if(clip.isPreload()) {
+                loadAudioClipFromDisk(clip.getName()).ifPresent(c -> preLoadedAudioClips.put(clip.getName(), c));
+            }
+        });
     }
 
-    private Clip getAudioClipFromDisk(final String name) {
+    /**
+     * Finds an audio clip from the name passed as parameter. This method looks for a match in the pre-loaded cache if
+     * available, otherwise it's loaded from disk.
+     *
+     * @param name The unique identifier for the resource found in the resource.index file
+     * @return An empty Optional if there was a problem retrieving the resource or the fully set up clip if it was successfully loaded
+     */
+    public Optional<Clip> findAudioClipFromName(final String name) {
+        // Attempts to retrieve the value from the pre-loaded cache first
+        if(preLoadedAudioClips.containsKey(name)) {
+            final Clip clip = preLoadedAudioClips.get(name);
+
+            // Make sure the Frame is set back to the beginning of the clip.
+            // This allows reuse of previously constructed objects.
+            clip.stop();
+            clip.setFramePosition(0);
+
+            log.info("Fetched clip named {} from cache", name);
+            return Optional.of(clip);
+        }
+
+        // If it's not preloaded we need to load it from disk and make sure the clip is closed once stopped to avoid memory leaks
+        final Optional<Clip> optClip = loadAudioClipFromDisk(name);
+        optClip.ifPresent(clip -> clip.addLineListener(event -> {
+            if (event.getType().equals(LineEvent.Type.STOP)) {
+                ((Clip) event.getSource()).close();
+            }
+        }));
+
+        return optClip;
+    }
+
+    /**
+     * Loads the audio clip from the disk.
+     *
+     * @param name Unique identifier specified in the resource.index file.
+     * @return The audio clip ready to be played.
+     */
+    private Optional<Clip> loadAudioClipFromDisk(final String name) {
+        log.trace("Loading audio clip from disk. Clip name {}", name);
+
+        // Find the clip descriptor from the resource index
         final Optional<com.fabbroniko.resources.domain.Clip> optResourceClip = resource.getAudio().getClip()
                 .stream()
                 .filter(c -> c.getName().equals(name))
                 .findFirst();
 
-        if(optResourceClip.isEmpty())
-            return null;
+        Optional<Clip> retValue = Optional.empty();
+        if(optResourceClip.isEmpty()) {
+            log.error("Couldn't find audio clip with name {} in the resource index.", name);
+            return retValue;
+        }
 
         try {
             final Clip clip = AudioSystem.getClip();
             final InputStream audioClipStream = getClass().getResourceAsStream(optResourceClip.get().getPath());
+            if(audioClipStream == null) {
+                log.error("Couldn't find audio clip {} in classpath with path {}", name, optResourceClip.get().getPath());
+                return retValue;
+            }
+
             final AudioInputStream ais = AudioSystem.getAudioInputStream(audioClipStream);
 
             clip.open(ais);
-            return clip;
-        } catch (final LineUnavailableException | IOException | UnsupportedAudioFileException e) {
-            // TODO
-            e.printStackTrace();
-            return null;
+
+            log.info("Successfully loaded audio clip {} from disk.", name);
+            retValue = Optional.of(clip);
+        } catch (final Exception e) {
+            log.error("An exception occurred while loading audio clip {}. Exception message {}", name, e.getMessage());
         }
+
+        return retValue;
     }
 }
