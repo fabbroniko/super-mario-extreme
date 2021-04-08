@@ -1,13 +1,11 @@
 package com.fabbroniko.gameobjects;
 
 import com.fabbroniko.environment.Animations;
-import com.fabbroniko.environment.AudioManager;
 import com.fabbroniko.environment.CollisionDirection;
 import com.fabbroniko.environment.ObjectType;
 import com.fabbroniko.environment.TileMap;
 import com.fabbroniko.environment.Animation.AnimationListener;
 import com.fabbroniko.gamestatemanager.AbstractGenericLevel;
-import com.fabbroniko.resources.Sound;
 
 /**
  * Represents an enemy that can only be killed if a player hits him from the top.
@@ -58,7 +56,7 @@ public class Enemy extends AbstractGameObject implements AnimationListener {
 		if (direction.equals(CollisionDirection.TOP_COLLISION) && obj.getObjectType().equals(ObjectType.TYPE_PLAYER) && !currentAnimation.getAnimation().equals(Animations.ENEMY_DEAD)) {
 			this.setAnimation(Animations.ENEMY_DEAD);
 			this.currentAnimation.setAnimationListener(this);
-			AudioManager.getInstance().playSound(Sound.getSoundFromName("HitSound"));
+			this.level.getAudioManager().playEffect("hit");
 		}
 	}
 

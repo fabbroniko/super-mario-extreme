@@ -6,7 +6,6 @@ import com.fabbroniko.environment.CollisionDirection;
 import com.fabbroniko.environment.ObjectType;
 import com.fabbroniko.environment.TileMap;
 import com.fabbroniko.gamestatemanager.AbstractGenericLevel;
-import com.fabbroniko.resources.Sound;
 
 /**
  * Represents an invisible block. If visible, it follows the same rules of a normal block. Otherwise it can only be hit from below.
@@ -29,7 +28,7 @@ public class InvisibleBlock extends AbstractGameObject {
 	{
 		if (obj.getObjectType().equals(ObjectType.TYPE_PLAYER) && direction.equals(CollisionDirection.BOTTOM_COLLISION)) {
 			this.setAnimation(Animations.INVISIBLEBLOCK_VISIBLE);
-			AudioManager.getInstance().playSound(Sound.getSoundFromName("HitSound"));
+			this.level.getAudioManager().playEffect("hit");
 		}
 	}
 }

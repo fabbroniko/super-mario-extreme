@@ -1,132 +1,129 @@
 package com.fabbroniko.resources;
 
-import java.io.BufferedReader;
+import com.fabbroniko.resources.domain.Resource;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import lombok.extern.log4j.Log4j2;
+
+import javax.sound.sampled.*;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
-import com.fabbroniko.error.CorruptedFileError;
-import com.fabbroniko.error.ResourceNotFoundError;
-
+/**
+ * The resource manager takes care of referencing, loading and caching resources such as audio clips, sprites and tilemap
+ *
+ * It uses a resource index as list of resources to load and what options are available to them.
+ */
+@Log4j2
 public class ResourceManager {
 
-	private Map<String, String> resources = new HashMap<>();
-	private Map<String, String> resourcesType = new HashMap<>();
-	private ResourceIndexParser resourceIndexParser = new ResourceIndexParser();
-	
-	private String currentTag = NO_TAG;
-	
-	private static final ResourceManager MY_INSTANCE = new ResourceManager();
-	private static final String RESOURCES_INDEX = "/resources.index";
-	private static final String RESOURCE_SPLITTER = "=";
-	private static final int NAME_INDEX = 0;
-	private static final int LOCATION_INDEX = 1;
-	private static final String NO_TAG = "";
+    private static final String RESOURCE_DESCRIPTOR_PATH = "/resources.index";
 
-	private ResourceManager() {
-		try {
-			loadResources();
-			checkLocations();
-			//System.out.println(resources);
-			//System.out.println(resourcesType);
-		} catch (IOException e) {
-			throw new ResourceNotFoundError(RESOURCES_INDEX);
-		}
-	}
-	
-	public static ResourceManager getInstance() {
-		return MY_INSTANCE;
-	}
-	
-	private void loadResources() throws IOException {
-		final InputStream inputStream = getClass().getResourceAsStream(RESOURCES_INDEX);
-		final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-		String tmpString;
-		String[] tmpArray;
-		 
-		while((tmpString = bufferedReader.readLine()) != null) {
-			tmpArray = tmpString.split(RESOURCE_SPLITTER);
-			if(tmpArray != null && tmpArray.length == 2){
-				if(currentTag.equals(NO_TAG) || resources.containsKey(tmpArray[NAME_INDEX])){
-					throw new CorruptedFileError(RESOURCES_INDEX);
-				}
-				resources.put(tmpArray[NAME_INDEX], tmpArray[LOCATION_INDEX]);
-				resourcesType.put(tmpArray[NAME_INDEX], currentTag);
-			}else if(resourceIndexParser.isOpeningTag(tmpString)){
-				if(!currentTag.equals(NO_TAG) || !ResourceService.getInstance().getAvailableTags().contains(resourceIndexParser.getTagName(tmpString))){
-					throw new CorruptedFileError(RESOURCES_INDEX);
-				}
-				currentTag = resourceIndexParser.getTagName(tmpString);
-			}else if(resourceIndexParser.isClosingTag(tmpString)) {
-				if(currentTag.equals(NO_TAG) || !currentTag.equals(resourceIndexParser.getTagName(tmpString))){
-					throw new CorruptedFileError(RESOURCES_INDEX);
-				}
-				currentTag = NO_TAG;
-			}
-		}
-		
-		bufferedReader.close();
-	}
-	
-	private void checkLocations() {
-		for(final String i:resources.values()){
-			if(i == null || getClass().getResource(i) == null) {
-				throw new ResourceNotFoundError(i);
-			}
-		}
-	}
-	
-	public Map<String, String> getResourcesFromTag(final String tag) {
-		final Map<String, String> res = new HashMap<>();
-		
-		for(final String i:resourcesType.keySet()){
-			if(resourcesType.get(i).equals(tag)){
-				res.put(i, resources.get(i));
-			}
-		}
-		
-		return res;
-	}
-	
-	private class ResourceIndexParser {
-		
-		private static final char OPENING_TAG = '<';
-		private static final char CLOSING_TAG = '>';
-		private static final char ENDING_TAG = '/';
-		private static final int MIN_LENGTH = 3;
-		private static final int FIRST_POSITION = 0;
-		private static final int ENDING_TAG_POSITION = 1;
-		
-		public ResourceIndexParser() {}
-		
-		public boolean isOpeningTag(final String tag){
-			return isValidTag(tag) && tag.charAt(ENDING_TAG_POSITION) != ENDING_TAG;
-		}
-		
-		public boolean isClosingTag(final String tag) {
-			return isValidTag(tag) && tag.charAt(ENDING_TAG_POSITION) == ENDING_TAG;
-		}
-		
-		private boolean isValidTag(final String tag) {
-			return tag != null && tag.length() > MIN_LENGTH && tag.charAt(FIRST_POSITION) == OPENING_TAG && tag.charAt(tag.length() - 1) == CLOSING_TAG;
-		}
-		
-		public String getTagName(final String tag) {
-			if(!isValidTag(tag)){
-				return null;
-			}
-			
-			final StringBuilder stringBuilder = new StringBuilder();
-			stringBuilder.append(tag);
-			stringBuilder.deleteCharAt(FIRST_POSITION);
-			if(stringBuilder.charAt(FIRST_POSITION) == ENDING_TAG){
-				stringBuilder.deleteCharAt(FIRST_POSITION);
-			}
-			stringBuilder.deleteCharAt(stringBuilder.toString().length() - 1);
-			return stringBuilder.toString();
-		}
-	}
-	
+    private Resource resource;
+    private final Map<String, Clip> preLoadedAudioClips;
+
+    public ResourceManager() {
+        preLoadedAudioClips = new HashMap<>();
+    }
+
+    /**
+     * This method initializes the resource manager and preloads all resources with preload=true in memory for faster access.
+     * Concurrent access of this method should not be allowed
+     */
+    public synchronized void preload() {
+        if(resource != null)
+            return;
+
+        try {
+            // Using jackson to deserialize the resource index into its object representation
+            resource = new XmlMapper().readValue(getClass().getResource(RESOURCE_DESCRIPTOR_PATH), Resource.class);
+        } catch (final IOException e) {
+            log.fatal("Unable to initialize the resource manager. {}", e.getMessage());
+            throw new RuntimeException(); // TODO handle this properly once error management is refactored
+        }
+
+        log.info("Pre-loading audio clips from disk.");
+
+        resource.getAudio().getClip().forEach(clip -> {
+            if(clip.isPreload()) {
+                loadAudioClipFromDisk(clip.getName()).ifPresent(c -> preLoadedAudioClips.put(clip.getName(), c));
+            }
+        });
+    }
+
+    /**
+     * Finds an audio clip from the name passed as parameter. This method looks for a match in the pre-loaded cache if
+     * available, otherwise it's loaded from disk.
+     *
+     * @param name The unique identifier for the resource found in the resource.index file
+     * @return An empty Optional if there was a problem retrieving the resource or the fully set up clip if it was successfully loaded
+     */
+    public Optional<Clip> findAudioClipFromName(final String name) {
+        // Attempts to retrieve the value from the pre-loaded cache first
+        if(preLoadedAudioClips.containsKey(name)) {
+            final Clip clip = preLoadedAudioClips.get(name);
+
+            // Make sure the Frame is set back to the beginning of the clip.
+            // This allows reuse of previously constructed objects.
+            clip.stop();
+            clip.setFramePosition(0);
+
+            log.info("Fetched clip named {} from cache", name);
+            return Optional.of(clip);
+        }
+
+        // If it's not preloaded we need to load it from disk and make sure the clip is closed once stopped to avoid memory leaks
+        final Optional<Clip> optClip = loadAudioClipFromDisk(name);
+        optClip.ifPresent(clip -> clip.addLineListener(event -> {
+            if (event.getType().equals(LineEvent.Type.STOP)) {
+                ((Clip) event.getSource()).close();
+            }
+        }));
+
+        return optClip;
+    }
+
+    /**
+     * Loads the audio clip from the disk.
+     *
+     * @param name Unique identifier specified in the resource.index file.
+     * @return The audio clip ready to be played.
+     */
+    private Optional<Clip> loadAudioClipFromDisk(final String name) {
+        log.trace("Loading audio clip from disk. Clip name {}", name);
+
+        // Find the clip descriptor from the resource index
+        final Optional<com.fabbroniko.resources.domain.Clip> optResourceClip = resource.getAudio().getClip()
+                .stream()
+                .filter(c -> c.getName().equals(name))
+                .findFirst();
+
+        Optional<Clip> retValue = Optional.empty();
+        if(optResourceClip.isEmpty()) {
+            log.error("Couldn't find audio clip with name {} in the resource index.", name);
+            return retValue;
+        }
+
+        try {
+            final Clip clip = AudioSystem.getClip();
+            final InputStream audioClipStream = getClass().getResourceAsStream(optResourceClip.get().getPath());
+            if(audioClipStream == null) {
+                log.error("Couldn't find audio clip {} in classpath with path {}", name, optResourceClip.get().getPath());
+                return retValue;
+            }
+
+            final AudioInputStream ais = AudioSystem.getAudioInputStream(audioClipStream);
+
+            clip.open(ais);
+
+            log.info("Successfully loaded audio clip {} from disk.", name);
+            retValue = Optional.of(clip);
+        } catch (final Exception e) {
+            log.error("An exception occurred while loading audio clip {}. Exception message {}", name, e.getMessage());
+        }
+
+        return retValue;
+    }
 }

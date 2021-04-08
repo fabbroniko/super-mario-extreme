@@ -1,7 +1,5 @@
 package com.fabbroniko.environment;
 
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
@@ -9,7 +7,6 @@ import javax.imageio.ImageIO;
 import com.fabbroniko.error.ErrorManager;
 import com.fabbroniko.error.ResourceNotFoundError;
 import com.fabbroniko.error.TileTypeError;
-import com.fabbroniko.gamestatemanager.GameManager;
 
 /**
  * Service Class used to perform environmental-operations.
@@ -33,21 +30,6 @@ public final class Service {
 	public static final Position ORIGIN = new Position(0, 0);
 	
 	private Service() { }
-	
-	/**
-	 * Gets a new centered position (X Coord) starting from the BASE_SIZE of the game and the dimension of the view.
-	 * @param viewDimension dimension of the view that has to be centered
-	 * @return A new Centered Position
-	 */
-	public static Position getXCentredPosition(final Dimension viewDimension) {
-		final Position centredPosition = ORIGIN.clone();
-		centredPosition.setX((GameManager.getInstance().getBaseWindowSize().getWidth() - viewDimension.getWidth()) / 2);
-		return centredPosition;
-	}
-	
-	public static boolean intersects(final Rectangle first, final Point point) {
-		return first.contains(point);
-	}
 	
 	public static BufferedImage getImageFromName(final String location) {
 		BufferedImage retImage;
@@ -79,9 +61,9 @@ public final class Service {
 		 */
 		TILE_BLOCK(1);
 		
-		private int tileType;
+		private final int tileType;
 		
-		private TileType(final int i) {
+		TileType(final int i) {
 			this.tileType = i;
 		}
 		

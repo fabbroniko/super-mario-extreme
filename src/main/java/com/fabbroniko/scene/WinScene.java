@@ -6,7 +6,6 @@ import java.awt.Color;
 
 import com.fabbroniko.environment.Dimension;
 import com.fabbroniko.environment.Service;
-import com.fabbroniko.resources.Sound;
 
 /**
  * The WinScene is a very simple scene, it shows a "Level Completed" string on a simple background and it plays
@@ -25,7 +24,7 @@ public final class WinScene extends AbstractStaticScene {
 
 	@Override
 	public void init() {
-		audioManager.playSound(Sound.getSoundFromName("WinSound"));
+		audioManager.playBackgroundMusic("victory", false);
 		initTime = System.currentTimeMillis();
 	}
 

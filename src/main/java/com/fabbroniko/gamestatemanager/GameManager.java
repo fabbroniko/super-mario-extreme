@@ -8,6 +8,7 @@ import com.fabbroniko.environment.AudioManager;
 import com.fabbroniko.environment.Dimension;
 import com.fabbroniko.main.Drawable;
 import com.fabbroniko.main.IView;
+import com.fabbroniko.resources.ResourceManager;
 import com.fabbroniko.scene.AbstractScene;
 
 /**
@@ -17,35 +18,30 @@ import com.fabbroniko.scene.AbstractScene;
  */
 public final class GameManager implements Drawable {
 
-	private static GameManager myInstance;
+	private static final GameManager instance = new GameManager();
 
 	private final Object synchronize;
+	private final ResourceManager resourceManager;
 	private final AudioManager audioManager;
 	private final Settings settings;
 
 	private static IView view;
 	private AbstractScene currentState;
-	
-	/**
-	 * Constructs a new GameStateManager
-	 */
+
 	private GameManager() {
-		synchronize = new Object();
-		audioManager = AudioManager.getInstance();
-		settings = new Settings();
+		this.synchronize = new Object();
+		this.resourceManager = new ResourceManager();
+		this.audioManager = new AudioManager(this, resourceManager);
+		this.settings = new Settings();
+
+		resourceManager.preload();
 	}
-	
-	/**
-	 * Gets the single instance of this class.
-	 * @return The single instance of this class.
-	 */
+
 	public static GameManager getInstance() {
-		if(myInstance == null) {
-			myInstance = new GameManager();
-		}
-		return myInstance;
+		return instance;
 	}
-	
+
+	// TODO refactor
 	public static GameManager setInstance(final IView viewParam) {
 		view = viewParam;
 		return getInstance();
