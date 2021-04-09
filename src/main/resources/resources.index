@@ -1,5 +1,5 @@
 <resource>
-    <audio>
+    <clips>
         <clip name="theme" preload="true">/sound/super-mario-theme.wav</clip>
         <clip name="victory" preload="true">/sound/victory.wav</clip>
         <clip name="death" preload="true">/sound/game-over.wav</clip>
@@ -7,5 +7,5 @@
         <clip name="jump" preload="true">/sound/jump.wav</clip>
         <clip name="hit" preload="true">/sound/hit.wav</clip>
         <clip name="breaking" preload="true">/sound/breaking-block.wav</clip>
-    </audio>
+    </clips>
 </resource>

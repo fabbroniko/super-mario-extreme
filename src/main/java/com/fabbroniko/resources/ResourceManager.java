@@ -46,7 +46,7 @@ public class ResourceManager {
 
         log.info("Pre-loading audio clips from disk.");
 
-        resource.getAudio().getClip().forEach(clip -> {
+        resource.getClips().forEach(clip -> {
             if(clip.isPreload()) {
                 loadAudioClipFromDisk(clip.getName()).ifPresent(c -> preLoadedAudioClips.put(clip.getName(), c));
             }
@@ -95,7 +95,7 @@ public class ResourceManager {
         log.trace("Loading audio clip from disk. Clip name {}", name);
 
         // Find the clip descriptor from the resource index
-        final Optional<com.fabbroniko.resources.domain.Clip> optResourceClip = resource.getAudio().getClip()
+        final Optional<com.fabbroniko.resources.domain.Clip> optResourceClip = resource.getClips()
                 .stream()
                 .filter(c -> c.getName().equals(name))
                 .findFirst();
