@@ -22,9 +22,6 @@ public final class MainMenuScene extends AbstractScene implements KeyListener {
 	private static final String QUIT_OPTION = "Quit";
 	private static final String HINT = "Arrow UP/DOWN to navigate. ENTER to confirm.";
 
-	// Resources
-	private static final String RES_BG_IMAGE = "/Menu/BaseBG.png";
-
 	// Indexes
 	private static final int START_OPTION_INDEX = 0;
 	private static final int SETTINGS_OPTION_INDEX = 1;
@@ -51,7 +48,7 @@ public final class MainMenuScene extends AbstractScene implements KeyListener {
 	 */
 	@Override
 	public void init() {
-		bg = new Background(RES_BG_IMAGE);
+		bg = new Background(gameManager.getResourceManager(), "menu");
 		selectedOption = 0;
 
 		gameManager.addKeyListener(this);

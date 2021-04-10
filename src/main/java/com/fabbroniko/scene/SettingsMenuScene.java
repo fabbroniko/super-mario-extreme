@@ -9,9 +9,6 @@ import com.fabbroniko.environment.Dimension;
 
 public final class SettingsMenuScene extends AbstractScene implements KeyListener {
 
-	// Resources
-	private static final String RES_BACKGROUND_IMAGE = "/Menu/BaseBG.png";
-
 	// Constant strings
 	private static final String HINT_1 = "Arrow UP/DOWN to navigate. ENTER to modify.";
 	private static final String HINT_2 = "Press a Key to select a new binding, then ENTER to confirm.";
@@ -40,7 +37,7 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 
 	@Override
 	public void init() {
-		bg = new Background(RES_BACKGROUND_IMAGE);
+		bg = new Background(gameManager.getResourceManager(), "menu");
 		gameManager.addKeyListener(this);
 	}
 

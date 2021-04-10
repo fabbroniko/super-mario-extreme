@@ -4,24 +4,15 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import com.fabbroniko.main.Drawable;
+import com.fabbroniko.resources.ResourceManager;
 
-/**
- * Represents a background that can be placed in a GameState.
- * @author nicola.fabbrini
- *
- */
 public class Background implements Drawable {
 
-	private BufferedImage bgImg;
-	private Position bgPosition;
-	
-	/**
-	 * Constructs a new Background.
-	 * @param bg Background Path.
-	 */
-	public Background(final String bg) {
-		bgImg = Service.getImageFromName(bg);
-		bgPosition = Service.ORIGIN.clone();
+	private final BufferedImage backgroundImage;
+	private final Position origin = new Position();
+
+	public Background(final ResourceManager resourceManager, final String backgroundName) {
+		backgroundImage = resourceManager.findBackgroundFromName(backgroundName);
 	}
 
 	@Override
@@ -29,6 +20,6 @@ public class Background implements Drawable {
 
 	@Override
 	public void draw(final Graphics2D g, final Dimension gDimension) {
-		g.drawImage(bgImg, bgPosition.getX(), bgPosition.getY(), gDimension.getWidth(), gDimension.getHeight(), null);
+		g.drawImage(backgroundImage, origin.getX(), origin.getY(), gDimension.getWidth(), gDimension.getHeight(), null);
 	}	
 }

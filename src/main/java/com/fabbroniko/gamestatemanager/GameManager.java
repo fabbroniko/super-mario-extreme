@@ -73,8 +73,10 @@ public final class GameManager implements Drawable {
 	}
 
 	public AudioManager getAudioManager() {
-		return this.audioManager;
+		return audioManager;
 	}
+
+	public ResourceManager getResourceManager() { return resourceManager; }
 
 	public Settings getSettings() {
 		return settings;

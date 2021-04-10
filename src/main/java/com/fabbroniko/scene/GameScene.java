@@ -14,8 +14,7 @@ import com.fabbroniko.gamestatemanager.GameManager;
  * @author com.fabbroniko
  */
 public final class GameScene extends AbstractGenericLevel {
-	
-	private static final String RES_BACKGROUND_IMAGE = "/Levels/LevelsBG.png";
+
 	private static final String RES_TILESET_IMAGE = "/Levels/TileMap.png";
 	private static final String RES_MAP_FILE = "/Levels/Level1.txt";
 	
@@ -46,7 +45,7 @@ public final class GameScene extends AbstractGenericLevel {
 	private static final int POSITION_OFFSET = 10;
 	
 	public GameScene() {
-		super(RES_BACKGROUND_IMAGE, RES_TILESET_IMAGE, RES_MAP_FILE);
+		super(RES_TILESET_IMAGE, RES_MAP_FILE);
 	}
 
 	@Override
