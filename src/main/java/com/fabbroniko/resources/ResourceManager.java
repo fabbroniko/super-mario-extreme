@@ -1,15 +1,20 @@
 package com.fabbroniko.resources;
 
+import com.fabbroniko.error.ResourceNotFoundException;
+import com.fabbroniko.resources.domain.Background;
 import com.fabbroniko.resources.domain.Resource;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.extern.log4j.Log4j2;
 
+import javax.imageio.ImageIO;
 import javax.sound.sampled.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * The resource manager takes care of referencing, loading and caching resources such as audio clips, sprites and tilemap
@@ -23,9 +28,11 @@ public class ResourceManager {
 
     private Resource resource;
     private final Map<String, Clip> preLoadedAudioClips;
+    private final Map<String, BufferedImage> preLoadedImages;
 
     public ResourceManager() {
         preLoadedAudioClips = new HashMap<>();
+        preLoadedImages = new HashMap<>();
     }
 
     /**
@@ -51,6 +58,11 @@ public class ResourceManager {
                 loadAudioClipFromDisk(clip.getName()).ifPresent(c -> preLoadedAudioClips.put(clip.getName(), c));
             }
         });
+
+        preLoadedImages.putAll(resource.getBackgrounds()
+                .stream()
+                .collect(Collectors.toMap(Background::getName, b -> findBackgroundFromName(b.getName())))
+        );
     }
 
     /**
@@ -98,7 +110,7 @@ public class ResourceManager {
         final Optional<com.fabbroniko.resources.domain.Clip> optResourceClip = resource.getClips()
                 .stream()
                 .filter(c -> c.getName().equals(name))
-                .findFirst();
+                .findAny();
 
         Optional<Clip> retValue = Optional.empty();
         if(optResourceClip.isEmpty()) {
@@ -125,5 +137,32 @@ public class ResourceManager {
         }
 
         return retValue;
+    }
+
+    public BufferedImage findBackgroundFromName(final String name) {
+        if(preLoadedImages.containsKey(name)) {
+            log.trace("Getting background with name {} from pre-loaded cache.", name);
+            return preLoadedImages.get(name);
+        }
+
+        log.trace("Loading background image {} from disk.", name);
+        final Background background = resource.getBackgrounds()
+                .stream()
+                .filter(c -> c.getName().equals(name))
+                .findAny()
+                .orElseThrow(() -> new ResourceNotFoundException(name));
+
+        return loadImageFromDisk(background.getPath());
+    }
+
+    private BufferedImage loadImageFromDisk(final String path) {
+        log.trace("Loading image with path {} from disk.", path);
+
+        try (final InputStream imageInputStream = getClass().getResourceAsStream(path)) {
+            return ImageIO.read(imageInputStream);
+        } catch (Exception e) {
+            log.error("Unable to load image {} from disk. Exception {}", path, e.getMessage());
+            throw new ResourceNotFoundException(path);
+        }
     }
 }

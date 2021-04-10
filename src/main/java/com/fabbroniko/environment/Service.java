@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
 import com.fabbroniko.error.ErrorManager;
-import com.fabbroniko.error.ResourceNotFoundError;
+import com.fabbroniko.error.ResourceNotFoundException;
 import com.fabbroniko.error.TileTypeError;
 
 /**
@@ -39,7 +39,7 @@ public final class Service {
 			retImage = ImageIO.read(classLoader.getClass().getResourceAsStream(location));
 		} catch (Exception e) {
 			ErrorManager.getInstance().notifyError(ErrorManager.ERROR_LOADING_IMAGE, "Unable to load the image named " + location);
-			throw new ResourceNotFoundError(location);
+			throw new ResourceNotFoundException(location);
 		}
 		
 		return retImage;

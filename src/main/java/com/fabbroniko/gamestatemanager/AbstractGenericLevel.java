@@ -31,8 +31,7 @@ public abstract class AbstractGenericLevel extends AbstractScene implements KeyL
 	 * List of {@link AbstractGameObject AbstractGameObject} in this level.
 	 */
 	protected List<AbstractGameObject> gameObjects;
-	
-	private final String resBgImage;
+
 	private final String resTileSet;
 	private final String resMapFile;
 	private CollisionManager collisionManager;
@@ -40,19 +39,17 @@ public abstract class AbstractGenericLevel extends AbstractScene implements KeyL
 	
 	/**
 	 * Constructs a new GenericLevel.
-	 * @param bgImage Background image.
 	 * @param tileSet TileSet containing the set of Tiles needed for this level.
 	 * @param mapFile MapFile containing the matrix of tiles needed to draw the whole map.
 	 */
-	public AbstractGenericLevel(final String bgImage, final String tileSet, final String mapFile) {
-		this.resBgImage = bgImage;
+	public AbstractGenericLevel(final String tileSet, final String mapFile) {
 		this.resTileSet = tileSet;
 		this.resMapFile = mapFile;
 	}
 	
 	@Override
 	public void init() {
-		bg = new Background(resBgImage);
+		bg = new Background(gameManager.getResourceManager(), "game");
 		tileMap = new TileMap(resTileSet, resMapFile);
 		tileMap.setPosition(Service.ORIGIN.clone());
 		gameObjects = new ArrayList<>();

@@ -12,4 +12,5 @@ import java.util.List;
 public class Resource {
 
     private List<Clip> clips;
+    private List<Background> backgrounds;
 }
