@@ -6,6 +6,7 @@ import java.awt.event.KeyListener;
 
 import com.fabbroniko.environment.Background;
 import com.fabbroniko.environment.Dimension;
+import com.fabbroniko.gamestatemanager.GameManager;
 
 public final class SettingsMenuScene extends AbstractScene implements KeyListener {
 
@@ -34,6 +35,10 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 	private int currentlyDrawingOption;
 	private int currentSelection;
 	private boolean keyListening;
+
+	public SettingsMenuScene(final GameManager gameManager) {
+		super(gameManager);
+	}
 
 	@Override
 	public void init() {
@@ -93,7 +98,7 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 	public void keyPressed(final KeyEvent e) {
 		switch(e.getKeyCode()) {
 			case KeyEvent.VK_ESCAPE: // ESC
-				gameManager.openScene(new MainMenuScene());
+				gameManager.openScene(MainMenuScene.class);
 				break;
 			case KeyEvent.VK_UP: // Arrow UP
 				specialKeyUpHandler();

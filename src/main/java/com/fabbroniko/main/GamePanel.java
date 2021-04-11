@@ -45,7 +45,7 @@ public final class GamePanel extends JPanel implements Runnable, IView {
 		this.requestFocus();
 		
 		gameManager = GameManager.setInstance(this);
-		gameManager.openScene(new MainMenuScene());
+		gameManager.openScene(MainMenuScene.class);
 	}
 	
 	/**

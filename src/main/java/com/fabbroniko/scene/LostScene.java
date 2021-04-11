@@ -4,6 +4,7 @@ import java.awt.*;
 
 import com.fabbroniko.environment.Dimension;
 import com.fabbroniko.environment.Position;
+import com.fabbroniko.gamestatemanager.GameManager;
 
 /**
  * The LostScene is a very simple scene, it just shows Game Over and the number of death on a simple background.
@@ -18,14 +19,11 @@ public final class LostScene extends AbstractStaticScene {
 	private static final String DEATH_COUNT_TEXT = "Death count: ";
 	private static final int SCENE_DURATION_MILLISECONDS = 3000;
 
-	private final int deathCount;
 	private long initTime;
 	private final Position origin = new Position();
 
-	public LostScene(final int deathCount) {
-		super();
-
-		this.deathCount = deathCount;
+	public LostScene(final GameManager gameManager) {
+		super(gameManager);
 	}
 
 	@Override
@@ -40,7 +38,7 @@ public final class LostScene extends AbstractStaticScene {
 	@Override
 	public void update() {
 		if((System.currentTimeMillis() - initTime) > SCENE_DURATION_MILLISECONDS) {
-			gameManager.openScene(new GameScene());
+			gameManager.openScene(GameScene.class);
 		}
 	}
 
@@ -78,7 +76,7 @@ public final class LostScene extends AbstractStaticScene {
 		 * Calculates the coordinate of the origin of the string in order for it to be centered in the X axis and below the Game Over string by a certain padding
 		 */
 		g.setFont(P_FONT);
-		final String composedDeathCount = DEATH_COUNT_TEXT + deathCount;
+		final String composedDeathCount = DEATH_COUNT_TEXT + gameManager.getDeathCount();
 		centeredX = getCenteredXPositionForString(composedDeathCount, g, gDimension);
 		y = (gDimension.getHeight() / 2) + (g.getFontMetrics().getHeight() / 2);
 

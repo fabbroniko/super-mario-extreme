@@ -6,6 +6,7 @@ import java.awt.Color;
 
 import com.fabbroniko.environment.Dimension;
 import com.fabbroniko.environment.Position;
+import com.fabbroniko.gamestatemanager.GameManager;
 
 /**
  * The WinScene is a very simple scene, it shows a "Level Completed" string on a simple background and it plays
@@ -23,6 +24,10 @@ public final class WinScene extends AbstractStaticScene {
 	private long initTime;
 	private final Position origin = new Position();
 
+	public WinScene(GameManager gameManager) {
+		super(gameManager);
+	}
+
 	@Override
 	public void init() {
 		audioManager.playBackgroundMusic("victory", false);
@@ -35,7 +40,7 @@ public final class WinScene extends AbstractStaticScene {
 	@Override
 	public void update() {
 		if((System.currentTimeMillis() - initTime) > SCENE_DURATION_MILLISECONDS) {
-			gameManager.openScene(new MainMenuScene());
+			gameManager.openScene(MainMenuScene.class);
 		}
 	}
 
