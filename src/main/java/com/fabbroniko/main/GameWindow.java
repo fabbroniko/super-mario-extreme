@@ -6,36 +6,26 @@ import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 
-
-/**
- * Starts a new game.
- * @author com.fabbroniko
- *
- */
 public final class GameWindow extends JFrame {
 
 	private static final String GAME_NAME = "Super Mario Bros Extreme Edition";
-
+	private static final Dimension BASE_WINDOW_SIZE = new Dimension(320, 240);
 	private static final double SCALE_DIVISION = 2;
 	private static final int FPS = 50;
-	
-	private static final Dimension BASE_WINDOW_SIZE = new Dimension(320, 240);
-	private static final Dimension SCREEN_SIZE = new Dimension(Toolkit.getDefaultToolkit().getScreenSize());
-	private static final double X_SCALE = (double) (SCREEN_SIZE.getWidth() / BASE_WINDOW_SIZE.getWidth() / SCALE_DIVISION);
-	private static final double Y_SCALE = (double) (SCREEN_SIZE.getHeight() / BASE_WINDOW_SIZE.getHeight() / SCALE_DIVISION);
-	private static final Dimension ACTUAL_WINDOW_SIZE = new Dimension((int) (BASE_WINDOW_SIZE.getWidth() * X_SCALE), (int) (BASE_WINDOW_SIZE.getHeight() * Y_SCALE));
-	
-	/**
-	 * Time for which every frame should stay on the screen.
-	 */
+
 	public static final int FPS_MILLIS = 1000 / FPS;
-	
-	/**
-	 * Contructs the whole game
-	 */
+
 	public GameWindow() {
+		final java.awt.Dimension screenDimensions = Toolkit.getDefaultToolkit().getScreenSize();
+		final double xScale = screenDimensions.getWidth() / BASE_WINDOW_SIZE.getWidth() / SCALE_DIVISION;
+		final double yScale = screenDimensions.getHeight() / BASE_WINDOW_SIZE.getHeight() / SCALE_DIVISION;
+		final Dimension windowDimension = new Dimension(
+				(int) (BASE_WINDOW_SIZE.getWidth() * xScale),
+				(int) (BASE_WINDOW_SIZE.getHeight() * yScale)
+		);
+
 		this.setTitle(GAME_NAME);
-		this.setContentPane(new GamePanel(BASE_WINDOW_SIZE, ACTUAL_WINDOW_SIZE));
+		this.setContentPane(new GamePanel(BASE_WINDOW_SIZE, windowDimension));
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.pack();

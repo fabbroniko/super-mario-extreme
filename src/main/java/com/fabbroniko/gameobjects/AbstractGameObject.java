@@ -9,7 +9,6 @@ import com.fabbroniko.environment.CollisionDirection;
 import com.fabbroniko.environment.Dimension;
 import com.fabbroniko.environment.GameObjectBiDimensionalSpace;
 import com.fabbroniko.environment.ObjectType;
-import com.fabbroniko.environment.Service;
 import com.fabbroniko.environment.Position;
 import com.fabbroniko.environment.TileMap;
 import com.fabbroniko.gamestatemanager.AbstractGenericLevel;
@@ -161,7 +160,7 @@ public abstract class AbstractGameObject implements Drawable {
 		bottomRight = new Point();
 
 		offset = new Position();
-		mapPosition = Service.ORIGIN.clone();
+		mapPosition = new Position();
 	}
 		
 	public GameObjectBiDimensionalSpace getBiDimensionalSpace() {
@@ -215,7 +214,7 @@ public abstract class AbstractGameObject implements Drawable {
 	 * @return The Object's position.
 	 */
 	public Position getObjectPosition() {
-		return new Position(this.gameObjectBiDimensionalSpace.getPosition());
+		return gameObjectBiDimensionalSpace.getPosition().clone();
 	}
 	
 	/**
@@ -248,8 +247,8 @@ public abstract class AbstractGameObject implements Drawable {
 	public void update() {
 		int xOffset = 0;
 		int yOffset = 0;
-		
-		mapPosition.copyPosition(tileMap.getPosition());
+
+		mapPosition.setPosition(tileMap.getPosition());
 		
 		if (jumping) {
 			yOffset += upOffset;

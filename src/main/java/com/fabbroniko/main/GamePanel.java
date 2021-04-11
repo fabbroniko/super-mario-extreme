@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
 import com.fabbroniko.environment.Dimension;
-import com.fabbroniko.environment.Service;
+import com.fabbroniko.environment.Position;
 import com.fabbroniko.gamestatemanager.GameManager;
 import com.fabbroniko.scene.MainMenuScene;
 
@@ -16,7 +16,9 @@ import com.fabbroniko.scene.MainMenuScene;
  * @author nicola.fabbrini
  */
 public final class GamePanel extends JPanel implements Runnable, IView {
-	
+
+	private final Position origin = new Position();
+
 	private GameManager gameManager;
 	private Thread gameThread;							// Thread che conterrà la gestione di ogni parte del gioco.
 	private boolean running;					// Campo booleano che serve ad uscire dal game loop.
@@ -113,7 +115,7 @@ public final class GamePanel extends JPanel implements Runnable, IView {
 	@Override
 	public void paintComponent(final Graphics cGraphics) {
 		super.paintComponent(cGraphics);
-		cGraphics.drawImage(image, Service.ORIGIN.getX(), Service.ORIGIN.getY(), actualWindowSize.getWidth(), actualWindowSize.getHeight(), null);
+		cGraphics.drawImage(image, origin.getX(), origin.getY(), actualWindowSize.getWidth(), actualWindowSize.getHeight(), null);
 	}
 	
 	/**
@@ -126,6 +128,6 @@ public final class GamePanel extends JPanel implements Runnable, IView {
 
 	@Override
 	public Dimension getBaseWindowSize() {
-		return new Dimension(this.baseWindowSize);
+		return this.baseWindowSize;
 	}
 }

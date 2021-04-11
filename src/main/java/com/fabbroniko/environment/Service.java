@@ -8,26 +8,7 @@ import com.fabbroniko.error.ErrorManager;
 import com.fabbroniko.error.ResourceNotFoundException;
 import com.fabbroniko.error.TileTypeError;
 
-/**
- * Service Class used to perform environmental-operations.
- * @author com.fabbroniko
- */
 public final class Service {
-
-	/**
-	 * Basic tile dimension.
-	 */
-	public static final Dimension TILE_DIMENSION = new Dimension(30, 30);
-	
-	/**
-	 * Represents the lower dimension that can be used.
-	 */
-	public static final Dimension BASE_DIMENSION = new Dimension(0, 0);
-	
-	/**
-	 * Base Position.
-	 */
-	public static final Position ORIGIN = new Position(0, 0);
 	
 	private Service() { }
 	
