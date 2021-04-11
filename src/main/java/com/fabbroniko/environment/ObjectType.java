@@ -59,6 +59,6 @@ public enum ObjectType {
 	}
 
 	public Dimension getDimension() {
-		return new Dimension(this.spriteDimension);
+		return spriteDimension;
 	}
 }

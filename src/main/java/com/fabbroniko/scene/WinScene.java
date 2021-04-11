@@ -5,7 +5,7 @@ import java.awt.RenderingHints;
 import java.awt.Color;
 
 import com.fabbroniko.environment.Dimension;
-import com.fabbroniko.environment.Service;
+import com.fabbroniko.environment.Position;
 
 /**
  * The WinScene is a very simple scene, it shows a "Level Completed" string on a simple background and it plays
@@ -21,6 +21,7 @@ public final class WinScene extends AbstractStaticScene {
 	private static final int SCENE_DURATION_MILLISECONDS = 6000;
 
 	private long initTime;
+	private final Position origin = new Position();
 
 	@Override
 	public void init() {
@@ -48,7 +49,7 @@ public final class WinScene extends AbstractStaticScene {
 	public void drawOnce(final Graphics2D g, final Dimension gDimension) {
 		// Fill in the background
 		g.setColor(Color.BLACK);
-		g.fillRect(Service.ORIGIN.getX(), Service.ORIGIN.getY(), gDimension.getWidth(), gDimension.getHeight());
+		g.fillRect(origin.getX(), origin.getY(), gDimension.getWidth(), gDimension.getHeight());
 
 		// Activating the antialiasing to smooth out the strings
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);

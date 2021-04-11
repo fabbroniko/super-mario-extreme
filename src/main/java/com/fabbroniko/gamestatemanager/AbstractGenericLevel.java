@@ -51,7 +51,7 @@ public abstract class AbstractGenericLevel extends AbstractScene implements KeyL
 	public void init() {
 		bg = new Background(gameManager.getResourceManager(), "game");
 		tileMap = new TileMap(resTileSet, resMapFile);
-		tileMap.setPosition(Service.ORIGIN.clone());
+		tileMap.setPosition(new Position());
 		gameObjects = new ArrayList<>();
 		
 		this.collisionManager = new CollisionManager(tileMap, gameObjects);

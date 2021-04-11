@@ -3,7 +3,7 @@ package com.fabbroniko.scene;
 import java.awt.*;
 
 import com.fabbroniko.environment.Dimension;
-import com.fabbroniko.environment.Service;
+import com.fabbroniko.environment.Position;
 
 /**
  * The LostScene is a very simple scene, it just shows Game Over and the number of death on a simple background.
@@ -20,6 +20,7 @@ public final class LostScene extends AbstractStaticScene {
 
 	private final int deathCount;
 	private long initTime;
+	private final Position origin = new Position();
 
 	public LostScene(final int deathCount) {
 		super();
@@ -53,7 +54,7 @@ public final class LostScene extends AbstractStaticScene {
 	protected void drawOnce(final Graphics2D g, final Dimension gDimension) {
 		// Filling the whole canvas with Black
 		g.setColor(Color.BLACK);
-		g.fillRect(Service.ORIGIN.getX(), Service.ORIGIN.getY(), gDimension.getWidth(), gDimension.getHeight());
+		g.fillRect(origin.getX(), origin.getY(), gDimension.getWidth(), gDimension.getHeight());
 
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 

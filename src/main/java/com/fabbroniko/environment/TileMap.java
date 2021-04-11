@@ -16,44 +16,35 @@ import com.fabbroniko.error.CorruptedFileError;
 import com.fabbroniko.gamestatemanager.GameManager;
 import com.fabbroniko.main.Drawable;
 
-/**
- * Loads and Draws the specified Map and TileSet into the graphic context.
- * @author nicola.fabbrini
- *
- */
 public class TileMap implements Drawable {
 
 	// Tiles data
-	private final Dimension tileSize;			// Dimensioni di un singolo tile
-	private BufferedImage tileSet;		// Immagine del set di tiles da scomporre
-	private int nRows;					// Numero di righe
-	private int nCols;					// Numero di colonne
+	private final Dimension tileSize;
+	private BufferedImage tileSet;
+	private int nRows;
+	private int nCols;
 		
 	private final List<Tile> tiles;
 	private int[][] map;
 	private Dimension mapSize;
-	private Position minLimits;			// Posizione del limite minimo disegnabile		
-	private Position maxLimits;			// Posizione del limite massimo disegnabile
+	private Position minLimits;
+	private Position maxLimits;
 	
 	// Current position of the map
-	private final Position mapPosition;		// Posizione della mappa nella matrice.
-	private final Position lastDrawablePosition;	// Ultima posizione disegnabile
-	private int startingXIndex;		// Indice X dal quale cominciare a disegnare
-	private int startingYIndex;		// Indice Y dal quale cominciare a disegnare
+	private Position mapPosition;
+	private final Position lastDrawablePosition;
+	private int startingXIndex;
+	private int startingYIndex;
 	
-	private Dimension baseWindowDimension;
-	/**
-	 * Constructs a new TileMap with a TileSet and a Map.
-	 * @param tileSetP TileSet's path.
-	 * @param mapP Map's path.
-	 */
+	private final Dimension baseWindowDimension;
+
 	public TileMap(final String tileSetP, final String mapP) {
-		tiles = new ArrayList<Tile>();
-		tileSize = Service.TILE_DIMENSION.clone();
+		tiles = new ArrayList<>();
+		tileSize = new Dimension(30, 30);
 		baseWindowDimension = GameManager.getInstance().getBaseWindowSize();
 		
-		mapPosition = Service.ORIGIN.clone();
-		lastDrawablePosition = Service.ORIGIN.clone();
+		mapPosition = new Position();
+		lastDrawablePosition = new Position();
 		
 		this.tileSet = Service.getImageFromName(tileSetP);
 		
@@ -93,7 +84,7 @@ public class TileMap implements Drawable {
 		
 		map = new int[nRows][nCols];
 		mapSize = new Dimension((int) (nCols * tileSize.getWidth()), (int) (nRows * tileSize.getHeight()));
-		minLimits = Service.ORIGIN.clone();
+		minLimits = new Position();
 		maxLimits = new Position((int) (mapSize.getWidth() - baseWindowDimension.getWidth()), (int) (mapSize.getHeight() - baseWindowDimension.getHeight()));
 		
 		for (int i = 0; i < nRows; i++) {
@@ -114,14 +105,11 @@ public class TileMap implements Drawable {
 			}
 		}
 	}
-	
-	/**
-	 * Set the position of the map within the matrix.
-	 * @param pos New Position
-	 */
-	public void setPosition(final Position pos) {
-		this.mapPosition.copyPosition(pos);
-		adjustCoords();
+
+	public void setPosition(final Position position) {
+		this.mapPosition.setPosition(position.getX(), position.getY());
+
+		adjustCoordinates();
 	}
 	
 	/**
@@ -129,7 +117,7 @@ public class TileMap implements Drawable {
 	 * @return Returns a new instance of the map's dimension.
 	 */
 	public Dimension getDimension() {
-		return this.mapSize.clone();
+		return mapSize;
 	}
 	
 	public boolean checkForMapCollision(final Rectangle rect) throws ArrayIndexOutOfBoundsException{
@@ -174,7 +162,7 @@ public class TileMap implements Drawable {
 	public void setPosition(final int x, final int y) {
 		this.mapPosition.setX(x);
 		this.mapPosition.setY(y);
-		adjustCoords();
+		adjustCoordinates();
 	}
 	
 	/**
@@ -214,7 +202,7 @@ public class TileMap implements Drawable {
 	/**
 	 * Checks if the position is valid. If an invalid position has been set, it will be adjusted.
 	 */
-	private void adjustCoords() {
+	private void adjustCoordinates() {
 		if (mapPosition.getX() < minLimits.getX()) {
 			mapPosition.setX(minLimits.getX());
 		}
@@ -246,19 +234,14 @@ public class TileMap implements Drawable {
 	@Override
 	public void update() {}
 
-	/**
-	 * @see com.fabbroniko.main.Drawable#draw(Graphics2D)
-	 */
 	@Override
 	public void draw(final Graphics2D g, final Dimension gDimension) {
 		setDrawValues();
-		
-		// settaggio posizione di base da cui iniziare a disegnare.
-		final Position basePosToDraw = Service.ORIGIN.clone();
+
+		final Position basePosToDraw = new Position();
 		basePosToDraw.setX(basePosToDraw.getX() - (mapPosition.getX() % tileSize.getWidth()));
 		basePosToDraw.setY(basePosToDraw.getY() - (mapPosition.getY() % tileSize.getHeight()));
-		
-		// Settaggio posizione corrente di disegno
+
 		final Position currentPosToDraw = new Position(basePosToDraw.getX(), basePosToDraw.getY());
 		int currentXIndexToDraw = startingXIndex;
 		int currentYIndexToDraw = startingYIndex;

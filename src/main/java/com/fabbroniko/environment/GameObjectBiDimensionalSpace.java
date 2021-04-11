@@ -16,11 +16,11 @@ public class GameObjectBiDimensionalSpace {
 	} 
 	
 	public Position getPosition(){
-		return new Position(this.position);
+		return position.clone();
 	}
 	
 	public Dimension getDimension() {
-		return new Dimension(this.dimension);
+		return dimension;
 	}
 	
 	public void setPosition(final Position position) {

@@ -19,7 +19,7 @@ public class CollisionManager {
 	
 	public void checkForCollisions(final AbstractGameObject obj, final Position tmpOffsetPosition) {
 		final GameObjectBiDimensionalSpace tmpSpace = obj.getBiDimensionalSpace();
-		final Position offsetPosition = new Position(tmpOffsetPosition);
+		final Position offsetPosition = tmpOffsetPosition.clone();
 		
 		try{
 			// Controllo collisione con mappa Y.
