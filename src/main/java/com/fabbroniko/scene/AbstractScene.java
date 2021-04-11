@@ -4,6 +4,7 @@ import com.fabbroniko.environment.AudioManager;
 import com.fabbroniko.environment.Dimension;
 import com.fabbroniko.gamestatemanager.GameManager;
 import com.fabbroniko.main.Drawable;
+import com.fabbroniko.resources.ResourceManager;
 
 import javax.swing.JPanel;
 
@@ -19,10 +20,12 @@ public abstract class AbstractScene implements Drawable {
 
 	protected GameManager gameManager;
 	protected AudioManager audioManager;
+	protected ResourceManager resourceManager;
 
-	public void attachGameManager(final GameManager gameManager) {
+	protected AbstractScene(final GameManager gameManager) {
 		this.gameManager = gameManager;
 		this.audioManager = gameManager.getAudioManager();
+		this.resourceManager = gameManager.getResourceManager();
 	}
 
 	public void detachScene() {
@@ -43,5 +46,17 @@ public abstract class AbstractScene implements Drawable {
 
 	protected int getCenteredXPositionFromSize(final Dimension canvasDimension, final int secondaryWidth) {
 		return (canvasDimension.getWidth() - secondaryWidth) / 2;
+	}
+
+	public GameManager getGameManager() {
+		return gameManager;
+	}
+
+	public AudioManager getAudioManager() {
+		return audioManager;
+	}
+
+	public ResourceManager getResourceManager() {
+		return resourceManager;
 	}
 }

@@ -19,7 +19,6 @@ import com.fabbroniko.scene.LostScene;
  */
 public class Player extends AbstractGameObject implements KeyListener {
 
-	private int deathCount = 0;
 	private boolean animationJump;
 	private boolean animationMove;
 	private final AbstractGenericLevel currentLevel;
@@ -50,7 +49,7 @@ public class Player extends AbstractGameObject implements KeyListener {
 		super.update();
 		tileMap.setPosition(this.getObjectPosition().getX() - (int) (baseWindowSize.getWidth() / 2), this.getObjectPosition().getY() - (int) (baseWindowSize.getHeight() / 2));
 		if (death) {
-			GameManager.getInstance().openScene(new LostScene(++deathCount));
+			GameManager.getInstance().openScene(LostScene.class);
 		}
 		if (animationJump) {
 			this.currentAnimation = animationJumpA;

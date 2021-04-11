@@ -10,6 +10,8 @@ import com.fabbroniko.main.Drawable;
 import com.fabbroniko.main.IView;
 import com.fabbroniko.resources.ResourceManager;
 import com.fabbroniko.scene.AbstractScene;
+import com.fabbroniko.scene.LostScene;
+import lombok.SneakyThrows;
 
 /**
  * Handles the current state of the game (e.g. Menus, Levels, etc.)
@@ -23,18 +25,21 @@ public final class GameManager implements Drawable {
 	private final Object synchronize;
 	private final ResourceManager resourceManager;
 	private final AudioManager audioManager;
+
 	private final Settings settings;
 
 	private static IView view;
 	private AbstractScene currentState;
+	private int deathCount;
 
 	private GameManager() {
 		this.synchronize = new Object();
 		this.resourceManager = new ResourceManager();
 		this.audioManager = new AudioManager(this, resourceManager);
 		this.settings = new Settings();
+		this.deathCount = 0;
 
-		resourceManager.preload();
+		this.resourceManager.preload();
 	}
 
 	public static GameManager getInstance() {
@@ -50,8 +55,12 @@ public final class GameManager implements Drawable {
 	/**
 	 * Sets the specified state that has to be displayed on the screen.
 	 */
-	public void openScene(final AbstractScene newScene) {
-		newScene.attachGameManager(this);
+	@SneakyThrows
+	public void openScene(final Class<? extends AbstractScene> newSceneClass) {
+		final AbstractScene newScene = newSceneClass.getConstructor(GameManager.class).newInstance(this);
+		if(newScene instanceof LostScene) {
+			deathCount++;
+		}
 
 		synchronized (synchronize) {
 			if(currentState != null) {
@@ -105,5 +114,9 @@ public final class GameManager implements Drawable {
 
 	public void removeKeyListener(final KeyListener keyDependent) {
 		view.removeKeyListener(keyDependent);
+	}
+
+	public int getDeathCount() {
+		return deathCount;
 	}
 }

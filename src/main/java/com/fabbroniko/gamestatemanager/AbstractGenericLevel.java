@@ -42,7 +42,9 @@ public abstract class AbstractGenericLevel extends AbstractScene implements KeyL
 	 * @param tileSet TileSet containing the set of Tiles needed for this level.
 	 * @param mapFile MapFile containing the matrix of tiles needed to draw the whole map.
 	 */
-	public AbstractGenericLevel(final String tileSet, final String mapFile) {
+	public AbstractGenericLevel(final GameManager gameManager, final String tileSet, final String mapFile) {
+		super(gameManager);
+
 		this.resTileSet = tileSet;
 		this.resMapFile = mapFile;
 	}
@@ -100,7 +102,7 @@ public abstract class AbstractGenericLevel extends AbstractScene implements KeyL
 	@Override
 	public void keyPressed(final KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			GameManager.getInstance().openScene(new MainMenuScene());
+			GameManager.getInstance().openScene(MainMenuScene.class);
 		}
 	}
 

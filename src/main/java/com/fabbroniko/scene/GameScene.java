@@ -44,8 +44,8 @@ public final class GameScene extends AbstractGenericLevel {
 	
 	private static final int POSITION_OFFSET = 10;
 	
-	public GameScene() {
-		super(RES_TILESET_IMAGE, RES_MAP_FILE);
+	public GameScene(final GameManager gameManager) {
+		super(gameManager, RES_TILESET_IMAGE, RES_MAP_FILE);
 	}
 
 	@Override
@@ -84,6 +84,6 @@ public final class GameScene extends AbstractGenericLevel {
 	
 	@Override
 	public void levelFinished() {
-		GameManager.getInstance().openScene(new WinScene());
+		gameManager.openScene(WinScene.class);
 	}
 }

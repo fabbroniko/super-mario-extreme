@@ -6,6 +6,7 @@ import java.awt.event.KeyListener;
 
 import com.fabbroniko.environment.Background;
 import com.fabbroniko.environment.Dimension;
+import com.fabbroniko.gamestatemanager.GameManager;
 
 /**
  * The main menu shown as the first scene of the game.
@@ -42,6 +43,10 @@ public final class MainMenuScene extends AbstractScene implements KeyListener {
 	// Allows the program to keep track of what option is currently selected. This is used to execute an operation when
 	// the player hits ENTER and it allows the draw function to draw the option in a different color.
 	private int selectedOption;
+
+	public MainMenuScene(final GameManager gameManager) {
+		super(gameManager);
+	}
 
 	/**
 	 * Loads the resources loaded for this scene.
@@ -122,9 +127,9 @@ public final class MainMenuScene extends AbstractScene implements KeyListener {
 			break;
 		case KeyEvent.VK_ENTER:
 			if (selectedOption == START_OPTION_INDEX) {
-				gameManager.openScene(new GameScene());
+				gameManager.openScene(GameScene.class);
 			} else if (selectedOption == SETTINGS_OPTION_INDEX) {
-				gameManager.openScene(new SettingsMenuScene());
+				gameManager.openScene(SettingsMenuScene.class);
 			} else {
 				gameManager.exit();
 			}
