@@ -6,7 +6,7 @@ import java.awt.event.KeyEvent;
  * Stores the user preferences set up in the Settings menu scene.
  *
  * These values are not persisted locally therefore each time the game is closed those changes are lost and restored to
- * default values.
+ * default values. 
  */
 public class Settings {
 
