@@ -13,4 +13,5 @@ public class Resource {
 
     private List<Clip> clips;
     private List<Background> backgrounds;
+    private TileMap tilemap;
 }

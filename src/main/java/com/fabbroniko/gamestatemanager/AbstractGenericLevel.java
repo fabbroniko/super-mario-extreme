@@ -32,27 +32,24 @@ public abstract class AbstractGenericLevel extends AbstractScene implements KeyL
 	 */
 	protected List<AbstractGameObject> gameObjects;
 
-	private final String resTileSet;
 	private final String resMapFile;
 	private CollisionManager collisionManager;
 	private GameObjectBuilder gameObjectBuilder;
 	
 	/**
 	 * Constructs a new GenericLevel.
-	 * @param tileSet TileSet containing the set of Tiles needed for this level.
 	 * @param mapFile MapFile containing the matrix of tiles needed to draw the whole map.
 	 */
-	public AbstractGenericLevel(final GameManager gameManager, final String tileSet, final String mapFile) {
+	public AbstractGenericLevel(final GameManager gameManager, final String mapFile) {
 		super(gameManager);
 
-		this.resTileSet = tileSet;
 		this.resMapFile = mapFile;
 	}
 	
 	@Override
 	public void init() {
 		bg = new Background(gameManager.getResourceManager(), "game");
-		tileMap = new TileMap(resTileSet, resMapFile);
+		tileMap = new TileMap(gameManager.getResourceManager(), resMapFile);
 		tileMap.setPosition(new Position());
 		gameObjects = new ArrayList<>();
 		
@@ -144,9 +141,4 @@ public abstract class AbstractGenericLevel extends AbstractScene implements KeyL
 	 * Loads the next level or the win window.
 	 */
 	public abstract void levelFinished();
-
-	// TODO tmp to refactor
-	public AudioManager getAudioManager() {
-		return audioManager;
-	}
 }

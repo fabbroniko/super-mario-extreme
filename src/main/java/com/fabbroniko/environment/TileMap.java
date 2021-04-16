@@ -15,6 +15,7 @@ import com.fabbroniko.environment.Service.TileType;
 import com.fabbroniko.error.CorruptedFileError;
 import com.fabbroniko.gamestatemanager.GameManager;
 import com.fabbroniko.main.Drawable;
+import com.fabbroniko.resources.ResourceManager;
 
 public class TileMap implements Drawable {
 
@@ -38,7 +39,7 @@ public class TileMap implements Drawable {
 	
 	private final Dimension baseWindowDimension;
 
-	public TileMap(final String tileSetP, final String mapP) {
+	public TileMap(final ResourceManager resourceManager, final String mapP) {
 		tiles = new ArrayList<>();
 		tileSize = new Dimension(30, 30);
 		baseWindowDimension = GameManager.getInstance().getBaseWindowSize();
@@ -46,7 +47,7 @@ public class TileMap implements Drawable {
 		mapPosition = new Position();
 		lastDrawablePosition = new Position();
 		
-		this.tileSet = Service.getImageFromName(tileSetP);
+		this.tileSet = resourceManager.getTileMapSet();
 		
 		loadTiles();
 		loadMap(mapP);
@@ -259,35 +260,5 @@ public class TileMap implements Drawable {
 			currentPosToDraw.setY((int) (currentPosToDraw.getY() + tileSize.getHeight()));
 			currentYIndexToDraw++;
 		}
-	}
-	
-	@Override
-	public String toString() {
-		final StringBuilder stringBuilder = new StringBuilder();
-		
-		stringBuilder.append("Map \n");
-		for (int i = 0; i < nRows; i++) {
-			for (int u = 0; u < nCols; u++) {
-				stringBuilder.append("[" + map[i][u] + "-" + tiles.get(map[i][u]).getType() + "]\t");
-			}
-			stringBuilder.append('\n');
-		}
-				
-		return stringBuilder.toString();
-	}
-
-	@Override
-	public boolean equals(final Object o) {
-		if(!(o instanceof TileMap)) {
-			return false;
-		}
-		final TileMap obj = (TileMap)o;
-		
-		return map.equals(obj.map);
-	}
-	
-	@Override
-	public int hashCode() {
-		return map.hashCode();
 	}
 }

@@ -13,4 +13,6 @@
         <background name="menu" preload="false">/backgrounds/menus.png</background>
         <background name="game" preload="true">/backgrounds/in-game.png</background>
     </backgrounds>
+
+    <tilemap tile-size="30">/tilemaps/default.png</tilemap>
 </resource>

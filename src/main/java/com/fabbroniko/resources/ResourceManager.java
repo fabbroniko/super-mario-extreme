@@ -155,6 +155,12 @@ public class ResourceManager {
         return loadImageFromDisk(background.getPath());
     }
 
+    public BufferedImage getTileMapSet() {
+        log.trace("Loading tile map set (uncut).");
+
+        return loadImageFromDisk(resource.getTilemap().getPath());
+    }
+
     private BufferedImage loadImageFromDisk(final String path) {
         log.trace("Loading image with path {} from disk.", path);
 
