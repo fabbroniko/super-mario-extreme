@@ -11,8 +11,8 @@ import com.fabbroniko.environment.GameObjectBiDimensionalSpace;
 import com.fabbroniko.environment.ObjectType;
 import com.fabbroniko.environment.Position;
 import com.fabbroniko.environment.TileMap;
-import com.fabbroniko.gamestatemanager.AbstractGenericLevel;
 import com.fabbroniko.main.Drawable;
+import com.fabbroniko.scene.GameScene;
 
 /**
  * Abstract Class representing a generic GameObject.
@@ -44,7 +44,7 @@ public abstract class AbstractGameObject implements Drawable {
 	/**
 	 * Level on which it has to be placed.
 	 */
-	protected AbstractGenericLevel level;
+	protected GameScene gameScene;
 	
 	/**
 	 * Represents whether it's jumping or not.
@@ -138,16 +138,11 @@ public abstract class AbstractGameObject implements Drawable {
 	protected Point bottomRight;
 	
 	private final int objectID;
-	
-	/**
-	 * Constructs a new AbstractGameObject.
-	 * @param tileMapP TileMap on which it has to be placed.
-	 * @param levelP GenericLevel on which it has to be placed.
-	 */
-	protected AbstractGameObject(final TileMap tileMapP, final AbstractGenericLevel levelP, final Animations animation, final int objectID) {
+
+	protected AbstractGameObject(final TileMap tileMapP, final GameScene gameScene, final Animations animation, final int objectID) {
 		this.objectID = objectID;
 		this.tileMap = tileMapP;
-		this.level = levelP;
+		this.gameScene = gameScene;
 		this.death = false;
 		this.objectType = animation.getObjectType();
 		this.setAnimation(animation);
@@ -265,7 +260,7 @@ public abstract class AbstractGameObject implements Drawable {
 		if (xOffset != 0 || yOffset != 0) {
 			offset.setX(xOffset);
 			offset.setY(yOffset);
-			level.checkForCollisions(this, offset);
+			gameScene.checkForCollisions(this, offset);
 			gameObjectBiDimensionalSpace.movePosition(offset);
 		}
 	}
