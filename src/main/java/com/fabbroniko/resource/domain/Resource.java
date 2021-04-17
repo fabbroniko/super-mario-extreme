@@ -1,4 +1,4 @@
-package com.fabbroniko.resources.domain;
+package com.fabbroniko.resource.domain;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import lombok.Data;

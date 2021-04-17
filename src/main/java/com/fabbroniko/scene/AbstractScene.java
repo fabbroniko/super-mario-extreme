@@ -4,7 +4,7 @@ import com.fabbroniko.environment.AudioManager;
 import com.fabbroniko.environment.Dimension;
 import com.fabbroniko.gamestatemanager.GameManager;
 import com.fabbroniko.main.Drawable;
-import com.fabbroniko.resources.ResourceManager;
+import com.fabbroniko.resource.ResourceManager;
 
 import javax.swing.JPanel;
 

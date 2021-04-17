@@ -15,8 +15,8 @@ import com.fabbroniko.environment.Service.TileType;
 import com.fabbroniko.error.CorruptedFileError;
 import com.fabbroniko.gamestatemanager.GameManager;
 import com.fabbroniko.main.Drawable;
-import com.fabbroniko.resources.ResourceManager;
-import com.fabbroniko.resources.domain.Map;
+import com.fabbroniko.resource.ResourceManager;
+import com.fabbroniko.resource.domain.Map;
 
 public class TileMap implements Drawable {
 

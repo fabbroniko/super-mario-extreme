@@ -1,3 +1,3 @@
-package com.fabbroniko.resources.domain;
+package com.fabbroniko.resource.domain;
 
 public class Clip extends SimpleResource{ }

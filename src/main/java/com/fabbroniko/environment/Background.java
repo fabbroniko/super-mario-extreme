@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import com.fabbroniko.main.Drawable;
-import com.fabbroniko.resources.ResourceManager;
+import com.fabbroniko.resource.ResourceManager;
 
 public class Background implements Drawable {
 
