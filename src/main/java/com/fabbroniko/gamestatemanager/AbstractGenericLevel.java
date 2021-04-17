@@ -10,6 +10,7 @@ import com.fabbroniko.environment.*;
 import com.fabbroniko.gameobjects.AbstractGameObject;
 import com.fabbroniko.gameobjects.GameObjectBuilder;
 import com.fabbroniko.gameobjects.Player;
+import com.fabbroniko.resources.domain.Level;
 import com.fabbroniko.scene.AbstractScene;
 import com.fabbroniko.scene.MainMenuScene;
 
@@ -26,30 +27,23 @@ public abstract class AbstractGenericLevel extends AbstractScene implements KeyL
 	 * Reference of the {@link TileMap TileMap}.
 	 */
 	protected TileMap tileMap;
-	
-	/**
-	 * List of {@link AbstractGameObject AbstractGameObject} in this level.
-	 */
-	protected List<AbstractGameObject> gameObjects;
 
-	private final String resMapFile;
+	protected List<AbstractGameObject> gameObjects;
+	protected final Level level;
+
 	private CollisionManager collisionManager;
 	private GameObjectBuilder gameObjectBuilder;
-	
-	/**
-	 * Constructs a new GenericLevel.
-	 * @param mapFile MapFile containing the matrix of tiles needed to draw the whole map.
-	 */
-	public AbstractGenericLevel(final GameManager gameManager, final String mapFile) {
+
+	public AbstractGenericLevel(final GameManager gameManager, final Level level) {
 		super(gameManager);
 
-		this.resMapFile = mapFile;
+		this.level = level;
 	}
 	
 	@Override
 	public void init() {
 		bg = new Background(gameManager.getResourceManager(), "game");
-		tileMap = new TileMap(gameManager.getResourceManager(), resMapFile);
+		tileMap = new TileMap(gameManager.getResourceManager(), level.getMap());
 		tileMap.setPosition(new Position());
 		gameObjects = new ArrayList<>();
 		
@@ -122,7 +116,7 @@ public abstract class AbstractGenericLevel extends AbstractScene implements KeyL
 
 		return newGameObject;
 	}
-	
+
 	/**
 	 * Gets the list of {@link AbstractGameObject AbstractGameObject} placed in this level.
 	 * @return The list of
@@ -130,15 +124,20 @@ public abstract class AbstractGenericLevel extends AbstractScene implements KeyL
 	public List<AbstractGameObject> getGameObjects() {
 		return this.gameObjects;
 	}
-	
+
 	/**
 	 * Gets the preferred starting position for the player.
 	 * @return The preferred starting position.
 	 */
 	protected abstract Position getPreferredStartPosition();
-	
+
 	/**
 	 * Loads the next level or the win window.
 	 */
 	public abstract void levelFinished();
+
+	// TODO tmp to refactor
+	public AudioManager getAudioManager() {
+		return audioManager;
+	}
 }

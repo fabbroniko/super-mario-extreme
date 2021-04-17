@@ -9,8 +9,11 @@ import com.fabbroniko.environment.Dimension;
 import com.fabbroniko.main.Drawable;
 import com.fabbroniko.main.IView;
 import com.fabbroniko.resources.ResourceManager;
+import com.fabbroniko.resources.domain.Level;
 import com.fabbroniko.scene.AbstractScene;
+import com.fabbroniko.scene.GameScene;
 import com.fabbroniko.scene.LostScene;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.SneakyThrows;
 
 /**
@@ -57,7 +60,15 @@ public final class GameManager implements Drawable {
 	 */
 	@SneakyThrows
 	public void openScene(final Class<? extends AbstractScene> newSceneClass) {
-		final AbstractScene newScene = newSceneClass.getConstructor(GameManager.class).newInstance(this);
+		AbstractScene newScene;
+
+		if(GameScene.class.equals(newSceneClass)) {
+			final Level defaultLevel = new XmlMapper().readValue(getClass().getResource("/levels/lvl1.xml"), Level.class);
+			newScene = newSceneClass.getConstructor(GameManager.class, Level.class).newInstance(this, defaultLevel);
+		} else {
+			newScene = newSceneClass.getConstructor(GameManager.class).newInstance(this);
+		}
+
 		if(newScene instanceof LostScene) {
 			deathCount++;
 		}

@@ -1,0 +1,35 @@
+<level required-game-version="1.0">
+  <start-position x="40" y="40" />
+
+  <game-objects>
+    <game-object x="60" y="250">breakable-block</game-object>
+    <game-object x="90" y="250">breakable-block</game-object>
+
+    <game-object x="1315" y="270">ghost-enemy</game-object>
+    <game-object x="2000" y="250">ghost-enemy</game-object>
+    <game-object x="2350" y="250">ghost-enemy</game-object>
+
+    <game-object x="270" y="270">falling-platform</game-object>
+    <game-object x="390" y="190">falling-platform</game-object>
+    <game-object x="480" y="150">falling-platform</game-object>
+    <game-object x="610" y="300">falling-platform</game-object>
+    <game-object x="700" y="260">falling-platform</game-object>
+    <game-object x="1470" y="330">falling-platform</game-object>
+    <game-object x="1560" y="330">falling-platform</game-object>
+
+    <game-object x="330" y="230">invisible-block</game-object>
+    <game-object x="760" y="210">invisible-block</game-object>
+    <game-object x="990" y="250">invisible-block</game-object>
+    <game-object x="1020" y="170">invisible-block</game-object>
+    <game-object x="1170" y="140">invisible-block</game-object>
+    <game-object x="1170" y="170">invisible-block</game-object>
+    <game-object x="1740" y="240">invisible-block</game-object>
+    <game-object x="1770" y="240">invisible-block</game-object>
+    <game-object x="1800" y="240">invisible-block</game-object>
+    <game-object x="1830" y="240">invisible-block</game-object>
+
+    <game-object x="2750" y="170">castle</game-object>
+  </game-objects>
+
+  <map>/levels/lvl1.info</map>
+</level>

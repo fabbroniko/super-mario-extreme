@@ -16,6 +16,7 @@ import com.fabbroniko.error.CorruptedFileError;
 import com.fabbroniko.gamestatemanager.GameManager;
 import com.fabbroniko.main.Drawable;
 import com.fabbroniko.resources.ResourceManager;
+import com.fabbroniko.resources.domain.Map;
 
 public class TileMap implements Drawable {
 
@@ -39,7 +40,7 @@ public class TileMap implements Drawable {
 	
 	private final Dimension baseWindowDimension;
 
-	public TileMap(final ResourceManager resourceManager, final String mapP) {
+	public TileMap(final ResourceManager resourceManager, final Map map) {
 		tiles = new ArrayList<>();
 		tileSize = new Dimension(30, 30);
 		baseWindowDimension = GameManager.getInstance().getBaseWindowSize();
@@ -50,7 +51,7 @@ public class TileMap implements Drawable {
 		this.tileSet = resourceManager.getTileMapSet();
 		
 		loadTiles();
-		loadMap(mapP);
+		loadMap(map.getPath());
 	}
 	
 	/**
