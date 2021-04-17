@@ -4,7 +4,7 @@ import java.awt.*;
 
 import com.fabbroniko.environment.Dimension;
 import com.fabbroniko.environment.Position;
-import com.fabbroniko.gamestatemanager.GameManager;
+import com.fabbroniko.GameManager;
 
 /**
  * The LostScene is a very simple scene, it just shows Game Over and the number of death on a simple background.

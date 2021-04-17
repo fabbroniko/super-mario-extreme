@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 
 import com.fabbroniko.environment.Dimension;
 import com.fabbroniko.environment.Position;
-import com.fabbroniko.gamestatemanager.GameManager;
+import com.fabbroniko.GameManager;
 import com.fabbroniko.scene.MainMenuScene;
 
 /**
@@ -56,6 +56,7 @@ public final class GamePanel extends JPanel implements Runnable, IView {
 		super.addNotify();
 		if (!threadInitialized) {
 			gameThread = new Thread(this);
+			gameThread.setName("GameThread");
 			gameThread.start();
 			threadInitialized = true;
 		}

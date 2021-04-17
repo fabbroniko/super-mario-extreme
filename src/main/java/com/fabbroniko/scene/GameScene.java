@@ -13,7 +13,7 @@ import com.fabbroniko.gameobjects.FallingBlock;
 import com.fabbroniko.gameobjects.GameObjectBuilder;
 import com.fabbroniko.gameobjects.InvisibleBlock;
 import com.fabbroniko.gameobjects.Player;
-import com.fabbroniko.gamestatemanager.GameManager;
+import com.fabbroniko.GameManager;
 import com.fabbroniko.resource.domain.Level;
 
 import java.awt.*;

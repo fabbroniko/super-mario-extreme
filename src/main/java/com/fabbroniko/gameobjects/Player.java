@@ -9,7 +9,7 @@ import com.fabbroniko.environment.CollisionDirection;
 import com.fabbroniko.environment.Dimension;
 import com.fabbroniko.environment.ObjectType;
 import com.fabbroniko.environment.TileMap;
-import com.fabbroniko.gamestatemanager.GameManager;
+import com.fabbroniko.GameManager;
 import com.fabbroniko.scene.GameScene;
 import com.fabbroniko.scene.LostScene;
 

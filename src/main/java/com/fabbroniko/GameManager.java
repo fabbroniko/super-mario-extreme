@@ -1,9 +1,8 @@
-package com.fabbroniko.gamestatemanager;
+package com.fabbroniko;
 
 import java.awt.Graphics2D;
 import java.awt.event.KeyListener;
 
-import com.fabbroniko.Settings;
 import com.fabbroniko.environment.AudioManager;
 import com.fabbroniko.environment.Dimension;
 import com.fabbroniko.main.Drawable;

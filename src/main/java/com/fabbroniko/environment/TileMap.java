@@ -13,7 +13,7 @@ import java.util.List;
 
 import com.fabbroniko.environment.Service.TileType;
 import com.fabbroniko.error.CorruptedFileError;
-import com.fabbroniko.gamestatemanager.GameManager;
+import com.fabbroniko.GameManager;
 import com.fabbroniko.main.Drawable;
 import com.fabbroniko.resource.ResourceManager;
 import com.fabbroniko.resource.domain.Map;
