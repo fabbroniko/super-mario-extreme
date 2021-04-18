@@ -6,12 +6,14 @@ import java.awt.event.KeyListener;
 import com.fabbroniko.environment.AudioManager;
 import com.fabbroniko.environment.Dimension;
 import com.fabbroniko.main.Drawable;
+import com.fabbroniko.main.GameWindow;
 import com.fabbroniko.main.IView;
 import com.fabbroniko.resource.ResourceManager;
 import com.fabbroniko.resource.domain.Level;
 import com.fabbroniko.scene.AbstractScene;
 import com.fabbroniko.scene.GameScene;
 import com.fabbroniko.scene.LostScene;
+import com.fabbroniko.scene.MainMenuScene;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.SneakyThrows;
 
@@ -47,12 +49,6 @@ public final class GameManager implements Drawable {
 	public static GameManager getInstance() {
 		return instance;
 	}
-
-	// TODO refactor
-	public static GameManager setInstance(final IView viewParam) {
-		view = viewParam;
-		return getInstance();
-	}
 	
 	/**
 	 * Sets the specified state that has to be displayed on the screen.
@@ -87,7 +83,7 @@ public final class GameManager implements Drawable {
 	 */
 	public void update() {
 		synchronized (synchronize) {
-			this.currentState.update();
+			if(currentState != null) this.currentState.update();
 		}
 	}
 
@@ -101,12 +97,9 @@ public final class GameManager implements Drawable {
 		return settings;
 	}
 
-	/**	Draws the current state.
-	 * 	@param g Graphic Context
-	 */
 	public void draw(final Graphics2D g, final Dimension gDimension) {
 		synchronized (synchronize) {
-			this.currentState.draw(g, gDimension);
+			if(currentState != null) this.currentState.draw(g, gDimension);
 		}
 	}
 	
@@ -128,5 +121,11 @@ public final class GameManager implements Drawable {
 
 	public int getDeathCount() {
 		return deathCount;
+	}
+
+	public void start() {
+		view = new GameWindow().getView();
+
+		openScene(MainMenuScene.class);
 	}
 }

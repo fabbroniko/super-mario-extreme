@@ -19,7 +19,6 @@ public final class GamePanel extends JPanel implements Runnable, IView {
 
 	private final Position origin = new Position();
 
-	private GameManager gameManager;
 	private Thread gameThread;							// Thread che conterrà la gestione di ogni parte del gioco.
 	private boolean running;					// Campo booleano che serve ad uscire dal game loop.
 	private BufferedImage image;						// Buffer dell'immagine finale che dovrà essere visualizzata sullo schermo
@@ -43,9 +42,6 @@ public final class GamePanel extends JPanel implements Runnable, IView {
 		this.setPreferredSize(new java.awt.Dimension(actualWindowSize.getWidth(), actualWindowSize.getHeight()));
 		this.setFocusable(true);
 		this.requestFocus();
-		
-		gameManager = GameManager.setInstance(this);
-		gameManager.openScene(MainMenuScene.class);
 	}
 	
 	/**
