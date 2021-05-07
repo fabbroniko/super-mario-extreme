@@ -43,7 +43,7 @@ public class TileMap implements Drawable {
 	public TileMap(final ResourceManager resourceManager, final Map map) {
 		tiles = new ArrayList<>();
 		tileSize = new Dimension(30, 30);
-		baseWindowDimension = GameManager.getInstance().getBaseWindowSize();
+		baseWindowDimension = GameManager.getInstance().getCanvasSize();
 		
 		mapPosition = new Position();
 		lastDrawablePosition = new Position();

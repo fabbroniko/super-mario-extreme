@@ -36,7 +36,7 @@ public class Player extends AbstractGameObject implements KeyListener {
 		facingRight = true;
 		this.objectType = ObjectType.TYPE_PLAYER;
 		this.gameScene = gameScene;
-		this.baseWindowSize = GameManager.getInstance().getBaseWindowSize();
+		this.baseWindowSize = GameManager.getInstance().getCanvasSize();
 	}
 	
 	@Override

@@ -2,7 +2,8 @@ package com.fabbroniko.main;
 
 import com.fabbroniko.environment.Dimension;
 
-import java.awt.Toolkit;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
@@ -35,7 +36,7 @@ public final class GameWindow extends JFrame {
 		this.setVisible(true);
 	}
 
-	public IView getView() {
+	public GamePanel getView() {
 		return gamePanel;
 	}
 }
