@@ -1,10 +1,8 @@
 package com.fabbroniko.gameobjects;
 
-import java.lang.reflect.InvocationTargetException;
-
 import com.fabbroniko.environment.Position;
 import com.fabbroniko.environment.TileMap;
-import com.fabbroniko.gamestatemanager.AbstractGenericLevel;
+import com.fabbroniko.scene.GameScene;
 
 /**
  * Service Class used to constructs {@link AbstractGameObject AbstractGameObject}.
@@ -14,43 +12,24 @@ public class GameObjectBuilder {
 
 	private AbstractGameObject currentObject;
 	private final TileMap tileMap;
-	private final AbstractGenericLevel genericLevel;
+	private final GameScene gameScene;
 	
 	private int id;
-	
-	/**
-	 * Constructs a new GameObjectBuilder.
-	 * @param tileMapP The {@link TileMap TileMap} passed to the {@link AbstractGameObject AbstractGameObject}.
-	 * @param genericLevelP The Level where the AbstractGameObject is going to be placed on.
-	 */
-	public GameObjectBuilder(final TileMap tileMapP, final AbstractGenericLevel genericLevelP) {
+
+	public GameObjectBuilder(final TileMap tileMapP, final GameScene gameScene) {
 		this.tileMap = tileMapP;
-		this.genericLevel = genericLevelP;
+		this.gameScene = gameScene;
 		id = 0;
 	} 
-	
-	/**
-	 * Creates a new {@link AbstractGameObject AbstractGameObject}.
-	 * @param objectClass Class of the AbstractGameObject that has to be created.
-	 * @return This instance of the GameObjectBuilder.
-	 */
+
 	public GameObjectBuilder newInstance(final Class<? extends AbstractGameObject> objectClass) {
 		try {
-			currentObject = objectClass.getConstructor(TileMap.class, AbstractGenericLevel.class, Integer.class).newInstance(tileMap, genericLevel, id);
+			currentObject = objectClass.getConstructor(TileMap.class, GameScene.class, Integer.class).newInstance(tileMap, gameScene, id);
 			id++;
-		} catch (InstantiationException e) {
-			throw new com.fabbroniko.error.InstantiationException(objectClass);
-		} catch (IllegalAccessException e2) {
-			throw new com.fabbroniko.error.InstantiationException(objectClass);
-		} catch (IllegalArgumentException e3) {
-			throw new com.fabbroniko.error.InstantiationException(objectClass);
-		} catch (InvocationTargetException e4) {
-			throw new com.fabbroniko.error.InstantiationException(objectClass);
-		} catch (NoSuchMethodException e5) {
-			throw new com.fabbroniko.error.InstantiationException(objectClass);
-		} catch (SecurityException e6) {
+		} catch (final Exception e) {
 			throw new com.fabbroniko.error.InstantiationException(objectClass);
 		}
+
 		return this;
 	}
 	

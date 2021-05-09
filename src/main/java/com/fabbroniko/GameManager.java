@@ -1,23 +1,23 @@
-package com.fabbroniko.gamestatemanager;
+package com.fabbroniko;
 
 import java.awt.Graphics2D;
 import java.awt.event.KeyListener;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-import com.fabbroniko.Settings;
 import com.fabbroniko.environment.AudioManager;
 import com.fabbroniko.environment.Dimension;
 import com.fabbroniko.main.Drawable;
-import com.fabbroniko.main.IView;
-import com.fabbroniko.resources.ResourceManager;
+import com.fabbroniko.main.GamePanel;
+import com.fabbroniko.main.GameWindow;
+import com.fabbroniko.resource.ResourceManager;
+import com.fabbroniko.resource.domain.Level;
 import com.fabbroniko.scene.AbstractScene;
+import com.fabbroniko.scene.GameScene;
 import com.fabbroniko.scene.LostScene;
+import com.fabbroniko.scene.MainMenuScene;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.SneakyThrows;
 
-/**
- * Handles the current state of the game (e.g. Menus, Levels, etc.)
- * @author nicola.fabbrini
- *
- */
 public final class GameManager implements Drawable {
 
 	private static final GameManager instance = new GameManager();
@@ -28,7 +28,8 @@ public final class GameManager implements Drawable {
 
 	private final Settings settings;
 
-	private static IView view;
+	private GamePanel gamePanel;
+	private GameThread gameThread;
 	private AbstractScene currentState;
 	private int deathCount;
 
@@ -45,19 +46,21 @@ public final class GameManager implements Drawable {
 	public static GameManager getInstance() {
 		return instance;
 	}
-
-	// TODO refactor
-	public static GameManager setInstance(final IView viewParam) {
-		view = viewParam;
-		return getInstance();
-	}
 	
 	/**
 	 * Sets the specified state that has to be displayed on the screen.
 	 */
 	@SneakyThrows
 	public void openScene(final Class<? extends AbstractScene> newSceneClass) {
-		final AbstractScene newScene = newSceneClass.getConstructor(GameManager.class).newInstance(this);
+		AbstractScene newScene;
+
+		if(GameScene.class.equals(newSceneClass)) {
+			final Level defaultLevel = new XmlMapper().readValue(getClass().getResource("/levels/lvl1.xml"), Level.class);
+			newScene = newSceneClass.getConstructor(GameManager.class, Level.class).newInstance(this, defaultLevel);
+		} else {
+			newScene = newSceneClass.getConstructor(GameManager.class).newInstance(this);
+		}
+
 		if(newScene instanceof LostScene) {
 			deathCount++;
 		}
@@ -77,7 +80,7 @@ public final class GameManager implements Drawable {
 	 */
 	public void update() {
 		synchronized (synchronize) {
-			this.currentState.update();
+			if(currentState != null) this.currentState.update();
 		}
 	}
 
@@ -91,32 +94,77 @@ public final class GameManager implements Drawable {
 		return settings;
 	}
 
-	/**	Draws the current state.
-	 * 	@param g Graphic Context
-	 */
 	public void draw(final Graphics2D g, final Dimension gDimension) {
 		synchronized (synchronize) {
-			this.currentState.draw(g, gDimension);
+			if(currentState != null) this.currentState.draw(g, gDimension);
 		}
 	}
 	
 	public void exit() {
-		view.exit();
-	}
-	
-	public Dimension getBaseWindowSize() {
-		return view.getBaseWindowSize();
+		gameThread.exit();
 	}
 
 	public void addKeyListener(final KeyListener keyListener) {
-		view.addKeyListener(keyListener);
+		gamePanel.addKeyListener(keyListener);
 	}
 
 	public void removeKeyListener(final KeyListener keyDependent) {
-		view.removeKeyListener(keyDependent);
+		gamePanel.removeKeyListener(keyDependent);
 	}
 
 	public int getDeathCount() {
 		return deathCount;
+	}
+
+	public void start() {
+		gamePanel = new GameWindow().getView();
+
+		gameThread = new GameThread();
+		gameThread.start();
+
+		openScene(MainMenuScene.class);
+	}
+
+	public Dimension getCanvasSize() {
+		return gamePanel.getCanvasSize();
+	}
+
+	private class GameThread extends Thread {
+
+		private final AtomicBoolean isRunning = new AtomicBoolean(false);
+
+		@SneakyThrows
+		@Override
+		public void run() {
+			long currentTime;
+			long wait;
+
+			final Dimension canvasDimension = getCanvasSize();
+			final Graphics2D canvas = gamePanel.getCanvas();
+			isRunning.set(true);
+
+			// Game Loop
+			while (isRunning.get()) {
+
+				currentTime = System.currentTimeMillis();
+
+				update();
+				draw(canvas, canvasDimension);
+				gamePanel.repaint();
+
+				wait = GameWindow.FPS_MILLIS - (System.currentTimeMillis() - currentTime);
+				if (wait < 0) {
+					wait = 0;
+				}
+
+				Thread.sleep(wait);
+			}
+
+			System.exit(0);
+		}
+
+		public void exit() {
+			isRunning.set(false);
+		}
 	}
 }

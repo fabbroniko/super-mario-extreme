@@ -5,7 +5,7 @@ import com.fabbroniko.environment.CollisionDirection;
 import com.fabbroniko.environment.ObjectType;
 import com.fabbroniko.environment.TileMap;
 import com.fabbroniko.environment.Animation.AnimationListener;
-import com.fabbroniko.gamestatemanager.AbstractGenericLevel;
+import com.fabbroniko.scene.GameScene;
 
 /**
  * Represents the simplest block in the game.
@@ -13,14 +13,9 @@ import com.fabbroniko.gamestatemanager.AbstractGenericLevel;
  * @author com.fabbroniko
  */
 public class Block extends AbstractGameObject implements AnimationListener {
-	
-	/**
-	 * Constructs a new Block.
-	 * @param tileMap Reference of the {@link TileMap TileMap} on which it should be placed.
-	 * @param level Reference of the {@link AbstractGenericLevel AbstractGenericLevel} on which it should be placed.
-	 */
-	public Block(final TileMap tileMap, final AbstractGenericLevel level, final Integer objectID) {
-		super(tileMap, level, Animations.BLOCK_NORMAL, objectID);
+
+	public Block(final TileMap tileMap, final GameScene gameScene, final Integer objectID) {
+		super(tileMap, gameScene, Animations.BLOCK_NORMAL, objectID);
 	}
 	
 	@Override
@@ -30,7 +25,7 @@ public class Block extends AbstractGameObject implements AnimationListener {
 		if (obj.getObjectType().equals(ObjectType.TYPE_PLAYER) && direction.equals(CollisionDirection.BOTTOM_COLLISION) && !currentAnimation.equals(Animations.BLOCK_BREAKING)) { // TODO check this equals of 2 different classes
 			this.setAnimation(Animations.BLOCK_BREAKING);
 			currentAnimation.setAnimationListener(this);
-			level.getAudioManager().playEffect("breaking");
+			gameScene.getAudioManager().playEffect("breaking");
 		}
 	}
 

@@ -9,8 +9,8 @@ import com.fabbroniko.environment.CollisionDirection;
 import com.fabbroniko.environment.Dimension;
 import com.fabbroniko.environment.ObjectType;
 import com.fabbroniko.environment.TileMap;
-import com.fabbroniko.gamestatemanager.GameManager;
-import com.fabbroniko.gamestatemanager.AbstractGenericLevel;
+import com.fabbroniko.GameManager;
+import com.fabbroniko.scene.GameScene;
 import com.fabbroniko.scene.LostScene;
 
 /**
@@ -21,27 +21,22 @@ public class Player extends AbstractGameObject implements KeyListener {
 
 	private boolean animationJump;
 	private boolean animationMove;
-	private final AbstractGenericLevel currentLevel;
+	private final GameScene gameScene;
 	
-	private Dimension baseWindowSize;
+	private final Dimension baseWindowSize;
 	
-	private Animation animationWalk = new Animation(Animations.PLAYER_WALK);
-	private Animation animationStill = new Animation(Animations.PLAYER_STILL);
-	private Animation animationJumpA = new Animation(Animations.PLAYER_JUMP);
-	
-	/**
-	 * Constructs the player instance.
-	 * @param tileMap Reference of the {@link TileMap TileMap} on which it should be placed.
-	 * @param level Reference of the {@link AbstractGenericLevel AbstractGenericLevel} on which it should be placed.
-	 */
-	public Player(final TileMap tileMap, final AbstractGenericLevel level, final Integer objectID) {
-		super(tileMap, level, Animations.PLAYER_JUMP, objectID);
+	private final Animation animationWalk = new Animation(Animations.PLAYER_WALK);
+	private final Animation animationStill = new Animation(Animations.PLAYER_STILL);
+	private final Animation animationJumpA = new Animation(Animations.PLAYER_JUMP);
+
+	public Player(final TileMap tileMap, final GameScene gameScene, final Integer objectID) {
+		super(tileMap, gameScene, Animations.PLAYER_JUMP, objectID);
 		falling = true;
 		animationJump = true;
 		facingRight = true;
 		this.objectType = ObjectType.TYPE_PLAYER;
-		this.currentLevel = level;
-		this.baseWindowSize = GameManager.getInstance().getBaseWindowSize();
+		this.gameScene = gameScene;
+		this.baseWindowSize = GameManager.getInstance().getCanvasSize();
 	}
 	
 	@Override
@@ -82,7 +77,7 @@ public class Player extends AbstractGameObject implements KeyListener {
 				death = true;
 			}
 		} else if (obj.getObjectType().equals(ObjectType.TYPE_CASTLE)) {
-			this.currentLevel.levelFinished();
+			this.gameScene.levelFinished();
 		} else {
 			if (direction.equals(CollisionDirection.BOTTOM_COLLISION)) {
 				animationJump = false;
@@ -108,7 +103,7 @@ public class Player extends AbstractGameObject implements KeyListener {
 			groundHit = false;
 			currentJump = 0;
 			animationJump = true;
-			level.getAudioManager().playEffect("jump");
+			gameScene.getAudioManager().playEffect("jump");
 		}
 	}
  

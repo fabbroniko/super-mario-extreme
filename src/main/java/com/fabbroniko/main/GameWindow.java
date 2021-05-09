@@ -2,7 +2,8 @@ package com.fabbroniko.main;
 
 import com.fabbroniko.environment.Dimension;
 
-import java.awt.Toolkit;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
@@ -15,6 +16,8 @@ public final class GameWindow extends JFrame {
 
 	public static final int FPS_MILLIS = 1000 / FPS;
 
+	private final GamePanel gamePanel;
+
 	public GameWindow() {
 		final java.awt.Dimension screenDimensions = Toolkit.getDefaultToolkit().getScreenSize();
 		final double xScale = screenDimensions.getWidth() / BASE_WINDOW_SIZE.getWidth() / SCALE_DIVISION;
@@ -25,10 +28,15 @@ public final class GameWindow extends JFrame {
 		);
 
 		this.setTitle(GAME_NAME);
-		this.setContentPane(new GamePanel(BASE_WINDOW_SIZE, windowDimension));
+		this.gamePanel = new GamePanel(BASE_WINDOW_SIZE, windowDimension);
+		this.setContentPane(gamePanel);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.pack();
 		this.setVisible(true);
+	}
+
+	public GamePanel getView() {
+		return gamePanel;
 	}
 }
