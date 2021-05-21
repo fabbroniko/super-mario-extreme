@@ -9,23 +9,25 @@ import java.util.List;
 */
 public final class Animation {
 
-	private Animations animation;
-	private List<BufferedImage> frames;
-	private long maxTimes;
+	private static final int START_INDEX = 0;
+
+	private final List<BufferedImage> frames;
+	private final long maxTimes;
+	private final boolean repeatOnce;
+	private final AnimationListener animationListener;
+	private final String name;
+
 	private long currentTimes;
 	private int currentFrame;
-	private boolean repeatOnce;
-	private AnimationListener animationListener;
-	
-	private static final int START_INDEX = 0;
-	
-	public Animation(final Animations myAnimationP) {
-		this.animation = myAnimationP;
+
+	public Animation(final String name, final List<BufferedImage> frames, final int frameRepetition, final boolean repeat, final AnimationListener animationListener) {
+		this.name = name;
+		this.frames = frames;
 		this.currentTimes = START_INDEX;
-		this.currentFrame = START_INDEX ;
-		this.frames = myAnimationP.getSprites();
-		this.maxTimes = myAnimationP.getFrameRepetitions();
-		this.repeatOnce = myAnimationP.mustBeRepeated();
+		this.currentFrame = START_INDEX;
+		this.maxTimes = frameRepetition;
+		this.repeatOnce = repeat;
+		this.animationListener = animationListener;
 	}
 	
 	private void checkIndex() {
@@ -36,9 +38,9 @@ public final class Animation {
 			}
 		}
 	}
-	
-	public void setAnimationListener(final AnimationListener animationListener) {
-		this.animationListener = animationListener;
+
+	public String getName() {
+		return name;
 	}
 	
 	/**
@@ -63,21 +65,15 @@ public final class Animation {
 		currentFrame = 0;
 		currentTimes = 0;
 	}
-	
-	public Animations getAnimation() {
-		return this.animation;
-	}
-	
+
 	@Override
 	public boolean equals(final Object o) {
-		if(o == null || !(o instanceof Animation)){
+		if(!(o instanceof Animation)){
 			return false;
 		}
+
 		final Animation anim = (Animation)o;
-		if(!anim.frames.equals(this.frames) || anim.maxTimes != this.maxTimes || anim.currentTimes != this.currentTimes || anim.currentFrame != this.currentFrame || anim.repeatOnce != this.repeatOnce){
-			return false;
-		}
-		return true;
+		return anim.frames.equals(this.frames) && anim.maxTimes == this.maxTimes && anim.currentTimes == this.currentTimes && anim.currentFrame == this.currentFrame && anim.repeatOnce == this.repeatOnce;
 	}
 
 	public interface AnimationListener {

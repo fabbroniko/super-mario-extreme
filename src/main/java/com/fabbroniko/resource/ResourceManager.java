@@ -161,7 +161,7 @@ public class ResourceManager {
         return loadImageFromDisk(resource.getTilemap().getPath());
     }
 
-    private BufferedImage loadImageFromDisk(final String path) {
+    public BufferedImage loadImageFromDisk(final String path) {
         log.trace("Loading image with path {} from disk.", path);
 
         try (final InputStream imageInputStream = getClass().getResourceAsStream(path)) {

@@ -2,12 +2,12 @@ package com.fabbroniko.gameobjects;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.util.List;
 
 import com.fabbroniko.environment.Animation;
-import com.fabbroniko.environment.Animations;
 import com.fabbroniko.environment.CollisionDirection;
 import com.fabbroniko.environment.Dimension;
-import com.fabbroniko.environment.ObjectType;
 import com.fabbroniko.environment.TileMap;
 import com.fabbroniko.GameManager;
 import com.fabbroniko.scene.GameScene;
@@ -19,24 +19,41 @@ import com.fabbroniko.scene.LostScene;
  */
 public class Player extends AbstractGameObject implements KeyListener {
 
+	private static final Dimension spriteDimension = new Dimension(28, 26);
+	private static final String spritePath = "/sprites/mario.png";
+
+	public static final String MARIO_IDLE_ANIMATION_NAME = "MARIO_IDLE";
+	public static final String MARIO_WALK_ANIMATION_NAME = "MARIO_WALK";
+	public static final String MARIO_JUMP_ANIMATION_NAME = "MARIO_JUMP";
+
 	private boolean animationJump;
 	private boolean animationMove;
 	private final GameScene gameScene;
 	
 	private final Dimension baseWindowSize;
 	
-	private final Animation animationWalk = new Animation(Animations.PLAYER_WALK);
-	private final Animation animationStill = new Animation(Animations.PLAYER_STILL);
-	private final Animation animationJumpA = new Animation(Animations.PLAYER_JUMP);
+	private final Animation walkAnimation;
+	private final Animation idleAnimation;
+	private final Animation jumpAnimation;
 
 	public Player(final TileMap tileMap, final GameScene gameScene, final Integer objectID) {
-		super(tileMap, gameScene, Animations.PLAYER_JUMP, objectID);
+		super(tileMap, gameScene, objectID, spriteDimension);
 		falling = true;
 		animationJump = true;
 		facingRight = true;
-		this.objectType = ObjectType.TYPE_PLAYER;
 		this.gameScene = gameScene;
 		this.baseWindowSize = GameManager.getInstance().getCanvasSize();
+
+		List<BufferedImage> frames = generateSprites(spritePath, spriteDimension, 0, 1);
+		idleAnimation = new Animation(MARIO_IDLE_ANIMATION_NAME, frames, 1, true, null);
+
+		frames = generateSprites(spritePath, spriteDimension, 1, 1);
+		jumpAnimation = new Animation(MARIO_JUMP_ANIMATION_NAME, frames, 1, true, null);
+
+		frames = generateSprites(spritePath, spriteDimension, 2, 3);
+		walkAnimation = new Animation(MARIO_WALK_ANIMATION_NAME, frames, 5, true, null);
+
+		setAnimation(jumpAnimation);
 	}
 	
 	@Override
@@ -47,11 +64,11 @@ public class Player extends AbstractGameObject implements KeyListener {
 			GameManager.getInstance().openScene(LostScene.class);
 		}
 		if (animationJump) {
-			this.currentAnimation = animationJumpA;
+			setAnimation(jumpAnimation);
 		} else if (animationMove) {
-			this.currentAnimation = animationWalk;
+			setAnimation(walkAnimation);
 		} else {
-			this.currentAnimation = animationStill;
+			setAnimation(idleAnimation);
 		}
 	}
 	
@@ -66,17 +83,17 @@ public class Player extends AbstractGameObject implements KeyListener {
 	 
 	@Override
 	public void handleObjectCollisions(final CollisionDirection direction, final AbstractGameObject obj) {
-		if (!obj.getObjectType().equals(ObjectType.TYPE_INVISIBLE_BLOCK) || obj.getObjectType().equals(ObjectType.TYPE_INVISIBLE_BLOCK) && obj.currentAnimation.getAnimation().equals(Animations.INVISIBLEBLOCK_VISIBLE) || obj.objectType.equals(ObjectType.TYPE_INVISIBLE_BLOCK) && direction.equals(CollisionDirection.TOP_COLLISION)) { 
+		if (!(obj instanceof InvisibleBlock) || (obj.currentAnimation.getName().equals(InvisibleBlock.INVISIBLE_BLOCK_VISIBLE_ANIMATION_NAME)) || (direction.equals(CollisionDirection.TOP_COLLISION))) {
 			super.handleObjectCollisions(direction, obj);
 		}
 		
-		if (obj.getObjectType().equals(ObjectType.TYPE_ENEMY)) {
+		if (obj instanceof Enemy) {
 			if (direction.equals(CollisionDirection.BOTTOM_COLLISION)) {
 				jumping = true;
 			} else {
 				death = true;
 			}
-		} else if (obj.getObjectType().equals(ObjectType.TYPE_CASTLE)) {
+		} else if (obj instanceof Castle) {
 			this.gameScene.levelFinished();
 		} else {
 			if (direction.equals(CollisionDirection.BOTTOM_COLLISION)) {
