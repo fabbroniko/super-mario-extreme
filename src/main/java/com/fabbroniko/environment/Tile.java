@@ -2,8 +2,6 @@ package com.fabbroniko.environment;
 
 import java.awt.image.BufferedImage;
 
-import com.fabbroniko.environment.Service.TileType;
-
 /**
  * Represents one tile of the map.
  * @author nicola.fabbrini
