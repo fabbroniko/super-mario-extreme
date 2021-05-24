@@ -21,7 +21,6 @@ public class FallingBlock extends AbstractGameObject {
 				.spriteDimension(spriteDimension)
 				.row(0)
 				.nFrames(1)
-				.nFramesEachImageIsRepeated(1)
 				.name(FALLING_BLOCK_IDLE_ANIMATION_NAME)
 				.build());
 	}

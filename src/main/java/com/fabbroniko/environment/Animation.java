@@ -12,11 +12,11 @@ public final class Animation {
 	private static final int START_INDEX = 0;
 
 	private List<BufferedImage> frames;
-	private int nFramesEachImageIsRepeated;
+	private long frameDuration;
 	private AnimationListener animationListener;
 	private String name;
 
-	private long currentFrameCount;
+	private long frameStartingTimestamp;
 	private int currentImageIndex;
 
 	public static Builder builder() {
@@ -24,8 +24,7 @@ public final class Animation {
 	}
 
 	private Animation() {
-		this.currentFrameCount = START_INDEX;
-		this.currentImageIndex = START_INDEX;
+		reset();
 	}
 
 	public String getName() {
@@ -33,11 +32,9 @@ public final class Animation {
 	}
 
 	public BufferedImage getImage() {
-		final BufferedImage frame = this.frames.get(currentImageIndex);
-
-		currentFrameCount++;
-		if (currentFrameCount >= nFramesEachImageIsRepeated) {
-			currentFrameCount = 0;
+		final long currentMillis = System.currentTimeMillis();
+		if ((currentMillis - frameStartingTimestamp) >= frameDuration) {
+			frameStartingTimestamp = currentMillis;
 			currentImageIndex++;
 
 			if(currentImageIndex >= frames.size()) {
@@ -47,12 +44,13 @@ public final class Animation {
 				}
 			}
 		}
-		return frame;
+
+		return frames.get(currentImageIndex);
 	}
 
 	public void reset() {
 		currentImageIndex = 0;
-		currentFrameCount = 0;
+		frameStartingTimestamp = System.currentTimeMillis();
 	}
 
 	@Override
@@ -71,10 +69,12 @@ public final class Animation {
 
 	public final static class Builder {
 
+		private static final long STATIC_ANIMATION = Long.MAX_VALUE;
+
 		private BufferedImage spriteSet;
 		private String name;
 		private AnimationListener animationListener;
-		private int nFramesEachImageIsRepeated = 1;
+		private long frameDuration = STATIC_ANIMATION;
 		private int nFrames = 1;
 		private int row = 0;
 		private Dimension spriteDimension = new Dimension();
@@ -96,8 +96,8 @@ public final class Animation {
 			return this;
 		}
 
-		public Builder nFramesEachImageIsRepeated(final int nFramesEachImageIsRepeated) {
-			this.nFramesEachImageIsRepeated = nFramesEachImageIsRepeated;
+		public Builder frameDuration(final long frameDuration) {
+			this.frameDuration = frameDuration;
 			return this;
 		}
 
@@ -130,7 +130,7 @@ public final class Animation {
 			final Animation animation = new Animation();
 			animation.name = this.name;
 			animation.animationListener = this.animationListener;
-			animation.nFramesEachImageIsRepeated = this.nFramesEachImageIsRepeated;
+			animation.frameDuration = this.frameDuration;
 			animation.frames = generateSprites();
 
 			return animation;

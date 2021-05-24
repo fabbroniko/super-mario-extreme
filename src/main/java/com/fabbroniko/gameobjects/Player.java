@@ -10,11 +10,13 @@ import com.fabbroniko.environment.TileMap;
 import com.fabbroniko.GameManager;
 import com.fabbroniko.scene.GameScene;
 import com.fabbroniko.scene.LostScene;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Represents the player's character.
  * @author com.fabbroniko
  */
+@Log4j2
 public class Player extends AbstractGameObject implements KeyListener {
 
 	private static final Dimension spriteDimension = new Dimension(28, 26);
@@ -47,7 +49,6 @@ public class Player extends AbstractGameObject implements KeyListener {
 				.spriteDimension(spriteDimension)
 				.row(0)
 				.nFrames(1)
-				.nFramesEachImageIsRepeated(1)
 				.name(MARIO_IDLE_ANIMATION_NAME)
 				.build();
 
@@ -56,7 +57,6 @@ public class Player extends AbstractGameObject implements KeyListener {
 				.spriteDimension(spriteDimension)
 				.row(1)
 				.nFrames(1)
-				.nFramesEachImageIsRepeated(1)
 				.name(MARIO_JUMP_ANIMATION_NAME)
 				.build();
 
@@ -65,7 +65,7 @@ public class Player extends AbstractGameObject implements KeyListener {
 				.spriteDimension(spriteDimension)
 				.row(2)
 				.nFrames(3)
-				.nFramesEachImageIsRepeated(5)
+				.frameDuration(100)
 				.name(MARIO_WALK_ANIMATION_NAME)
 				.build();
 
@@ -79,11 +79,12 @@ public class Player extends AbstractGameObject implements KeyListener {
 		if (death) {
 			GameManager.getInstance().openScene(LostScene.class);
 		}
+
 		if (animationJump) {
 			setAnimation(jumpAnimation);
-		} else if (animationMove) {
+		} else if (animationMove && !currentAnimation.getName().equals(MARIO_WALK_ANIMATION_NAME)) {
 			setAnimation(walkAnimation);
-		} else {
+		} else if (!animationMove) {
 			setAnimation(idleAnimation);
 		}
 	}

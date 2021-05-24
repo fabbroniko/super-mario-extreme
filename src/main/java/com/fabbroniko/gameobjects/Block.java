@@ -26,7 +26,7 @@ public class Block extends AbstractGameObject implements AnimationListener {
 				.spriteDimension(spriteDimension)
 				.row(1)
 				.nFrames(6)
-				.nFramesEachImageIsRepeated(4)
+				.frameDuration(50)
 				.animationListener(this)
 				.name(BLOCK_BREAKING_ANIMATION_NAME)
 				.build();
@@ -36,7 +36,6 @@ public class Block extends AbstractGameObject implements AnimationListener {
 				.spriteDimension(spriteDimension)
 				.row(0)
 				.nFrames(1)
-				.nFramesEachImageIsRepeated(1)
 				.name(BLOCK_IDLE_ANIMATION_NAME)
 				.build());
 	}

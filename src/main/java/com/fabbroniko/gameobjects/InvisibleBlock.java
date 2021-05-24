@@ -21,7 +21,6 @@ public class InvisibleBlock extends AbstractGameObject {
 				.spriteDimension(spriteDimension)
 				.row(0)
 				.nFrames(1)
-				.nFramesEachImageIsRepeated(1)
 				.name(INVISIBLE_BLOCK_INVISIBLE_ANIMATION_NAME)
 				.build());
 
@@ -30,7 +29,6 @@ public class InvisibleBlock extends AbstractGameObject {
 				.spriteDimension(spriteDimension)
 				.row(1)
 				.nFrames(1)
-				.nFramesEachImageIsRepeated(1)
 				.name(INVISIBLE_BLOCK_VISIBLE_ANIMATION_NAME)
 				.build();
 	}

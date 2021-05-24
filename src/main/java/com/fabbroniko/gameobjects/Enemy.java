@@ -23,7 +23,7 @@ public class Enemy extends AbstractGameObject implements AnimationListener {
 				.spriteDimension(spriteDimension)
 				.row(1)
 				.nFrames(1)
-				.nFramesEachImageIsRepeated(7)
+				.frameDuration(200)
 				.animationListener(this)
 				.name(ENEMY_DEAD_ANIMATION_NAME)
 				.build();
@@ -33,7 +33,7 @@ public class Enemy extends AbstractGameObject implements AnimationListener {
 				.spriteDimension(spriteDimension)
 				.row(0)
 				.nFrames(2)
-				.nFramesEachImageIsRepeated(5)
+				.frameDuration(100)
 				.name(ENEMY_WALK_ANIMATION_NAME)
 				.build());
 	}

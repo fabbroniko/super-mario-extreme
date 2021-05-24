@@ -20,7 +20,6 @@ public class Castle extends AbstractGameObject {
 				.spriteDimension(spriteDimension)
 				.row(0)
 				.nFrames(1)
-				.nFramesEachImageIsRepeated(1)
 				.name(CASTLE_IDLE_ANIMATION_NAME)
 				.build());
 	}
