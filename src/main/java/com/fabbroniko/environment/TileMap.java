@@ -11,7 +11,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fabbroniko.environment.Service.TileType;
 import com.fabbroniko.error.CorruptedFileError;
 import com.fabbroniko.GameManager;
 import com.fabbroniko.main.Drawable;

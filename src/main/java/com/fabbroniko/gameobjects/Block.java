@@ -1,10 +1,6 @@
 package com.fabbroniko.gameobjects;
 
-import com.fabbroniko.environment.Animations;
-import com.fabbroniko.environment.CollisionDirection;
-import com.fabbroniko.environment.ObjectType;
-import com.fabbroniko.environment.TileMap;
-import com.fabbroniko.environment.Animation.AnimationListener;
+import com.fabbroniko.environment.*;
 import com.fabbroniko.scene.GameScene;
 
 /**
@@ -14,17 +10,42 @@ import com.fabbroniko.scene.GameScene;
  */
 public class Block extends AbstractGameObject implements AnimationListener {
 
+	private static final Dimension spriteDimension = new Dimension(30, 30);
+	private static final String spritePath = "/sprites/block.png";
+
+	public static final String BLOCK_IDLE_ANIMATION_NAME = "BLOCK_IDLE";
+	public static final String BLOCK_BREAKING_ANIMATION_NAME = "BLOCK_BREAKING";
+
+	private final Animation breakingAnimation;
+
 	public Block(final TileMap tileMap, final GameScene gameScene, final Integer objectID) {
-		super(tileMap, gameScene, Animations.BLOCK_NORMAL, objectID);
+		super(tileMap, gameScene, objectID, spriteDimension);
+
+		breakingAnimation = Animation.builder()
+				.spriteSet(gameScene.getResourceManager().loadImageFromDisk(spritePath))
+				.spriteDimension(spriteDimension)
+				.row(1)
+				.nFrames(6)
+				.frameDuration(50)
+				.animationListener(this)
+				.name(BLOCK_BREAKING_ANIMATION_NAME)
+				.build();
+
+		setAnimation(Animation.builder()
+				.spriteSet(gameScene.getResourceManager().loadImageFromDisk(spritePath))
+				.spriteDimension(spriteDimension)
+				.row(0)
+				.nFrames(1)
+				.name(BLOCK_IDLE_ANIMATION_NAME)
+				.build());
 	}
 	
 	@Override
 	public void handleObjectCollisions(final CollisionDirection direction, final AbstractGameObject obj) {
 		super.handleObjectCollisions(direction, obj);
 		
-		if (obj.getObjectType().equals(ObjectType.TYPE_PLAYER) && direction.equals(CollisionDirection.BOTTOM_COLLISION) && !currentAnimation.equals(Animations.BLOCK_BREAKING)) { // TODO check this equals of 2 different classes
-			this.setAnimation(Animations.BLOCK_BREAKING);
-			currentAnimation.setAnimationListener(this);
+		if (obj instanceof Player && direction.equals(CollisionDirection.BOTTOM_COLLISION) && !currentAnimation.getName().equals(BLOCK_BREAKING_ANIMATION_NAME)) {
+			this.setAnimation(breakingAnimation);
 			gameScene.getAudioManager().playEffect("breaking");
 		}
 	}

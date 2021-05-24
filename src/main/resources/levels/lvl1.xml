@@ -17,7 +17,7 @@
     <game-object x="1470" y="330">falling-platform</game-object>
     <game-object x="1560" y="330">falling-platform</game-object>
 
-    <game-object x="330" y="230">invisible-block</game-object>
+    <game-object x="290" y="230">invisible-block</game-object>
     <game-object x="760" y="210">invisible-block</game-object>
     <game-object x="990" y="250">invisible-block</game-object>
     <game-object x="1020" y="170">invisible-block</game-object>

@@ -2,13 +2,14 @@ package com.fabbroniko.gameobjects;
 
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.fabbroniko.environment.Animation;
-import com.fabbroniko.environment.Animations;
 import com.fabbroniko.environment.CollisionDirection;
 import com.fabbroniko.environment.Dimension;
 import com.fabbroniko.environment.GameObjectBiDimensionalSpace;
-import com.fabbroniko.environment.ObjectType;
 import com.fabbroniko.environment.Position;
 import com.fabbroniko.environment.TileMap;
 import com.fabbroniko.main.Drawable;
@@ -25,11 +26,6 @@ public abstract class AbstractGameObject implements Drawable {
 	 * Map's Position.
 	 */
 	protected Position mapPosition;
-	
-	/**
-	 * Object's type.
-	 */
-	protected ObjectType objectType;
 	
 	/**
 	 * Object's current animation.
@@ -139,15 +135,13 @@ public abstract class AbstractGameObject implements Drawable {
 	
 	private final int objectID;
 
-	protected AbstractGameObject(final TileMap tileMapP, final GameScene gameScene, final Animations animation, final int objectID) {
+	protected AbstractGameObject(final TileMap tileMapP, final GameScene gameScene, final int objectID, final Dimension spriteDimension) {
 		this.objectID = objectID;
 		this.tileMap = tileMapP;
 		this.gameScene = gameScene;
 		this.death = false;
-		this.objectType = animation.getObjectType();
-		this.setAnimation(animation);
 		
-		this.gameObjectBiDimensionalSpace = new GameObjectBiDimensionalSpace(new Position(0, 0), objectType.getDimension());
+		this.gameObjectBiDimensionalSpace = new GameObjectBiDimensionalSpace(new Position(0, 0), spriteDimension);
 
 		topLeft = new Point();
 		topRight = new Point();
@@ -188,13 +182,14 @@ public abstract class AbstractGameObject implements Drawable {
 		handleMapCollisions(direction);
 	}
 	
-	protected void setAnimation(final Animations animation) {
-		this.currentAnimation = new Animation(animation);
+	protected void setAnimation(final Animation animation) {
+		animation.reset();
+		this.currentAnimation = animation;
 	}
 	
 	/**
 	 * Checks if the object is dead.
-	 * @return Return true if it's dead, fale otherwise.
+	 * @return Return true if it's dead, false otherwise.
 	 */
 	public boolean isDead() {
 		return death;
@@ -218,14 +213,6 @@ public abstract class AbstractGameObject implements Drawable {
 	 */
 	public void setObjectPosition(final Position position) {
 		this.gameObjectBiDimensionalSpace.setPosition(position.clone());
-	}
-
-	/**
-	 * Gets the object's type.
-	 * @return Returns the object's type.
-	 */
-	public ObjectType getObjectType() {
-		return this.objectType;
 	}
 	
 	@Override
