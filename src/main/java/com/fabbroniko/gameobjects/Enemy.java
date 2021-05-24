@@ -1,11 +1,7 @@
 package com.fabbroniko.gameobjects;
 
 import com.fabbroniko.environment.*;
-import com.fabbroniko.environment.Animation.AnimationListener;
 import com.fabbroniko.scene.GameScene;
-
-import java.awt.image.BufferedImage;
-import java.util.List;
 
 public class Enemy extends AbstractGameObject implements AnimationListener {
 
@@ -22,12 +18,24 @@ public class Enemy extends AbstractGameObject implements AnimationListener {
 		leftOffset = -1;
 		rightOffset = 1;
 
-		List<BufferedImage> frames = generateSprites(spritePath, spriteDimension, 1, 1);
-		deadAnimation = new Animation(ENEMY_DEAD_ANIMATION_NAME, frames, 7, true, this);
+		deadAnimation = Animation.builder()
+				.spriteSet(gameScene.getResourceManager().loadImageFromDisk(spritePath))
+				.spriteDimension(spriteDimension)
+				.row(1)
+				.nFrames(1)
+				.nFramesEachImageIsRepeated(7)
+				.animationListener(this)
+				.name(ENEMY_DEAD_ANIMATION_NAME)
+				.build();
 
-		frames = generateSprites(spritePath, spriteDimension, 0, 2);
-		final Animation walkAnimation = new Animation(ENEMY_WALK_ANIMATION_NAME, frames, 5, false, null);
-		setAnimation(walkAnimation);
+		setAnimation(Animation.builder()
+				.spriteSet(gameScene.getResourceManager().loadImageFromDisk(spritePath))
+				.spriteDimension(spriteDimension)
+				.row(0)
+				.nFrames(2)
+				.nFramesEachImageIsRepeated(5)
+				.name(ENEMY_WALK_ANIMATION_NAME)
+				.build());
 	}
 	
 	@Override

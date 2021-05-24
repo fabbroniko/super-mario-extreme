@@ -1,11 +1,7 @@
 package com.fabbroniko.gameobjects;
 
 import com.fabbroniko.environment.*;
-import com.fabbroniko.environment.Animation.AnimationListener;
 import com.fabbroniko.scene.GameScene;
-
-import java.awt.image.BufferedImage;
-import java.util.List;
 
 /**
  * Represents the simplest block in the game.
@@ -25,12 +21,24 @@ public class Block extends AbstractGameObject implements AnimationListener {
 	public Block(final TileMap tileMap, final GameScene gameScene, final Integer objectID) {
 		super(tileMap, gameScene, objectID, spriteDimension);
 
-		List<BufferedImage> frames = generateSprites(spritePath, spriteDimension, 1, 6);
-		breakingAnimation = new Animation(BLOCK_BREAKING_ANIMATION_NAME, frames, 4, true, this);
+		breakingAnimation = Animation.builder()
+				.spriteSet(gameScene.getResourceManager().loadImageFromDisk(spritePath))
+				.spriteDimension(spriteDimension)
+				.row(1)
+				.nFrames(6)
+				.nFramesEachImageIsRepeated(4)
+				.animationListener(this)
+				.name(BLOCK_BREAKING_ANIMATION_NAME)
+				.build();
 
-		frames = generateSprites(spritePath, spriteDimension, 0, 1);
-		final Animation idleAnimation = new Animation(BLOCK_IDLE_ANIMATION_NAME, frames, 1, true, null);
-		setAnimation(idleAnimation);
+		setAnimation(Animation.builder()
+				.spriteSet(gameScene.getResourceManager().loadImageFromDisk(spritePath))
+				.spriteDimension(spriteDimension)
+				.row(0)
+				.nFrames(1)
+				.nFramesEachImageIsRepeated(1)
+				.name(BLOCK_IDLE_ANIMATION_NAME)
+				.build());
 	}
 	
 	@Override

@@ -16,9 +16,14 @@ public class FallingBlock extends AbstractGameObject {
 	public FallingBlock(final TileMap tileMap, final GameScene gameScene, final Integer objectID) {
 		super(tileMap, gameScene, objectID, spriteDimension);
 
-		final List<BufferedImage> frames = generateSprites(spritePath, spriteDimension, 0, 1);
-		final Animation idleAnimation = new Animation(FALLING_BLOCK_IDLE_ANIMATION_NAME, frames, 1, true, null);
-		setAnimation(idleAnimation);
+		setAnimation(Animation.builder()
+				.spriteSet(gameScene.getResourceManager().loadImageFromDisk(spritePath))
+				.spriteDimension(spriteDimension)
+				.row(0)
+				.nFrames(1)
+				.nFramesEachImageIsRepeated(1)
+				.name(FALLING_BLOCK_IDLE_ANIMATION_NAME)
+				.build());
 	}
 	
 	@Override

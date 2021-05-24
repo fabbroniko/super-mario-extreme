@@ -3,9 +3,6 @@ package com.fabbroniko.gameobjects;
 import com.fabbroniko.environment.*;
 import com.fabbroniko.scene.GameScene;
 
-import java.awt.image.BufferedImage;
-import java.util.List;
-
 public class InvisibleBlock extends AbstractGameObject {
 
 	private static final Dimension spriteDimension = new Dimension(30, 30);
@@ -19,12 +16,23 @@ public class InvisibleBlock extends AbstractGameObject {
 	public InvisibleBlock(final TileMap tileMap, final GameScene gameScene, final Integer objectID) {
 		super(tileMap, gameScene, objectID, spriteDimension);
 
-		List<BufferedImage> frames = generateSprites(spritePath, spriteDimension, 0, 1);
-		final Animation invisibleAnimation = new Animation(INVISIBLE_BLOCK_INVISIBLE_ANIMATION_NAME, frames, 1, true, null);
-		setAnimation(invisibleAnimation);
+		setAnimation(Animation.builder()
+				.spriteSet(gameScene.getResourceManager().loadImageFromDisk(spritePath))
+				.spriteDimension(spriteDimension)
+				.row(0)
+				.nFrames(1)
+				.nFramesEachImageIsRepeated(1)
+				.name(INVISIBLE_BLOCK_INVISIBLE_ANIMATION_NAME)
+				.build());
 
-		frames = generateSprites(spritePath, spriteDimension, 1, 1);
-		visibleAnimation = new Animation(INVISIBLE_BLOCK_VISIBLE_ANIMATION_NAME, frames, 1, true, null);
+		visibleAnimation = Animation.builder()
+				.spriteSet(gameScene.getResourceManager().loadImageFromDisk(spritePath))
+				.spriteDimension(spriteDimension)
+				.row(1)
+				.nFrames(1)
+				.nFramesEachImageIsRepeated(1)
+				.name(INVISIBLE_BLOCK_VISIBLE_ANIMATION_NAME)
+				.build();
 	}
 	
 	@Override

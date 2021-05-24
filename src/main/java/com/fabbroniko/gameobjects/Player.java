@@ -2,8 +2,6 @@ package com.fabbroniko.gameobjects;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
-import java.util.List;
 
 import com.fabbroniko.environment.Animation;
 import com.fabbroniko.environment.CollisionDirection;
@@ -44,14 +42,32 @@ public class Player extends AbstractGameObject implements KeyListener {
 		this.gameScene = gameScene;
 		this.baseWindowSize = GameManager.getInstance().getCanvasSize();
 
-		List<BufferedImage> frames = generateSprites(spritePath, spriteDimension, 0, 1);
-		idleAnimation = new Animation(MARIO_IDLE_ANIMATION_NAME, frames, 1, true, null);
+		idleAnimation = Animation.builder()
+				.spriteSet(gameScene.getResourceManager().loadImageFromDisk(spritePath))
+				.spriteDimension(spriteDimension)
+				.row(0)
+				.nFrames(1)
+				.nFramesEachImageIsRepeated(1)
+				.name(MARIO_IDLE_ANIMATION_NAME)
+				.build();
 
-		frames = generateSprites(spritePath, spriteDimension, 1, 1);
-		jumpAnimation = new Animation(MARIO_JUMP_ANIMATION_NAME, frames, 1, true, null);
+		jumpAnimation = Animation.builder()
+				.spriteSet(gameScene.getResourceManager().loadImageFromDisk(spritePath))
+				.spriteDimension(spriteDimension)
+				.row(1)
+				.nFrames(1)
+				.nFramesEachImageIsRepeated(1)
+				.name(MARIO_JUMP_ANIMATION_NAME)
+				.build();
 
-		frames = generateSprites(spritePath, spriteDimension, 2, 3);
-		walkAnimation = new Animation(MARIO_WALK_ANIMATION_NAME, frames, 5, true, null);
+		walkAnimation = Animation.builder()
+				.spriteSet(gameScene.getResourceManager().loadImageFromDisk(spritePath))
+				.spriteDimension(spriteDimension)
+				.row(2)
+				.nFrames(3)
+				.nFramesEachImageIsRepeated(5)
+				.name(MARIO_WALK_ANIMATION_NAME)
+				.build();
 
 		setAnimation(jumpAnimation);
 	}

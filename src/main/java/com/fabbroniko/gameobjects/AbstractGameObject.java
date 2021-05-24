@@ -262,18 +262,4 @@ public abstract class AbstractGameObject implements Drawable {
 			g.drawImage(currentAnimation.getImage(), myPosition.getX() - mapPosition.getX() + spriteDimension.getWidth(), myPosition.getY() - mapPosition.getY(),  -spriteDimension.getWidth(), spriteDimension.getHeight(), null);
 		}
 	}
-
-	protected List<BufferedImage> generateSprites(final String spriteSetPath, final Dimension spriteDimension, final int row, final int nFrames){
-		final BufferedImage spriteSet = gameScene.getResourceManager().loadImageFromDisk(spriteSetPath);
-		final int yPosition = row * spriteDimension.getHeight();
-
-		int xPosition = 0;
-		final List<BufferedImage> sprites = new ArrayList<>();
-		for(int i = 0; i < nFrames; i++){
-			sprites.add(spriteSet.getSubimage(xPosition, yPosition, spriteDimension.getWidth(), spriteDimension.getHeight()));
-			xPosition += spriteDimension.getWidth();
-		}
-
-		return sprites;
-	}
 }

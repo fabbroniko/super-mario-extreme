@@ -1,69 +1,58 @@
 package com.fabbroniko.environment;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.List;
 
-/**
-* Represents an animation for an AbstractGameObject.
-* @author com.fabbroniko
-*/
+@Log4j2
 public final class Animation {
 
 	private static final int START_INDEX = 0;
 
-	private final List<BufferedImage> frames;
-	private final long maxTimes;
-	private final boolean repeatOnce;
-	private final AnimationListener animationListener;
-	private final String name;
+	private List<BufferedImage> frames;
+	private int nFramesEachImageIsRepeated;
+	private AnimationListener animationListener;
+	private String name;
 
-	private long currentTimes;
-	private int currentFrame;
+	private long currentFrameCount;
+	private int currentImageIndex;
 
-	public Animation(final String name, final List<BufferedImage> frames, final int frameRepetition, final boolean repeat, final AnimationListener animationListener) {
-		this.name = name;
-		this.frames = frames;
-		this.currentTimes = START_INDEX;
-		this.currentFrame = START_INDEX;
-		this.maxTimes = frameRepetition;
-		this.repeatOnce = repeat;
-		this.animationListener = animationListener;
+	public static Builder builder() {
+		return new Animation.Builder();
 	}
-	
-	private void checkIndex() {
-		if(currentFrame >= frames.size()) {
-			currentFrame = START_INDEX ;
-			if (repeatOnce && animationListener != null) {
-				animationListener.animationFinished();
-			}
-		}
+
+	private Animation() {
+		this.currentFrameCount = START_INDEX;
+		this.currentImageIndex = START_INDEX;
 	}
 
 	public String getName() {
 		return name;
 	}
-	
-	/**
-	 * Get's the current frame.
-	 * @return The current frame.
-	 */
+
 	public BufferedImage getImage() {
-		final BufferedImage tmp = this.frames.get(currentFrame);
-		currentTimes++;
-		if (currentTimes >= maxTimes) {
-			currentTimes = 0;
-			currentFrame++;
-			checkIndex();
+		final BufferedImage frame = this.frames.get(currentImageIndex);
+
+		currentFrameCount++;
+		if (currentFrameCount >= nFramesEachImageIsRepeated) {
+			currentFrameCount = 0;
+			currentImageIndex++;
+
+			if(currentImageIndex >= frames.size()) {
+				currentImageIndex = START_INDEX ;
+				if (animationListener != null) {
+					animationListener.animationFinished();
+				}
+			}
 		}
-		return tmp;
+		return frame;
 	}
-	
-	/**
-	 * Resets this animation.
-	 */
+
 	public void reset() {
-		currentFrame = 0;
-		currentTimes = 0;
+		currentImageIndex = 0;
+		currentFrameCount = 0;
 	}
 
 	@Override
@@ -72,11 +61,92 @@ public final class Animation {
 			return false;
 		}
 
-		final Animation anim = (Animation)o;
-		return anim.frames.equals(this.frames) && anim.maxTimes == this.maxTimes && anim.currentTimes == this.currentTimes && anim.currentFrame == this.currentFrame && anim.repeatOnce == this.repeatOnce;
+		return ((Animation)o).name.equals(this.name);
 	}
 
-	public interface AnimationListener {
-		void animationFinished();
+	@Override
+	public int hashCode() {
+		return name.hashCode();
+	}
+
+	public final static class Builder {
+
+		private BufferedImage spriteSet;
+		private String name;
+		private AnimationListener animationListener;
+		private int nFramesEachImageIsRepeated = 1;
+		private int nFrames = 1;
+		private int row = 0;
+		private Dimension spriteDimension = new Dimension();
+
+		public Builder() {}
+
+		public Builder spriteSet(final BufferedImage spriteSet) {
+			this.spriteSet = spriteSet;
+			return this;
+		}
+
+		public Builder name(final String name) {
+			this.name = name;
+			return this;
+		}
+
+		public Builder animationListener(final AnimationListener animationListener) {
+			this.animationListener = animationListener;
+			return this;
+		}
+
+		public Builder nFramesEachImageIsRepeated(final int nFramesEachImageIsRepeated) {
+			this.nFramesEachImageIsRepeated = nFramesEachImageIsRepeated;
+			return this;
+		}
+
+		public Builder nFrames(final int nFrames) {
+			this.nFrames = nFrames;
+			return this;
+		}
+
+		public Builder row(final int row) {
+			this.row = row;
+			return this;
+		}
+
+		public Builder spriteDimension(final Dimension dimension) {
+			this.spriteDimension = dimension;
+			return this;
+		}
+
+		public Animation build() {
+			if(name == null) {
+				log.error("animation_builder,build,invalid_state,name_not_set");
+				throw new IllegalArgumentException("Can't build animation without a unique name identifier.");
+			}
+
+			if(spriteSet == null) {
+				log.error("animation_builder,build,invalid_state,sprite_set_not_valid");
+				throw new IllegalArgumentException("Can't build animation without the sprite set for the game object.");
+			}
+
+			final Animation animation = new Animation();
+			animation.name = this.name;
+			animation.animationListener = this.animationListener;
+			animation.nFramesEachImageIsRepeated = this.nFramesEachImageIsRepeated;
+			animation.frames = generateSprites();
+
+			return animation;
+		}
+
+		private List<BufferedImage> generateSprites(){
+			final int yPosition = row * spriteDimension.getHeight();
+
+			int xPosition = 0;
+			final List<BufferedImage> sprites = new ArrayList<>();
+			for(int i = 0; i < nFrames; i++){
+				sprites.add(spriteSet.getSubimage(xPosition, yPosition, spriteDimension.getWidth(), spriteDimension.getHeight()));
+				xPosition += spriteDimension.getWidth();
+			}
+
+			return sprites;
+		}
 	}
 }
