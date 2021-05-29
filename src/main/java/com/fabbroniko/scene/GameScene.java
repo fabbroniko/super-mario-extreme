@@ -1,10 +1,7 @@
 package com.fabbroniko.scene;
 
-import com.fabbroniko.environment.Background;
-import com.fabbroniko.environment.CollisionManager;
+import com.fabbroniko.environment.*;
 import com.fabbroniko.environment.Dimension;
-import com.fabbroniko.environment.Position;
-import com.fabbroniko.environment.TileMap;
 import com.fabbroniko.gameobjects.AbstractGameObject;
 import com.fabbroniko.gameobjects.Block;
 import com.fabbroniko.gameobjects.Castle;
