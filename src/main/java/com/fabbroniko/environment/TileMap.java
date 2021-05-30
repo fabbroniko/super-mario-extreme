@@ -49,9 +49,9 @@ public class TileMap implements Drawable {
 	 */
 	private void loadTiles() {
 		for (int currentX = 0; currentX < tileSet.getWidth(); currentX += tileSize.getWidth()) {
-			TileType tt = TileType.TILE_BLOCK;
+			TileType tt = TileType.BLOCKING;
 			if(currentX/tileSize.getWidth() > 4)
-				tt = TileType.TILE_FREE;
+				tt = TileType.NON_BLOCKING;
 
 			tiles.add(new Tile(tileSet.getSubimage(currentX, 0, tileSize.getWidth(), tileSize.getHeight()), tt));
 		}
@@ -72,7 +72,7 @@ public class TileMap implements Drawable {
 			}
 		}
 
-		for(final com.fabbroniko.resource.domain.Tile t : map.getTile()) {
+		for(final com.fabbroniko.resource.domain.Tile t : map.getTiles()) {
 			this.map[t.getVerticalIndex()][t.getHorizontalIndex()] = t.getId();
 		}
 	}
@@ -100,25 +100,25 @@ public class TileMap implements Drawable {
 		
 		// Checking the top-left corner
 		currentPoint.setLocation(startingX, startingY);
-		if(getTileType(currentPoint).equals(TileType.TILE_BLOCK)) {
+		if(getTileType(currentPoint).equals(TileType.BLOCKING)) {
 			return true;
 		}
 		
 		// Checking the top-right corner
 		currentPoint.setLocation(startingX + width, startingY);
-		if(getTileType(currentPoint).equals(TileType.TILE_BLOCK)) {
+		if(getTileType(currentPoint).equals(TileType.BLOCKING)) {
 			return true;
 		}
 		
 		// Checking the bottom-left corner
 		currentPoint.setLocation(startingX, startingY + height);
-		if(getTileType(currentPoint).equals(TileType.TILE_BLOCK)) {
+		if(getTileType(currentPoint).equals(TileType.BLOCKING)) {
 			return true;
 		}
 		
 		// Checking the bottom-right corner
 		currentPoint.setLocation(startingX + width, startingY + height);
-		return getTileType(currentPoint).equals(TileType.TILE_BLOCK);
+		return getTileType(currentPoint).equals(TileType.BLOCKING);
 	}
 	
 	/**

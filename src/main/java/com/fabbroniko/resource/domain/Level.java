@@ -21,11 +21,10 @@ public class Level {
   @JacksonXmlElementWrapper(localName = "game-objects")
   @JacksonXmlProperty(localName = "game-object")
   private List<GameObject> gameObjects;
-  private Map map;
 
-  @JacksonXmlProperty(localName = "start-position")
+  private Map map;
   private Position startPosition;
 
-  @JacksonXmlProperty(isAttribute = true, localName = "required-game-version")
+  @JacksonXmlProperty(isAttribute = true)
   private double requiredGameVersion;
 }

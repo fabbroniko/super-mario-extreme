@@ -1,54 +1,27 @@
 package com.fabbroniko.environment;
 
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+
 import java.awt.image.BufferedImage;
 
 /**
- * Represents one tile of the map.
- * @author nicola.fabbrini
+ * A tile is a fragment of the tilemap which includes the sub-images of all the possible terrains that can be drawn in
+ * the game canvas.
  *
+ * On game startup the tilemap is split into its individual tiles, representing different types of terrain like Dirt, Grass, Water, Pipes and so on.
+ * Tiles are unique - this means that it should not be possible to have instances of this class with the same tile image and tile type.
+ * In the future it could be possible to have the same tile with different properties (aka tile type). For example it could be possible
+ * to create a trap from a tile that looks like grass but with {@link TileType#NON_BLOCKING NON_BLOCKING} physics.
+ *
+ * @see TileType
  */
+@Getter
+@AllArgsConstructor
+@EqualsAndHashCode
 public class Tile {
 
-	private final BufferedImage tileImage;
+	private final BufferedImage image;
 	private final TileType type;
-	
-	/**
-	 * Constructs a new tile.
-	 * @param img Tile Image
-	 * @param typeP Tile type (e.g. BLOCKED or UNBLOCKED)
-	 */
-	public Tile(final BufferedImage img, final TileType typeP) {
-		this.tileImage = img;
-		this.type = typeP;
-	}
-	
-	/**
-	 * Image Getter.
-	 * @return Returns the tile's image.
-	 */
-	public BufferedImage getImage() {
-		return tileImage;
-	}
-	
-	/**
-	 * Type Getter.
-	 * @return Returns the tile's type.
-	 */
-	public TileType getType() {
-		return this.type;
-	}
-	
-	@Override
-	public boolean equals(final Object o) {
-		if(o == null || !(o instanceof Tile)){
-			return false;
-		}
-		final Tile obj = (Tile)o;
-		return this.type.equals(obj.type) && this.tileImage.equals(obj.tileImage);
-	}
-	
-	@Override
-	public int hashCode() {
-		return (this.tileImage.hashCode() & this.type.hashCode()) ^ (this.tileImage.hashCode() | this.type.hashCode());
-	}
 }
