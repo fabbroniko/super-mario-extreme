@@ -13,7 +13,7 @@ import com.fabbroniko.gameobjects.Player;
 import com.fabbroniko.GameManager;
 import com.fabbroniko.resource.domain.Level;
 
-import java.awt.*;
+import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;

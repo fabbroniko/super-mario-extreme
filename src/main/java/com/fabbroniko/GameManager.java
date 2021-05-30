@@ -15,8 +15,6 @@ import com.fabbroniko.scene.AbstractScene;
 import com.fabbroniko.scene.GameScene;
 import com.fabbroniko.scene.LostScene;
 import com.fabbroniko.scene.MainMenuScene;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.SneakyThrows;
 
