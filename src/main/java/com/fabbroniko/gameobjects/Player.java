@@ -3,10 +3,7 @@ package com.fabbroniko.gameobjects;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import com.fabbroniko.environment.Animation;
-import com.fabbroniko.environment.CollisionDirection;
-import com.fabbroniko.environment.Dimension;
-import com.fabbroniko.environment.TileMap;
+import com.fabbroniko.environment.*;
 import com.fabbroniko.GameManager;
 import com.fabbroniko.scene.GameScene;
 import com.fabbroniko.scene.LostScene;

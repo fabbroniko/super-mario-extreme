@@ -31,5 +31,232 @@
     <game-object x="2750" y="170">castle</game-object>
   </game-objects>
 
-  <map>/levels/lvl1.info</map>
+  <map vertical-blocks="12" horizontal-blocks="100">
+    <tile id="1" vertical-index="0" horizontal-index="0" />
+    <tile id="1" vertical-index="1" horizontal-index="0" />
+    <tile id="1" vertical-index="2" horizontal-index="0" />
+    <tile id="1" vertical-index="3" horizontal-index="0" />
+    <tile id="1" vertical-index="4" horizontal-index="0" />
+    <tile id="1" vertical-index="5" horizontal-index="0" />
+    <tile id="1" vertical-index="6" horizontal-index="0" />
+    <tile id="1" vertical-index="7" horizontal-index="0" />
+    <tile id="1" vertical-index="8" horizontal-index="0" />
+    <tile id="1" vertical-index="9" horizontal-index="0" />
+    <tile id="1" vertical-index="10" horizontal-index="0" />
+    <tile id="1" vertical-index="11" horizontal-index="0" />
+
+    <tile id="0" vertical-index="11" horizontal-index="1" />
+    <tile id="0" vertical-index="11" horizontal-index="2" />
+    <tile id="0" vertical-index="11" horizontal-index="3" />
+    <tile id="0" vertical-index="11" horizontal-index="4" />
+    <tile id="0" vertical-index="11" horizontal-index="5" />
+    <tile id="0" vertical-index="11" horizontal-index="6" />
+    <tile id="0" vertical-index="11" horizontal-index="7" />
+
+    <tile id="6" vertical-index="10" horizontal-index="1" />
+    <tile id="6" vertical-index="10" horizontal-index="2" />
+    <tile id="6" vertical-index="10" horizontal-index="3" />
+    <tile id="6" vertical-index="10" horizontal-index="4" />
+    <tile id="6" vertical-index="10" horizontal-index="5" />
+    <tile id="6" vertical-index="10" horizontal-index="6" />
+
+    <tile id="2" vertical-index="10" horizontal-index="7" />
+    <tile id="3" vertical-index="9" horizontal-index="7" />
+    <tile id="4" vertical-index="8" horizontal-index="7" />
+
+    <tile id="8" vertical-index="11" horizontal-index="8" />
+    <tile id="8" vertical-index="11" horizontal-index="9" />
+    <tile id="8" vertical-index="11" horizontal-index="10" />
+    <tile id="8" vertical-index="11" horizontal-index="11" />
+    <tile id="8" vertical-index="11" horizontal-index="12" />
+    <tile id="8" vertical-index="11" horizontal-index="13" />
+    <tile id="8" vertical-index="11" horizontal-index="14" />
+    <tile id="8" vertical-index="11" horizontal-index="15" />
+    <tile id="8" vertical-index="11" horizontal-index="16" />
+    <tile id="8" vertical-index="11" horizontal-index="17" />
+    <tile id="8" vertical-index="11" horizontal-index="18" />
+    <tile id="8" vertical-index="11" horizontal-index="19" />
+    <tile id="8" vertical-index="11" horizontal-index="20" />
+    <tile id="8" vertical-index="11" horizontal-index="21" />
+    <tile id="8" vertical-index="11" horizontal-index="22" />
+    <tile id="8" vertical-index="11" horizontal-index="23" />
+    <tile id="8" vertical-index="11" horizontal-index="24" />
+    <tile id="8" vertical-index="11" horizontal-index="25" />
+    <tile id="8" vertical-index="11" horizontal-index="26" />
+    <tile id="8" vertical-index="11" horizontal-index="27" />
+    <tile id="8" vertical-index="11" horizontal-index="28" />
+    <tile id="8" vertical-index="11" horizontal-index="29" />
+    <tile id="8" vertical-index="11" horizontal-index="30" />
+    <tile id="8" vertical-index="11" horizontal-index="31" />
+
+    <tile id="0" vertical-index="11" horizontal-index="32" />
+    <tile id="6" vertical-index="10" horizontal-index="32" />
+
+    <tile id="0" vertical-index="11" horizontal-index="36" />
+    <tile id="6" vertical-index="10" horizontal-index="36" />
+    <tile id="1" vertical-index="11" horizontal-index="37" />
+    <tile id="0" vertical-index="10" horizontal-index="37" />
+    <tile id="6" vertical-index="9" horizontal-index="37" />
+
+    <tile id="0" vertical-index="11" horizontal-index="38" />
+    <tile id="2" vertical-index="10" horizontal-index="38" />
+    <tile id="3" vertical-index="9" horizontal-index="38" />
+    <tile id="4" vertical-index="8" horizontal-index="38" />
+
+    <tile id="0" vertical-index="11" horizontal-index="39" />
+    <tile id="2" vertical-index="10" horizontal-index="39" />
+    <tile id="4" vertical-index="9" horizontal-index="39" />
+
+    <tile id="0" vertical-index="11" horizontal-index="40" />
+    <tile id="0" vertical-index="11" horizontal-index="41" />
+    <tile id="0" vertical-index="11" horizontal-index="42" />
+    <tile id="0" vertical-index="11" horizontal-index="43" />
+    <tile id="0" vertical-index="11" horizontal-index="44" />
+    <tile id="0" vertical-index="11" horizontal-index="45" />
+    <tile id="0" vertical-index="11" horizontal-index="46" />
+
+    <tile id="6" vertical-index="10" horizontal-index="40" />
+    <tile id="6" vertical-index="10" horizontal-index="41" />
+    <tile id="6" vertical-index="10" horizontal-index="42" />
+    <tile id="6" vertical-index="10" horizontal-index="43" />
+    <tile id="6" vertical-index="10" horizontal-index="44" />
+    <tile id="6" vertical-index="10" horizontal-index="45" />
+    <tile id="6" vertical-index="10" horizontal-index="46" />
+
+    <tile id="0" vertical-index="11" horizontal-index="47" />
+    <tile id="2" vertical-index="10" horizontal-index="47" />
+    <tile id="3" vertical-index="9" horizontal-index="47" />
+    <tile id="4" vertical-index="8" horizontal-index="47" />
+
+    <tile id="0" vertical-index="11" horizontal-index="48" />
+    <tile id="6" vertical-index="10" horizontal-index="48" />
+
+    <tile id="0" vertical-index="11" horizontal-index="57" />
+    <tile id="2" vertical-index="10" horizontal-index="57" />
+    <tile id="4" vertical-index="9" horizontal-index="57" />
+
+    <tile id="0" vertical-index="11" horizontal-index="58" />
+    <tile id="6" vertical-index="10" horizontal-index="58" />
+    <tile id="0" vertical-index="11" horizontal-index="59" />
+    <tile id="6" vertical-index="10" horizontal-index="59" />
+    <tile id="0" vertical-index="11" horizontal-index="61" />
+    <tile id="6" vertical-index="10" horizontal-index="61" />
+
+    <tile id="0" vertical-index="11" horizontal-index="62" />
+    <tile id="2" vertical-index="10" horizontal-index="62" />
+    <tile id="3" vertical-index="9" horizontal-index="62" />
+    <tile id="4" vertical-index="8" horizontal-index="62" />
+
+    <tile id="0" vertical-index="11" horizontal-index="63" />
+    <tile id="0" vertical-index="11" horizontal-index="64" />
+    <tile id="0" vertical-index="11" horizontal-index="65" />
+    <tile id="0" vertical-index="11" horizontal-index="66" />
+    <tile id="0" vertical-index="11" horizontal-index="67" />
+    <tile id="0" vertical-index="11" horizontal-index="68" />
+
+    <tile id="6" vertical-index="10" horizontal-index="63" />
+    <tile id="6" vertical-index="10" horizontal-index="64" />
+    <tile id="6" vertical-index="10" horizontal-index="65" />
+    <tile id="6" vertical-index="10" horizontal-index="66" />
+    <tile id="6" vertical-index="10" horizontal-index="67" />
+    <tile id="6" vertical-index="10" horizontal-index="68" />
+
+    <tile id="0" vertical-index="11" horizontal-index="69" />
+    <tile id="2" vertical-index="10" horizontal-index="69" />
+    <tile id="3" vertical-index="9" horizontal-index="69" />
+    <tile id="4" vertical-index="8" horizontal-index="69" />
+
+    <tile id="8" vertical-index="11" horizontal-index="70" />
+    <tile id="8" vertical-index="11" horizontal-index="71" />
+    <tile id="8" vertical-index="11" horizontal-index="72" />
+    <tile id="8" vertical-index="11" horizontal-index="73" />
+    <tile id="8" vertical-index="11" horizontal-index="74" />
+    <tile id="8" vertical-index="11" horizontal-index="75" />
+
+    <tile id="0" vertical-index="11" horizontal-index="76" />
+    <tile id="2" vertical-index="10" horizontal-index="76" />
+    <tile id="4" vertical-index="9" horizontal-index="76" />
+
+    <tile id="0" vertical-index="11" horizontal-index="77" />
+    <tile id="0" vertical-index="11" horizontal-index="78" />
+    <tile id="0" vertical-index="11" horizontal-index="79" />
+    <tile id="0" vertical-index="11" horizontal-index="80" />
+    <tile id="0" vertical-index="11" horizontal-index="81" />
+    <tile id="0" vertical-index="11" horizontal-index="82" />
+    <tile id="0" vertical-index="11" horizontal-index="83" />
+    <tile id="0" vertical-index="11" horizontal-index="84" />
+    <tile id="0" vertical-index="11" horizontal-index="85" />
+
+    <tile id="6" vertical-index="10" horizontal-index="77" />
+    <tile id="6" vertical-index="10" horizontal-index="78" />
+    <tile id="6" vertical-index="10" horizontal-index="79" />
+    <tile id="6" vertical-index="10" horizontal-index="80" />
+    <tile id="6" vertical-index="10" horizontal-index="81" />
+    <tile id="6" vertical-index="10" horizontal-index="82" />
+    <tile id="6" vertical-index="10" horizontal-index="83" />
+    <tile id="6" vertical-index="10" horizontal-index="84" />
+    <tile id="6" vertical-index="10" horizontal-index="85" />
+
+
+    <tile id="6" vertical-index="10" horizontal-index="86" />
+    <tile id="0" vertical-index="10" horizontal-index="86" />
+    <tile id="1" vertical-index="11" horizontal-index="86" />
+
+    <tile id="6" vertical-index="8" horizontal-index="87" />
+    <tile id="0" vertical-index="9" horizontal-index="87" />
+    <tile id="1" vertical-index="10" horizontal-index="87" />
+    <tile id="1" vertical-index="11" horizontal-index="87" />
+
+    <tile id="6" vertical-index="7" horizontal-index="88" />
+    <tile id="0" vertical-index="8" horizontal-index="88" />
+    <tile id="1" vertical-index="9" horizontal-index="88" />
+    <tile id="1" vertical-index="10" horizontal-index="88" />
+    <tile id="1" vertical-index="11" horizontal-index="88" />
+
+    <tile id="6" vertical-index="6" horizontal-index="89" />
+    <tile id="0" vertical-index="7" horizontal-index="89" />
+    <tile id="1" vertical-index="8" horizontal-index="89" />
+    <tile id="1" vertical-index="9" horizontal-index="89" />
+    <tile id="1" vertical-index="10" horizontal-index="89" />
+    <tile id="1" vertical-index="11" horizontal-index="89" />
+
+    <tile id="6" vertical-index="5" horizontal-index="90" />
+    <tile id="0" vertical-index="6" horizontal-index="90" />
+    <tile id="1" vertical-index="7" horizontal-index="90" />
+    <tile id="1" vertical-index="8" horizontal-index="90" />
+    <tile id="1" vertical-index="9" horizontal-index="90" />
+    <tile id="1" vertical-index="10" horizontal-index="90" />
+    <tile id="1" vertical-index="11" horizontal-index="90" />
+
+    <tile id="0" vertical-index="11" horizontal-index="91" />
+    <tile id="0" vertical-index="11" horizontal-index="92" />
+    <tile id="0" vertical-index="11" horizontal-index="93" />
+    <tile id="0" vertical-index="11" horizontal-index="94" />
+    <tile id="0" vertical-index="11" horizontal-index="95" />
+    <tile id="0" vertical-index="11" horizontal-index="96" />
+    <tile id="0" vertical-index="11" horizontal-index="97" />
+    <tile id="0" vertical-index="11" horizontal-index="98" />
+
+    <tile id="6" vertical-index="11" horizontal-index="91" />
+    <tile id="6" vertical-index="11" horizontal-index="92" />
+    <tile id="6" vertical-index="11" horizontal-index="93" />
+    <tile id="6" vertical-index="11" horizontal-index="94" />
+    <tile id="6" vertical-index="11" horizontal-index="95" />
+    <tile id="6" vertical-index="11" horizontal-index="96" />
+    <tile id="6" vertical-index="11" horizontal-index="97" />
+    <tile id="6" vertical-index="11" horizontal-index="98" />
+
+    <tile id="1" vertical-index="0" horizontal-index="99" />
+    <tile id="1" vertical-index="1" horizontal-index="99" />
+    <tile id="1" vertical-index="2" horizontal-index="99" />
+    <tile id="1" vertical-index="3" horizontal-index="99" />
+    <tile id="1" vertical-index="4" horizontal-index="99" />
+    <tile id="1" vertical-index="5" horizontal-index="99" />
+    <tile id="1" vertical-index="6" horizontal-index="99" />
+    <tile id="1" vertical-index="7" horizontal-index="99" />
+    <tile id="1" vertical-index="8" horizontal-index="99" />
+    <tile id="1" vertical-index="9" horizontal-index="99" />
+    <tile id="1" vertical-index="10" horizontal-index="99" />
+    <tile id="1" vertical-index="11" horizontal-index="99" />
+  </map>
 </level>

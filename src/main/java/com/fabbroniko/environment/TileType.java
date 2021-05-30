@@ -1,41 +1,17 @@
 package com.fabbroniko.environment;
 
-import com.fabbroniko.error.TileTypeError;
-
+/**
+ * Describes what kind of physics is applied to a {@link Tile Tile}
+ */
 public enum TileType {
 
     /**
-     * Represents a non-blocking tile.
+     * {@link com.fabbroniko.resource.domain.GameObject GameObjects} can move freely through this type of tile.
      */
-    TILE_FREE(0),
+    NON_BLOCKING,
 
     /**
-     * Represents a blocking tile.
+     * {@link com.fabbroniko.resource.domain.GameObject GameObjects} collide with this type of tile and can't go through it, effectively behaving like a solid surface.
      */
-    TILE_BLOCK(1);
-
-    private final int tileType;
-
-    TileType(final int i) {
-        this.tileType = i;
-    }
-
-    private int getType() {
-        return this.tileType;
-    }
-
-    /**
-     * Gets the TileType associated with the given index.
-     * @param index Value associated with each TileType.
-     * @return Returns the corresponding TileType.
-     */
-    public static TileType getTileType(final int index) {
-        for (final TileType i: TileType.values()) {
-            if (i.getType() == index) {
-                return i;
-            }
-        }
-
-        throw new TileTypeError(index);
-    }
+    BLOCKING
 }

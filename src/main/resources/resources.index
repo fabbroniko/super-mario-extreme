@@ -14,5 +14,5 @@
         <background name="game" preload="true">/backgrounds/in-game.png</background>
     </backgrounds>
 
-    <tilemap tile-size="30">/tilemaps/default.png</tilemap>
+    <tilemap tile-size="30">/tilemaps/default-sl.png</tilemap>
 </resource>

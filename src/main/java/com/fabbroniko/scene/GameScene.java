@@ -1,10 +1,7 @@
 package com.fabbroniko.scene;
 
-import com.fabbroniko.environment.Background;
-import com.fabbroniko.environment.CollisionManager;
+import com.fabbroniko.environment.*;
 import com.fabbroniko.environment.Dimension;
-import com.fabbroniko.environment.Position;
-import com.fabbroniko.environment.TileMap;
 import com.fabbroniko.gameobjects.AbstractGameObject;
 import com.fabbroniko.gameobjects.Block;
 import com.fabbroniko.gameobjects.Castle;
@@ -16,7 +13,7 @@ import com.fabbroniko.gameobjects.Player;
 import com.fabbroniko.GameManager;
 import com.fabbroniko.resource.domain.Level;
 
-import java.awt.*;
+import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;

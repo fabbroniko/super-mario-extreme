@@ -2,16 +2,8 @@ package com.fabbroniko.gameobjects;
 
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
 
-import com.fabbroniko.environment.Animation;
-import com.fabbroniko.environment.CollisionDirection;
-import com.fabbroniko.environment.Dimension;
-import com.fabbroniko.environment.GameObjectBiDimensionalSpace;
-import com.fabbroniko.environment.Position;
-import com.fabbroniko.environment.TileMap;
+import com.fabbroniko.environment.*;
 import com.fabbroniko.main.Drawable;
 import com.fabbroniko.scene.GameScene;
 
