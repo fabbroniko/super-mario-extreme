@@ -12,42 +12,22 @@ import java.util.List;
 
 public class TileMap implements Drawable {
 
-	// Tiles data
-	private final Dimension tileSize;
-	private final BufferedImage tileSet;
+	private final List<Tile> tiles = new ArrayList<>();
+	private final Position mapPosition = new Position();
 
-	private final List<Tile> tiles;
 	private int[][] map;
-	private Dimension mapSize;
 	private Position minLimits;
 	private Position maxLimits;
-
-	// Current position of the map
-	private final Position mapPosition;
-	private final Position lastDrawablePosition;
-	private int startingXIndex;
-	private int startingYIndex;
-
-	private final Dimension baseWindowDimension;
+	private final Dimension tileSize;
 
 	public TileMap(final ResourceManager resourceManager, final Map map) {
-		tiles = new ArrayList<>();
 		tileSize = new Dimension(30, 30);
-		baseWindowDimension = GameManager.getInstance().getCanvasSize();
-		
-		mapPosition = new Position();
-		lastDrawablePosition = new Position();
-		
-		this.tileSet = resourceManager.getTileMapSet();
-		
-		loadTiles();
-		loadMap(map);
+
+		loadTiles(resourceManager.getTileMapSet());
+		loadMap(map, GameManager.getInstance().getCanvasSize());
 	}
-	
-	/**
-	 * Splits the TileSet into the basic tiles and it stores them into and array of Tile
-	 */
-	private void loadTiles() {
+
+	private void loadTiles(final BufferedImage tileSet) {
 		for (int currentX = 0; currentX < tileSet.getWidth(); currentX += tileSize.getWidth()) {
 			TileType tt = TileType.BLOCKING;
 			if(currentX/tileSize.getWidth() > 4)
@@ -57,14 +37,14 @@ public class TileMap implements Drawable {
 		}
 	}
 
-	private void loadMap(final Map map) {
-		int nRows = map.getVerticalBlocks();
-		int nCols = map.getHorizontalBlocks();
+	private void loadMap(final Map map, final Dimension canvasSize) {
+		final int nRows = map.getVerticalBlocks();
+		final int nCols = map.getHorizontalBlocks();
 
 		this.map = new int[nRows][nCols];
-		mapSize = new Dimension(nCols * tileSize.getWidth(), nRows * tileSize.getHeight());
+		Dimension mapSize = new Dimension(nCols * tileSize.getWidth(), nRows * tileSize.getHeight());
 		minLimits = new Position();
-		maxLimits = new Position(mapSize.getWidth() - baseWindowDimension.getWidth(), mapSize.getHeight() - baseWindowDimension.getHeight());
+		maxLimits = new Position(mapSize.getWidth() - canvasSize.getWidth(), mapSize.getHeight() - canvasSize.getHeight());
 
 		for(int i = 0; i < nRows; i++) {
 			for(int y = 0; y < nCols; y++) {
@@ -77,20 +57,6 @@ public class TileMap implements Drawable {
 		}
 	}
 
-	public void setPosition(final Position position) {
-		this.mapPosition.setPosition(position.getX(), position.getY());
-
-		adjustCoordinates();
-	}
-	
-	/**
-	 * Gets the map's dimension.
-	 * @return Returns a new instance of the map's dimension.
-	 */
-	public Dimension getDimension() {
-		return mapSize;
-	}
-	
 	public boolean checkForMapCollision(final Rectangle rect) throws ArrayIndexOutOfBoundsException{
 		final Point currentPoint = new Point();
 		double startingX = rect.getLocation().getX();
@@ -120,39 +86,11 @@ public class TileMap implements Drawable {
 		currentPoint.setLocation(startingX + width, startingY + height);
 		return getTileType(currentPoint).equals(TileType.BLOCKING);
 	}
-	
-	/**
-	 * Sets the map's position. If it goes out of bounds, its position will be automatically adjusted.
-	 * @param x X Coordinate.
-	 * @param y Y Coordinate.
-	 */
+
 	public void setPosition(final int x, final int y) {
 		this.mapPosition.setX(x);
 		this.mapPosition.setY(y);
-		adjustCoordinates();
-	}
-	
-	/**
-	 * Gets the current map's position.
-	 * @return Return's a new instance of the map's location.
-	 */
-	public Position getPosition() {
-		return this.mapPosition.clone();
-	}
-	
-	/**
-	 * Gets the type of the tile in the specified {@link Point Point}.
-	 * @param point Point containing the coordinates of a point in the map. 
-	 * @return Returns the {@link TileType TileType} of the tile that contains the specified point.
-	 */
-	public TileType getTileType(final Point point) {
-		return tiles.get(map[(int) (point.getY() / tileSize.getHeight())][(int) (point.getX() / tileSize.getWidth())]).getType();
-	}
-	
-	/**
-	 * Checks if the position is valid. If an invalid position has been set, it will be adjusted.
-	 */
-	private void adjustCoordinates() {
+
 		if (mapPosition.getX() < minLimits.getX()) {
 			mapPosition.setX(minLimits.getX());
 		}
@@ -167,12 +105,12 @@ public class TileMap implements Drawable {
 		}
 	}
 
-	private void setDrawValues() {
-		startingXIndex = mapPosition.getX() / tileSize.getWidth();
-		startingYIndex = mapPosition.getY() / tileSize.getHeight();
-		
-		lastDrawablePosition.setX(mapPosition.getX() + baseWindowDimension.getWidth());
-		lastDrawablePosition.setY(mapPosition.getY() + baseWindowDimension.getHeight());
+	public Position getPosition() {
+		return this.mapPosition.clone();
+	}
+
+	public TileType getTileType(final Point point) {
+		return tiles.get(map[(int) (point.getY() / tileSize.getHeight())][(int) (point.getX() / tileSize.getWidth())]).getType();
 	}
 
 	@Override
@@ -180,7 +118,8 @@ public class TileMap implements Drawable {
 
 	@Override
 	public void draw(final Graphics2D g, final Dimension gDimension) {
-		setDrawValues();
+		final int startingXIndex = mapPosition.getX() / tileSize.getWidth();
+		final int startingYIndex = mapPosition.getY() / tileSize.getHeight();
 
 		final Position basePosToDraw = new Position();
 		basePosToDraw.setX(basePosToDraw.getX() - (mapPosition.getX() % tileSize.getWidth()));

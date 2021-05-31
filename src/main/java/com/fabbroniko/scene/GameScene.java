@@ -42,7 +42,6 @@ public final class GameScene extends AbstractScene implements KeyListener {
     public void init() {
         bg = new Background(gameManager.getResourceManager(), "game");
         tileMap = new TileMap(gameManager.getResourceManager(), level.getMap());
-        tileMap.setPosition(new Position());
         gameObjects = new ArrayList<>();
 
         this.collisionManager = new CollisionManager(tileMap, gameObjects);
