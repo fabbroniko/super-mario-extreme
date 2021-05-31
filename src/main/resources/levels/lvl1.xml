@@ -237,14 +237,14 @@
     <tile id="0" vertical-index="11" horizontal-index="97" />
     <tile id="0" vertical-index="11" horizontal-index="98" />
 
-    <tile id="6" vertical-index="11" horizontal-index="91" />
-    <tile id="6" vertical-index="11" horizontal-index="92" />
-    <tile id="6" vertical-index="11" horizontal-index="93" />
-    <tile id="6" vertical-index="11" horizontal-index="94" />
-    <tile id="6" vertical-index="11" horizontal-index="95" />
-    <tile id="6" vertical-index="11" horizontal-index="96" />
-    <tile id="6" vertical-index="11" horizontal-index="97" />
-    <tile id="6" vertical-index="11" horizontal-index="98" />
+    <tile id="6" vertical-index="10" horizontal-index="91" />
+    <tile id="6" vertical-index="10" horizontal-index="92" />
+    <tile id="6" vertical-index="10" horizontal-index="93" />
+    <tile id="6" vertical-index="10" horizontal-index="94" />
+    <tile id="6" vertical-index="10" horizontal-index="95" />
+    <tile id="6" vertical-index="10" horizontal-index="96" />
+    <tile id="6" vertical-index="10" horizontal-index="97" />
+    <tile id="6" vertical-index="10" horizontal-index="98" />
 
     <tile id="1" vertical-index="0" horizontal-index="99" />
     <tile id="1" vertical-index="1" horizontal-index="99" />
