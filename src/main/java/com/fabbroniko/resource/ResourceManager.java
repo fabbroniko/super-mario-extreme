@@ -1,14 +1,21 @@
 package com.fabbroniko.resource;
 
+import com.fabbroniko.Settings;
 import com.fabbroniko.error.ResourceNotFoundException;
 import com.fabbroniko.resource.domain.Background;
 import com.fabbroniko.resource.domain.Resource;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.extern.log4j.Log4j2;
 
 import javax.imageio.ImageIO;
 import javax.sound.sampled.*;
 import java.awt.image.BufferedImage;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -25,6 +32,9 @@ import java.util.stream.Collectors;
 public class ResourceManager {
 
     private static final String RESOURCE_DESCRIPTOR_PATH = "/resources.index";
+    private static final String SUPER_MARIO_USER_HOME_DIR = System.getProperty("user.home") + File.separator + "super-mario-extreme" + File.separator;
+    private static final String SETTINGS_FILE_NAME = "settings.json";
+    private static final ObjectMapper om = new ObjectMapper();
 
     private Resource resource;
     private final Map<String, Clip> preLoadedAudioClips;
@@ -169,6 +179,33 @@ public class ResourceManager {
         } catch (Exception e) {
             log.error("Unable to load image {} from disk. Exception {}", path, e.getMessage());
             throw new ResourceNotFoundException(path);
+        }
+    }
+
+    public Settings loadSettings() {
+        try (FileInputStream fis = new FileInputStream(SUPER_MARIO_USER_HOME_DIR + SETTINGS_FILE_NAME)) {
+            return om.readValue(fis, Settings.class);
+        } catch (final IOException e) {
+            log.error("Unable to load settings from the user home directory {}. Exception {}", SUPER_MARIO_USER_HOME_DIR + SETTINGS_FILE_NAME, e.getMessage());
+        }
+
+        return new Settings();
+    }
+
+    public void saveSettings(final Settings settings) {
+        final File homeDirectory = new File(SUPER_MARIO_USER_HOME_DIR);
+        final File settingsFile = new File(homeDirectory, SETTINGS_FILE_NAME);
+
+        try {
+            if(homeDirectory.mkdirs() || settingsFile.createNewFile()) {
+                log.info("Settings file doesn't exist, a new one will be created.");
+            } else {
+                log.info("The existing settings file will be overridden.");
+            }
+
+            om.writeValue(settingsFile, settings);
+        } catch (final IOException e) {
+            log.error("Unable to save settings to the users home directory {}. Exception {}", SUPER_MARIO_USER_HOME_DIR + SETTINGS_FILE_NAME, e.getMessage());
         }
     }
 }

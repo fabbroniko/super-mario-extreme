@@ -37,7 +37,7 @@ public final class GameManager implements Drawable {
 		this.synchronize = new Object();
 		this.resourceManager = new ResourceManager();
 		this.audioManager = new AudioManager(this, resourceManager);
-		this.settings = new Settings();
+		this.settings = resourceManager.loadSettings();
 		this.deathCount = 0;
 
 		this.resourceManager.preload();
@@ -92,6 +92,10 @@ public final class GameManager implements Drawable {
 
 	public Settings getSettings() {
 		return settings;
+	}
+
+	public void saveSettings() {
+		resourceManager.saveSettings(settings);
 	}
 
 	public void draw(final Graphics2D g, final Dimension gDimension) {

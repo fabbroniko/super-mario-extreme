@@ -244,6 +244,8 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 			gameManager.getSettings().invertMusicActive();
 		else
 			keyListening ^= true;
+
+		gameManager.saveSettings();
 	}
 
 	/**
@@ -263,5 +265,7 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 		} else if (currentSelection == SELECTION_JUMP_KEY) {
 			gameManager.getSettings().setJumpKeyCode(keyCode);
 		}
+
+		gameManager.saveSettings();
 	}
 }
