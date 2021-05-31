@@ -1,5 +1,8 @@
 package com.fabbroniko;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+
 import java.awt.event.KeyEvent;
 
 /**
@@ -8,6 +11,7 @@ import java.awt.event.KeyEvent;
  * These values are not persisted locally therefore each time the game is closed those changes are lost and restored to
  * default values.
  */
+@JsonNaming(PropertyNamingStrategies.KebabCaseStrategy.class)
 public class Settings {
 
     private boolean musicActive;
