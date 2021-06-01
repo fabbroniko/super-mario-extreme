@@ -257,6 +257,7 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 	}
 
 	private int nextFps(final int fps) {
+		/* TODO re-enable this once the rounding movement issue is fixed
 		switch (fps) {
 			case 30:
 				return 60;
@@ -267,6 +268,8 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 			default:
 				return 30;
 		}
+		*/
+		return 60;
 	}
 
 	/**

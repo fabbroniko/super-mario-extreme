@@ -15,7 +15,7 @@ public class Enemy extends AbstractGameObject implements AnimationListener {
 	public Enemy(final TileMap tileMap, final GameScene gameScene, final Integer objectID) {
 		super(tileMap, gameScene, objectID, spriteDimension);
 		falling = true;
-		walkingSpeed = 50;
+		walkingSpeed = 75;
 
 		deadAnimation = Animation.builder()
 				.spriteSet(gameScene.getResourceManager().loadImageFromDisk(spritePath))
