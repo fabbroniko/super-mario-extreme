@@ -74,7 +74,7 @@ public final class MainMenuScene extends AbstractScene implements KeyListener {
 	 * @param canvasDimension The dimension of the canvas
 	 */
 	@Override
-	public void draw(final Graphics2D g, final Dimension canvasDimension) {
+	public void drawScene(final Graphics2D g, final Dimension canvasDimension) {
 		// Draw the background first
 		bg.draw(g, canvasDimension);
 

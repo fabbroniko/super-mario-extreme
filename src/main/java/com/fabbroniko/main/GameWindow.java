@@ -3,7 +3,6 @@ package com.fabbroniko.main;
 import com.fabbroniko.environment.Dimension;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
@@ -12,9 +11,6 @@ public final class GameWindow extends JFrame {
 	private static final String GAME_NAME = "Super Mario Bros Extreme Edition";
 	private static final Dimension BASE_WINDOW_SIZE = new Dimension(320, 240);
 	private static final double SCALE_DIVISION = 2;
-	private static final int FPS = 50;
-
-	public static final int FPS_MILLIS = 1000 / FPS;
 
 	private final GamePanel gamePanel;
 

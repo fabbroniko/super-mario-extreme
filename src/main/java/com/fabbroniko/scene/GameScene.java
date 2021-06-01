@@ -113,7 +113,7 @@ public final class GameScene extends AbstractScene implements KeyListener {
     }
 
     @Override
-    public void draw(final Graphics2D g, final Dimension gDimension) {
+    public void drawScene(final Graphics2D g, final Dimension gDimension) {
         bg.draw(g, gDimension);
 
         for (final AbstractGameObject i:gameObjects) {

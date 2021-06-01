@@ -5,6 +5,7 @@ import java.awt.Point;
 
 import com.fabbroniko.environment.*;
 import com.fabbroniko.main.Drawable;
+import com.fabbroniko.main.Time;
 import com.fabbroniko.scene.GameScene;
 
 /**
@@ -12,7 +13,9 @@ import com.fabbroniko.scene.GameScene;
  * @author com.fabbroniko
  */
 public abstract class AbstractGameObject implements Drawable {
-	
+
+	private static final int speed = 50;
+
 	protected GameObjectBiDimensionalSpace gameObjectBiDimensionalSpace;
 	/**
 	 * Map's Position.
@@ -235,6 +238,13 @@ public abstract class AbstractGameObject implements Drawable {
 		yOffset += falling && !jumping ? downOffset : 0;
 		xOffset += left ? leftOffset : 0;
 		xOffset += right ? rightOffset : 0;
+
+		//System.out.println("Before delta " + xOffset + "," + yOffset);
+		System.out.println("Delta time " + Time.deltaTime());
+		//yOffset *= speed * Time.deltaTime();
+		//xOffset *= speed * Time.deltaTime();
+
+		//System.out.println("After delta " + xOffset + "," + yOffset);
 		
 		if (xOffset != 0 || yOffset != 0) {
 			offset.setX(xOffset);
