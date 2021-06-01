@@ -2,6 +2,7 @@ package com.fabbroniko;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import lombok.Data;
 
 import java.awt.event.KeyEvent;
 
@@ -11,29 +12,28 @@ import java.awt.event.KeyEvent;
  * These values are not persisted locally therefore each time the game is closed those changes are lost and restored to
  * default values.
  */
+@Data
 @JsonNaming(PropertyNamingStrategies.KebabCaseStrategy.class)
 public class Settings {
 
+    private static final int DEFAULT_FPS_CAP = 60;
+
     private boolean musicActive;
     private boolean effectsAudioActive;
+    private boolean showFps;
     private int rightMovementKeyCode;
     private int leftMovementKeyCode;
     private int jumpKeyCode;
+    private int fpsCap;
 
     public Settings() {
         this.musicActive = true;
         this.effectsAudioActive = true;
+        this.showFps = false;
         this.rightMovementKeyCode = KeyEvent.VK_RIGHT;
         this.leftMovementKeyCode = KeyEvent.VK_LEFT;
         this.jumpKeyCode = KeyEvent.VK_SPACE;
-    }
-
-    /**
-     * This setting allows the user to enable or disable background music in the game, win and lost scene.
-     * @return true if the game is allowed to play the background music, false otherwise.
-     */
-    public boolean isMusicActive() {
-        return musicActive;
+        this.fpsCap = DEFAULT_FPS_CAP;
     }
 
     /**
@@ -47,14 +47,6 @@ public class Settings {
     }
 
     /**
-     * This setting allows the user to enable or disable sound effects in the game (like jumping, breaking blocks, etc.).
-     * @return true if sound effects are allowed to be played, false otherwise.
-     */
-    public boolean isEffectsAudioActive() {
-        return effectsAudioActive;
-    }
-
-    /**
      * Inverts the value of the effectsActive field.
      *
      * If effects were enabled, disable them.
@@ -64,57 +56,5 @@ public class Settings {
         this.effectsAudioActive ^= true;
     }
 
-    /**
-     * Returns what key code is associated to move to the right.
-     * @return The key code of the key the user should press to move to the right.
-     */
-    public int getRightMovementKeyCode() {
-        return rightMovementKeyCode;
-    }
-
-    /**
-     * Sets the key code associated to moving Mario to the right
-     *
-     * @see KeyEvent#getKeyCode()
-     * @param rightMovementKeyCode The key code of the key to use to move to the right
-     */
-    public void setRightMovementKeyCode(final int rightMovementKeyCode) {
-        this.rightMovementKeyCode = rightMovementKeyCode;
-    }
-
-    /**
-     * Returns what key code is associated to move to the left.
-     * @return The key code of the key the user should press to move to the left.
-     */
-    public int getLeftMovementKeyCode() {
-        return leftMovementKeyCode;
-    }
-
-    /**
-     * Sets the key code associated to moving Mario to the left
-     *
-     * @see KeyEvent#getKeyCode()
-     * @param leftMovementKeyCode The key code of the key to use to move to the left
-     */
-    public void setLeftMovementKeyCode(final int leftMovementKeyCode) {
-        this.leftMovementKeyCode = leftMovementKeyCode;
-    }
-
-    /**
-     * Returns what key code is associated to jumping.
-     * @return The key code of the key the user should press to jump.
-     */
-    public int getJumpKeyCode() {
-        return jumpKeyCode;
-    }
-
-    /**
-     * Sets the key code associated to jumping
-     *
-     * @see KeyEvent#getKeyCode()
-     * @param jumpKeyCode The key code of the key to use to jump
-     */
-    public void setJumpKeyCode(final int jumpKeyCode) {
-        this.jumpKeyCode = jumpKeyCode;
-    }
+    public void invertShowFps() { this.showFps ^= true; }
 }

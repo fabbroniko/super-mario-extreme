@@ -16,7 +16,7 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 
 	// Absolute coordinates
 	private static final int FIRST_OPTION_Y = 0;
-	private static final int OPTIONS_Y_OFFSET = 30;
+	private static final int OPTIONS_Y_OFFSET = 20;
 	private static final int HINT_Y = 230;
 	private static final int OPTION_NAME_X = 10;
 	private static final int OPTION_VALUE_X = 250;
@@ -27,8 +27,10 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 	private static final int SELECTION_JUMP_KEY = 2;
 	private static final int SELECTION_MUSIC = 3;
 	private static final int SELECTION_EFFECTS = 4;
+	private static final int SELECTION_SHOW_FPS = 5;
+	private static final int SELECTION_FPS_CAP = 6;
 
-	private static final int MAX_SELECTION = 4;
+	private static final int MAX_SELECTION = 6;
 
 	// Fields
 	private Background bg;
@@ -71,6 +73,8 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 		printOption("Jump Key: ", gameManager.getSettings().getJumpKeyCode(), g);
 		printOption("Music: ", gameManager.getSettings().isMusicActive(), g);
 		printOption("Effects: ", gameManager.getSettings().isEffectsAudioActive(), g);
+		printOption("Show FPS: ", gameManager.getSettings().isShowFps(), g);
+		printOption("FPS Cap: ", String.valueOf(gameManager.getSettings().getFpsCap()), g);
 
 		// Setting up the configuration for the bottom page hints.
 		g.setColor(Color.WHITE);
@@ -242,10 +246,30 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 			gameManager.getSettings().invertEffectActive();
 		else if (currentSelection == SELECTION_MUSIC)
 			gameManager.getSettings().invertMusicActive();
+		else if (currentSelection == SELECTION_SHOW_FPS)
+			gameManager.getSettings().invertShowFps();
+		else if (currentSelection == SELECTION_FPS_CAP)
+			gameManager.getSettings().setFpsCap(nextFps(gameManager.getSettings().getFpsCap()));
 		else
 			keyListening ^= true;
 
 		gameManager.saveSettings();
+	}
+
+	private int nextFps(final int fps) {
+		/* TODO re-enable this once the rounding movement issue is fixed
+		switch (fps) {
+			case 30:
+				return 60;
+			case 60:
+				return 90;
+			case 90:
+				return 120;
+			default:
+				return 30;
+		}
+		*/
+		return 60;
 	}
 
 	/**

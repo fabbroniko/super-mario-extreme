@@ -5,6 +5,7 @@ import java.awt.Point;
 
 import com.fabbroniko.environment.*;
 import com.fabbroniko.main.Drawable;
+import com.fabbroniko.main.Time;
 import com.fabbroniko.scene.GameScene;
 
 /**
@@ -12,7 +13,7 @@ import com.fabbroniko.scene.GameScene;
  * @author com.fabbroniko
  */
 public abstract class AbstractGameObject implements Drawable {
-	
+
 	protected GameObjectBiDimensionalSpace gameObjectBiDimensionalSpace;
 	/**
 	 * Map's Position.
@@ -73,31 +74,11 @@ public abstract class AbstractGameObject implements Drawable {
 	 * Represents whether it's dead or not.
 	 */
 	protected boolean death;
-	
-	/**
-	 * Represents the default offset for movements.
-	 */
-	protected int upOffset = -5;
-	
-	/**
-	 * Represents the default offset for movements.
-	 */
-	protected int downOffset = 3;
-	
-	/**
-	 * Represents the default offset for movements.
-	 */
-	protected int leftOffset = -3;
-	
-	/**
-	 * Represents the default offset for movements.
-	 */
-	protected int rightOffset = 3;
-	
-	/**
-	 * Represents the max jump.
-	 */
-	protected int maxJump = 20;
+
+	protected int jumpSpeed = -250; // Pixels per second
+	protected int gravitySpeed = 150; // Pixels per second
+	protected int walkingSpeed = 150; // Pixels per second
+	protected int maxJump = 100; // Pixels
 	
 	// Collision rectangle
 	/**
@@ -225,16 +206,16 @@ public abstract class AbstractGameObject implements Drawable {
 		mapPosition.setPosition(tileMap.getPosition());
 		
 		if (jumping) {
-			yOffset += upOffset;
-			currentJump++;
-			if (currentJump > maxJump) {
+			yOffset += (jumpSpeed * Time.deltaTime());
+			currentJump += yOffset;
+			if (currentJump < -maxJump) {
 				jumping = false;
 			}
 		}
 		
-		yOffset += falling && !jumping ? downOffset : 0;
-		xOffset += left ? leftOffset : 0;
-		xOffset += right ? rightOffset : 0;
+		yOffset += falling && !jumping ? (gravitySpeed * Time.deltaTime()) : 0;
+		xOffset += left ? (-walkingSpeed * Time.deltaTime()) : 0;
+		xOffset += right ? (walkingSpeed * Time.deltaTime()) : 0;
 		
 		if (xOffset != 0 || yOffset != 0) {
 			offset.setX(xOffset);

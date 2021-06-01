@@ -38,7 +38,7 @@ public abstract class AbstractScene implements Drawable {
 	public void update() {}
 	
 	@Override
-	public abstract void draw(final Graphics2D g, final Dimension gDimension);
+	public abstract void draw(final Graphics2D g, final Dimension dimension);
 
 	protected int getCenteredXPositionForString(final String text, final Graphics2D g, final Dimension dimension) {
 		return (dimension.getWidth() - g.getFontMetrics().stringWidth(text)) / 2;
