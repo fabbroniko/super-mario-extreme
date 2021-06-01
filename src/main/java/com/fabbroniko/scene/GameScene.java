@@ -11,9 +11,12 @@ import com.fabbroniko.gameobjects.GameObjectBuilder;
 import com.fabbroniko.gameobjects.InvisibleBlock;
 import com.fabbroniko.gameobjects.Player;
 import com.fabbroniko.GameManager;
+import com.fabbroniko.main.Time;
 import com.fabbroniko.resource.domain.Level;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
@@ -31,6 +34,9 @@ public final class GameScene extends AbstractScene implements KeyListener {
     private TileMap tileMap;
     private List<AbstractGameObject> gameObjects;
     private CollisionManager collisionManager;
+
+    private int fpsCounts = 0, oldFpsCount = 0;
+    private double cumulativeDeltas = 0;
 
     public GameScene(final GameManager gameManager, final Level level) {
         super(gameManager);
@@ -113,7 +119,7 @@ public final class GameScene extends AbstractScene implements KeyListener {
     }
 
     @Override
-    public void drawScene(final Graphics2D g, final Dimension gDimension) {
+    public void draw(final Graphics2D g, final Dimension gDimension) {
         bg.draw(g, gDimension);
 
         for (final AbstractGameObject i:gameObjects) {
@@ -123,6 +129,35 @@ public final class GameScene extends AbstractScene implements KeyListener {
         }
 
         tileMap.draw(g, gDimension);
+
+        drawFps(g, gDimension);
+    }
+
+    private void drawFps(final Graphics2D g, final Dimension dimension) {
+        // Showing fps in all screens
+        if(gameManager.getSettings().isShowFps()) {
+            cumulativeDeltas += Time.deltaTime();
+            fpsCounts++;
+
+            int drawingFps = oldFpsCount;
+            if (cumulativeDeltas > 1) {
+                drawingFps = fpsCounts;
+                oldFpsCount = fpsCounts;
+                cumulativeDeltas = 0;
+                fpsCounts = 0;
+            }
+
+            if(drawingFps < 30)
+                g.setColor(Color.RED);
+            else
+                g.setColor(Color.GREEN);
+
+            g.setFont(g.getFont().deriveFont(14.0f));
+
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g.drawString(String.valueOf(drawingFps), 292, 15);
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+        }
     }
 
     @Override

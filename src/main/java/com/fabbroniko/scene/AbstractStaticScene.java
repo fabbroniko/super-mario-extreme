@@ -14,7 +14,7 @@ public abstract class AbstractStaticScene extends AbstractScene {
     }
 
     @Override
-    public void drawScene(final Graphics2D g, final Dimension d) {
+    public void draw(final Graphics2D g, final Dimension d) {
         if(drawn)
             return;
 

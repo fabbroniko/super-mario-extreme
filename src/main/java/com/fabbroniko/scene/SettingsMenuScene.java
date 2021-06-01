@@ -55,7 +55,7 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 		gameManager.removeKeyListener(this);
 	}
 	@Override
-	public void drawScene(final Graphics2D g, final Dimension gDimension) {
+	public void draw(final Graphics2D g, final Dimension gDimension) {
 		// Drawing the background
 		bg.draw(g, gDimension);
 
