@@ -35,9 +35,6 @@ public final class GameScene extends AbstractScene implements KeyListener {
     private List<AbstractGameObject> gameObjects;
     private CollisionManager collisionManager;
 
-    private int fpsCounts = 0, oldFpsCount = 0;
-    private double cumulativeDeltas = 0;
-
     public GameScene(final GameManager gameManager, final Level level) {
         super(gameManager);
 
@@ -134,20 +131,10 @@ public final class GameScene extends AbstractScene implements KeyListener {
     }
 
     private void drawFps(final Graphics2D g, final Dimension dimension) {
-        // Showing fps in all screens
         if(gameManager.getSettings().isShowFps()) {
-            cumulativeDeltas += Time.deltaTime();
-            fpsCounts++;
+            int currentFps = Time.getFps();
 
-            int drawingFps = oldFpsCount;
-            if (cumulativeDeltas > 1) {
-                drawingFps = fpsCounts;
-                oldFpsCount = fpsCounts;
-                cumulativeDeltas = 0;
-                fpsCounts = 0;
-            }
-
-            if(drawingFps < 30)
+            if(currentFps < 30)
                 g.setColor(Color.RED);
             else
                 g.setColor(Color.GREEN);
@@ -155,7 +142,7 @@ public final class GameScene extends AbstractScene implements KeyListener {
             g.setFont(g.getFont().deriveFont(14.0f));
 
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g.drawString(String.valueOf(drawingFps), 292, 15);
+            g.drawString(String.valueOf(Time.getFps()), 292, 15);
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
         }
     }

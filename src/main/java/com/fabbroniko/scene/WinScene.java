@@ -24,7 +24,7 @@ public final class WinScene extends AbstractStaticScene {
 	private long initTime;
 	private final Position origin = new Position();
 
-	public WinScene(GameManager gameManager) {
+	public WinScene(final GameManager gameManager) {
 		super(gameManager);
 	}
 

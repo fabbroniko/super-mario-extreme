@@ -9,8 +9,7 @@ import java.awt.event.KeyEvent;
 /**
  * Stores the user preferences set up in the Settings menu scene.
  *
- * These values are not persisted locally therefore each time the game is closed those changes are lost and restored to
- * default values.
+ * These changes are saved locally in JSON format in ~/super-mario-extreme/settings.json so they can be loaded the next time the game is opened.
  */
 @Data
 @JsonNaming(PropertyNamingStrategies.KebabCaseStrategy.class)
@@ -36,22 +35,10 @@ public class Settings {
         this.fpsCap = DEFAULT_FPS_CAP;
     }
 
-    /**
-     * Inverts the value of the musicActive field.
-     *
-     * If music was enabled, disable it.
-     * If music was disabled, enable it.
-     */
     public void invertMusicActive() {
         this.musicActive ^= true;
     }
 
-    /**
-     * Inverts the value of the effectsActive field.
-     *
-     * If effects were enabled, disable them.
-     * If effects were disabled, enable them.
-     */
     public void invertEffectActive() {
         this.effectsAudioActive ^= true;
     }
