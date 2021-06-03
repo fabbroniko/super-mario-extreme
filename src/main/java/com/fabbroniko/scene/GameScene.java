@@ -107,11 +107,16 @@ public final class GameScene extends AbstractScene implements KeyListener {
     public void update() {
         super.update();
 
-        for (int i = 0; i < gameObjects.size(); i++) {
-            gameObjects.get(i).update();
-            if (gameObjects.get(i).isDead()) {
-                gameObjects.remove(i); // TODO refactor
-            }
+        final List<AbstractGameObject> deadGameObjects = new ArrayList<>();
+
+        for(final AbstractGameObject go : gameObjects) {
+            go.update();
+            if(go.isDead())
+                deadGameObjects.add(go);
+        }
+
+        for(final AbstractGameObject go : deadGameObjects) {
+            gameObjects.remove(go);
         }
     }
 
@@ -127,10 +132,6 @@ public final class GameScene extends AbstractScene implements KeyListener {
 
         tileMap.draw(g, gDimension);
 
-        drawFps(g, gDimension);
-    }
-
-    private void drawFps(final Graphics2D g, final Dimension dimension) {
         if(gameManager.getSettings().isShowFps()) {
             int currentFps = Time.getFps();
 
@@ -142,7 +143,7 @@ public final class GameScene extends AbstractScene implements KeyListener {
             g.setFont(g.getFont().deriveFont(14.0f));
 
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g.drawString(String.valueOf(Time.getFps()), 292, 15);
+            g.drawString(String.valueOf(currentFps), 292, 15);
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
         }
     }
