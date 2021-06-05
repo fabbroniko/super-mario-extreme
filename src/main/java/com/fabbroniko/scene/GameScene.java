@@ -28,6 +28,8 @@ import java.util.List;
  */
 public final class GameScene extends AbstractScene implements KeyListener {
 
+    private static final int FPS_OFFSET = 15;
+
     private final Level level;
     private GameObjectBuilder gameObjectBuilder;
     private Background bg;
@@ -140,10 +142,12 @@ public final class GameScene extends AbstractScene implements KeyListener {
             else
                 g.setColor(Color.GREEN);
 
-            g.setFont(g.getFont().deriveFont(14.0f));
+            g.setFont(P_FONT);
 
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g.drawString(String.valueOf(currentFps), 292, 15);
+            final String currentFpsString = String.valueOf(currentFps);
+            final int fpsWidth = g.getFontMetrics().stringWidth(currentFpsString);
+            g.drawString(currentFpsString, gDimension.getWidth() - fpsWidth - FPS_OFFSET, g.getFontMetrics().getHeight());
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
         }
     }

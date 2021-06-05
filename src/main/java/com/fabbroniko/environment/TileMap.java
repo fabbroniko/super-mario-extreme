@@ -12,6 +12,9 @@ import java.util.List;
 
 public class TileMap implements Drawable {
 
+	private static final int NO_TILE = -1;
+	private static final int LAST_SOLID_TILE_INDEX = 6;
+
 	private final List<Tile> tiles = new ArrayList<>();
 	private final Position mapPosition = new Position();
 
@@ -21,7 +24,7 @@ public class TileMap implements Drawable {
 	private final Dimension tileSize;
 
 	public TileMap(final ResourceManager resourceManager, final Map map) {
-		tileSize = new Dimension(30, 30);
+		tileSize = new Dimension(120, 120);
 
 		loadTiles(resourceManager.getTileMapSet());
 		loadMap(map, GameManager.getInstance().getCanvasSize());
@@ -30,7 +33,7 @@ public class TileMap implements Drawable {
 	private void loadTiles(final BufferedImage tileSet) {
 		for (int currentX = 0; currentX < tileSet.getWidth(); currentX += tileSize.getWidth()) {
 			TileType tt = TileType.BLOCKING;
-			if(currentX/tileSize.getWidth() > 4)
+			if(currentX/tileSize.getWidth() > LAST_SOLID_TILE_INDEX)
 				tt = TileType.NON_BLOCKING;
 
 			tiles.add(new Tile(tileSet.getSubimage(currentX, 0, tileSize.getWidth(), tileSize.getHeight()), tt));
@@ -48,7 +51,7 @@ public class TileMap implements Drawable {
 
 		for(int i = 0; i < nRows; i++) {
 			for(int y = 0; y < nCols; y++) {
-				this.map[i][y] = 5;
+				this.map[i][y] = NO_TILE;
 			}
 		}
 
@@ -110,7 +113,11 @@ public class TileMap implements Drawable {
 	}
 
 	public TileType getTileType(final Point point) {
-		return tiles.get(map[(int) (point.getY() / tileSize.getHeight())][(int) (point.getX() / tileSize.getWidth())]).getType();
+		final int tileId = map[(int) (point.getY() / tileSize.getHeight())][(int) (point.getX() / tileSize.getWidth())];
+		if(tileId == NO_TILE)
+			return TileType.NON_BLOCKING;
+
+		return tiles.get(tileId).getType();
 	}
 
 	@Override
@@ -133,7 +140,7 @@ public class TileMap implements Drawable {
 			currentXIndexToDraw = startingXIndex;
 			currentPosToDraw.setX(basePosToDraw.getX());
 			while (currentPosToDraw.getX() < gDimension.getWidth()) {
-				if (map[currentYIndexToDraw][currentXIndexToDraw] != 5) {
+				if (map[currentYIndexToDraw][currentXIndexToDraw] != NO_TILE) {
 					g.drawImage(tiles.get(map[currentYIndexToDraw][currentXIndexToDraw]).getImage(), currentPosToDraw.getX(), currentPosToDraw.getY(), null);
 				}
 				currentPosToDraw.setX(currentPosToDraw.getX() + tileSize.getWidth());

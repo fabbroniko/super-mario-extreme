@@ -29,14 +29,14 @@ public final class MainMenuScene extends AbstractScene implements KeyListener {
 	private static final int QUIT_OPTION_INDEX = 2;
 
 	// Magic numbers
-	private static final int STROKE_SIZE = 3;
-	private static final int OPTION_ARC_SIZE = 8;
-	private static final Dimension OPTION_RECTANGLE_DIMENSION = new Dimension(90, 30);
-	private static final int OPTION_RECT_TO_TEXT_OFFSET = 23;
-	private static final int TITLE_Y = 30;
-	private static final int START_OPTION_Y = 65;
-	private static final int OPTIONS_OFFSET = 50;
-	private static final int HINT_Y = 230;
+	private static final int STROKE_SIZE = 12;
+	private static final int OPTION_ARC_SIZE = 32;
+	private static final Dimension OPTION_RECTANGLE_DIMENSION = new Dimension(360, 120);
+	private static final int OPTION_RECT_TO_TEXT_OFFSET = 92;
+	private static final int TITLE_Y = 120;
+	private static final int START_OPTION_Y = 260;
+	private static final int OPTIONS_OFFSET = 200;
+	private static final int HINT_Y = 920;
 
 	private Background bg;
 

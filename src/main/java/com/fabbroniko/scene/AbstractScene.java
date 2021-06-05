@@ -13,10 +13,10 @@ import java.awt.Graphics2D;
 
 public abstract class AbstractScene implements Drawable {
 
-	protected static final Font H1_FONT = new JPanel().getFont().deriveFont(Font.BOLD, 20);
-	protected static final Font P_XXXL_FONT = new JPanel().getFont().deriveFont(Font.PLAIN, 20);
-	protected static final Font P_FONT = new JPanel().getFont().deriveFont(Font.PLAIN, 12);
-	protected static final Font P_S_FONT = new JPanel().getFont().deriveFont(Font.PLAIN, 10);
+	protected static final Font H1_FONT = new JPanel().getFont().deriveFont(Font.BOLD, 80);
+	protected static final Font P_XXXL_FONT = new JPanel().getFont().deriveFont(Font.PLAIN, 80);
+	protected static final Font P_FONT = new JPanel().getFont().deriveFont(Font.PLAIN, 48);
+	protected static final Font P_S_FONT = new JPanel().getFont().deriveFont(Font.PLAIN, 40);
 
 	protected GameManager gameManager;
 	protected AudioManager audioManager;

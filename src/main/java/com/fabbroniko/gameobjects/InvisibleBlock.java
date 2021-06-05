@@ -5,7 +5,7 @@ import com.fabbroniko.scene.GameScene;
 
 public class InvisibleBlock extends AbstractGameObject {
 
-	private static final Dimension spriteDimension = new Dimension(30, 30);
+	private static final Dimension spriteDimension = new Dimension(120, 120);
 	private static final String spritePath = "/sprites/invisible-block.png";
 
 	public static final String INVISIBLE_BLOCK_VISIBLE_ANIMATION_NAME = "INV_BLK_VISIBLE";
