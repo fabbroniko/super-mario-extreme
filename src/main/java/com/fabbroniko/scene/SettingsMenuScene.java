@@ -16,10 +16,10 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 
 	// Absolute coordinates
 	private static final int FIRST_OPTION_Y = 0;
-	private static final int OPTIONS_Y_OFFSET = 20;
-	private static final int HINT_Y = 230;
-	private static final int OPTION_NAME_X = 10;
-	private static final int OPTION_VALUE_X = 250;
+	private static final int OPTIONS_Y_OFFSET = 80;
+	private static final int HINT_Y = 920;
+	private static final int OPTION_NAME_X = 40;
+	private static final int OPTION_VALUE_X = 1000;
 
 	// Options Index
 	private static final int SELECTION_LEFT_KEY = 0;

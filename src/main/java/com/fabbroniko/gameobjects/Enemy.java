@@ -5,7 +5,7 @@ import com.fabbroniko.scene.GameScene;
 
 public class Enemy extends AbstractGameObject implements AnimationListener {
 
-	private static final Dimension spriteDimension = new Dimension(27, 48);
+	private static final Dimension spriteDimension = new Dimension(108, 192);
 	private static final String spritePath = "/sprites/ghost.png";
 	private static final String ENEMY_WALK_ANIMATION_NAME = "ENEMY_WALK";
 	private static final String ENEMY_DEAD_ANIMATION_NAME = "ENEMY_DEAD";
@@ -15,7 +15,7 @@ public class Enemy extends AbstractGameObject implements AnimationListener {
 	public Enemy(final TileMap tileMap, final GameScene gameScene, final Integer objectID) {
 		super(tileMap, gameScene, objectID, spriteDimension);
 		falling = true;
-		walkingSpeed = 75;
+		walkingSpeed = 300;
 
 		deadAnimation = Animation.builder()
 				.spriteSet(gameScene.getResourceManager().loadImageFromDisk(spritePath))

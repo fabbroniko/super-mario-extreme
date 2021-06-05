@@ -9,23 +9,19 @@ import javax.swing.JFrame;
 public final class GameWindow extends JFrame {
 
 	private static final String GAME_NAME = "Super Mario Bros Extreme Edition";
-	private static final Dimension BASE_WINDOW_SIZE = new Dimension(320, 240);
-	private static final double SCALE_DIVISION = 2;
+	private static final Dimension BASE_WINDOW_SIZE = new Dimension(1280, 960);
 
 	private final GamePanel gamePanel;
 
 	public GameWindow() {
 		final java.awt.Dimension screenDimensions = Toolkit.getDefaultToolkit().getScreenSize();
-		final double xScale = screenDimensions.getWidth() / BASE_WINDOW_SIZE.getWidth() / SCALE_DIVISION;
-		final double yScale = screenDimensions.getHeight() / BASE_WINDOW_SIZE.getHeight() / SCALE_DIVISION;
-		final Dimension windowDimension = new Dimension(
-				(int) (BASE_WINDOW_SIZE.getWidth() * xScale),
-				(int) (BASE_WINDOW_SIZE.getHeight() * yScale)
-		);
+		final Dimension windowDimension = new Dimension((int) screenDimensions.getWidth(), (int) screenDimensions.getHeight());
 
 		this.setTitle(GAME_NAME);
 		this.gamePanel = new GamePanel(BASE_WINDOW_SIZE, windowDimension);
 		this.setContentPane(gamePanel);
+		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		this.setUndecorated(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.pack();

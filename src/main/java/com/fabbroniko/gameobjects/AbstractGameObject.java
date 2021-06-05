@@ -75,10 +75,10 @@ public abstract class AbstractGameObject implements Drawable {
 	 */
 	protected boolean death;
 
-	protected int jumpSpeed = -250; // Pixels per second
-	protected int gravitySpeed = 150; // Pixels per second
-	protected int walkingSpeed = 150; // Pixels per second
-	protected int maxJump = 100; // Pixels
+	protected int jumpSpeed = -1000; // Pixels per second
+	protected int gravitySpeed = 600; // Pixels per second
+	protected int walkingSpeed = 600; // Pixels per second
+	protected int maxJump = 400; // Pixels
 	
 	// Collision rectangle
 	/**
