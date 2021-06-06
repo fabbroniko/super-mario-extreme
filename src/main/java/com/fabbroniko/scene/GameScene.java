@@ -89,7 +89,7 @@ public final class GameScene extends AbstractScene implements KeyListener {
             gameObjects.add(newGameObject);
             return newGameObject;
         } catch (final Exception e) {
-            throw new com.fabbroniko.error.InstantiationException(objectClass);
+            throw new com.fabbroniko.error.InstantiationException(objectClass, e);
         }
     }
 
