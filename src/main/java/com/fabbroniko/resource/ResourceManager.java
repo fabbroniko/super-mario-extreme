@@ -1,6 +1,6 @@
 package com.fabbroniko.resource;
 
-import com.fabbroniko.Settings;
+import com.fabbroniko.resource.domain.Settings;
 import com.fabbroniko.error.ResourceNotFoundException;
 import com.fabbroniko.resource.domain.Background;
 import com.fabbroniko.resource.domain.Resource;
@@ -11,11 +11,8 @@ import lombok.extern.log4j.Log4j2;
 import javax.imageio.ImageIO;
 import javax.sound.sampled.*;
 import java.awt.image.BufferedImage;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;

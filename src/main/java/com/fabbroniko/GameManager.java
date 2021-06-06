@@ -10,6 +10,7 @@ import com.fabbroniko.main.GameThread;
 import com.fabbroniko.main.GameWindow;
 import com.fabbroniko.resource.ResourceManager;
 import com.fabbroniko.resource.domain.Level;
+import com.fabbroniko.resource.domain.Settings;
 import com.fabbroniko.scene.AbstractScene;
 import com.fabbroniko.scene.GameScene;
 import com.fabbroniko.scene.LostScene;
