@@ -33,8 +33,8 @@ public class Player extends AbstractGameObject implements KeyListener {
 	private final Animation idleAnimation;
 	private final Animation jumpAnimation;
 
-	public Player(final TileMap tileMap, final GameScene gameScene, final Integer objectID) {
-		super(tileMap, gameScene, objectID, spriteDimension);
+	public Player(final TileMap tileMap, final GameScene gameScene, final Position position) {
+		super(tileMap, gameScene, position, spriteDimension);
 		falling = true;
 		animationJump = true;
 		facingRight = true;

@@ -12,8 +12,8 @@ public class Enemy extends AbstractGameObject implements AnimationListener {
 	private boolean init;
 	private final Animation deadAnimation;
 
-	public Enemy(final TileMap tileMap, final GameScene gameScene, final Integer objectID) {
-		super(tileMap, gameScene, objectID, spriteDimension);
+	public Enemy(final TileMap tileMap, final GameScene gameScene, final Position position) {
+		super(tileMap, gameScene, position, spriteDimension);
 		falling = true;
 		walkingSpeed = 300;
 

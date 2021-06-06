@@ -1,7 +1,6 @@
 package com.fabbroniko.gameobjects;
 
 import java.awt.Graphics2D;
-import java.awt.Point;
 
 import com.fabbroniko.environment.*;
 import com.fabbroniko.main.Drawable;
@@ -85,41 +84,13 @@ public abstract class AbstractGameObject implements Drawable {
 	 * Movement's offset.
 	 */
 	protected Position offset;
-	
-	/**
-	 * Top Left Corner.
-	 */
-	protected Point topLeft;
-	
-	/**
-	 * Top Right Corner.
-	 */
-	protected Point topRight;
-	
-	/**
-	 * Bottom Left Corner.
-	 */
-	protected Point bottomLeft;
-	
-	/**
-	 * Bottom Right Corner.
-	 */
-	protected Point bottomRight;
-	
-	private final int objectID;
 
-	protected AbstractGameObject(final TileMap tileMapP, final GameScene gameScene, final int objectID, final Dimension spriteDimension) {
-		this.objectID = objectID;
+	protected AbstractGameObject(final TileMap tileMapP, final GameScene gameScene, final Position spawnPosition, final Dimension spriteDimension) {
 		this.tileMap = tileMapP;
 		this.gameScene = gameScene;
 		this.death = false;
 		
-		this.gameObjectBiDimensionalSpace = new GameObjectBiDimensionalSpace(new Position(0, 0), spriteDimension);
-
-		topLeft = new Point();
-		topRight = new Point();
-		bottomLeft = new Point();
-		bottomRight = new Point();
+		this.gameObjectBiDimensionalSpace = new GameObjectBiDimensionalSpace(spawnPosition, spriteDimension);
 
 		offset = new Position();
 		mapPosition = new Position();
@@ -178,24 +149,6 @@ public abstract class AbstractGameObject implements Drawable {
 	 */
 	public Position getObjectPosition() {
 		return gameObjectBiDimensionalSpace.getPosition().clone();
-	}
-	
-	/**
-	 * Sets the object's position.
-	 * @param position The new object's position.
-	 */
-	public void setObjectPosition(final Position position) {
-		this.gameObjectBiDimensionalSpace.setPosition(position.clone());
-	}
-	
-	@Override
-	public boolean equals(final Object gameObject) {
-		return gameObject instanceof AbstractGameObject && this.objectID == ((AbstractGameObject)gameObject).objectID;
-	}
-	
-	@Override
-	public int hashCode() {
-		return this.getObjectPosition().hashCode();
 	}
 	
 	@Override

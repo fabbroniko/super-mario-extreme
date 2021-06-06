@@ -7,7 +7,6 @@ import com.fabbroniko.gameobjects.Block;
 import com.fabbroniko.gameobjects.Castle;
 import com.fabbroniko.gameobjects.Enemy;
 import com.fabbroniko.gameobjects.FallingBlock;
-import com.fabbroniko.gameobjects.GameObjectBuilder;
 import com.fabbroniko.gameobjects.InvisibleBlock;
 import com.fabbroniko.gameobjects.Player;
 import com.fabbroniko.GameManager;
@@ -31,7 +30,6 @@ public final class GameScene extends AbstractScene implements KeyListener {
     private static final int FPS_OFFSET = 15;
 
     private final Level level;
-    private GameObjectBuilder gameObjectBuilder;
     private Background bg;
     private TileMap tileMap;
     private List<AbstractGameObject> gameObjects;
@@ -50,8 +48,6 @@ public final class GameScene extends AbstractScene implements KeyListener {
         gameObjects = new ArrayList<>();
 
         this.collisionManager = new CollisionManager(tileMap, gameObjects);
-
-        gameObjectBuilder = new GameObjectBuilder(tileMap, this);
 
         final Player player = (Player) this.addNewObject(Player.class, level.getStartPosition().clone());
 
@@ -88,10 +84,13 @@ public final class GameScene extends AbstractScene implements KeyListener {
     }
 
     private AbstractGameObject addNewObject(final Class<? extends AbstractGameObject> objectClass, final Position position) {
-        final AbstractGameObject newGameObject = gameObjectBuilder.newInstance(objectClass).setPosition(position).getInstance();
-        gameObjects.add(newGameObject);
-
-        return newGameObject;
+        try {
+            final AbstractGameObject newGameObject = objectClass.getConstructor(TileMap.class, GameScene.class, Position.class).newInstance(tileMap, this, position);
+            gameObjects.add(newGameObject);
+            return newGameObject;
+        } catch (final Exception e) {
+            throw new com.fabbroniko.error.InstantiationException(objectClass);
+        }
     }
 
     public void levelFinished() {
