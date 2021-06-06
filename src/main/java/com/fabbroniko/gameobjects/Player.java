@@ -4,7 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import com.fabbroniko.environment.*;
-import com.fabbroniko.GameManager;
+import com.fabbroniko.main.GameManager;
 import com.fabbroniko.scene.GameScene;
 import com.fabbroniko.scene.LostScene;
 import lombok.extern.log4j.Log4j2;

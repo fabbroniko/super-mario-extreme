@@ -9,7 +9,7 @@ import com.fabbroniko.gameobjects.Enemy;
 import com.fabbroniko.gameobjects.FallingBlock;
 import com.fabbroniko.gameobjects.InvisibleBlock;
 import com.fabbroniko.gameobjects.Player;
-import com.fabbroniko.GameManager;
+import com.fabbroniko.main.GameManager;
 import com.fabbroniko.main.Time;
 import com.fabbroniko.resource.domain.Level;
 

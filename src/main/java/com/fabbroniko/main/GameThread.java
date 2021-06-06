@@ -1,6 +1,5 @@
 package com.fabbroniko.main;
 
-import com.fabbroniko.GameManager;
 import com.fabbroniko.environment.Dimension;
 import lombok.SneakyThrows;
 

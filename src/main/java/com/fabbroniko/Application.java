@@ -1,5 +1,7 @@
 package com.fabbroniko;
 
+import com.fabbroniko.main.GameManager;
+
 public class Application {
 
     /**

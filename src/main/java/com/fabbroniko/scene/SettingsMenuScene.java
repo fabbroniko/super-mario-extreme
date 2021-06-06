@@ -6,7 +6,7 @@ import java.awt.event.KeyListener;
 
 import com.fabbroniko.environment.Background;
 import com.fabbroniko.environment.Dimension;
-import com.fabbroniko.GameManager;
+import com.fabbroniko.main.GameManager;
 
 public final class SettingsMenuScene extends AbstractScene implements KeyListener {
 

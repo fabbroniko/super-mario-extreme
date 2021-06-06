@@ -6,7 +6,7 @@ import java.awt.event.KeyListener;
 
 import com.fabbroniko.environment.Background;
 import com.fabbroniko.environment.Dimension;
-import com.fabbroniko.GameManager;
+import com.fabbroniko.main.GameManager;
 
 /**
  * The main menu shown as the first scene of the game.

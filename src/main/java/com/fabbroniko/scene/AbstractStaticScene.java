@@ -1,7 +1,7 @@
 package com.fabbroniko.scene;
 
 import com.fabbroniko.environment.Dimension;
-import com.fabbroniko.GameManager;
+import com.fabbroniko.main.GameManager;
 
 import java.awt.*;
 

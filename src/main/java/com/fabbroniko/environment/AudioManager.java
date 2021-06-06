@@ -2,7 +2,7 @@ package com.fabbroniko.environment;
 
 import javax.sound.sampled.Clip;
 
-import com.fabbroniko.GameManager;
+import com.fabbroniko.main.GameManager;
 import com.fabbroniko.resource.ResourceManager;
 
 import java.util.Optional;
