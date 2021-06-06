@@ -61,33 +61,46 @@ public class TileMap implements Drawable {
 	}
 
 	public boolean checkForMapCollision(final Rectangle rect) throws ArrayIndexOutOfBoundsException{
-		final Point currentPoint = new Point();
 		double startingX = rect.getLocation().getX();
 		double startingY = rect.getLocation().getY();
 		int width = rect.width;
 		int height = rect.height;
-		
+
+		boolean outOfBounds = true;
 		// Checking the top-left corner
-		currentPoint.setLocation(startingX, startingY);
-		if(getTileType(currentPoint).equals(TileType.BLOCKING)) {
+		TileType tileType = getTileType((int)startingX, (int)startingY);
+		if(TileType.BLOCKING.equals(tileType)) {
 			return true;
+		} else if (tileType != null) {
+			outOfBounds = false;
 		}
 		
 		// Checking the top-right corner
-		currentPoint.setLocation(startingX + width, startingY);
-		if(getTileType(currentPoint).equals(TileType.BLOCKING)) {
+		tileType = getTileType((int)startingX + width, (int)startingY);
+		if(TileType.BLOCKING.equals(tileType)) {
 			return true;
+		} else if (tileType != null) {
+			outOfBounds = false;
 		}
 		
 		// Checking the bottom-left corner
-		currentPoint.setLocation(startingX, startingY + height);
-		if(getTileType(currentPoint).equals(TileType.BLOCKING)) {
+		tileType = getTileType((int)startingX, (int)startingY + height);
+		if(TileType.BLOCKING.equals(tileType)) {
 			return true;
+		} else if (tileType != null) {
+			outOfBounds = false;
 		}
 		
 		// Checking the bottom-right corner
-		currentPoint.setLocation(startingX + width, startingY + height);
-		return getTileType(currentPoint).equals(TileType.BLOCKING);
+		tileType = getTileType((int)startingX + width, (int)startingY + height);
+		if (tileType != null) {
+			outOfBounds = false;
+		}
+
+		if(outOfBounds)
+			throw new ArrayIndexOutOfBoundsException();
+
+		return TileType.BLOCKING.equals(tileType);
 	}
 
 	public void setPosition(final int x, final int y) {
@@ -112,8 +125,31 @@ public class TileMap implements Drawable {
 		return this.mapPosition.clone();
 	}
 
-	public TileType getTileType(final Point point) {
-		final int tileId = map[(int) (point.getY() / tileSize.getHeight())][(int) (point.getX() / tileSize.getWidth())];
+	/**
+	 * Retrieves the {@link TileType TileType} of the tile at the specified coordinates.
+	 * These coordinates can be any point in the map and it *doesn't have to* be rounded to the closest tile origin point
+	 * (multiples of tile-size).
+	 *
+	 * If the point is outside the limits of the map, null is returned.
+	 *
+	 * @param xPoint The X coordinate element of the point we want to check.
+	 * @param yPoint The Y coordinate element of the point we want to check.
+	 * @return Returns the tile type at the specified point or null if out of the map limits.
+	 */
+	public TileType getTileType(final int xPoint, final int yPoint) {
+		/* Calculate the index of the tile that includes the specified coordinate
+		 * For example if the tile size is 30x30px and we want to check a point with coordinates 35,61 we would get
+		 * 35/30 that rounded is 1 and 61/30 that rounded becomes 2, therefore we want to retried the tile at
+		 * map[2, 1]
+		 */
+		final int yIndex = yPoint / tileSize.getHeight();
+		final int xIndex = xPoint / tileSize.getWidth();
+
+		if(yIndex >= map.length || xIndex >= map[yIndex].length) {
+			return null;
+		}
+
+		final int tileId = map[yIndex][xIndex];
 		if(tileId == NO_TILE)
 			return TileType.NON_BLOCKING;
 
