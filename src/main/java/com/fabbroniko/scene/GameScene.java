@@ -44,7 +44,7 @@ public final class GameScene extends AbstractScene implements KeyListener {
     @Override
     public void init() {
         bg = new Background(gameManager.getResourceManager(), "game");
-        tileMap = new TileMap(gameManager.getResourceManager(), level.getMap());
+        tileMap = new TileMap(gameManager.getResourceManager(), level.getMap(), gameManager.getCanvasSize());
         gameObjects = new ArrayList<>();
 
         this.collisionManager = new CollisionManager(tileMap, gameObjects);
@@ -106,8 +106,6 @@ public final class GameScene extends AbstractScene implements KeyListener {
 
     @Override
     public void update() {
-        super.update();
-
         final List<AbstractGameObject> deadGameObjects = new ArrayList<>();
 
         for(final AbstractGameObject go : gameObjects) {
@@ -123,15 +121,20 @@ public final class GameScene extends AbstractScene implements KeyListener {
 
     @Override
     public void draw(final Graphics2D g, final Dimension gDimension) {
-        bg.draw(g, gDimension);
+        final Position bgPosition = bg.getDrawingPosition();
+        g.drawImage(bg.getDrawableImage(), bgPosition.getX(), bgPosition.getY(), gDimension.getWidth(), gDimension.getHeight(), null);
 
         for (final AbstractGameObject i:gameObjects) {
             if (!i.isDead()) {
-                i.draw(g, gDimension);
+                final Position position = i.getDrawingPosition();
+                final Dimension spriteDimension = i.getSpriteDimension();
+
+                g.drawImage(i.getDrawableImage(), position.getX(), position.getY(), spriteDimension.getWidth(), spriteDimension.getHeight(), null);
             }
         }
 
-        tileMap.draw(g, gDimension);
+        final Position tileMapPosition = tileMap.getDrawingPosition();
+        g.drawImage(tileMap.getDrawableImage(), tileMapPosition.getX(), tileMapPosition.getY(), gDimension.getWidth(), gDimension.getHeight(), null);
 
         if(gameManager.getSettings().isShowFps()) {
             int currentFps = Time.getFps();

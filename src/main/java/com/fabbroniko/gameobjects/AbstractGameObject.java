@@ -1,7 +1,9 @@
 package com.fabbroniko.gameobjects;
 
-import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.fabbroniko.environment.*;
 import com.fabbroniko.main.Drawable;
@@ -26,6 +28,8 @@ public abstract class AbstractGameObject implements Drawable {
 	 * Object's current animation.
 	 */
 	protected Animation currentAnimation;
+
+	protected List<Animation> registeredAnimations;
 	
 	/**
 	 * TileMap on which it has to be placed.
@@ -56,10 +60,7 @@ public abstract class AbstractGameObject implements Drawable {
 	 * Represents it's going in the right direction.
 	 */
 	protected boolean right;
-	
-	/**
-	 * Represents whether it's facing right or not.
-	 */
+
 	protected boolean facingRight;
 	
 	/**
@@ -95,6 +96,7 @@ public abstract class AbstractGameObject implements Drawable {
 		
 		this.currentPosition = spawnPosition.clone();
 		this.spriteDimension = spriteDimension;
+		this.registeredAnimations = new ArrayList<>();
 
 		offset = new Position();
 		mapPosition = new Position();
@@ -191,11 +193,20 @@ public abstract class AbstractGameObject implements Drawable {
 	}
 	
 	@Override
-	public void draw(final Graphics2D g, final Dimension gDimension) {
-		if (facingRight) {
-			g.drawImage(currentAnimation.getImage(), currentPosition.getX() - mapPosition.getX(), currentPosition.getY() - mapPosition.getY(), spriteDimension.getWidth(), spriteDimension.getHeight(), null);
+	public BufferedImage getDrawableImage() {
+		if(facingRight) {
+			return currentAnimation.getImage();
 		} else {
-			g.drawImage(currentAnimation.getImage(), currentPosition.getX() - mapPosition.getX() + spriteDimension.getWidth(), currentPosition.getY() - mapPosition.getY(),  -spriteDimension.getWidth(), spriteDimension.getHeight(), null);
+			return currentAnimation.getMirroredImage();
 		}
+	}
+
+	@Override
+	public Position getDrawingPosition() {
+		return new Position(currentPosition.getX() - mapPosition.getX(), currentPosition.getY() - mapPosition.getY());
+	}
+
+	public Dimension getSpriteDimension() {
+		return spriteDimension;
 	}
 }

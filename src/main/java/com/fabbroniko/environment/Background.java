@@ -1,6 +1,5 @@
 package com.fabbroniko.environment;
 
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import com.fabbroniko.main.Drawable;
@@ -19,7 +18,12 @@ public class Background implements Drawable {
 	public void update() {}
 
 	@Override
-	public void draw(final Graphics2D g, final Dimension gDimension) {
-		g.drawImage(backgroundImage, origin.getX(), origin.getY(), gDimension.getWidth(), gDimension.getHeight(), null);
-	}	
+	public BufferedImage getDrawableImage() {
+		return backgroundImage;
+	}
+
+	@Override
+	public Position getDrawingPosition() {
+		return origin.clone();
+	}
 }

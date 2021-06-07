@@ -25,6 +25,7 @@ public class Enemy extends AbstractGameObject implements AnimationListener {
 				.frameDuration(200)
 				.animationListener(this)
 				.name(ENEMY_DEAD_ANIMATION_NAME)
+				.mirror()
 				.build();
 
 		setAnimation(Animation.builder()
@@ -34,6 +35,7 @@ public class Enemy extends AbstractGameObject implements AnimationListener {
 				.nFrames(2)
 				.frameDuration(100)
 				.name(ENEMY_WALK_ANIMATION_NAME)
+				.mirror()
 				.build());
 	}
 	

@@ -2,6 +2,7 @@ package com.fabbroniko.environment;
 
 import lombok.extern.log4j.Log4j2;
 
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,8 @@ public final class Animation {
 	private static final int START_INDEX = 0;
 
 	private List<BufferedImage> frames;
+	private List<BufferedImage> mirroredFrames;
+
 	private long frameDuration;
 	private AnimationListener animationListener;
 	private String name;
@@ -32,6 +35,17 @@ public final class Animation {
 	}
 
 	public BufferedImage getImage() {
+		return getImage(frames);
+	}
+
+	public BufferedImage getMirroredImage() {
+		if(mirroredFrames == null)
+			return getImage(frames);
+		else
+			return getImage(mirroredFrames);
+	}
+
+	private BufferedImage getImage(final List<BufferedImage> pFrames) {
 		final long currentMillis = System.currentTimeMillis();
 		if ((currentMillis - frameStartingTimestamp) >= frameDuration) {
 			frameStartingTimestamp = currentMillis;
@@ -45,7 +59,7 @@ public final class Animation {
 			}
 		}
 
-		return frames.get(currentImageIndex);
+		return pFrames.get(currentImageIndex);
 	}
 
 	public void reset() {
@@ -78,6 +92,7 @@ public final class Animation {
 		private int nFrames = 1;
 		private int row = 0;
 		private Dimension spriteDimension = new Dimension();
+		private boolean mirror;
 
 		public Builder() {}
 
@@ -111,6 +126,11 @@ public final class Animation {
 			return this;
 		}
 
+		public Builder mirror() {
+			mirror = true;
+			return this;
+		}
+
 		public Builder spriteDimension(final Dimension dimension) {
 			this.spriteDimension = dimension;
 			return this;
@@ -133,6 +153,9 @@ public final class Animation {
 			animation.frameDuration = this.frameDuration;
 			animation.frames = generateSprites();
 
+			if(mirror)
+				animation.mirroredFrames = generateMirroredSprites(animation.frames);
+
 			return animation;
 		}
 
@@ -147,6 +170,20 @@ public final class Animation {
 			}
 
 			return sprites;
+		}
+
+		private List<BufferedImage> generateMirroredSprites(final List<BufferedImage> frames) {
+			final List<BufferedImage> mirroredFrames = new ArrayList<>();
+
+			frames.forEach(animation -> {
+				final BufferedImage mirroredFrame = new BufferedImage(spriteDimension.getWidth(), spriteDimension.getHeight(), BufferedImage.TYPE_INT_ARGB);
+				final Graphics2D g = mirroredFrame.createGraphics();
+				g.drawImage(animation, spriteDimension.getWidth(), 0, -spriteDimension.getWidth(), spriteDimension.getHeight(), null);
+
+				mirroredFrames.add(mirroredFrame);
+			});
+
+			return mirroredFrames;
 		}
 	}
 }

@@ -3,7 +3,6 @@ package com.fabbroniko.scene;
 import com.fabbroniko.environment.AudioManager;
 import com.fabbroniko.environment.Dimension;
 import com.fabbroniko.main.GameManager;
-import com.fabbroniko.main.Drawable;
 import com.fabbroniko.resource.ResourceManager;
 
 import javax.swing.JPanel;
@@ -11,7 +10,7 @@ import javax.swing.JPanel;
 import java.awt.Font;
 import java.awt.Graphics2D;
 
-public abstract class AbstractScene implements Drawable {
+public abstract class AbstractScene {
 
 	protected static final Font H1_FONT = new JPanel().getFont().deriveFont(Font.BOLD, 80);
 	protected static final Font P_XXXL_FONT = new JPanel().getFont().deriveFont(Font.PLAIN, 80);
@@ -33,11 +32,9 @@ public abstract class AbstractScene implements Drawable {
 	}
 
 	public abstract void init();
-	
-	@Override
-	public void update() {}
-	
-	@Override
+
+	public abstract void update();
+
 	public abstract void draw(final Graphics2D g, final Dimension dimension);
 
 	protected int getCenteredXPositionForString(final String text, final Graphics2D g, final Dimension dimension) {
