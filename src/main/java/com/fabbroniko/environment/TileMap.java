@@ -1,15 +1,17 @@
 package com.fabbroniko.environment;
 
-import com.fabbroniko.GameManager;
+import com.fabbroniko.main.GameManager;
 import com.fabbroniko.main.Drawable;
 import com.fabbroniko.resource.ResourceManager;
 import com.fabbroniko.resource.domain.Map;
+import lombok.extern.log4j.Log4j2;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
+@Log4j2
 public class TileMap implements Drawable {
 
 	private static final int NO_TILE = -1;
@@ -22,9 +24,13 @@ public class TileMap implements Drawable {
 	private Position minLimits;
 	private Position maxLimits;
 	private final Dimension tileSize;
+	private final Dimension canvasSize;
 
-	public TileMap(final ResourceManager resourceManager, final Map map) {
-		tileSize = new Dimension(120, 120);
+	private BufferedImage cachedTileMap;
+
+	public TileMap(final ResourceManager resourceManager, final Map map, final Dimension canvasSize) {
+		this.tileSize = new Dimension(120, 120);
+		this.canvasSize = canvasSize;
 
 		loadTiles(resourceManager.getTileMapSet());
 		loadMap(map, GameManager.getInstance().getCanvasSize());
@@ -104,21 +110,28 @@ public class TileMap implements Drawable {
 	}
 
 	public void setPosition(final int x, final int y) {
-		this.mapPosition.setX(x);
-		this.mapPosition.setY(y);
+		int adjustedX = x;
+		int adjustedY = y;
 
-		if (mapPosition.getX() < minLimits.getX()) {
-			mapPosition.setX(minLimits.getX());
+		if (adjustedX < minLimits.getX()) {
+			adjustedX = minLimits.getX();
 		}
-		if (mapPosition.getY() < minLimits.getY()) {
-			mapPosition.setY(minLimits.getY());
+		if (adjustedY < minLimits.getY()) {
+			adjustedY = minLimits.getY();
 		}
-		if (mapPosition.getX() > maxLimits.getX()) {
-			mapPosition.setX(maxLimits.getX());
+		if (adjustedX > maxLimits.getX()) {
+			adjustedX = maxLimits.getX();
 		}
-		if (mapPosition.getY() > maxLimits.getY()) {
-			mapPosition.setY(maxLimits.getY());
+		if (adjustedY > maxLimits.getY()) {
+			adjustedY = maxLimits.getY();
 		}
+
+		if(adjustedX != mapPosition.getX() || adjustedY != mapPosition.getY()) {
+			cachedTileMap = null;
+		}
+
+		this.mapPosition.setX(adjustedX);
+		this.mapPosition.setY(adjustedY);
 	}
 
 	public Position getPosition() {
@@ -159,8 +172,17 @@ public class TileMap implements Drawable {
 	@Override
 	public void update() {}
 
+	// Add cache - if the position is not moved then use previously built tilemap
 	@Override
-	public void draw(final Graphics2D g, final Dimension gDimension) {
+	public BufferedImage getDrawableImage() {
+		if(cachedTileMap != null) {
+			log.trace("tile_map,get_drawable_image,using_cached_image");
+			return cachedTileMap;
+		}
+
+		final BufferedImage tileMapImage = new BufferedImage(canvasSize.getWidth(), canvasSize.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		final Graphics2D tileMapGraphics = tileMapImage.createGraphics();
+
 		final int startingXIndex = mapPosition.getX() / tileSize.getWidth();
 		final int startingYIndex = mapPosition.getY() / tileSize.getHeight();
 
@@ -172,12 +194,12 @@ public class TileMap implements Drawable {
 		int currentXIndexToDraw;
 		int currentYIndexToDraw = startingYIndex;
 		
-		while (currentPosToDraw.getY() < gDimension.getHeight()) {
+		while (currentPosToDraw.getY() < canvasSize.getHeight()) {
 			currentXIndexToDraw = startingXIndex;
 			currentPosToDraw.setX(basePosToDraw.getX());
-			while (currentPosToDraw.getX() < gDimension.getWidth()) {
+			while (currentPosToDraw.getX() < canvasSize.getWidth()) {
 				if (map[currentYIndexToDraw][currentXIndexToDraw] != NO_TILE) {
-					g.drawImage(tiles.get(map[currentYIndexToDraw][currentXIndexToDraw]).getImage(), currentPosToDraw.getX(), currentPosToDraw.getY(), null);
+					tileMapGraphics.drawImage(tiles.get(map[currentYIndexToDraw][currentXIndexToDraw]).getImage(), currentPosToDraw.getX(), currentPosToDraw.getY(), null);
 				}
 				currentPosToDraw.setX(currentPosToDraw.getX() + tileSize.getWidth());
 				currentXIndexToDraw++;
@@ -185,5 +207,14 @@ public class TileMap implements Drawable {
 			currentPosToDraw.setY(currentPosToDraw.getY() + tileSize.getHeight());
 			currentYIndexToDraw++;
 		}
+
+		cachedTileMap = tileMapImage;
+		log.trace("tile_map,get_drawable_image,drawn_new_image");
+		return cachedTileMap;
+	}
+
+	@Override
+	public Position getDrawingPosition() {
+		return new Position();
 	}
 }

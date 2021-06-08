@@ -6,7 +6,7 @@ import java.awt.Color;
 
 import com.fabbroniko.environment.Dimension;
 import com.fabbroniko.environment.Position;
-import com.fabbroniko.GameManager;
+import com.fabbroniko.main.GameManager;
 
 /**
  * The WinScene is a very simple scene, it shows a "Level Completed" string on a simple background and it plays

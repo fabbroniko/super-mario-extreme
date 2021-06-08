@@ -4,7 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import com.fabbroniko.environment.*;
-import com.fabbroniko.GameManager;
+import com.fabbroniko.main.GameManager;
 import com.fabbroniko.scene.GameScene;
 import com.fabbroniko.scene.LostScene;
 import lombok.extern.log4j.Log4j2;
@@ -33,11 +33,10 @@ public class Player extends AbstractGameObject implements KeyListener {
 	private final Animation idleAnimation;
 	private final Animation jumpAnimation;
 
-	public Player(final TileMap tileMap, final GameScene gameScene, final Integer objectID) {
-		super(tileMap, gameScene, objectID, spriteDimension);
+	public Player(final TileMap tileMap, final GameScene gameScene, final Position position) {
+		super(tileMap, gameScene, position, spriteDimension);
 		falling = true;
 		animationJump = true;
-		facingRight = true;
 		this.gameScene = gameScene;
 		this.baseWindowSize = GameManager.getInstance().getCanvasSize();
 
@@ -47,6 +46,7 @@ public class Player extends AbstractGameObject implements KeyListener {
 				.row(0)
 				.nFrames(1)
 				.name(MARIO_IDLE_ANIMATION_NAME)
+				.mirror()
 				.build();
 
 		jumpAnimation = Animation.builder()
@@ -55,6 +55,7 @@ public class Player extends AbstractGameObject implements KeyListener {
 				.row(1)
 				.nFrames(1)
 				.name(MARIO_JUMP_ANIMATION_NAME)
+				.mirror()
 				.build();
 
 		walkAnimation = Animation.builder()
@@ -64,7 +65,12 @@ public class Player extends AbstractGameObject implements KeyListener {
 				.nFrames(3)
 				.frameDuration(100)
 				.name(MARIO_WALK_ANIMATION_NAME)
+				.mirror()
 				.build();
+
+		registeredAnimations.add(walkAnimation);
+		registeredAnimations.add(jumpAnimation);
+		registeredAnimations.add(idleAnimation);
 
 		setAnimation(jumpAnimation);
 	}

@@ -13,6 +13,6 @@ public class ResourceNotFoundException extends RuntimeException {
 	
 	@Override
 	public String toString() {
-		return "Unable to find the file: " + path + ".";
+		return "Unable to find file at " + path;
 	}
 }

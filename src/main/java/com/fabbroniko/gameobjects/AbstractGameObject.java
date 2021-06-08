@@ -1,7 +1,9 @@
 package com.fabbroniko.gameobjects;
 
-import java.awt.Graphics2D;
-import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.fabbroniko.environment.*;
 import com.fabbroniko.main.Drawable;
@@ -14,7 +16,9 @@ import com.fabbroniko.scene.GameScene;
  */
 public abstract class AbstractGameObject implements Drawable {
 
-	protected GameObjectBiDimensionalSpace gameObjectBiDimensionalSpace;
+	protected Position currentPosition;
+
+	protected Dimension spriteDimension;
 	/**
 	 * Map's Position.
 	 */
@@ -24,6 +28,8 @@ public abstract class AbstractGameObject implements Drawable {
 	 * Object's current animation.
 	 */
 	protected Animation currentAnimation;
+
+	protected List<Animation> registeredAnimations;
 	
 	/**
 	 * TileMap on which it has to be placed.
@@ -54,10 +60,7 @@ public abstract class AbstractGameObject implements Drawable {
 	 * Represents it's going in the right direction.
 	 */
 	protected boolean right;
-	
-	/**
-	 * Represents whether it's facing right or not.
-	 */
+
 	protected boolean facingRight;
 	
 	/**
@@ -85,50 +88,20 @@ public abstract class AbstractGameObject implements Drawable {
 	 * Movement's offset.
 	 */
 	protected Position offset;
-	
-	/**
-	 * Top Left Corner.
-	 */
-	protected Point topLeft;
-	
-	/**
-	 * Top Right Corner.
-	 */
-	protected Point topRight;
-	
-	/**
-	 * Bottom Left Corner.
-	 */
-	protected Point bottomLeft;
-	
-	/**
-	 * Bottom Right Corner.
-	 */
-	protected Point bottomRight;
-	
-	private final int objectID;
 
-	protected AbstractGameObject(final TileMap tileMapP, final GameScene gameScene, final int objectID, final Dimension spriteDimension) {
-		this.objectID = objectID;
+	protected AbstractGameObject(final TileMap tileMapP, final GameScene gameScene, final Position spawnPosition, final Dimension spriteDimension) {
 		this.tileMap = tileMapP;
 		this.gameScene = gameScene;
 		this.death = false;
 		
-		this.gameObjectBiDimensionalSpace = new GameObjectBiDimensionalSpace(new Position(0, 0), spriteDimension);
-
-		topLeft = new Point();
-		topRight = new Point();
-		bottomLeft = new Point();
-		bottomRight = new Point();
+		this.currentPosition = spawnPosition.clone();
+		this.spriteDimension = spriteDimension;
+		this.registeredAnimations = new ArrayList<>();
 
 		offset = new Position();
 		mapPosition = new Position();
 	}
-		
-	public GameObjectBiDimensionalSpace getBiDimensionalSpace() {
-		return this.gameObjectBiDimensionalSpace;
-	}
-	
+
 	/**
 	 * Handles collisions with the map.
 	 * @param direction Collision's direction.
@@ -159,6 +132,10 @@ public abstract class AbstractGameObject implements Drawable {
 		animation.reset();
 		this.currentAnimation = animation;
 	}
+
+	public final Rectangle getRectangle() {
+		return new Rectangle(currentPosition.getX(), currentPosition.getY(), spriteDimension.getWidth(), spriteDimension.getHeight());
+	}
 	
 	/**
 	 * Checks if the object is dead.
@@ -171,31 +148,21 @@ public abstract class AbstractGameObject implements Drawable {
 	public void notifyDeath() {
 		this.death = true;
 	}
+
+	public Position getPosition() {
+		return currentPosition.clone();
+	}
+
+	public Dimension getDimension() {
+		return spriteDimension;
+	}
 	
 	/**
 	 * Gets the object's position.
 	 * @return The Object's position.
 	 */
 	public Position getObjectPosition() {
-		return gameObjectBiDimensionalSpace.getPosition().clone();
-	}
-	
-	/**
-	 * Sets the object's position.
-	 * @param position The new object's position.
-	 */
-	public void setObjectPosition(final Position position) {
-		this.gameObjectBiDimensionalSpace.setPosition(position.clone());
-	}
-	
-	@Override
-	public boolean equals(final Object gameObject) {
-		return gameObject instanceof AbstractGameObject && this.objectID == ((AbstractGameObject)gameObject).objectID;
-	}
-	
-	@Override
-	public int hashCode() {
-		return this.getObjectPosition().hashCode();
+		return currentPosition.clone();
 	}
 	
 	@Override
@@ -221,18 +188,25 @@ public abstract class AbstractGameObject implements Drawable {
 			offset.setX(xOffset);
 			offset.setY(yOffset);
 			gameScene.checkForCollisions(this, offset);
-			gameObjectBiDimensionalSpace.movePosition(offset);
+			currentPosition.setPosition(currentPosition.getX() + offset.getX(), currentPosition.getY() + offset.getY());
 		}
 	}
 	
 	@Override
-	public void draw(final Graphics2D g, final Dimension gDimension) {
-		Position myPosition = this.gameObjectBiDimensionalSpace.getPosition();
-		Dimension spriteDimension = this.gameObjectBiDimensionalSpace.getDimension();
-		if (facingRight) {
-			g.drawImage(currentAnimation.getImage(), myPosition.getX() - mapPosition.getX(), myPosition.getY() - mapPosition.getY(), spriteDimension.getWidth(), spriteDimension.getHeight(), null);
+	public BufferedImage getDrawableImage() {
+		if(facingRight) {
+			return currentAnimation.getImage();
 		} else {
-			g.drawImage(currentAnimation.getImage(), myPosition.getX() - mapPosition.getX() + spriteDimension.getWidth(), myPosition.getY() - mapPosition.getY(),  -spriteDimension.getWidth(), spriteDimension.getHeight(), null);
+			return currentAnimation.getMirroredImage();
 		}
+	}
+
+	@Override
+	public Position getDrawingPosition() {
+		return new Position(currentPosition.getX() - mapPosition.getX(), currentPosition.getY() - mapPosition.getY());
+	}
+
+	public Dimension getSpriteDimension() {
+		return spriteDimension;
 	}
 }

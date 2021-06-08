@@ -7,10 +7,9 @@ import com.fabbroniko.gameobjects.Block;
 import com.fabbroniko.gameobjects.Castle;
 import com.fabbroniko.gameobjects.Enemy;
 import com.fabbroniko.gameobjects.FallingBlock;
-import com.fabbroniko.gameobjects.GameObjectBuilder;
 import com.fabbroniko.gameobjects.InvisibleBlock;
 import com.fabbroniko.gameobjects.Player;
-import com.fabbroniko.GameManager;
+import com.fabbroniko.main.GameManager;
 import com.fabbroniko.main.Time;
 import com.fabbroniko.resource.domain.Level;
 
@@ -31,7 +30,6 @@ public final class GameScene extends AbstractScene implements KeyListener {
     private static final int FPS_OFFSET = 15;
 
     private final Level level;
-    private GameObjectBuilder gameObjectBuilder;
     private Background bg;
     private TileMap tileMap;
     private List<AbstractGameObject> gameObjects;
@@ -46,12 +44,10 @@ public final class GameScene extends AbstractScene implements KeyListener {
     @Override
     public void init() {
         bg = new Background(gameManager.getResourceManager(), "game");
-        tileMap = new TileMap(gameManager.getResourceManager(), level.getMap());
+        tileMap = new TileMap(gameManager.getResourceManager(), level.getMap(), gameManager.getCanvasSize());
         gameObjects = new ArrayList<>();
 
         this.collisionManager = new CollisionManager(tileMap, gameObjects);
-
-        gameObjectBuilder = new GameObjectBuilder(tileMap, this);
 
         final Player player = (Player) this.addNewObject(Player.class, level.getStartPosition().clone());
 
@@ -88,10 +84,13 @@ public final class GameScene extends AbstractScene implements KeyListener {
     }
 
     private AbstractGameObject addNewObject(final Class<? extends AbstractGameObject> objectClass, final Position position) {
-        final AbstractGameObject newGameObject = gameObjectBuilder.newInstance(objectClass).setPosition(position).getInstance();
-        gameObjects.add(newGameObject);
-
-        return newGameObject;
+        try {
+            final AbstractGameObject newGameObject = objectClass.getConstructor(TileMap.class, GameScene.class, Position.class).newInstance(tileMap, this, position);
+            gameObjects.add(newGameObject);
+            return newGameObject;
+        } catch (final Exception e) {
+            throw new com.fabbroniko.error.InstantiationException(objectClass, e);
+        }
     }
 
     public void levelFinished() {
@@ -107,8 +106,6 @@ public final class GameScene extends AbstractScene implements KeyListener {
 
     @Override
     public void update() {
-        super.update();
-
         final List<AbstractGameObject> deadGameObjects = new ArrayList<>();
 
         for(final AbstractGameObject go : gameObjects) {
@@ -124,15 +121,20 @@ public final class GameScene extends AbstractScene implements KeyListener {
 
     @Override
     public void draw(final Graphics2D g, final Dimension gDimension) {
-        bg.draw(g, gDimension);
+        final Position bgPosition = bg.getDrawingPosition();
+        g.drawImage(bg.getDrawableImage(), bgPosition.getX(), bgPosition.getY(), gDimension.getWidth(), gDimension.getHeight(), null);
 
         for (final AbstractGameObject i:gameObjects) {
             if (!i.isDead()) {
-                i.draw(g, gDimension);
+                final Position position = i.getDrawingPosition();
+                final Dimension spriteDimension = i.getSpriteDimension();
+
+                g.drawImage(i.getDrawableImage(), position.getX(), position.getY(), spriteDimension.getWidth(), spriteDimension.getHeight(), null);
             }
         }
 
-        tileMap.draw(g, gDimension);
+        final Position tileMapPosition = tileMap.getDrawingPosition();
+        g.drawImage(tileMap.getDrawableImage(), tileMapPosition.getX(), tileMapPosition.getY(), gDimension.getWidth(), gDimension.getHeight(), null);
 
         if(gameManager.getSettings().isShowFps()) {
             int currentFps = Time.getFps();

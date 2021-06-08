@@ -1,15 +1,13 @@
-package com.fabbroniko;
+package com.fabbroniko.main;
 
 import java.awt.Graphics2D;
 import java.awt.event.KeyListener;
 
 import com.fabbroniko.environment.AudioManager;
 import com.fabbroniko.environment.Dimension;
-import com.fabbroniko.main.GamePanel;
-import com.fabbroniko.main.GameThread;
-import com.fabbroniko.main.GameWindow;
 import com.fabbroniko.resource.ResourceManager;
 import com.fabbroniko.resource.domain.Level;
+import com.fabbroniko.resource.domain.Settings;
 import com.fabbroniko.scene.AbstractScene;
 import com.fabbroniko.scene.GameScene;
 import com.fabbroniko.scene.LostScene;

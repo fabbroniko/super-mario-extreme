@@ -6,7 +6,8 @@ import java.awt.event.KeyListener;
 
 import com.fabbroniko.environment.Background;
 import com.fabbroniko.environment.Dimension;
-import com.fabbroniko.GameManager;
+import com.fabbroniko.environment.Position;
+import com.fabbroniko.main.GameManager;
 
 /**
  * The main menu shown as the first scene of the game.
@@ -60,6 +61,9 @@ public final class MainMenuScene extends AbstractScene implements KeyListener {
 	}
 
 	@Override
+	public void update() {}
+
+	@Override
 	public void detachScene() {
 		super.detachScene();
 
@@ -76,7 +80,8 @@ public final class MainMenuScene extends AbstractScene implements KeyListener {
 	@Override
 	public void draw(final Graphics2D g, final Dimension canvasDimension) {
 		// Draw the background first
-		bg.draw(g, canvasDimension);
+		final Position bgPosition = bg.getDrawingPosition();
+		g.drawImage(bg.getDrawableImage(), bgPosition.getX(), bgPosition.getY(), canvasDimension.getWidth(), canvasDimension.getHeight(), null);
 
 		// Activating antialiasing to soften up the look of the strings
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);

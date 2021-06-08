@@ -13,8 +13,8 @@ public class InvisibleBlock extends AbstractGameObject {
 
 	private final Animation visibleAnimation;
 
-	public InvisibleBlock(final TileMap tileMap, final GameScene gameScene, final Integer objectID) {
-		super(tileMap, gameScene, objectID, spriteDimension);
+	public InvisibleBlock(final TileMap tileMap, final GameScene gameScene, final Position position) {
+		super(tileMap, gameScene, position, spriteDimension);
 
 		setAnimation(Animation.builder()
 				.spriteSet(gameScene.getResourceManager().loadImageFromDisk(spritePath))

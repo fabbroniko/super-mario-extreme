@@ -6,7 +6,8 @@ import java.awt.event.KeyListener;
 
 import com.fabbroniko.environment.Background;
 import com.fabbroniko.environment.Dimension;
-import com.fabbroniko.GameManager;
+import com.fabbroniko.environment.Position;
+import com.fabbroniko.main.GameManager;
 
 public final class SettingsMenuScene extends AbstractScene implements KeyListener {
 
@@ -49,15 +50,18 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 	}
 
 	@Override
+	public void update() {}
+
+	@Override
 	public void detachScene() {
 		super.detachScene();
 
 		gameManager.removeKeyListener(this);
 	}
 	@Override
-	public void draw(final Graphics2D g, final Dimension gDimension) {
-		// Drawing the background
-		bg.draw(g, gDimension);
+	public void draw(final Graphics2D g, final Dimension canvasDimension) {
+		final Position bgPosition = bg.getDrawingPosition();
+		g.drawImage(bg.getDrawableImage(), bgPosition.getX(), bgPosition.getY(), canvasDimension.getWidth(), canvasDimension.getHeight(), null);
 
 		// Setting up the shared parameters to all options
 		g.setFont(P_FONT);
@@ -84,10 +88,10 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 		int x;
 		String hint;
 		if(!keyListening) {
-			x = getCenteredXPositionForString(HINT_1, g, gDimension);
+			x = getCenteredXPositionForString(HINT_1, g, canvasDimension);
 			hint = HINT_1;
 		} else {
-			x = getCenteredXPositionForString(HINT_2, g, gDimension);
+			x = getCenteredXPositionForString(HINT_2, g, canvasDimension);
 			hint = HINT_2;
 		}
 
