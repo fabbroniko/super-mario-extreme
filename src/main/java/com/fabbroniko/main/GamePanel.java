@@ -40,7 +40,7 @@ public final class GamePanel extends JPanel {
 	public void paintComponent(final Graphics cGraphics) {
 		super.paintComponent(cGraphics);
 
-		cGraphics.drawImage(canvasImage, origin.getX(), origin.getY(), windowSize.getWidth(), windowSize.getHeight(), null);
+		cGraphics.drawImage(canvasImage, origin.getRoundedX(), origin.getRoundedY(), windowSize.getWidth(), windowSize.getHeight(), null);
 	}
 
 	public Dimension getCanvasSize() {

@@ -81,7 +81,7 @@ public final class MainMenuScene extends AbstractScene implements KeyListener {
 	public void draw(final Graphics2D g, final Dimension canvasDimension) {
 		// Draw the background first
 		final Position bgPosition = bg.getDrawingPosition();
-		g.drawImage(bg.getDrawableImage(), bgPosition.getX(), bgPosition.getY(), canvasDimension.getWidth(), canvasDimension.getHeight(), null);
+		g.drawImage(bg.getDrawableImage(), bgPosition.getRoundedX(), bgPosition.getRoundedY(), canvasDimension.getWidth(), canvasDimension.getHeight(), null);
 
 		// Activating antialiasing to soften up the look of the strings
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);

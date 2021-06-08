@@ -113,17 +113,17 @@ public class TileMap implements Drawable {
 		int adjustedX = x;
 		int adjustedY = y;
 
-		if (adjustedX < minLimits.getX()) {
-			adjustedX = minLimits.getX();
+		if (adjustedX < minLimits.getRoundedX()) {
+			adjustedX = minLimits.getRoundedX();
 		}
-		if (adjustedY < minLimits.getY()) {
-			adjustedY = minLimits.getY();
+		if (adjustedY < minLimits.getRoundedY()) {
+			adjustedY = minLimits.getRoundedY();
 		}
-		if (adjustedX > maxLimits.getX()) {
-			adjustedX = maxLimits.getX();
+		if (adjustedX > maxLimits.getRoundedX()) {
+			adjustedX = maxLimits.getRoundedX();
 		}
-		if (adjustedY > maxLimits.getY()) {
-			adjustedY = maxLimits.getY();
+		if (adjustedY > maxLimits.getRoundedY()) {
+			adjustedY = maxLimits.getRoundedY();
 		}
 
 		if(adjustedX != mapPosition.getX() || adjustedY != mapPosition.getY()) {
@@ -183,8 +183,8 @@ public class TileMap implements Drawable {
 		final BufferedImage tileMapImage = new BufferedImage(canvasSize.getWidth(), canvasSize.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		final Graphics2D tileMapGraphics = tileMapImage.createGraphics();
 
-		final int startingXIndex = mapPosition.getX() / tileSize.getWidth();
-		final int startingYIndex = mapPosition.getY() / tileSize.getHeight();
+		final int startingXIndex = mapPosition.getRoundedX() / tileSize.getWidth();
+		final int startingYIndex = mapPosition.getRoundedY() / tileSize.getHeight();
 
 		final Position basePosToDraw = new Position();
 		basePosToDraw.setX(basePosToDraw.getX() - (mapPosition.getX() % tileSize.getWidth()));
@@ -199,7 +199,7 @@ public class TileMap implements Drawable {
 			currentPosToDraw.setX(basePosToDraw.getX());
 			while (currentPosToDraw.getX() < canvasSize.getWidth()) {
 				if (map[currentYIndexToDraw][currentXIndexToDraw] != NO_TILE) {
-					tileMapGraphics.drawImage(tiles.get(map[currentYIndexToDraw][currentXIndexToDraw]).getImage(), currentPosToDraw.getX(), currentPosToDraw.getY(), null);
+					tileMapGraphics.drawImage(tiles.get(map[currentYIndexToDraw][currentXIndexToDraw]).getImage(), currentPosToDraw.getRoundedX(), currentPosToDraw.getRoundedY(), null);
 				}
 				currentPosToDraw.setX(currentPosToDraw.getX() + tileSize.getWidth());
 				currentXIndexToDraw++;
