@@ -10,7 +10,7 @@ public class FallingBlock extends AbstractGameObject {
 
 	public static final String FALLING_BLOCK_IDLE_ANIMATION_NAME = "FALL_BLK_IDLE";
 
-	public FallingBlock(final TileMap tileMap, final GameScene gameScene, final Position position) {
+	public FallingBlock(final TileMap tileMap, final GameScene gameScene, final Vector2D position) {
 		super(tileMap, gameScene, position, spriteDimension);
 
 		setAnimation(Animation.builder()

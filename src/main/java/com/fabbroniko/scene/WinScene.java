@@ -5,7 +5,7 @@ import java.awt.RenderingHints;
 import java.awt.Color;
 
 import com.fabbroniko.environment.Dimension;
-import com.fabbroniko.environment.Position;
+import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.main.GameManager;
 
 /**
@@ -22,7 +22,7 @@ public final class WinScene extends AbstractStaticScene {
 	private static final int SCENE_DURATION_MILLISECONDS = 6000;
 
 	private long initTime;
-	private final Position origin = new Position();
+	private final Vector2D origin = new Vector2D();
 
 	public WinScene(final GameManager gameManager) {
 		super(gameManager);

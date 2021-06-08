@@ -13,7 +13,7 @@ public class InvisibleBlock extends AbstractGameObject {
 
 	private final Animation visibleAnimation;
 
-	public InvisibleBlock(final TileMap tileMap, final GameScene gameScene, final Position position) {
+	public InvisibleBlock(final TileMap tileMap, final GameScene gameScene, final Vector2D position) {
 		super(tileMap, gameScene, position, spriteDimension);
 
 		setAnimation(Animation.builder()

@@ -15,9 +15,9 @@ public class CollisionManager {
 		this.objects = objects;
 	}
 	
-	public void checkForCollisions(final AbstractGameObject obj, final Position tmpOffsetPosition) {
-		final Position offsetPosition = tmpOffsetPosition.clone();
-		final Position currentPosition = obj.getPosition().clone();
+	public void checkForCollisions(final AbstractGameObject obj, final Vector2D tmpOffsetPosition) {
+		final Vector2D offsetPosition = tmpOffsetPosition.clone();
+		final Vector2D currentPosition = obj.getPosition().clone();
 		final Dimension objectDimension = obj.getDimension();
 
 		final Rectangle wantedPosition = new Rectangle();

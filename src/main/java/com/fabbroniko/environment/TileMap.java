@@ -18,11 +18,11 @@ public class TileMap implements Drawable {
 	private static final int LAST_SOLID_TILE_INDEX = 6;
 
 	private final List<Tile> tiles = new ArrayList<>();
-	private final Position mapPosition = new Position();
+	private final Vector2D mapPosition = new Vector2D();
 
 	private int[][] map;
-	private Position minLimits;
-	private Position maxLimits;
+	private Vector2D minLimits;
+	private Vector2D maxLimits;
 	private final Dimension tileSize;
 	private final Dimension canvasSize;
 
@@ -52,8 +52,8 @@ public class TileMap implements Drawable {
 
 		this.map = new int[nRows][nCols];
 		Dimension mapSize = new Dimension(nCols * tileSize.getWidth(), nRows * tileSize.getHeight());
-		minLimits = new Position();
-		maxLimits = new Position(mapSize.getWidth() - canvasSize.getWidth(), mapSize.getHeight() - canvasSize.getHeight());
+		minLimits = new Vector2D();
+		maxLimits = new Vector2D(mapSize.getWidth() - canvasSize.getWidth(), mapSize.getHeight() - canvasSize.getHeight());
 
 		for(int i = 0; i < nRows; i++) {
 			for(int y = 0; y < nCols; y++) {
@@ -134,7 +134,7 @@ public class TileMap implements Drawable {
 		this.mapPosition.setY(adjustedY);
 	}
 
-	public Position getPosition() {
+	public Vector2D getPosition() {
 		return this.mapPosition.clone();
 	}
 
@@ -186,11 +186,11 @@ public class TileMap implements Drawable {
 		final int startingXIndex = mapPosition.getRoundedX() / tileSize.getWidth();
 		final int startingYIndex = mapPosition.getRoundedY() / tileSize.getHeight();
 
-		final Position basePosToDraw = new Position();
+		final Vector2D basePosToDraw = new Vector2D();
 		basePosToDraw.setX(basePosToDraw.getX() - (mapPosition.getX() % tileSize.getWidth()));
 		basePosToDraw.setY(basePosToDraw.getY() - (mapPosition.getY() % tileSize.getHeight()));
 
-		final Position currentPosToDraw = new Position(basePosToDraw.getX(), basePosToDraw.getY());
+		final Vector2D currentPosToDraw = new Vector2D(basePosToDraw.getX(), basePosToDraw.getY());
 		int currentXIndexToDraw;
 		int currentYIndexToDraw = startingYIndex;
 		
@@ -214,7 +214,7 @@ public class TileMap implements Drawable {
 	}
 
 	@Override
-	public Position getDrawingPosition() {
-		return new Position();
+	public Vector2D getDrawingPosition() {
+		return new Vector2D();
 	}
 }

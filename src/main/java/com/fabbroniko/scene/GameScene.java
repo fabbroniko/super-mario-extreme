@@ -56,7 +56,7 @@ public final class GameScene extends AbstractScene implements KeyListener {
 
         level.getGameObjects().forEach(gameObject -> this.addNewObject(
                 getClassFromName(gameObject.getType()),
-                new Position(gameObject.getX(), gameObject.getY()))
+                new Vector2D(gameObject.getX(), gameObject.getY()))
         );
 
         audioManager.playBackgroundMusic("theme", true);
@@ -79,13 +79,13 @@ public final class GameScene extends AbstractScene implements KeyListener {
         }
     }
 
-    public final void checkForCollisions(final AbstractGameObject obj, final Position offsetPosition) {
+    public final void checkForCollisions(final AbstractGameObject obj, final Vector2D offsetPosition) {
         this.collisionManager.checkForCollisions(obj, offsetPosition);
     }
 
-    private AbstractGameObject addNewObject(final Class<? extends AbstractGameObject> objectClass, final Position position) {
+    private AbstractGameObject addNewObject(final Class<? extends AbstractGameObject> objectClass, final Vector2D position) {
         try {
-            final AbstractGameObject newGameObject = objectClass.getConstructor(TileMap.class, GameScene.class, Position.class).newInstance(tileMap, this, position);
+            final AbstractGameObject newGameObject = objectClass.getConstructor(TileMap.class, GameScene.class, Vector2D.class).newInstance(tileMap, this, position);
             gameObjects.add(newGameObject);
             return newGameObject;
         } catch (final Exception e) {
@@ -121,19 +121,19 @@ public final class GameScene extends AbstractScene implements KeyListener {
 
     @Override
     public void draw(final Graphics2D g, final Dimension gDimension) {
-        final Position bgPosition = bg.getDrawingPosition();
+        final Vector2D bgPosition = bg.getDrawingPosition();
         g.drawImage(bg.getDrawableImage(), bgPosition.getRoundedX(), bgPosition.getRoundedY(), gDimension.getWidth(), gDimension.getHeight(), null);
 
         for (final AbstractGameObject i:gameObjects) {
             if (!i.isDead()) {
-                final Position position = i.getDrawingPosition();
+                final Vector2D position = i.getDrawingPosition();
                 final Dimension spriteDimension = i.getSpriteDimension();
 
                 g.drawImage(i.getDrawableImage(), position.getRoundedX(), position.getRoundedY(), spriteDimension.getWidth(), spriteDimension.getHeight(), null);
             }
         }
 
-        final Position tileMapPosition = tileMap.getDrawingPosition();
+        final Vector2D tileMapPosition = tileMap.getDrawingPosition();
         g.drawImage(tileMap.getDrawableImage(), tileMapPosition.getRoundedX(), tileMapPosition.getRoundedY(), gDimension.getWidth(), gDimension.getHeight(), null);
 
         if(gameManager.getSettings().isShowFps()) {

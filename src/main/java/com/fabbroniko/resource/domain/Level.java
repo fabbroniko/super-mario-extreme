@@ -1,8 +1,7 @@
 package com.fabbroniko.resource.domain;
 
-import com.fabbroniko.environment.Position;
+import com.fabbroniko.environment.Vector2D;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
@@ -23,7 +22,7 @@ public class Level {
   private List<GameObject> gameObjects;
 
   private Map map;
-  private Position startPosition;
+  private Vector2D startPosition;
 
   @JacksonXmlProperty(isAttribute = true)
   private double requiredGameVersion;

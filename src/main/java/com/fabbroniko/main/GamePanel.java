@@ -7,11 +7,11 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
 import com.fabbroniko.environment.Dimension;
-import com.fabbroniko.environment.Position;
+import com.fabbroniko.environment.Vector2D;
 
 public final class GamePanel extends JPanel {
 
-	private static final Position origin = new Position();
+	private static final Vector2D origin = new Vector2D();
 
 	private final Dimension windowSize;
 	private final Dimension canvasSize;

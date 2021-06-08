@@ -8,7 +8,7 @@ import com.fabbroniko.resource.ResourceManager;
 public class Background implements Drawable {
 
 	private final BufferedImage backgroundImage;
-	private final Position origin = new Position();
+	private final Vector2D origin = new Vector2D();
 
 	public Background(final ResourceManager resourceManager, final String backgroundName) {
 		backgroundImage = resourceManager.findBackgroundFromName(backgroundName);
@@ -23,7 +23,7 @@ public class Background implements Drawable {
 	}
 
 	@Override
-	public Position getDrawingPosition() {
+	public Vector2D getDrawingPosition() {
 		return origin.clone();
 	}
 }

@@ -18,7 +18,7 @@ public class Block extends AbstractGameObject implements AnimationListener {
 
 	private final Animation breakingAnimation;
 
-	public Block(final TileMap tileMap, final GameScene gameScene, final Position position) {
+	public Block(final TileMap tileMap, final GameScene gameScene, final Vector2D position) {
 		super(tileMap, gameScene, position, spriteDimension);
 
 		breakingAnimation = Animation.builder()

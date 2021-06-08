@@ -6,7 +6,7 @@ import java.awt.event.KeyListener;
 
 import com.fabbroniko.environment.Background;
 import com.fabbroniko.environment.Dimension;
-import com.fabbroniko.environment.Position;
+import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.main.GameManager;
 
 /**
@@ -80,7 +80,7 @@ public final class MainMenuScene extends AbstractScene implements KeyListener {
 	@Override
 	public void draw(final Graphics2D g, final Dimension canvasDimension) {
 		// Draw the background first
-		final Position bgPosition = bg.getDrawingPosition();
+		final Vector2D bgPosition = bg.getDrawingPosition();
 		g.drawImage(bg.getDrawableImage(), bgPosition.getRoundedX(), bgPosition.getRoundedY(), canvasDimension.getWidth(), canvasDimension.getHeight(), null);
 
 		// Activating antialiasing to soften up the look of the strings

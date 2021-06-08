@@ -16,13 +16,13 @@ import com.fabbroniko.scene.GameScene;
  */
 public abstract class AbstractGameObject implements Drawable {
 
-	protected Position currentPosition;
+	protected Vector2D currentPosition;
 
 	protected Dimension spriteDimension;
 	/**
 	 * Map's Position.
 	 */
-	protected Position mapPosition;
+	protected Vector2D mapPosition;
 	
 	/**
 	 * Object's current animation.
@@ -87,9 +87,9 @@ public abstract class AbstractGameObject implements Drawable {
 	/**
 	 * Movement's offset.
 	 */
-	protected Position offset;
+	protected Vector2D offset;
 
-	protected AbstractGameObject(final TileMap tileMapP, final GameScene gameScene, final Position spawnPosition, final Dimension spriteDimension) {
+	protected AbstractGameObject(final TileMap tileMapP, final GameScene gameScene, final Vector2D spawnPosition, final Dimension spriteDimension) {
 		this.tileMap = tileMapP;
 		this.gameScene = gameScene;
 		this.death = false;
@@ -98,8 +98,8 @@ public abstract class AbstractGameObject implements Drawable {
 		this.spriteDimension = spriteDimension;
 		this.registeredAnimations = new ArrayList<>();
 
-		offset = new Position();
-		mapPosition = new Position();
+		offset = new Vector2D();
+		mapPosition = new Vector2D();
 	}
 
 	/**
@@ -149,7 +149,7 @@ public abstract class AbstractGameObject implements Drawable {
 		this.death = true;
 	}
 
-	public Position getPosition() {
+	public Vector2D getPosition() {
 		return currentPosition.clone();
 	}
 
@@ -162,7 +162,7 @@ public abstract class AbstractGameObject implements Drawable {
 		double xOffset = 0;
 		double yOffset = 0;
 
-		mapPosition.setPosition(tileMap.getPosition());
+		mapPosition.setVector2D(tileMap.getPosition());
 		
 		if (jumping) {
 			yOffset += (jumpSpeed * Time.deltaTime());
@@ -180,7 +180,7 @@ public abstract class AbstractGameObject implements Drawable {
 			offset.setX(xOffset);
 			offset.setY(yOffset);
 			gameScene.checkForCollisions(this, offset);
-			currentPosition.setPosition(currentPosition.getX() + offset.getX(), currentPosition.getY() + offset.getY());
+			currentPosition.setVector2D(currentPosition.getX() + offset.getX(), currentPosition.getY() + offset.getY());
 		}
 	}
 	
@@ -194,8 +194,8 @@ public abstract class AbstractGameObject implements Drawable {
 	}
 
 	@Override
-	public Position getDrawingPosition() {
-		return new Position(currentPosition.getX() - mapPosition.getX(), currentPosition.getY() - mapPosition.getY());
+	public Vector2D getDrawingPosition() {
+		return new Vector2D(currentPosition.getX() - mapPosition.getX(), currentPosition.getY() - mapPosition.getY());
 	}
 
 	public Dimension getSpriteDimension() {
