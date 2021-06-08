@@ -7,14 +7,12 @@ import lombok.Getter;
 import java.awt.image.BufferedImage;
 
 /**
- * A tile is a fragment of the tilemap which includes the sub-images of all the possible terrains that can be drawn in
- * the game canvas.
+ * The tile map is what we can consider as the map layout of the game. This includes static elements like terrain, pipes and similar.
+ * The map is created by drawing tiles one next to the other on the game canvas and tiles can have different properties like
+ * allowing game objects to move freely through them (like grass) or being blocked by them (like terrain).
  *
- * On game startup the tilemap is split into its individual tiles, representing different types of terrain like Dirt, Grass, Water, Pipes and so on.
- * Tiles are unique - this means that it should not be possible to have instances of this class with the same tile image and tile type.
- * In the future it could be possible to have the same tile with different properties (aka tile type). For example it could be possible
- * to create a trap from a tile that looks like grass but with {@link TileType#NON_BLOCKING NON_BLOCKING} physics.
- *
+ * By knowing the layout of the map (where tiles are located) and the position of the player relative to the map, we can easily draw
+ * the tile map on the game canvas and decide whether a game object is allowed to move to a certain position or not.
  * @see TileType
  */
 @Getter
@@ -22,6 +20,14 @@ import java.awt.image.BufferedImage;
 @EqualsAndHashCode
 public class Tile {
 
+	/*
+	 * The BufferedImage representing the tile.
+	 * This is a single element like a patch of grass, or a block of dirt or the base of a pipe.
+	 */
 	private final BufferedImage image;
+
+	/*
+	 * The tile's properties
+	 */
 	private final TileType type;
 }

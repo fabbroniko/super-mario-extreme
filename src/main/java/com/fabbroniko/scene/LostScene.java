@@ -52,7 +52,7 @@ public final class LostScene extends AbstractStaticScene {
 	protected void drawOnce(final Graphics2D g, final Dimension gDimension) {
 		// Filling the whole canvas with Black
 		g.setColor(Color.BLACK);
-		g.fillRect(origin.getX(), origin.getY(), gDimension.getWidth(), gDimension.getHeight());
+		g.fillRect(origin.getRoundedX(), origin.getRoundedY(), gDimension.getWidth(), gDimension.getHeight());
 
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 

@@ -122,19 +122,19 @@ public final class GameScene extends AbstractScene implements KeyListener {
     @Override
     public void draw(final Graphics2D g, final Dimension gDimension) {
         final Position bgPosition = bg.getDrawingPosition();
-        g.drawImage(bg.getDrawableImage(), bgPosition.getX(), bgPosition.getY(), gDimension.getWidth(), gDimension.getHeight(), null);
+        g.drawImage(bg.getDrawableImage(), bgPosition.getRoundedX(), bgPosition.getRoundedY(), gDimension.getWidth(), gDimension.getHeight(), null);
 
         for (final AbstractGameObject i:gameObjects) {
             if (!i.isDead()) {
                 final Position position = i.getDrawingPosition();
                 final Dimension spriteDimension = i.getSpriteDimension();
 
-                g.drawImage(i.getDrawableImage(), position.getX(), position.getY(), spriteDimension.getWidth(), spriteDimension.getHeight(), null);
+                g.drawImage(i.getDrawableImage(), position.getRoundedX(), position.getRoundedY(), spriteDimension.getWidth(), spriteDimension.getHeight(), null);
             }
         }
 
         final Position tileMapPosition = tileMap.getDrawingPosition();
-        g.drawImage(tileMap.getDrawableImage(), tileMapPosition.getX(), tileMapPosition.getY(), gDimension.getWidth(), gDimension.getHeight(), null);
+        g.drawImage(tileMap.getDrawableImage(), tileMapPosition.getRoundedX(), tileMapPosition.getRoundedY(), gDimension.getWidth(), gDimension.getHeight(), null);
 
         if(gameManager.getSettings().isShowFps()) {
             int currentFps = Time.getFps();

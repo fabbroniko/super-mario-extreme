@@ -61,7 +61,7 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 	@Override
 	public void draw(final Graphics2D g, final Dimension canvasDimension) {
 		final Position bgPosition = bg.getDrawingPosition();
-		g.drawImage(bg.getDrawableImage(), bgPosition.getX(), bgPosition.getY(), canvasDimension.getWidth(), canvasDimension.getHeight(), null);
+		g.drawImage(bg.getDrawableImage(), bgPosition.getRoundedX(), bgPosition.getRoundedY(), canvasDimension.getWidth(), canvasDimension.getHeight(), null);
 
 		// Setting up the shared parameters to all options
 		g.setFont(P_FONT);
@@ -261,7 +261,6 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 	}
 
 	private int nextFps(final int fps) {
-		/* TODO re-enable this once the rounding movement issue is fixed
 		switch (fps) {
 			case 30:
 				return 60;
@@ -272,8 +271,6 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 			default:
 				return 30;
 		}
-		*/
-		return 60;
 	}
 
 	/**

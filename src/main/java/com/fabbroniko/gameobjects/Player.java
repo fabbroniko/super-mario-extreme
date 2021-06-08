@@ -78,7 +78,7 @@ public class Player extends AbstractGameObject implements KeyListener {
 	@Override
 	public void update() {
 		super.update();
-		tileMap.setPosition(this.getObjectPosition().getX() - (baseWindowSize.getWidth() / 2), this.getObjectPosition().getY() - (baseWindowSize.getHeight() / 2));
+		tileMap.setPosition(currentPosition.getRoundedX() - (baseWindowSize.getWidth() / 2), currentPosition.getRoundedY() - (baseWindowSize.getHeight() / 2));
 		if (death) {
 			GameManager.getInstance().openScene(LostScene.class);
 		}

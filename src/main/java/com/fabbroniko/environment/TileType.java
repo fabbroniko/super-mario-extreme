@@ -1,17 +1,18 @@
 package com.fabbroniko.environment;
 
 /**
- * Describes what kind of physics is applied to a {@link Tile Tile}
+ * Describes a {@link Tile Tile's} properties.
  */
 public enum TileType {
 
     /**
-     * {@link com.fabbroniko.resource.domain.GameObject GameObjects} can move freely through this type of tile.
+     * {@link com.fabbroniko.gameobjects.AbstractGameObject GameObjects} can move freely through this {@link Tile Tile}.
      */
     NON_BLOCKING,
 
     /**
-     * {@link com.fabbroniko.resource.domain.GameObject GameObjects} collide with this type of tile and can't go through it, effectively behaving like a solid surface.
+     * {@link com.fabbroniko.gameobjects.AbstractGameObject GameObjects} collide with this {@link Tile Tile}, therefore
+     * game objects can't go through this tile.
      */
     BLOCKING
 }

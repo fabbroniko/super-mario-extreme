@@ -134,7 +134,7 @@ public abstract class AbstractGameObject implements Drawable {
 	}
 
 	public final Rectangle getRectangle() {
-		return new Rectangle(currentPosition.getX(), currentPosition.getY(), spriteDimension.getWidth(), spriteDimension.getHeight());
+		return new Rectangle(currentPosition.getRoundedX(), currentPosition.getRoundedY(), spriteDimension.getWidth(), spriteDimension.getHeight());
 	}
 	
 	/**
@@ -156,19 +156,11 @@ public abstract class AbstractGameObject implements Drawable {
 	public Dimension getDimension() {
 		return spriteDimension;
 	}
-	
-	/**
-	 * Gets the object's position.
-	 * @return The Object's position.
-	 */
-	public Position getObjectPosition() {
-		return currentPosition.clone();
-	}
-	
+
 	@Override
 	public void update() {
-		int xOffset = 0;
-		int yOffset = 0;
+		double xOffset = 0;
+		double yOffset = 0;
 
 		mapPosition.setPosition(tileMap.getPosition());
 		

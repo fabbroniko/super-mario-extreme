@@ -8,8 +8,8 @@ import lombok.SneakyThrows;
 @AllArgsConstructor
 public class Position implements Cloneable {
 
-	private int x;
-	private int y;
+	private double x;
+	private double y;
 	
 	public Position() {
 		this(0, 0);
@@ -19,9 +19,17 @@ public class Position implements Cloneable {
 		this.setPosition(position.getX(), position.getY());
 	}
 
-	public void setPosition(final int x, final int y) {
+	public void setPosition(final double x, final double y) {
 		this.x = x;
 		this.y = y;
+	}
+
+	public int getRoundedX() {
+		return (int)Math.round(x);
+	}
+
+	public int getRoundedY() {
+		return (int)Math.round(y);
 	}
 
 	@SneakyThrows
