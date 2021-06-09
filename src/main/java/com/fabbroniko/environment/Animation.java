@@ -67,20 +67,6 @@ public final class Animation {
 		frameStartingTimestamp = System.currentTimeMillis();
 	}
 
-	@Override
-	public boolean equals(final Object o) {
-		if(!(o instanceof Animation)){
-			return false;
-		}
-
-		return ((Animation)o).name.equals(this.name);
-	}
-
-	@Override
-	public int hashCode() {
-		return name.hashCode();
-	}
-
 	public final static class Builder {
 
 		private static final long STATIC_ANIMATION = Long.MAX_VALUE;

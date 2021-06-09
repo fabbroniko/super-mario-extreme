@@ -147,12 +147,20 @@ public class Player extends AbstractGameObject implements KeyListener {
 	@Override
 	public void keyReleased(final KeyEvent e) {
 		if (e.getKeyCode() == GameManager.getInstance().getSettings().getLeftMovementKeyCode()) {
-			left = false; 
-			animationMove = false;
+			left = false;
+			if(!right) {
+				animationMove = false;
+			} else {
+				facingRight = true;
+			}
 		}
 		if (e.getKeyCode() == GameManager.getInstance().getSettings().getRightMovementKeyCode()) {
-			right = false; 	
-			animationMove = false;
+			right = false;
+			if(!left) {
+				animationMove = false;
+			} else {
+				facingRight = false;
+			}
 		}
 		if (e.getKeyCode() == GameManager.getInstance().getSettings().getJumpKeyCode()) {
 			jumping = false;
