@@ -6,7 +6,8 @@ import com.fabbroniko.resource.ResourceManager;
 import com.fabbroniko.resource.domain.Map;
 import lombok.extern.log4j.Log4j2;
 
-import java.awt.*;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,13 +24,13 @@ public class TileMap implements Drawable {
 	private int[][] map;
 	private Vector2D minLimits;
 	private Vector2D maxLimits;
-	private final Dimension tileSize;
-	private final Dimension canvasSize;
+	private final Vector2D tileSize;
+	private final Vector2D canvasSize;
 
 	private BufferedImage cachedTileMap;
 
-	public TileMap(final ResourceManager resourceManager, final Map map, final Dimension canvasSize) {
-		this.tileSize = new Dimension(120, 120);
+	public TileMap(final ResourceManager resourceManager, final Map map, final Vector2D canvasSize) {
+		this.tileSize = new Vector2D(120, 120);
 		this.canvasSize = canvasSize;
 
 		loadTiles(resourceManager.getTileMapSet());
@@ -37,23 +38,23 @@ public class TileMap implements Drawable {
 	}
 
 	private void loadTiles(final BufferedImage tileSet) {
-		for (int currentX = 0; currentX < tileSet.getWidth(); currentX += tileSize.getWidth()) {
+		for (int currentX = 0; currentX < tileSet.getWidth(); currentX += tileSize.getRoundedX()) {
 			TileType tt = TileType.BLOCKING;
-			if(currentX/tileSize.getWidth() > LAST_SOLID_TILE_INDEX)
+			if(currentX/tileSize.getRoundedX() > LAST_SOLID_TILE_INDEX)
 				tt = TileType.NON_BLOCKING;
 
-			tiles.add(new Tile(tileSet.getSubimage(currentX, 0, tileSize.getWidth(), tileSize.getHeight()), tt));
+			tiles.add(new Tile(tileSet.getSubimage(currentX, 0, tileSize.getRoundedX(), tileSize.getRoundedY()), tt));
 		}
 	}
 
-	private void loadMap(final Map map, final Dimension canvasSize) {
+	private void loadMap(final Map map, final Vector2D canvasSize) {
 		final int nRows = map.getVerticalBlocks();
 		final int nCols = map.getHorizontalBlocks();
 
 		this.map = new int[nRows][nCols];
-		Dimension mapSize = new Dimension(nCols * tileSize.getWidth(), nRows * tileSize.getHeight());
+		Vector2D mapSize = new Vector2D(nCols * tileSize.getRoundedX(), nRows * tileSize.getRoundedY());
 		minLimits = new Vector2D();
-		maxLimits = new Vector2D(mapSize.getWidth() - canvasSize.getWidth(), mapSize.getHeight() - canvasSize.getHeight());
+		maxLimits = new Vector2D(mapSize.getRoundedX() - canvasSize.getRoundedX(), mapSize.getRoundedY() - canvasSize.getRoundedY());
 
 		for(int i = 0; i < nRows; i++) {
 			for(int y = 0; y < nCols; y++) {
@@ -155,8 +156,8 @@ public class TileMap implements Drawable {
 		 * 35/30 that rounded is 1 and 61/30 that rounded becomes 2, therefore we want to retried the tile at
 		 * map[2, 1]
 		 */
-		final int yIndex = yPoint / tileSize.getHeight();
-		final int xIndex = xPoint / tileSize.getWidth();
+		final int yIndex = yPoint / tileSize.getRoundedY();
+		final int xIndex = xPoint / tileSize.getRoundedX();
 
 		if(yIndex >= map.length || xIndex >= map[yIndex].length) {
 			return null;
@@ -180,31 +181,31 @@ public class TileMap implements Drawable {
 			return cachedTileMap;
 		}
 
-		final BufferedImage tileMapImage = new BufferedImage(canvasSize.getWidth(), canvasSize.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		final BufferedImage tileMapImage = new BufferedImage(canvasSize.getRoundedX(), canvasSize.getRoundedY(), BufferedImage.TYPE_INT_ARGB);
 		final Graphics2D tileMapGraphics = tileMapImage.createGraphics();
 
-		final int startingXIndex = mapPosition.getRoundedX() / tileSize.getWidth();
-		final int startingYIndex = mapPosition.getRoundedY() / tileSize.getHeight();
+		final int startingXIndex = mapPosition.getRoundedX() / tileSize.getRoundedX();
+		final int startingYIndex = mapPosition.getRoundedY() / tileSize.getRoundedY();
 
 		final Vector2D basePosToDraw = new Vector2D();
-		basePosToDraw.setX(basePosToDraw.getX() - (mapPosition.getX() % tileSize.getWidth()));
-		basePosToDraw.setY(basePosToDraw.getY() - (mapPosition.getY() % tileSize.getHeight()));
+		basePosToDraw.setX(basePosToDraw.getX() - (mapPosition.getX() % tileSize.getRoundedX()));
+		basePosToDraw.setY(basePosToDraw.getY() - (mapPosition.getY() % tileSize.getRoundedY()));
 
 		final Vector2D currentPosToDraw = new Vector2D(basePosToDraw.getX(), basePosToDraw.getY());
 		int currentXIndexToDraw;
 		int currentYIndexToDraw = startingYIndex;
 		
-		while (currentPosToDraw.getY() < canvasSize.getHeight()) {
+		while (currentPosToDraw.getY() < canvasSize.getRoundedY()) {
 			currentXIndexToDraw = startingXIndex;
 			currentPosToDraw.setX(basePosToDraw.getX());
-			while (currentPosToDraw.getX() < canvasSize.getWidth()) {
+			while (currentPosToDraw.getX() < canvasSize.getRoundedX()) {
 				if (map[currentYIndexToDraw][currentXIndexToDraw] != NO_TILE) {
 					tileMapGraphics.drawImage(tiles.get(map[currentYIndexToDraw][currentXIndexToDraw]).getImage(), currentPosToDraw.getRoundedX(), currentPosToDraw.getRoundedY(), null);
 				}
-				currentPosToDraw.setX(currentPosToDraw.getX() + tileSize.getWidth());
+				currentPosToDraw.setX(currentPosToDraw.getX() + tileSize.getRoundedX());
 				currentXIndexToDraw++;
 			}
-			currentPosToDraw.setY(currentPosToDraw.getY() + tileSize.getHeight());
+			currentPosToDraw.setY(currentPosToDraw.getY() + tileSize.getRoundedY());
 			currentYIndexToDraw++;
 		}
 

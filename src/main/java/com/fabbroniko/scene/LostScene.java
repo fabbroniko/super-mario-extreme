@@ -2,7 +2,6 @@ package com.fabbroniko.scene;
 
 import java.awt.*;
 
-import com.fabbroniko.environment.Dimension;
 import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.main.GameManager;
 
@@ -49,10 +48,10 @@ public final class LostScene extends AbstractStaticScene {
 	 * @param gDimension The dimensions of the canvas.
 	 */
 	@Override
-	protected void drawOnce(final Graphics2D g, final Dimension gDimension) {
+	protected void drawOnce(final Graphics2D g, final Vector2D gDimension) {
 		// Filling the whole canvas with Black
 		g.setColor(Color.BLACK);
-		g.fillRect(origin.getRoundedX(), origin.getRoundedY(), gDimension.getWidth(), gDimension.getHeight());
+		g.fillRect(origin.getRoundedX(), origin.getRoundedY(), gDimension.getRoundedX(), gDimension.getRoundedY());
 
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -65,7 +64,7 @@ public final class LostScene extends AbstractStaticScene {
 		g.setColor(Color.WHITE);
 		g.setFont(H1_FONT);
 		int centeredX = getCenteredXPositionForString(GAME_OVER_MAIN_TEXT, g, gDimension);
-		int y = (gDimension.getHeight() - g.getFontMetrics().getHeight()) / 2;
+		int y = (gDimension.getRoundedY() - g.getFontMetrics().getHeight()) / 2;
 
 		// Draw the Game Over string.
 		g.drawString(GAME_OVER_MAIN_TEXT, centeredX, y);
@@ -78,7 +77,7 @@ public final class LostScene extends AbstractStaticScene {
 		g.setFont(P_FONT);
 		final String composedDeathCount = DEATH_COUNT_TEXT + gameManager.getDeathCount();
 		centeredX = getCenteredXPositionForString(composedDeathCount, g, gDimension);
-		y = (gDimension.getHeight() / 2) + (g.getFontMetrics().getHeight() / 2);
+		y = (gDimension.getRoundedY() / 2) + (g.getFontMetrics().getHeight() / 2);
 
 		// Draw the death count string
 		g.drawString(composedDeathCount, centeredX, y);

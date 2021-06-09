@@ -1,6 +1,6 @@
 package com.fabbroniko.main;
 
-import com.fabbroniko.environment.Dimension;
+import com.fabbroniko.environment.Vector2D;
 import lombok.SneakyThrows;
 
 import java.awt.Graphics2D;
@@ -10,7 +10,7 @@ public class GameThread extends Thread {
 
     private volatile boolean running = false;
     private final GamePanel gamePanel;
-    private final Dimension canvasDimension;
+    private final Vector2D canvasDimension;
     private final GameManager gameManager;
 
     public GameThread(final GamePanel gamePanel, final GameManager gameManager) {
@@ -24,13 +24,13 @@ public class GameThread extends Thread {
     @SneakyThrows
     @Override
     public void run() {
-        final Dimension canvasDimension = this.canvasDimension;
+        final Vector2D canvasDimension = this.canvasDimension;
         final Graphics2D canvas = this.gamePanel.getCanvas();
         running = true;
 
         // Game Loop
         while (running) {
-            final BufferedImage bufferedImage = new BufferedImage(canvasDimension.getWidth(), canvasDimension.getHeight(), BufferedImage.TYPE_INT_ARGB);
+            final BufferedImage bufferedImage = new BufferedImage(canvasDimension.getRoundedX(), canvasDimension.getRoundedY(), BufferedImage.TYPE_INT_ARGB);
             final Graphics2D bufferedCanvas = bufferedImage.createGraphics();
 
             gameManager.update();

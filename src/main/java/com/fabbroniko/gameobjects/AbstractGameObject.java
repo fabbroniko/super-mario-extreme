@@ -18,7 +18,7 @@ public abstract class AbstractGameObject implements Drawable {
 
 	protected Vector2D currentPosition;
 
-	protected Dimension spriteDimension;
+	protected Vector2D spriteDimension;
 	/**
 	 * Map's Position.
 	 */
@@ -89,7 +89,7 @@ public abstract class AbstractGameObject implements Drawable {
 	 */
 	protected Vector2D offset;
 
-	protected AbstractGameObject(final TileMap tileMapP, final GameScene gameScene, final Vector2D spawnPosition, final Dimension spriteDimension) {
+	protected AbstractGameObject(final TileMap tileMapP, final GameScene gameScene, final Vector2D spawnPosition, final Vector2D spriteDimension) {
 		this.tileMap = tileMapP;
 		this.gameScene = gameScene;
 		this.death = false;
@@ -134,7 +134,7 @@ public abstract class AbstractGameObject implements Drawable {
 	}
 
 	public final Rectangle getRectangle() {
-		return new Rectangle(currentPosition.getRoundedX(), currentPosition.getRoundedY(), spriteDimension.getWidth(), spriteDimension.getHeight());
+		return new Rectangle(currentPosition.getRoundedX(), currentPosition.getRoundedY(), spriteDimension.getRoundedX(), spriteDimension.getRoundedY());
 	}
 	
 	/**
@@ -153,7 +153,7 @@ public abstract class AbstractGameObject implements Drawable {
 		return currentPosition.clone();
 	}
 
-	public Dimension getDimension() {
+	public Vector2D getDimension() {
 		return spriteDimension;
 	}
 
@@ -198,7 +198,7 @@ public abstract class AbstractGameObject implements Drawable {
 		return new Vector2D(currentPosition.getX() - mapPosition.getX(), currentPosition.getY() - mapPosition.getY());
 	}
 
-	public Dimension getSpriteDimension() {
+	public Vector2D getSpriteDimension() {
 		return spriteDimension;
 	}
 }

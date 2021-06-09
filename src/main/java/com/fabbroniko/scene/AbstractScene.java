@@ -1,7 +1,7 @@
 package com.fabbroniko.scene;
 
 import com.fabbroniko.environment.AudioManager;
-import com.fabbroniko.environment.Dimension;
+import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.main.GameManager;
 import com.fabbroniko.resource.ResourceManager;
 
@@ -35,14 +35,14 @@ public abstract class AbstractScene {
 
 	public abstract void update();
 
-	public abstract void draw(final Graphics2D g, final Dimension dimension);
+	public abstract void draw(final Graphics2D g, final Vector2D canvasDimension);
 
-	protected int getCenteredXPositionForString(final String text, final Graphics2D g, final Dimension dimension) {
-		return (dimension.getWidth() - g.getFontMetrics().stringWidth(text)) / 2;
+	protected int getCenteredXPositionForString(final String text, final Graphics2D g, final Vector2D dimension) {
+		return (dimension.getRoundedX() - g.getFontMetrics().stringWidth(text)) / 2;
 	}
 
-	protected int getCenteredXPositionFromSize(final Dimension canvasDimension, final int secondaryWidth) {
-		return (canvasDimension.getWidth() - secondaryWidth) / 2;
+	protected int getCenteredXPositionFromSize(final Vector2D canvasDimension, final int secondaryWidth) {
+		return (canvasDimension.getRoundedX() - secondaryWidth) / 2;
 	}
 
 	public GameManager getGameManager() {

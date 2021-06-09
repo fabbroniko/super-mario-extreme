@@ -5,7 +5,7 @@ import com.fabbroniko.scene.GameScene;
 
 public class Enemy extends AbstractGameObject implements AnimationListener {
 
-	private static final Dimension spriteDimension = new Dimension(108, 192);
+	private static final Vector2D spriteDimension = new Vector2D(108, 192);
 	private static final String spritePath = "/sprites/ghost.png";
 	private static final String ENEMY_WALK_ANIMATION_NAME = "ENEMY_WALK";
 	private static final String ENEMY_DEAD_ANIMATION_NAME = "ENEMY_DEAD";
