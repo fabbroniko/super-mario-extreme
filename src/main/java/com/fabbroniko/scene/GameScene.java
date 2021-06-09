@@ -1,7 +1,6 @@
 package com.fabbroniko.scene;
 
 import com.fabbroniko.environment.*;
-import com.fabbroniko.environment.Dimension;
 import com.fabbroniko.gameobjects.AbstractGameObject;
 import com.fabbroniko.gameobjects.Block;
 import com.fabbroniko.gameobjects.Castle;
@@ -56,7 +55,7 @@ public final class GameScene extends AbstractScene implements KeyListener {
 
         level.getGameObjects().forEach(gameObject -> this.addNewObject(
                 getClassFromName(gameObject.getType()),
-                new Position(gameObject.getX(), gameObject.getY()))
+                new Vector2D(gameObject.getX(), gameObject.getY()))
         );
 
         audioManager.playBackgroundMusic("theme", true);
@@ -79,13 +78,13 @@ public final class GameScene extends AbstractScene implements KeyListener {
         }
     }
 
-    public final void checkForCollisions(final AbstractGameObject obj, final Position offsetPosition) {
+    public final void checkForCollisions(final AbstractGameObject obj, final Vector2D offsetPosition) {
         this.collisionManager.checkForCollisions(obj, offsetPosition);
     }
 
-    private AbstractGameObject addNewObject(final Class<? extends AbstractGameObject> objectClass, final Position position) {
+    private AbstractGameObject addNewObject(final Class<? extends AbstractGameObject> objectClass, final Vector2D position) {
         try {
-            final AbstractGameObject newGameObject = objectClass.getConstructor(TileMap.class, GameScene.class, Position.class).newInstance(tileMap, this, position);
+            final AbstractGameObject newGameObject = objectClass.getConstructor(TileMap.class, GameScene.class, Vector2D.class).newInstance(tileMap, this, position);
             gameObjects.add(newGameObject);
             return newGameObject;
         } catch (final Exception e) {
@@ -120,21 +119,21 @@ public final class GameScene extends AbstractScene implements KeyListener {
     }
 
     @Override
-    public void draw(final Graphics2D g, final Dimension gDimension) {
-        final Position bgPosition = bg.getDrawingPosition();
-        g.drawImage(bg.getDrawableImage(), bgPosition.getRoundedX(), bgPosition.getRoundedY(), gDimension.getWidth(), gDimension.getHeight(), null);
+    public void draw(final Graphics2D g, final Vector2D canvasDimension) {
+        final Vector2D bgPosition = bg.getDrawingPosition();
+        g.drawImage(bg.getDrawableImage(), bgPosition.getRoundedX(), bgPosition.getRoundedY(), canvasDimension.getRoundedX(), canvasDimension.getRoundedY(), null);
 
         for (final AbstractGameObject i:gameObjects) {
             if (!i.isDead()) {
-                final Position position = i.getDrawingPosition();
-                final Dimension spriteDimension = i.getSpriteDimension();
+                final Vector2D position = i.getDrawingPosition();
+                final Vector2D spriteDimension = i.getSpriteDimension();
 
-                g.drawImage(i.getDrawableImage(), position.getRoundedX(), position.getRoundedY(), spriteDimension.getWidth(), spriteDimension.getHeight(), null);
+                g.drawImage(i.getDrawableImage(), position.getRoundedX(), position.getRoundedY(), spriteDimension.getRoundedX(), spriteDimension.getRoundedY(), null);
             }
         }
 
-        final Position tileMapPosition = tileMap.getDrawingPosition();
-        g.drawImage(tileMap.getDrawableImage(), tileMapPosition.getRoundedX(), tileMapPosition.getRoundedY(), gDimension.getWidth(), gDimension.getHeight(), null);
+        final Vector2D tileMapPosition = tileMap.getDrawingPosition();
+        g.drawImage(tileMap.getDrawableImage(), tileMapPosition.getRoundedX(), tileMapPosition.getRoundedY(), canvasDimension.getRoundedX(), canvasDimension.getRoundedY(), null);
 
         if(gameManager.getSettings().isShowFps()) {
             int currentFps = Time.getFps();
@@ -149,7 +148,7 @@ public final class GameScene extends AbstractScene implements KeyListener {
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             final String currentFpsString = String.valueOf(currentFps);
             final int fpsWidth = g.getFontMetrics().stringWidth(currentFpsString);
-            g.drawString(currentFpsString, gDimension.getWidth() - fpsWidth - FPS_OFFSET, g.getFontMetrics().getHeight());
+            g.drawString(currentFpsString, canvasDimension.getRoundedX() - fpsWidth - FPS_OFFSET, g.getFontMetrics().getHeight());
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
         }
     }

@@ -5,8 +5,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import com.fabbroniko.environment.Background;
-import com.fabbroniko.environment.Dimension;
-import com.fabbroniko.environment.Position;
+import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.main.GameManager;
 
 /**
@@ -32,7 +31,7 @@ public final class MainMenuScene extends AbstractScene implements KeyListener {
 	// Magic numbers
 	private static final int STROKE_SIZE = 12;
 	private static final int OPTION_ARC_SIZE = 32;
-	private static final Dimension OPTION_RECTANGLE_DIMENSION = new Dimension(360, 120);
+	private static final Vector2D OPTION_RECTANGLE_DIMENSION = new Vector2D(360, 120);
 	private static final int OPTION_RECT_TO_TEXT_OFFSET = 92;
 	private static final int TITLE_Y = 120;
 	private static final int START_OPTION_Y = 260;
@@ -78,10 +77,10 @@ public final class MainMenuScene extends AbstractScene implements KeyListener {
 	 * @param canvasDimension The dimension of the canvas
 	 */
 	@Override
-	public void draw(final Graphics2D g, final Dimension canvasDimension) {
+	public void draw(final Graphics2D g, final Vector2D canvasDimension) {
 		// Draw the background first
-		final Position bgPosition = bg.getDrawingPosition();
-		g.drawImage(bg.getDrawableImage(), bgPosition.getRoundedX(), bgPosition.getRoundedY(), canvasDimension.getWidth(), canvasDimension.getHeight(), null);
+		final Vector2D bgPosition = bg.getDrawingPosition();
+		g.drawImage(bg.getDrawableImage(), bgPosition.getRoundedX(), bgPosition.getRoundedY(), canvasDimension.getRoundedX(), canvasDimension.getRoundedY(), null);
 
 		// Activating antialiasing to soften up the look of the strings
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -171,14 +170,14 @@ public final class MainMenuScene extends AbstractScene implements KeyListener {
 	 * @param text The option name displayed within the rounded box
 	 * @param y The y origin coordinate of the option box
 	 */
-	private void printMenuOption(final String text, final int y, final Graphics2D g, final Dimension canvasDimension, final boolean isSelected) {
+	private void printMenuOption(final String text, final int y, final Graphics2D g, final Vector2D canvasDimension, final boolean isSelected) {
 		// Sets up the requirements to draw the rounded rectangle
 		g.setColor(Color.BLACK);
 		g.setStroke(new BasicStroke(STROKE_SIZE));
-		int x = getCenteredXPositionFromSize(canvasDimension, OPTION_RECTANGLE_DIMENSION.getWidth());
+		int x = getCenteredXPositionFromSize(canvasDimension, OPTION_RECTANGLE_DIMENSION.getRoundedX());
 
 		// Draws the rectangle
-		g.drawRoundRect(x, y, OPTION_RECTANGLE_DIMENSION.getWidth(), OPTION_RECTANGLE_DIMENSION.getHeight(), OPTION_ARC_SIZE, OPTION_ARC_SIZE);
+		g.drawRoundRect(x, y, OPTION_RECTANGLE_DIMENSION.getRoundedX(), OPTION_RECTANGLE_DIMENSION.getRoundedY(), OPTION_ARC_SIZE, OPTION_ARC_SIZE);
 
 		// Sets up the requirements to draw the option name within the rectangle
 		if(isSelected)

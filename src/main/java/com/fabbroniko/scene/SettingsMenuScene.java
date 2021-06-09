@@ -5,8 +5,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import com.fabbroniko.environment.Background;
-import com.fabbroniko.environment.Dimension;
-import com.fabbroniko.environment.Position;
+import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.main.GameManager;
 
 public final class SettingsMenuScene extends AbstractScene implements KeyListener {
@@ -59,9 +58,9 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 		gameManager.removeKeyListener(this);
 	}
 	@Override
-	public void draw(final Graphics2D g, final Dimension canvasDimension) {
-		final Position bgPosition = bg.getDrawingPosition();
-		g.drawImage(bg.getDrawableImage(), bgPosition.getRoundedX(), bgPosition.getRoundedY(), canvasDimension.getWidth(), canvasDimension.getHeight(), null);
+	public void draw(final Graphics2D g, final Vector2D canvasDimension) {
+		final Vector2D bgPosition = bg.getDrawingPosition();
+		g.drawImage(bg.getDrawableImage(), bgPosition.getRoundedX(), bgPosition.getRoundedY(), canvasDimension.getRoundedX(), canvasDimension.getRoundedY(), null);
 
 		// Setting up the shared parameters to all options
 		g.setFont(P_FONT);

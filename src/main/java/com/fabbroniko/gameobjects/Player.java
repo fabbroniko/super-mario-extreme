@@ -16,7 +16,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class Player extends AbstractGameObject implements KeyListener {
 
-	private static final Dimension spriteDimension = new Dimension(112, 104);
+	private static final Vector2D spriteDimension = new Vector2D(112, 104);
 	private static final String spritePath = "/sprites/mario.png";
 
 	public static final String MARIO_IDLE_ANIMATION_NAME = "MARIO_IDLE";
@@ -27,13 +27,13 @@ public class Player extends AbstractGameObject implements KeyListener {
 	private boolean animationMove;
 	private final GameScene gameScene;
 	
-	private final Dimension baseWindowSize;
+	private final Vector2D baseWindowSize;
 	
 	private final Animation walkAnimation;
 	private final Animation idleAnimation;
 	private final Animation jumpAnimation;
 
-	public Player(final TileMap tileMap, final GameScene gameScene, final Position position) {
+	public Player(final TileMap tileMap, final GameScene gameScene, final Vector2D position) {
 		super(tileMap, gameScene, position, spriteDimension);
 		falling = true;
 		animationJump = true;
@@ -78,7 +78,7 @@ public class Player extends AbstractGameObject implements KeyListener {
 	@Override
 	public void update() {
 		super.update();
-		tileMap.setPosition(currentPosition.getRoundedX() - (baseWindowSize.getWidth() / 2), currentPosition.getRoundedY() - (baseWindowSize.getHeight() / 2));
+		tileMap.setPosition(currentPosition.getRoundedX() - (baseWindowSize.getRoundedX() / 2), currentPosition.getRoundedY() - (baseWindowSize.getRoundedY() / 2));
 		if (death) {
 			GameManager.getInstance().openScene(LostScene.class);
 		}

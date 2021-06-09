@@ -4,8 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Color;
 
-import com.fabbroniko.environment.Dimension;
-import com.fabbroniko.environment.Position;
+import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.main.GameManager;
 
 /**
@@ -22,7 +21,7 @@ public final class WinScene extends AbstractStaticScene {
 	private static final int SCENE_DURATION_MILLISECONDS = 6000;
 
 	private long initTime;
-	private final Position origin = new Position();
+	private final Vector2D origin = new Vector2D();
 
 	public WinScene(final GameManager gameManager) {
 		super(gameManager);
@@ -48,13 +47,13 @@ public final class WinScene extends AbstractStaticScene {
 	 * Draw the WinScene.
 	 * This is a simple static scene showing just a string. Nothing special here.
 	 * @param g The canvas to paint on.
-	 * @param gDimension The dimension of the canvas
+	 * @param canvasDimension The dimension of the canvas
 	 */
 	@Override
-	public void drawOnce(final Graphics2D g, final Dimension gDimension) {
+	public void drawOnce(final Graphics2D g, final Vector2D canvasDimension) {
 		// Fill in the background
 		g.setColor(Color.BLACK);
-		g.fillRect(origin.getRoundedX(), origin.getRoundedY(), gDimension.getWidth(), gDimension.getHeight());
+		g.fillRect(origin.getRoundedX(), origin.getRoundedY(), canvasDimension.getRoundedX(), canvasDimension.getRoundedY());
 
 		// Activating the antialiasing to smooth out the strings
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -62,8 +61,8 @@ public final class WinScene extends AbstractStaticScene {
 		// Setting up the parameters to draw the strings
 		g.setColor(Color.WHITE);
 		g.setFont(H1_FONT);
-		int centeredX = getCenteredXPositionForString(LEVEL_COMPLETED, g, gDimension);
-		int y = (gDimension.getHeight() - g.getFontMetrics().getHeight()) / 2;
+		int centeredX = getCenteredXPositionForString(LEVEL_COMPLETED, g, canvasDimension);
+		int y = (canvasDimension.getRoundedY() - g.getFontMetrics().getHeight()) / 2;
 
 		// Draw the Game Over string.
 		g.drawString(LEVEL_COMPLETED, centeredX, y);

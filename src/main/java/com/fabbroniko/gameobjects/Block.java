@@ -10,7 +10,7 @@ import com.fabbroniko.scene.GameScene;
  */
 public class Block extends AbstractGameObject implements AnimationListener {
 
-	private static final Dimension spriteDimension = new Dimension(120, 120);
+	private static final Vector2D spriteDimension = new Vector2D(120, 120);
 	private static final String spritePath = "/sprites/block.png";
 
 	public static final String BLOCK_IDLE_ANIMATION_NAME = "BLOCK_IDLE";
@@ -18,7 +18,7 @@ public class Block extends AbstractGameObject implements AnimationListener {
 
 	private final Animation breakingAnimation;
 
-	public Block(final TileMap tileMap, final GameScene gameScene, final Position position) {
+	public Block(final TileMap tileMap, final GameScene gameScene, final Vector2D position) {
 		super(tileMap, gameScene, position, spriteDimension);
 
 		breakingAnimation = Animation.builder()

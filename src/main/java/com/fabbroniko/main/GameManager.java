@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyListener;
 
 import com.fabbroniko.environment.AudioManager;
-import com.fabbroniko.environment.Dimension;
+import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.resource.ResourceManager;
 import com.fabbroniko.resource.domain.Level;
 import com.fabbroniko.resource.domain.Settings;
@@ -89,8 +89,8 @@ public final class GameManager {
 		resourceManager.saveSettings(settings);
 	}
 
-	public synchronized void draw(final Graphics2D g, final Dimension gDimension) {
-		if(currentState != null) this.currentState.draw(g, gDimension);
+	public synchronized void draw(final Graphics2D g, final Vector2D canvasDimension) {
+		if(currentState != null) this.currentState.draw(g, canvasDimension);
 	}
 	
 	public void exit() {
@@ -118,7 +118,7 @@ public final class GameManager {
 		openScene(MainMenuScene.class);
 	}
 
-	public Dimension getCanvasSize() {
+	public Vector2D getCanvasSize() {
 		return gamePanel.getCanvasSize();
 	}
 }

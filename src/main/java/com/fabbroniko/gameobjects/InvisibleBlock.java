@@ -5,7 +5,7 @@ import com.fabbroniko.scene.GameScene;
 
 public class InvisibleBlock extends AbstractGameObject {
 
-	private static final Dimension spriteDimension = new Dimension(120, 120);
+	private static final Vector2D spriteDimension = new Vector2D(120, 120);
 	private static final String spritePath = "/sprites/invisible-block.png";
 
 	public static final String INVISIBLE_BLOCK_VISIBLE_ANIMATION_NAME = "INV_BLK_VISIBLE";
@@ -13,7 +13,7 @@ public class InvisibleBlock extends AbstractGameObject {
 
 	private final Animation visibleAnimation;
 
-	public InvisibleBlock(final TileMap tileMap, final GameScene gameScene, final Position position) {
+	public InvisibleBlock(final TileMap tileMap, final GameScene gameScene, final Vector2D position) {
 		super(tileMap, gameScene, position, spriteDimension);
 
 		setAnimation(Animation.builder()
