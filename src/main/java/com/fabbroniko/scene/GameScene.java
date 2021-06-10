@@ -4,7 +4,7 @@ import com.fabbroniko.environment.*;
 import com.fabbroniko.gameobjects.AbstractGameObject;
 import com.fabbroniko.gameobjects.Block;
 import com.fabbroniko.gameobjects.Castle;
-import com.fabbroniko.gameobjects.Enemy;
+import com.fabbroniko.gameobjects.Ghost;
 import com.fabbroniko.gameobjects.FallingBlock;
 import com.fabbroniko.gameobjects.InvisibleBlock;
 import com.fabbroniko.gameobjects.Player;
@@ -33,6 +33,7 @@ public final class GameScene extends AbstractScene implements KeyListener {
     private TileMap tileMap;
     private List<AbstractGameObject> gameObjects;
     private CollisionManager collisionManager;
+    private Player player;
 
     public GameScene(final GameManager gameManager, final Level level) {
         super(gameManager);
@@ -48,7 +49,7 @@ public final class GameScene extends AbstractScene implements KeyListener {
 
         this.collisionManager = new CollisionManager(tileMap, gameObjects);
 
-        final Player player = (Player) this.addNewObject(Player.class, level.getStartPosition().clone());
+        player = (Player) this.addNewObject(Player.class, level.getStartPosition().clone());
 
         gameManager.addKeyListener(player);
         gameManager.addKeyListener(this);
@@ -70,7 +71,7 @@ public final class GameScene extends AbstractScene implements KeyListener {
             case "falling-platform":
                 return FallingBlock.class;
             case "ghost-enemy":
-                return Enemy.class;
+                return Ghost.class;
             case "breakable-block":
                 return Block.class;
             default:
@@ -105,6 +106,10 @@ public final class GameScene extends AbstractScene implements KeyListener {
 
     @Override
     public void update() {
+        if (player.isDead()) {
+            gameManager.openScene(LostScene.class);
+        }
+
         final List<AbstractGameObject> deadGameObjects = new ArrayList<>();
 
         for(final AbstractGameObject go : gameObjects) {

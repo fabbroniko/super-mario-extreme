@@ -3,96 +3,38 @@ package com.fabbroniko.gameobjects;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.fabbroniko.environment.*;
 import com.fabbroniko.main.Drawable;
 import com.fabbroniko.main.Time;
 import com.fabbroniko.scene.GameScene;
 
-/**
- * Abstract Class representing a generic GameObject.
- * @author com.fabbroniko
- */
 public abstract class AbstractGameObject implements Drawable {
 
 	protected Vector2D currentPosition;
-
 	protected Vector2D spriteDimension;
-	/**
-	 * Map's Position.
-	 */
 	protected Vector2D mapPosition;
-	
-	/**
-	 * Object's current animation.
-	 */
 	protected Animation currentAnimation;
-
 	protected List<Animation> registeredAnimations;
-	
-	/**
-	 * TileMap on which it has to be placed.
-	 */
 	protected TileMap tileMap;
-	
-	/**
-	 * Level on which it has to be placed.
-	 */
 	protected GameScene gameScene;
-	
-	/**
-	 * Represents whether it's jumping or not.
-	 */
-	protected boolean jumping;
-	
-	/**
-	 * Represents whether it's falling or not.
-	 */
-	protected boolean falling;
-	
-	/**
-	 * Represents it's going in the left direction.
-	 */
-	protected boolean left; 
-	
-	/**
-	 * Represents it's going in the right direction.
-	 */
-	protected boolean right;
-
-	protected boolean facingRight;
-	
-	/**
-	 * Represents whether it hit the ground or not.
-	 */
-	protected boolean groundHit;
-	
-	/**
-	 * Represents the current jumping height.
-	 */
 	protected int currentJump;
-	
-	/**
-	 * Represents whether it's dead or not.
-	 */
-	protected boolean death;
-
 	protected int jumpSpeed = -1000; // Pixels per second
 	protected int gravitySpeed = 600; // Pixels per second
 	protected int walkingSpeed = 600; // Pixels per second
 	protected int maxJump = 400; // Pixels
-	
-	// Collision rectangle
-	/**
-	 * Movement's offset.
-	 */
 	protected Vector2D offset;
+
+	protected final Set<GameObjectProperty> properties;
 
 	protected AbstractGameObject(final TileMap tileMapP, final GameScene gameScene, final Vector2D spawnPosition, final Vector2D spriteDimension) {
 		this.tileMap = tileMapP;
 		this.gameScene = gameScene;
-		this.death = false;
+		properties = Collections.synchronizedSet(new HashSet<>());
 		
 		this.currentPosition = spawnPosition.clone();
 		this.spriteDimension = spriteDimension;
@@ -108,11 +50,11 @@ public abstract class AbstractGameObject implements Drawable {
 	 */
 	public void handleMapCollisions(final CollisionDirection direction) {
 		if (direction.equals(CollisionDirection.BOTTOM_COLLISION)) {
-			groundHit = true;
+			properties.add(GameObjectProperty.GROUND_HIT);
 			offset.setY(0);
 		}
 		if (direction.equals(CollisionDirection.TOP_COLLISION)) {
-			jumping = false;
+			properties.remove(GameObjectProperty.JUMP);
 			offset.setY(0);
 		}
 		if (direction.equals(CollisionDirection.LEFT_COLLISION) || direction.equals(CollisionDirection.RIGHT_COLLISION)) {
@@ -142,11 +84,12 @@ public abstract class AbstractGameObject implements Drawable {
 	 * @return Return true if it's dead, false otherwise.
 	 */
 	public boolean isDead() {
-		return death;
+		return properties.contains(GameObjectProperty.DEAD);
 	}
 	
 	public void notifyDeath() {
-		this.death = true;
+		properties.clear();
+		properties.add(GameObjectProperty.DEAD);
 	}
 
 	public Vector2D getPosition() {
@@ -164,17 +107,17 @@ public abstract class AbstractGameObject implements Drawable {
 
 		mapPosition.setVector2D(tileMap.getPosition());
 		
-		if (jumping) {
+		if (properties.contains(GameObjectProperty.JUMP)) {
 			yOffset += (jumpSpeed * Time.deltaTime());
 			currentJump += yOffset;
 			if (currentJump < -maxJump) {
-				jumping = false;
+				properties.remove(GameObjectProperty.JUMP);
 			}
 		}
 		
-		yOffset += falling && !jumping ? (gravitySpeed * Time.deltaTime()) : 0;
-		xOffset += left ? (-walkingSpeed * Time.deltaTime()) : 0;
-		xOffset += right ? (walkingSpeed * Time.deltaTime()) : 0;
+		yOffset += properties.contains(GameObjectProperty.FALLING) && !properties.contains(GameObjectProperty.JUMP) ? (gravitySpeed * Time.deltaTime()) : 0;
+		xOffset += properties.contains(GameObjectProperty.MOVEMENT_LEFT) ? (-walkingSpeed * Time.deltaTime()) : 0;
+		xOffset += properties.contains(GameObjectProperty.MOVEMENT_RIGHT) ? (walkingSpeed * Time.deltaTime()) : 0;
 		
 		if (xOffset != 0 || yOffset != 0) {
 			offset.setX(xOffset);
@@ -186,7 +129,7 @@ public abstract class AbstractGameObject implements Drawable {
 	
 	@Override
 	public BufferedImage getDrawableImage() {
-		if(facingRight) {
+		if(properties.contains(GameObjectProperty.FACING_RIGHT)) {
 			return currentAnimation.getImage();
 		} else {
 			return currentAnimation.getMirroredImage();

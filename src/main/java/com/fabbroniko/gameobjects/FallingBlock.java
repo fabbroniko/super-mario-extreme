@@ -27,7 +27,7 @@ public class FallingBlock extends AbstractGameObject {
 		super.handleObjectCollisions(direction, obj);
 		
 		if (obj instanceof Player && direction.equals(CollisionDirection.TOP_COLLISION)) {
-			falling = true;
+			properties.add(GameObjectProperty.FALLING);
 		}
 	}
 }

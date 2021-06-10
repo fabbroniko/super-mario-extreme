@@ -52,6 +52,6 @@ public class Block extends AbstractGameObject implements AnimationListener {
 
 	@Override
 	public void animationFinished() {
-		death = true;
+		notifyDeath();
 	}
 }

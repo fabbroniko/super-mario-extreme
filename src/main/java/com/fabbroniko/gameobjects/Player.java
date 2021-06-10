@@ -6,7 +6,6 @@ import java.awt.event.KeyListener;
 import com.fabbroniko.environment.*;
 import com.fabbroniko.main.GameManager;
 import com.fabbroniko.scene.GameScene;
-import com.fabbroniko.scene.LostScene;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -35,7 +34,7 @@ public class Player extends AbstractGameObject implements KeyListener {
 
 	public Player(final TileMap tileMap, final GameScene gameScene, final Vector2D position) {
 		super(tileMap, gameScene, position, spriteDimension);
-		falling = true;
+		properties.add(GameObjectProperty.FALLING);
 		animationJump = true;
 		this.gameScene = gameScene;
 		this.baseWindowSize = GameManager.getInstance().getCanvasSize();
@@ -79,9 +78,6 @@ public class Player extends AbstractGameObject implements KeyListener {
 	public void update() {
 		super.update();
 		tileMap.setPosition(currentPosition.getRoundedX() - (baseWindowSize.getRoundedX() / 2), currentPosition.getRoundedY() - (baseWindowSize.getRoundedY() / 2));
-		if (death) {
-			GameManager.getInstance().openScene(LostScene.class);
-		}
 
 		if (animationJump) {
 			setAnimation(jumpAnimation);
@@ -107,18 +103,18 @@ public class Player extends AbstractGameObject implements KeyListener {
 			super.handleObjectCollisions(direction, obj);
 		}
 		
-		if (obj instanceof Enemy) {
+		if (obj instanceof Ghost) {
 			if (direction.equals(CollisionDirection.BOTTOM_COLLISION)) {
-				jumping = true;
+				properties.add(GameObjectProperty.JUMP);
 			} else {
-				death = true;
+				notifyDeath();
 			}
 		} else if (obj instanceof Castle) {
 			this.gameScene.levelFinished();
 		} else {
 			if (direction.equals(CollisionDirection.BOTTOM_COLLISION)) {
 				animationJump = false;
-				groundHit = true;
+				properties.add(GameObjectProperty.GROUND_HIT);
 			}
 		}
 	}
@@ -126,18 +122,18 @@ public class Player extends AbstractGameObject implements KeyListener {
 	@Override
 	public void keyPressed(final KeyEvent e) {
 		if (e.getKeyCode() == GameManager.getInstance().getSettings().getLeftMovementKeyCode()) {
-			left = true;
+			properties.add(GameObjectProperty.MOVEMENT_LEFT);
 			animationMove = true;
-			facingRight = false;
+			properties.remove(GameObjectProperty.FACING_RIGHT);
 		}
 		if (e.getKeyCode() == GameManager.getInstance().getSettings().getRightMovementKeyCode()) {
-			right = true;
+			properties.add(GameObjectProperty.MOVEMENT_RIGHT);
 			animationMove = true;
-			facingRight = true;
+			properties.add(GameObjectProperty.FACING_RIGHT);
 		}
-		if (e.getKeyCode() == GameManager.getInstance().getSettings().getJumpKeyCode() && !jumping && groundHit) {
-			jumping = true;
-			groundHit = false;
+		if (e.getKeyCode() == GameManager.getInstance().getSettings().getJumpKeyCode() && !properties.contains(GameObjectProperty.JUMP) && properties.contains(GameObjectProperty.GROUND_HIT)) {
+			properties.add(GameObjectProperty.JUMP);
+			properties.remove(GameObjectProperty.GROUND_HIT);
 			currentJump = 0;
 			animationJump = true;
 			gameScene.getAudioManager().playEffect("jump");
@@ -147,23 +143,23 @@ public class Player extends AbstractGameObject implements KeyListener {
 	@Override
 	public void keyReleased(final KeyEvent e) {
 		if (e.getKeyCode() == GameManager.getInstance().getSettings().getLeftMovementKeyCode()) {
-			left = false;
-			if(!right) {
+			properties.remove(GameObjectProperty.MOVEMENT_LEFT);
+			if(!properties.contains(GameObjectProperty.MOVEMENT_RIGHT)) {
 				animationMove = false;
 			} else {
-				facingRight = true;
+				properties.add(GameObjectProperty.FACING_RIGHT);
 			}
 		}
 		if (e.getKeyCode() == GameManager.getInstance().getSettings().getRightMovementKeyCode()) {
-			right = false;
-			if(!left) {
+			properties.remove(GameObjectProperty.MOVEMENT_RIGHT);
+			if(!properties.contains(GameObjectProperty.MOVEMENT_LEFT)) {
 				animationMove = false;
 			} else {
-				facingRight = false;
+				properties.remove(GameObjectProperty.FACING_RIGHT);
 			}
 		}
 		if (e.getKeyCode() == GameManager.getInstance().getSettings().getJumpKeyCode()) {
-			jumping = false;
+			properties.remove(GameObjectProperty.JUMP);
 		}
 	}
 
