@@ -25,21 +25,12 @@ public class Vector2D implements Cloneable {
 	}
 
 	/**
-	 * Sets new coordinates for this instance using another instance's values.
-	 * @param model The instance of this class to use to copy the coordinates.
+	 * Performs a vector addition between this instance and the offset instance passed as parameter
+	 * @param offset The offset vector to add to this vector instance.
 	 */
-	public void setVector2D(final Vector2D model) {
-		this.setVector2D(model.getX(), model.getY());
-	}
-
-	/**
-	 * Sets new coordinates for this instance
-	 * @param x The X component of the new coordinate.
-	 * @param y The Y component of the new coordinate.
-	 */
-	public void setVector2D(final double x, final double y) {
-		this.x = x;
-		this.y = y;
+	public void add(final Vector2D offset) {
+		this.x += offset.getX();
+		this.y += offset.getY();
 	}
 
 	/**

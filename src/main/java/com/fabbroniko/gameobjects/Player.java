@@ -67,10 +67,6 @@ public class Player extends AbstractGameObject implements KeyListener {
 				.mirror()
 				.build();
 
-		registeredAnimations.add(walkAnimation);
-		registeredAnimations.add(jumpAnimation);
-		registeredAnimations.add(idleAnimation);
-
 		setAnimation(jumpAnimation);
 	}
 	

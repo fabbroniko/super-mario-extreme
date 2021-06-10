@@ -2,10 +2,8 @@ package com.fabbroniko.gameobjects;
 
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import com.fabbroniko.environment.*;
@@ -17,15 +15,13 @@ public abstract class AbstractGameObject implements Drawable {
 
 	protected Vector2D currentPosition;
 	protected Vector2D spriteDimension;
-	protected Vector2D mapPosition;
 	protected Animation currentAnimation;
-	protected List<Animation> registeredAnimations;
 	protected TileMap tileMap;
 	protected GameScene gameScene;
 	protected int currentJump;
-	protected int jumpSpeed = -1000; // Pixels per second
-	protected int gravitySpeed = 600; // Pixels per second
-	protected int walkingSpeed = 600; // Pixels per second
+	protected int jumpSpeed = -1000; // Pixels per second (based on the canvas size, not screen size)
+	protected int gravitySpeed = 600; // Pixels per second (based on the canvas size, not screen size)
+	protected int walkingSpeed = 600; // Pixels per second (based on the canvas size, not screen size)
 	protected int maxJump = 400; // Pixels
 	protected Vector2D offset;
 
@@ -38,10 +34,8 @@ public abstract class AbstractGameObject implements Drawable {
 		
 		this.currentPosition = spawnPosition.clone();
 		this.spriteDimension = spriteDimension;
-		this.registeredAnimations = new ArrayList<>();
 
 		offset = new Vector2D();
-		mapPosition = new Vector2D();
 	}
 
 	/**
@@ -104,8 +98,6 @@ public abstract class AbstractGameObject implements Drawable {
 	public void update() {
 		double xOffset = 0;
 		double yOffset = 0;
-
-		mapPosition.setVector2D(tileMap.getPosition());
 		
 		if (properties.contains(GameObjectProperty.JUMP)) {
 			yOffset += (jumpSpeed * Time.deltaTime());
@@ -123,7 +115,7 @@ public abstract class AbstractGameObject implements Drawable {
 			offset.setX(xOffset);
 			offset.setY(yOffset);
 			gameScene.checkForCollisions(this, offset);
-			currentPosition.setVector2D(currentPosition.getX() + offset.getX(), currentPosition.getY() + offset.getY());
+			currentPosition.add(offset);
 		}
 	}
 	
@@ -138,6 +130,7 @@ public abstract class AbstractGameObject implements Drawable {
 
 	@Override
 	public Vector2D getDrawingPosition() {
+		final Vector2D mapPosition = tileMap.getPosition();
 		return new Vector2D(currentPosition.getX() - mapPosition.getX(), currentPosition.getY() - mapPosition.getY());
 	}
 

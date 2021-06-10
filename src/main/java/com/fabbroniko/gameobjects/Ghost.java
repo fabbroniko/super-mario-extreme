@@ -23,6 +23,13 @@ public class Ghost extends AbstractGameObject implements AnimationListener {
 	// Reference to the death animation when the player hits the ghost from the top. Once the animation is completed the GO is killed.
 	private final Animation deadAnimation;
 
+	/**
+	 * Creates a new instance of a ghost that is going to spawn at the desired location.
+	 *
+	 * @param tileMap A reference to the map where this ghost is gonna be placed on.
+	 * @param gameScene A reference to the game scene used to render the level
+	 * @param position Spawn position - where the ghost is spawn relative to the map.
+	 */
 	public Ghost(final TileMap tileMap, final GameScene gameScene, final Vector2D position) {
 		super(tileMap, gameScene, position, spriteDimension);
 
