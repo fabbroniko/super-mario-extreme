@@ -39,7 +39,8 @@ public class Block extends AbstractGameObject implements AnimationListener {
 				.name(BLOCK_IDLE_ANIMATION_NAME)
 				.build());
 	}
-	
+
+	/*
 	@Override
 	public void handleObjectCollisions(final CollisionDirection direction, final AbstractGameObject obj) {
 		super.handleObjectCollisions(direction, obj);
@@ -50,8 +51,11 @@ public class Block extends AbstractGameObject implements AnimationListener {
 		}
 	}
 
+	 */
+
 	@Override
 	public void animationFinished() {
-		death = true;
+		currentStates.clear();
+		currentStates.add(State.DEAD);
 	}
 }

@@ -21,13 +21,15 @@ public class FallingBlock extends AbstractGameObject {
 				.name(FALLING_BLOCK_IDLE_ANIMATION_NAME)
 				.build());
 	}
-	
+
+	/*
 	@Override
 	public void handleObjectCollisions(final CollisionDirection direction, final AbstractGameObject obj) {
 		super.handleObjectCollisions(direction, obj);
-		
+
 		if (obj instanceof Player && direction.equals(CollisionDirection.TOP_COLLISION)) {
 			falling = true;
 		}
 	}
+	 */
 }

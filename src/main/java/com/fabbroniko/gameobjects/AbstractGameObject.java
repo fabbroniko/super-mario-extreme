@@ -1,8 +1,8 @@
 package com.fabbroniko.gameobjects;
 
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import com.fabbroniko.environment.*;
@@ -10,131 +10,40 @@ import com.fabbroniko.main.Drawable;
 import com.fabbroniko.main.Time;
 import com.fabbroniko.scene.GameScene;
 
-/**
- * Abstract Class representing a generic GameObject.
- * @author com.fabbroniko
- */
 public abstract class AbstractGameObject implements Drawable {
 
 	protected Vector2D currentPosition;
-
 	protected Vector2D spriteDimension;
-	/**
-	 * Map's Position.
-	 */
 	protected Vector2D mapPosition;
-	
-	/**
-	 * Object's current animation.
-	 */
 	protected Animation currentAnimation;
-
 	protected List<Animation> registeredAnimations;
-	
-	/**
-	 * TileMap on which it has to be placed.
-	 */
 	protected TileMap tileMap;
-	
-	/**
-	 * Level on which it has to be placed.
-	 */
-	protected GameScene gameScene;
-	
-	/**
-	 * Represents whether it's jumping or not.
-	 */
-	protected boolean jumping;
-	
-	/**
-	 * Represents whether it's falling or not.
-	 */
-	protected boolean falling;
-	
-	/**
-	 * Represents it's going in the left direction.
-	 */
-	protected boolean left; 
-	
-	/**
-	 * Represents it's going in the right direction.
-	 */
-	protected boolean right;
+	protected final GameScene gameScene;
+	protected HashSet<State> currentStates;
 
-	protected boolean facingRight;
-	
-	/**
-	 * Represents whether it hit the ground or not.
-	 */
-	protected boolean groundHit;
-	
-	/**
-	 * Represents the current jumping height.
-	 */
-	protected int currentJump;
-	
-	/**
-	 * Represents whether it's dead or not.
-	 */
-	protected boolean death;
+	private final Vector2D cachedMapSize;
 
-	protected int jumpSpeed = -1000; // Pixels per second
+	protected int jumpSpeed = 1000; // Pixels per second
 	protected int gravitySpeed = 600; // Pixels per second
 	protected int walkingSpeed = 600; // Pixels per second
-	protected int maxJump = 400; // Pixels
-	
-	// Collision rectangle
-	/**
-	 * Movement's offset.
-	 */
-	protected Vector2D offset;
+	//protected int maxJump = 400; // Pixels
 
 	protected AbstractGameObject(final TileMap tileMapP, final GameScene gameScene, final Vector2D spawnPosition, final Vector2D spriteDimension) {
 		this.tileMap = tileMapP;
 		this.gameScene = gameScene;
-		this.death = false;
 		
 		this.currentPosition = spawnPosition.clone();
 		this.spriteDimension = spriteDimension;
 		this.registeredAnimations = new ArrayList<>();
+		this.currentStates = new HashSet<>();
 
-		offset = new Vector2D();
 		mapPosition = new Vector2D();
-	}
-
-	/**
-	 * Handles collisions with the map.
-	 * @param direction Collision's direction.
-	 */
-	public void handleMapCollisions(final CollisionDirection direction) {
-		if (direction.equals(CollisionDirection.BOTTOM_COLLISION)) {
-			groundHit = true;
-			offset.setY(0);
-		}
-		if (direction.equals(CollisionDirection.TOP_COLLISION)) {
-			jumping = false;
-			offset.setY(0);
-		}
-		if (direction.equals(CollisionDirection.LEFT_COLLISION) || direction.equals(CollisionDirection.RIGHT_COLLISION)) {
-			offset.setX(0);
-		}
-	}
-	
-	/**
-	 * Handles collisions with other objects.
-	 * @param direction Collision's Direction.
-	 */
-	public void handleObjectCollisions(final CollisionDirection direction, final AbstractGameObject obj) {
-		handleMapCollisions(direction);
+		cachedMapSize = tileMapP.getMapSize();
 	}
 	
 	protected void setAnimation(final Animation animation) {
 		animation.reset();
 		this.currentAnimation = animation;
-	}
-
-	public final Rectangle getRectangle() {
-		return new Rectangle(currentPosition.getRoundedX(), currentPosition.getRoundedY(), spriteDimension.getRoundedX(), spriteDimension.getRoundedY());
 	}
 	
 	/**
@@ -142,11 +51,7 @@ public abstract class AbstractGameObject implements Drawable {
 	 * @return Return true if it's dead, false otherwise.
 	 */
 	public boolean isDead() {
-		return death;
-	}
-	
-	public void notifyDeath() {
-		this.death = true;
+		return currentStates.contains(State.DEAD);
 	}
 
 	public Vector2D getPosition() {
@@ -159,38 +64,66 @@ public abstract class AbstractGameObject implements Drawable {
 
 	@Override
 	public void update() {
-		double xOffset = 0;
-		double yOffset = 0;
+		Vector2D offset = new Vector2D();
 
 		mapPosition.setVector2D(tileMap.getPosition());
 		
-		if (jumping) {
-			yOffset += (jumpSpeed * Time.deltaTime());
-			currentJump += yOffset;
-			if (currentJump < -maxJump) {
-				jumping = false;
-			}
-		}
-		
-		yOffset += falling && !jumping ? (gravitySpeed * Time.deltaTime()) : 0;
-		xOffset += left ? (-walkingSpeed * Time.deltaTime()) : 0;
-		xOffset += right ? (walkingSpeed * Time.deltaTime()) : 0;
-		
-		if (xOffset != 0 || yOffset != 0) {
-			offset.setX(xOffset);
-			offset.setY(yOffset);
-			gameScene.checkForCollisions(this, offset);
+		if(currentStates.contains(State.MOVING_UP))
+			offset.sum(0, -(jumpSpeed * Time.deltaTime()));
+
+		if(currentStates.contains(State.MOVING_DOWN))
+			offset.sum(0, gravitySpeed * Time.deltaTime());
+
+		if(currentStates.contains(State.MOVING_LEFT))
+			offset.sum(-walkingSpeed * Time.deltaTime(), 0);
+
+		if(currentStates.contains(State.MOVING_RIGHT))
+			offset.sum(walkingSpeed * Time.deltaTime(), 0);
+
+		if((offset.getX() < 0) && currentStates.contains(State.FACING_RIGHT))
+			currentStates.remove(State.FACING_RIGHT);
+		else if (offset.getX() > 0)
+			currentStates.add(State.FACING_RIGHT);
+
+		if (offset.getX() != 0 || offset.getY() != 0) {
+			final CollisionManager.CollisionResult collisionResult = gameScene.getCollisionManager().detectCollisions(this, offset);
+			offset = collisionResult.getOffset();
 			currentPosition.setVector2D(currentPosition.getX() + offset.getX(), currentPosition.getY() + offset.getY());
+
+			// Check if the new offset positions the game object outside the boundaries of the map.
+			// If it does, kill the game object.
+			if(((currentPosition.getX() + spriteDimension.getRoundedX() - 1) < 0) ||
+					((currentPosition.getY() + spriteDimension.getRoundedY() - 1) < 0) ||
+					(currentPosition.getX() >= cachedMapSize.getRoundedX()) ||
+					(currentPosition.getY() >= cachedMapSize.getRoundedY())
+			) {
+				currentStates.clear();
+				currentStates.add(State.DEAD);
+			}
 		}
 	}
 	
 	@Override
 	public BufferedImage getDrawableImage() {
-		if(facingRight) {
-			return currentAnimation.getImage();
+		BufferedImage imageToDraw;
+		if(currentStates.contains(State.FACING_RIGHT)) {
+			imageToDraw = currentAnimation.getImage();
 		} else {
-			return currentAnimation.getMirroredImage();
+			imageToDraw = currentAnimation.getMirroredImage();
 		}
+
+		/*
+		// Draw hit box
+		final Graphics imageGraphics = imageToDraw.getGraphics();
+		imageGraphics.drawLine(0, 0, spriteDimension.getRoundedX() -1 ,0);
+		imageGraphics.drawLine(spriteDimension.getRoundedX() - 1, 0, spriteDimension.getRoundedX() - 1, spriteDimension.getRoundedY() - 1);
+		imageGraphics.drawLine(spriteDimension.getRoundedX() - 1, spriteDimension.getRoundedY() - 1, 0,spriteDimension.getRoundedY() - 1);
+		imageGraphics.drawLine(0, spriteDimension.getRoundedY() - 1, 0,0);
+*/
+
+
+
+		return imageToDraw;
 	}
 
 	@Override
@@ -200,5 +133,20 @@ public abstract class AbstractGameObject implements Drawable {
 
 	public Vector2D getSpriteDimension() {
 		return spriteDimension;
+	}
+
+	public enum State {
+
+		FACING_RIGHT,
+
+		MOVING_LEFT,
+
+		MOVING_RIGHT,
+
+		MOVING_UP,
+
+		MOVING_DOWN,
+
+		DEAD
 	}
 }

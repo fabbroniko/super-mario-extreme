@@ -14,7 +14,7 @@ public class Enemy extends AbstractGameObject implements AnimationListener {
 
 	public Enemy(final TileMap tileMap, final GameScene gameScene, final Vector2D position) {
 		super(tileMap, gameScene, position, spriteDimension);
-		falling = true;
+		//falling = true;
 		walkingSpeed = 300;
 
 		deadAnimation = Animation.builder()
@@ -38,7 +38,8 @@ public class Enemy extends AbstractGameObject implements AnimationListener {
 				.mirror()
 				.build());
 	}
-	
+
+	/*
 	@Override
 	public void handleMapCollisions(final CollisionDirection direction) {
 		super.handleMapCollisions(direction);
@@ -71,8 +72,11 @@ public class Enemy extends AbstractGameObject implements AnimationListener {
 		}
 	}
 
+	 */
+
 	@Override
 	public void animationFinished() {
-		death = true;
+		currentStates.clear();
+		currentStates.add(State.DEAD);
 	}
 }

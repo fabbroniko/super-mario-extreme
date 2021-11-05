@@ -5,10 +5,6 @@
     <game-object x="240" y="1000">breakable-block</game-object>
     <game-object x="360" y="1000">breakable-block</game-object>
 
-    <game-object x="5260" y="1080">ghost-enemy</game-object>
-    <game-object x="8000" y="1000">ghost-enemy</game-object>
-    <game-object x="9400" y="1000">ghost-enemy</game-object>
-
     <game-object x="1080" y="1080">falling-platform</game-object>
     <game-object x="1560" y="760">falling-platform</game-object>
     <game-object x="1920" y="600">falling-platform</game-object>
@@ -45,6 +41,11 @@
     <tile id="1" vertical-index="10" horizontal-index="0" />
     <tile id="5" vertical-index="11" horizontal-index="0" />
     <tile id="8" vertical-index="9" horizontal-index="1" />
+
+
+    <tile id="0" vertical-index="6" horizontal-index="2" />
+    <tile id="0" vertical-index="6" horizontal-index="4" />
+
 
     <tile id="0" vertical-index="11" horizontal-index="1" />
     <tile id="0" vertical-index="11" horizontal-index="2" />

@@ -24,11 +24,13 @@ public class Settings {
     private int leftMovementKeyCode;
     private int jumpKeyCode;
     private int fpsCap;
+    private boolean flightMode;
 
     public Settings() {
         this.musicActive = true;
         this.effectsAudioActive = true;
         this.showFps = false;
+        this.flightMode = false;
         this.rightMovementKeyCode = KeyEvent.VK_RIGHT;
         this.leftMovementKeyCode = KeyEvent.VK_LEFT;
         this.jumpKeyCode = KeyEvent.VK_SPACE;

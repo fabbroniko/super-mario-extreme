@@ -32,7 +32,8 @@ public class InvisibleBlock extends AbstractGameObject {
 				.name(INVISIBLE_BLOCK_VISIBLE_ANIMATION_NAME)
 				.build();
 	}
-	
+
+	/*
 	@Override
 	public void handleObjectCollisions(final CollisionDirection direction, final AbstractGameObject obj) 
 	{
@@ -41,4 +42,6 @@ public class InvisibleBlock extends AbstractGameObject {
 			this.gameScene.getAudioManager().playEffect("hit");
 		}
 	}
+
+	 */
 }

@@ -4,10 +4,11 @@ import com.fabbroniko.main.GameManager;
 import com.fabbroniko.main.Drawable;
 import com.fabbroniko.resource.ResourceManager;
 import com.fabbroniko.resource.domain.Map;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,20 +18,20 @@ public class TileMap implements Drawable {
 
 	private static final int NO_TILE = -1;
 	private static final int LAST_SOLID_TILE_INDEX = 6;
+	private static final Vector2D TILE_SIZE = new Vector2D(120, 120);
 
 	private final List<Tile> tiles = new ArrayList<>();
 	private final Vector2D mapPosition = new Vector2D();
+	private final Vector2D mapSize = new Vector2D();
 
 	private int[][] map;
 	private Vector2D minLimits;
 	private Vector2D maxLimits;
-	private final Vector2D tileSize;
 	private final Vector2D canvasSize;
 
 	private BufferedImage cachedTileMap;
 
 	public TileMap(final ResourceManager resourceManager, final Map map, final Vector2D canvasSize) {
-		this.tileSize = new Vector2D(120, 120);
 		this.canvasSize = canvasSize;
 
 		loadTiles(resourceManager.getTileMapSet());
@@ -38,12 +39,12 @@ public class TileMap implements Drawable {
 	}
 
 	private void loadTiles(final BufferedImage tileSet) {
-		for (int currentX = 0; currentX < tileSet.getWidth(); currentX += tileSize.getRoundedX()) {
+		for (int currentX = 0; currentX < tileSet.getWidth(); currentX += TILE_SIZE.getRoundedX()) {
 			TileType tt = TileType.BLOCKING;
-			if(currentX/tileSize.getRoundedX() > LAST_SOLID_TILE_INDEX)
+			if(currentX / TILE_SIZE.getRoundedX() > LAST_SOLID_TILE_INDEX)
 				tt = TileType.NON_BLOCKING;
 
-			tiles.add(new Tile(tileSet.getSubimage(currentX, 0, tileSize.getRoundedX(), tileSize.getRoundedY()), tt));
+			tiles.add(new Tile(tileSet.getSubimage(currentX, 0, TILE_SIZE.getRoundedX(), TILE_SIZE.getRoundedY()), tt));
 		}
 	}
 
@@ -52,7 +53,7 @@ public class TileMap implements Drawable {
 		final int nCols = map.getHorizontalBlocks();
 
 		this.map = new int[nRows][nCols];
-		Vector2D mapSize = new Vector2D(nCols * tileSize.getRoundedX(), nRows * tileSize.getRoundedY());
+		mapSize.setVector2D(nCols * TILE_SIZE.getRoundedX(), nRows * TILE_SIZE.getRoundedY());
 		minLimits = new Vector2D();
 		maxLimits = new Vector2D(mapSize.getRoundedX() - canvasSize.getRoundedX(), mapSize.getRoundedY() - canvasSize.getRoundedY());
 
@@ -65,49 +66,6 @@ public class TileMap implements Drawable {
 		for(final com.fabbroniko.resource.domain.Tile t : map.getTiles()) {
 			this.map[t.getVerticalIndex()][t.getHorizontalIndex()] = t.getId();
 		}
-	}
-
-	public boolean checkForMapCollision(final Rectangle rect) throws ArrayIndexOutOfBoundsException{
-		double startingX = rect.getLocation().getX();
-		double startingY = rect.getLocation().getY();
-		int width = rect.width;
-		int height = rect.height;
-
-		boolean outOfBounds = true;
-		// Checking the top-left corner
-		TileType tileType = getTileType((int)startingX, (int)startingY);
-		if(TileType.BLOCKING.equals(tileType)) {
-			return true;
-		} else if (tileType != null) {
-			outOfBounds = false;
-		}
-		
-		// Checking the top-right corner
-		tileType = getTileType((int)startingX + width, (int)startingY);
-		if(TileType.BLOCKING.equals(tileType)) {
-			return true;
-		} else if (tileType != null) {
-			outOfBounds = false;
-		}
-		
-		// Checking the bottom-left corner
-		tileType = getTileType((int)startingX, (int)startingY + height);
-		if(TileType.BLOCKING.equals(tileType)) {
-			return true;
-		} else if (tileType != null) {
-			outOfBounds = false;
-		}
-		
-		// Checking the bottom-right corner
-		tileType = getTileType((int)startingX + width, (int)startingY + height);
-		if (tileType != null) {
-			outOfBounds = false;
-		}
-
-		if(outOfBounds)
-			throw new ArrayIndexOutOfBoundsException();
-
-		return TileType.BLOCKING.equals(tileType);
 	}
 
 	public void setPosition(final int x, final int y) {
@@ -139,6 +97,10 @@ public class TileMap implements Drawable {
 		return this.mapPosition.clone();
 	}
 
+	public Vector2D getMapSize() {
+		return this.mapSize.clone();
+	}
+
 	/**
 	 * Retrieves the {@link TileType TileType} of the tile at the specified coordinates.
 	 * These coordinates can be any point in the map and it *doesn't have to* be rounded to the closest tile origin point
@@ -150,24 +112,29 @@ public class TileMap implements Drawable {
 	 * @param yPoint The Y coordinate element of the point we want to check.
 	 * @return Returns the tile type at the specified point or null if out of the map limits.
 	 */
-	public TileType getTileType(final int xPoint, final int yPoint) {
+	public TileInfo getTileType(final int xPoint, final int yPoint) {
+		if(xPoint < 0 || yPoint < 0)
+			return null;
+
 		/* Calculate the index of the tile that includes the specified coordinate
 		 * For example if the tile size is 30x30px and we want to check a point with coordinates 35,61 we would get
 		 * 35/30 that rounded is 1 and 61/30 that rounded becomes 2, therefore we want to retried the tile at
 		 * map[2, 1]
 		 */
-		final int yIndex = yPoint / tileSize.getRoundedY();
-		final int xIndex = xPoint / tileSize.getRoundedX();
+		final int yIndex = yPoint / TILE_SIZE.getRoundedY();
+		final int xIndex = xPoint / TILE_SIZE.getRoundedX();
 
 		if(yIndex >= map.length || xIndex >= map[yIndex].length) {
 			return null;
 		}
 
-		final int tileId = map[yIndex][xIndex];
-		if(tileId == NO_TILE)
-			return TileType.NON_BLOCKING;
+		TileType tileType = TileType.NON_BLOCKING;
 
-		return tiles.get(tileId).getType();
+		final int tileId = map[yIndex][xIndex];
+		if(tileId != NO_TILE)
+			tileType = tiles.get(tileId).getType();
+
+		return new TileInfo(tileType, new Vector2D(xIndex * TILE_SIZE.getRoundedX(), yIndex * TILE_SIZE.getRoundedY()), TileMap.TILE_SIZE.clone());
 	}
 
 	@Override
@@ -184,12 +151,12 @@ public class TileMap implements Drawable {
 		final BufferedImage tileMapImage = new BufferedImage(canvasSize.getRoundedX(), canvasSize.getRoundedY(), BufferedImage.TYPE_INT_ARGB);
 		final Graphics2D tileMapGraphics = tileMapImage.createGraphics();
 
-		final int startingXIndex = mapPosition.getRoundedX() / tileSize.getRoundedX();
-		final int startingYIndex = mapPosition.getRoundedY() / tileSize.getRoundedY();
+		final int startingXIndex = mapPosition.getRoundedX() / TILE_SIZE.getRoundedX();
+		final int startingYIndex = mapPosition.getRoundedY() / TILE_SIZE.getRoundedY();
 
 		final Vector2D basePosToDraw = new Vector2D();
-		basePosToDraw.setX(basePosToDraw.getX() - (mapPosition.getX() % tileSize.getRoundedX()));
-		basePosToDraw.setY(basePosToDraw.getY() - (mapPosition.getY() % tileSize.getRoundedY()));
+		basePosToDraw.setX(basePosToDraw.getX() - (mapPosition.getX() % TILE_SIZE.getRoundedX()));
+		basePosToDraw.setY(basePosToDraw.getY() - (mapPosition.getY() % TILE_SIZE.getRoundedY()));
 
 		final Vector2D currentPosToDraw = new Vector2D(basePosToDraw.getX(), basePosToDraw.getY());
 		int currentXIndexToDraw;
@@ -202,10 +169,10 @@ public class TileMap implements Drawable {
 				if (map[currentYIndexToDraw][currentXIndexToDraw] != NO_TILE) {
 					tileMapGraphics.drawImage(tiles.get(map[currentYIndexToDraw][currentXIndexToDraw]).getImage(), currentPosToDraw.getRoundedX(), currentPosToDraw.getRoundedY(), null);
 				}
-				currentPosToDraw.setX(currentPosToDraw.getX() + tileSize.getRoundedX());
+				currentPosToDraw.setX(currentPosToDraw.getX() + TILE_SIZE.getRoundedX());
 				currentXIndexToDraw++;
 			}
-			currentPosToDraw.setY(currentPosToDraw.getY() + tileSize.getRoundedY());
+			currentPosToDraw.setY(currentPosToDraw.getY() + TILE_SIZE.getRoundedY());
 			currentYIndexToDraw++;
 		}
 
@@ -217,5 +184,19 @@ public class TileMap implements Drawable {
 	@Override
 	public Vector2D getDrawingPosition() {
 		return new Vector2D();
+	}
+
+	@AllArgsConstructor
+	@Getter
+	public static class TileInfo {
+
+		private TileType tileType;
+		private Vector2D origin;
+		private Vector2D dimension;
+
+		@Override
+		public String toString() {
+			return origin.toString();
+		}
 	}
 }

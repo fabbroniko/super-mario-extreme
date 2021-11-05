@@ -35,7 +35,6 @@ public class Player extends AbstractGameObject implements KeyListener {
 
 	public Player(final TileMap tileMap, final GameScene gameScene, final Vector2D position) {
 		super(tileMap, gameScene, position, spriteDimension);
-		falling = true;
 		animationJump = true;
 		this.gameScene = gameScene;
 		this.baseWindowSize = GameManager.getInstance().getCanvasSize();
@@ -79,10 +78,11 @@ public class Player extends AbstractGameObject implements KeyListener {
 	public void update() {
 		super.update();
 		tileMap.setPosition(currentPosition.getRoundedX() - (baseWindowSize.getRoundedX() / 2), currentPosition.getRoundedY() - (baseWindowSize.getRoundedY() / 2));
-		if (death) {
+		if (isDead()) {
 			GameManager.getInstance().openScene(LostScene.class);
 		}
 
+		/*
 		if (animationJump) {
 			setAnimation(jumpAnimation);
 		} else if (animationMove && !currentAnimation.getName().equals(MARIO_WALK_ANIMATION_NAME)) {
@@ -90,80 +90,57 @@ public class Player extends AbstractGameObject implements KeyListener {
 		} else if (!animationMove) {
 			setAnimation(idleAnimation);
 		}
-	}
-	
-	@Override
-	public void handleMapCollisions(final CollisionDirection direction) {
-		super.handleMapCollisions(direction);
-		
-		if (direction.equals(CollisionDirection.BOTTOM_COLLISION)) {
-			animationJump = false;
-		}
-	}
-	 
-	@Override
-	public void handleObjectCollisions(final CollisionDirection direction, final AbstractGameObject obj) {
-		if (!(obj instanceof InvisibleBlock) || (obj.currentAnimation.getName().equals(InvisibleBlock.INVISIBLE_BLOCK_VISIBLE_ANIMATION_NAME)) || (direction.equals(CollisionDirection.TOP_COLLISION))) {
-			super.handleObjectCollisions(direction, obj);
-		}
-		
-		if (obj instanceof Enemy) {
-			if (direction.equals(CollisionDirection.BOTTOM_COLLISION)) {
-				jumping = true;
-			} else {
-				death = true;
-			}
-		} else if (obj instanceof Castle) {
-			this.gameScene.levelFinished();
-		} else {
-			if (direction.equals(CollisionDirection.BOTTOM_COLLISION)) {
-				animationJump = false;
-				groundHit = true;
-			}
-		}
+		 */
 	}
 
 	@Override
 	public void keyPressed(final KeyEvent e) {
-		if (e.getKeyCode() == GameManager.getInstance().getSettings().getLeftMovementKeyCode()) {
-			left = true;
+		if(e.getKeyCode() == gameScene.getGameManager().getSettings().getLeftMovementKeyCode()) {
+			currentStates.add(State.MOVING_LEFT);
 			animationMove = true;
-			facingRight = false;
 		}
-		if (e.getKeyCode() == GameManager.getInstance().getSettings().getRightMovementKeyCode()) {
-			right = true;
+
+		if(e.getKeyCode() == gameScene.getGameManager().getSettings().getRightMovementKeyCode()) {
+			currentStates.add(State.MOVING_RIGHT);
 			animationMove = true;
-			facingRight = true;
 		}
-		if (e.getKeyCode() == GameManager.getInstance().getSettings().getJumpKeyCode() && !jumping && groundHit) {
-			jumping = true;
-			groundHit = false;
-			currentJump = 0;
-			animationJump = true;
-			gameScene.getAudioManager().playEffect("jump");
+
+		if(e.getKeyCode() == gameScene.getGameManager().getSettings().getJumpKeyCode()) {
+			if(gameScene.getGameManager().getSettings().isFlightMode()) {
+				currentStates.add(State.MOVING_UP);
+			} else {
+				gameScene.getAudioManager().playEffect("jump");
+			}
+
+			//animationJump = true;
+		}
+
+		if(e.getKeyCode() == KeyEvent.VK_DOWN && gameScene.getGameManager().getSettings().isFlightMode()) {
+			if(!currentStates.contains(State.MOVING_UP) && !currentStates.contains(State.MOVING_DOWN)) {
+				currentStates.add(State.MOVING_DOWN);
+				//animationJump = true;
+			}
 		}
 	}
  
 	@Override
 	public void keyReleased(final KeyEvent e) {
-		if (e.getKeyCode() == GameManager.getInstance().getSettings().getLeftMovementKeyCode()) {
-			left = false;
-			if(!right) {
-				animationMove = false;
-			} else {
-				facingRight = true;
-			}
+		if(e.getKeyCode() == gameScene.getGameManager().getSettings().getLeftMovementKeyCode()) {
+			currentStates.remove(State.MOVING_LEFT);
+			animationMove = false;
 		}
-		if (e.getKeyCode() == GameManager.getInstance().getSettings().getRightMovementKeyCode()) {
-			right = false;
-			if(!left) {
-				animationMove = false;
-			} else {
-				facingRight = false;
-			}
+
+		if(e.getKeyCode() == gameScene.getGameManager().getSettings().getRightMovementKeyCode()) {
+			currentStates.remove(State.MOVING_RIGHT);
+			animationMove = false;
 		}
-		if (e.getKeyCode() == GameManager.getInstance().getSettings().getJumpKeyCode()) {
-			jumping = false;
+
+		if(e.getKeyCode() == gameScene.getGameManager().getSettings().getJumpKeyCode()) {
+			currentStates.remove(State.MOVING_UP);
+		}
+
+		if(e.getKeyCode() == KeyEvent.VK_DOWN && gameScene.getGameManager().getSettings().isFlightMode()) {
+			currentStates.remove(State.MOVING_DOWN);
 		}
 	}
 

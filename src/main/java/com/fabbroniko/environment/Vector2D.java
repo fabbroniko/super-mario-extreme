@@ -58,6 +58,18 @@ public class Vector2D implements Cloneable {
 		return (int)Math.round(y);
 	}
 
+	public Vector2D sum(final Vector2D operand) {
+		this.x += operand.x;
+		this.y += operand.y;
+
+		return this;
+	}
+
+	public void sum(final double x, final double y) {
+		this.x += x;
+		this.y += y;
+	}
+
 	/**
 	 * Returns a copy of this Vector2D object
 	 * Allows the JVM to perform field-for-field copy of the instance of this class. If this class wasn't implementing
