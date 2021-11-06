@@ -48,7 +48,7 @@ public class CollisionManager {
                 partialFinalDestination.getRoundedX(),
                 partialFinalDestination.getRoundedY());
         if(topLeftCorner != null && topLeftCorner.getTileType().equals(TileType.BLOCKING)) {
-            final CollisionResult collisionResult = computeCollision(currentPosition, dimension, topLeftCorner.getOrigin(), topLeftCorner.getDimension(), offset);
+            final CollisionResult collisionResult = computeCollision(currentPosition, dimension, topLeftCorner.getOrigin(), topLeftCorner.getDimension(), partialNewOffset);
             collisionDirection = collisionResult.getCollisionDirection();
             partialNewOffset = collisionResult.getOffset();
         }
@@ -59,7 +59,7 @@ public class CollisionManager {
                 partialFinalDestination.getRoundedX() + dimension.getRoundedX() - 1,
                 partialFinalDestination.getRoundedY());
         if(topRightCorner != null && topRightCorner.getTileType().equals(TileType.BLOCKING)) {
-            final CollisionResult collisionResult =  computeCollision(currentPosition, dimension, topRightCorner.getOrigin(), topRightCorner.getDimension(), offset);
+            final CollisionResult collisionResult =  computeCollision(currentPosition, dimension, topRightCorner.getOrigin(), topRightCorner.getDimension(), partialNewOffset);
             partialNewOffset = collisionResult.getOffset();
 
             if(collisionDirection == null)
@@ -71,7 +71,7 @@ public class CollisionManager {
                 partialFinalDestination.getRoundedX(),
                 partialFinalDestination.getRoundedY() + dimension.getRoundedY() - 1);
         if(bottomLeftCorner != null && bottomLeftCorner.getTileType().equals(TileType.BLOCKING)) {
-            final CollisionResult collisionResult = computeCollision(currentPosition, dimension, bottomLeftCorner.getOrigin(), bottomLeftCorner.getDimension(), offset);
+            final CollisionResult collisionResult = computeCollision(currentPosition, dimension, bottomLeftCorner.getOrigin(), bottomLeftCorner.getDimension(), partialNewOffset);
             partialNewOffset = collisionResult.getOffset();
 
             if(collisionDirection == null)
@@ -83,7 +83,7 @@ public class CollisionManager {
                 partialFinalDestination.getRoundedX() + dimension.getRoundedX() - 1,
                 partialFinalDestination.getRoundedY() + dimension.getRoundedY() - 1);
         if(bottomRightCorner != null && bottomRightCorner.getTileType().equals(TileType.BLOCKING)) {
-            final CollisionResult collisionResult = computeCollision(currentPosition, dimension, bottomRightCorner.getOrigin(), bottomRightCorner.getDimension(), offset);
+            final CollisionResult collisionResult = computeCollision(currentPosition, dimension, bottomRightCorner.getOrigin(), bottomRightCorner.getDimension(), partialNewOffset);
             partialNewOffset = collisionResult.getOffset();
 
             if(collisionDirection == null)
