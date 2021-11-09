@@ -75,6 +75,9 @@ public class Enemy extends AbstractGameObject implements AnimationListener {
 	 */
 
 	@Override
+	protected void movementDirection(boolean horizontal, boolean vertical) {}
+
+	@Override
 	public void animationFinished() {
 		currentStates.clear();
 		currentStates.add(State.DEAD);

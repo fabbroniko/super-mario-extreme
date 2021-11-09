@@ -23,4 +23,7 @@ public class Castle extends AbstractGameObject {
 				.name(CASTLE_IDLE_ANIMATION_NAME)
 				.build());
 	}
+
+	@Override
+	protected void movementDirection(boolean horizontal, boolean vertical) {}
 }

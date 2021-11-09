@@ -42,6 +42,9 @@ public abstract class AbstractGameObject implements Drawable {
 	}
 	
 	protected void setAnimation(final Animation animation) {
+		if(currentAnimation != null && animation.getName().equals(currentAnimation.getName()))
+			return;
+
 		animation.reset();
 		this.currentAnimation = animation;
 	}
@@ -90,6 +93,8 @@ public abstract class AbstractGameObject implements Drawable {
 			offset = collisionResult.getOffset();
 			currentPosition.setVector2D(currentPosition.getX() + offset.getX(), currentPosition.getY() + offset.getY());
 
+			movementDirection(offset.getX() != 0, offset.getY() != 0);
+
 			// Check if the new offset positions the game object outside the boundaries of the map.
 			// If it does, kill the game object.
 			if(((currentPosition.getX() + spriteDimension.getRoundedX() - 1) < 0) ||
@@ -100,30 +105,20 @@ public abstract class AbstractGameObject implements Drawable {
 				currentStates.clear();
 				currentStates.add(State.DEAD);
 			}
+		} else {
+			movementDirection(false, false);
 		}
 	}
+
+	protected abstract void movementDirection(final boolean horizontal, final boolean vertical);
 	
 	@Override
 	public BufferedImage getDrawableImage() {
-		BufferedImage imageToDraw;
 		if(currentStates.contains(State.FACING_RIGHT)) {
-			imageToDraw = currentAnimation.getImage();
+			return currentAnimation.getImage();
 		} else {
-			imageToDraw = currentAnimation.getMirroredImage();
+			return currentAnimation.getMirroredImage();
 		}
-
-		/*
-		// Draw hit box
-		final Graphics imageGraphics = imageToDraw.getGraphics();
-		imageGraphics.drawLine(0, 0, spriteDimension.getRoundedX() -1 ,0);
-		imageGraphics.drawLine(spriteDimension.getRoundedX() - 1, 0, spriteDimension.getRoundedX() - 1, spriteDimension.getRoundedY() - 1);
-		imageGraphics.drawLine(spriteDimension.getRoundedX() - 1, spriteDimension.getRoundedY() - 1, 0,spriteDimension.getRoundedY() - 1);
-		imageGraphics.drawLine(0, spriteDimension.getRoundedY() - 1, 0,0);
-*/
-
-
-
-		return imageToDraw;
 	}
 
 	@Override

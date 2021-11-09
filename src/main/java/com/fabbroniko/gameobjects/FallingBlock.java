@@ -32,4 +32,7 @@ public class FallingBlock extends AbstractGameObject {
 		}
 	}
 	 */
+
+	@Override
+	protected void movementDirection(boolean horizontal, boolean vertical) {}
 }

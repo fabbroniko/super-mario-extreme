@@ -22,10 +22,6 @@ public class Player extends AbstractGameObject implements KeyListener {
 	public static final String MARIO_IDLE_ANIMATION_NAME = "MARIO_IDLE";
 	public static final String MARIO_WALK_ANIMATION_NAME = "MARIO_WALK";
 	public static final String MARIO_JUMP_ANIMATION_NAME = "MARIO_JUMP";
-
-	private boolean animationJump;
-	private boolean animationMove;
-	private final GameScene gameScene;
 	
 	private final Vector2D baseWindowSize;
 	
@@ -35,8 +31,6 @@ public class Player extends AbstractGameObject implements KeyListener {
 
 	public Player(final TileMap tileMap, final GameScene gameScene, final Vector2D position) {
 		super(tileMap, gameScene, position, spriteDimension);
-		animationJump = true;
-		this.gameScene = gameScene;
 		this.baseWindowSize = GameManager.getInstance().getCanvasSize();
 
 		idleAnimation = Animation.builder()
@@ -77,17 +71,33 @@ public class Player extends AbstractGameObject implements KeyListener {
 	@Override
 	public void update() {
 		super.update();
+
 		tileMap.setPosition(currentPosition.getRoundedX() - (baseWindowSize.getRoundedX() / 2), currentPosition.getRoundedY() - (baseWindowSize.getRoundedY() / 2));
+
+		if(currentStates.contains(State.MOVING_UP) || currentStates.contains(State.MOVING_DOWN)) {
+			setAnimation(jumpAnimation);
+		} else if (currentStates.contains(State.MOVING_LEFT) || currentStates.contains(State.MOVING_RIGHT)) {
+			setAnimation(walkAnimation);
+		} else {
+			setAnimation(idleAnimation);
+		}
+
 		if (isDead()) {
 			GameManager.getInstance().openScene(LostScene.class);
 		}
+	}
 
+	@Override
+	protected void movementDirection(boolean horizontal, boolean vertical) {
 		/*
-		if (animationJump) {
+		if(vertical && !currentAnimation.getName().equals(MARIO_JUMP_ANIMATION_NAME)) {
+			System.out.println("Setting jump animation for the player game object.");
 			setAnimation(jumpAnimation);
-		} else if (animationMove && !currentAnimation.getName().equals(MARIO_WALK_ANIMATION_NAME)) {
+		} else if (horizontal && !currentAnimation.getName().equals(MARIO_WALK_ANIMATION_NAME)) {
+			System.out.println("Setting walk animation for the player game object.");
 			setAnimation(walkAnimation);
-		} else if (!animationMove) {
+		} else if (!currentAnimation.getName().equals(MARIO_IDLE_ANIMATION_NAME)) {
+			System.out.println("Setting idle animation for the player game object.");
 			setAnimation(idleAnimation);
 		}
 		 */
@@ -97,12 +107,10 @@ public class Player extends AbstractGameObject implements KeyListener {
 	public void keyPressed(final KeyEvent e) {
 		if(e.getKeyCode() == gameScene.getGameManager().getSettings().getLeftMovementKeyCode()) {
 			currentStates.add(State.MOVING_LEFT);
-			animationMove = true;
 		}
 
 		if(e.getKeyCode() == gameScene.getGameManager().getSettings().getRightMovementKeyCode()) {
 			currentStates.add(State.MOVING_RIGHT);
-			animationMove = true;
 		}
 
 		if(e.getKeyCode() == gameScene.getGameManager().getSettings().getJumpKeyCode()) {
@@ -111,14 +119,11 @@ public class Player extends AbstractGameObject implements KeyListener {
 			} else {
 				gameScene.getAudioManager().playEffect("jump");
 			}
-
-			//animationJump = true;
 		}
 
 		if(e.getKeyCode() == KeyEvent.VK_DOWN && gameScene.getGameManager().getSettings().isFlightMode()) {
-			if(!currentStates.contains(State.MOVING_UP) && !currentStates.contains(State.MOVING_DOWN)) {
+			if(!currentStates.contains(State.MOVING_UP)) {
 				currentStates.add(State.MOVING_DOWN);
-				//animationJump = true;
 			}
 		}
 	}
@@ -127,12 +132,10 @@ public class Player extends AbstractGameObject implements KeyListener {
 	public void keyReleased(final KeyEvent e) {
 		if(e.getKeyCode() == gameScene.getGameManager().getSettings().getLeftMovementKeyCode()) {
 			currentStates.remove(State.MOVING_LEFT);
-			animationMove = false;
 		}
 
 		if(e.getKeyCode() == gameScene.getGameManager().getSettings().getRightMovementKeyCode()) {
 			currentStates.remove(State.MOVING_RIGHT);
-			animationMove = false;
 		}
 
 		if(e.getKeyCode() == gameScene.getGameManager().getSettings().getJumpKeyCode()) {

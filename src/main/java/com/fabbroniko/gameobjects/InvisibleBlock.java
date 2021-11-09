@@ -44,4 +44,7 @@ public class InvisibleBlock extends AbstractGameObject {
 	}
 
 	 */
+
+	@Override
+	protected void movementDirection(boolean horizontal, boolean vertical) {}
 }
