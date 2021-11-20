@@ -29,9 +29,14 @@ public class Player extends AbstractGameObject implements KeyListener {
 	private final Animation idleAnimation;
 	private final Animation jumpAnimation;
 
+	private Vector2D startJumpPosition;
+
 	public Player(final TileMap tileMap, final GameScene gameScene, final Vector2D position) {
 		super(tileMap, gameScene, position, spriteDimension);
 		this.baseWindowSize = GameManager.getInstance().getCanvasSize();
+
+		if(!gameScene.getGameManager().getSettings().isFlightMode())
+			this.currentStates.add(State.MOVING_DOWN);
 
 		idleAnimation = Animation.builder()
 				.spriteSet(gameScene.getResourceManager().loadImageFromDisk(spritePath))
@@ -74,6 +79,10 @@ public class Player extends AbstractGameObject implements KeyListener {
 
 		tileMap.setPosition(currentPosition.getRoundedX() - (baseWindowSize.getRoundedX() / 2), currentPosition.getRoundedY() - (baseWindowSize.getRoundedY() / 2));
 
+		// Stop jumping if the maximum jump height has been reached
+		if(startJumpPosition != null && (startJumpPosition.getY() - currentPosition.getY() > 400))
+			currentStates.remove(State.MOVING_UP);
+
 		if(currentStates.contains(State.MOVING_UP) || currentStates.contains(State.MOVING_DOWN)) {
 			setAnimation(jumpAnimation);
 		} else if (currentStates.contains(State.MOVING_LEFT) || currentStates.contains(State.MOVING_RIGHT)) {
@@ -115,8 +124,10 @@ public class Player extends AbstractGameObject implements KeyListener {
 
 		if(e.getKeyCode() == gameScene.getGameManager().getSettings().getJumpKeyCode()) {
 			if(gameScene.getGameManager().getSettings().isFlightMode()) {
+				startJumpPosition = currentPosition.clone();
 				currentStates.add(State.MOVING_UP);
-			} else {
+			} else if (startJumpPosition == null){
+				startJumpPosition = currentPosition.clone();
 				gameScene.getAudioManager().playEffect("jump");
 			}
 		}

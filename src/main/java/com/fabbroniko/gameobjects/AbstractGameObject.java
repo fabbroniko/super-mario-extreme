@@ -23,7 +23,7 @@ public abstract class AbstractGameObject implements Drawable {
 
 	private final Vector2D cachedMapSize;
 
-	protected int jumpSpeed = 1000; // Pixels per second
+	protected int jumpSpeed = 1600; // Pixels per second
 	protected int gravitySpeed = 600; // Pixels per second
 	protected int walkingSpeed = 600; // Pixels per second
 	//protected int maxJump = 400; // Pixels

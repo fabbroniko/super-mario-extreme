@@ -187,7 +187,7 @@ public class CollisionManager {
             }
         }
 
-        log.fatal("The algorithm determined a collision was detected but it failed to compute the new offset and direction of the collision.");
+        // The algorithm determined a collision was detected but it failed to compute the new offset and direction of the collision.
         return new CollisionResult(offset, false, null, null);
     }
 
