@@ -29,8 +29,9 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 	private static final int SELECTION_EFFECTS = 4;
 	private static final int SELECTION_SHOW_FPS = 5;
 	private static final int SELECTION_FPS_CAP = 6;
+	private static final int SELECTION_FLIGHT_MODE = 7;
 
-	private static final int MAX_SELECTION = 6;
+	private static final int MAX_SELECTION = 7;
 
 	// Fields
 	private Background bg;
@@ -78,6 +79,7 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 		printOption("Effects: ", gameManager.getSettings().isEffectsAudioActive(), g);
 		printOption("Show FPS: ", gameManager.getSettings().isShowFps(), g);
 		printOption("FPS Cap: ", String.valueOf(gameManager.getSettings().getFpsCap()), g);
+		printOption("Flight mode: ", gameManager.getSettings().isFlightMode(), g);
 
 		// Setting up the configuration for the bottom page hints.
 		g.setColor(Color.WHITE);
@@ -253,6 +255,8 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 			gameManager.getSettings().invertShowFps();
 		else if (currentSelection == SELECTION_FPS_CAP)
 			gameManager.getSettings().setFpsCap(nextFps(gameManager.getSettings().getFpsCap()));
+		else if (currentSelection == SELECTION_FLIGHT_MODE)
+			gameManager.getSettings().invertFlightMode();
 		else
 			keyListening ^= true;
 

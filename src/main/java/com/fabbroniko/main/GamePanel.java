@@ -13,18 +13,15 @@ public final class GamePanel extends JPanel {
 
 	private static final Vector2D origin = new Vector2D();
 
-	private final Vector2D windowSize;
+	private Vector2D windowSize;
 	private final Vector2D canvasSize;
 	private final BufferedImage canvasImage;
 	private final Graphics2D canvas;
 
-	public GamePanel(final Vector2D canvasSize, final Vector2D windowSize) {
+	public GamePanel(final Vector2D canvasSize) {
 		super();
 
 		this.canvasSize = canvasSize;
-		this.windowSize = windowSize;
-		
-		this.setPreferredSize(new Dimension(windowSize.getRoundedX(), windowSize.getRoundedY()));
 		this.setFocusable(true);
 		this.requestFocus();
 
@@ -39,6 +36,9 @@ public final class GamePanel extends JPanel {
 	@Override
 	public void paintComponent(final Graphics cGraphics) {
 		super.paintComponent(cGraphics);
+
+		//if(windowSize == null)
+			windowSize = new Vector2D(this.getSize().getWidth(), this.getSize().getHeight());
 
 		cGraphics.drawImage(canvasImage, origin.getRoundedX(), origin.getRoundedY(), windowSize.getRoundedX(), windowSize.getRoundedY(), null);
 	}

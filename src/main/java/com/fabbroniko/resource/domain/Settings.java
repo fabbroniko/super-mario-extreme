@@ -46,4 +46,8 @@ public class Settings {
     }
 
     public void invertShowFps() { this.showFps ^= true; }
+
+    public void invertFlightMode() {
+        this.flightMode ^= true;
+    }
 }

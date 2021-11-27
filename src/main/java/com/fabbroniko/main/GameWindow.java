@@ -13,16 +13,11 @@ public final class GameWindow extends JFrame {
 	private final GamePanel gamePanel;
 
 	public GameWindow() {
-		final java.awt.Dimension screenDimensions = Toolkit.getDefaultToolkit().getScreenSize();
-		final Vector2D windowDimension = new Vector2D((int) screenDimensions.getWidth(), (int) screenDimensions.getHeight());
-
 		this.setTitle(GAME_NAME);
-		this.gamePanel = new GamePanel(BASE_WINDOW_SIZE, windowDimension);
+		this.gamePanel = new GamePanel(BASE_WINDOW_SIZE);
 		this.setContentPane(gamePanel);
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		this.setUndecorated(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setResizable(false);
 		this.pack();
 		this.setVisible(true);
 	}
