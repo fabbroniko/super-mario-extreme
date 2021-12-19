@@ -1,6 +1,7 @@
 package com.fabbroniko.gameobjects;
 
 import com.fabbroniko.environment.Animation;
+import com.fabbroniko.environment.CollisionManager;
 import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.environment.TileMap;
 import com.fabbroniko.scene.GameScene;
@@ -25,5 +26,8 @@ public class Castle extends AbstractGameObject {
 	}
 
 	@Override
-	protected void movementDirection(boolean horizontal, boolean vertical) {}
+	public void collisionHandler(final CollisionManager.CollisionResult collisionResult) {
+		if(collisionResult.getCollidedWith() instanceof Player)
+			gameScene.levelFinished();
+	}
 }

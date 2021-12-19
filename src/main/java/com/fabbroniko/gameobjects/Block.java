@@ -40,21 +40,14 @@ public class Block extends AbstractGameObject implements AnimationListener {
 				.build());
 	}
 
-	/*
 	@Override
-	public void handleObjectCollisions(final CollisionDirection direction, final AbstractGameObject obj) {
-		super.handleObjectCollisions(direction, obj);
-		
-		if (obj instanceof Player && direction.equals(CollisionDirection.BOTTOM_COLLISION) && !currentAnimation.getName().equals(BLOCK_BREAKING_ANIMATION_NAME)) {
-			this.setAnimation(breakingAnimation);
-			gameScene.getAudioManager().playEffect("breaking");
-		}
+	public void collisionHandler(final CollisionManager.CollisionResult collisionResult) {
+		if(!collisionResult.getCollisionDirection().equals(CollisionDirection.BOTTOM_COLLISION) || isDead() || !(collisionResult.getCollidedWith() instanceof Player) || currentAnimation.getName().equals(BLOCK_BREAKING_ANIMATION_NAME))
+			return;
+
+		this.setAnimation(breakingAnimation);
+		gameScene.getAudioManager().playEffect("breaking");
 	}
-
-	 */
-
-	@Override
-	protected void movementDirection(boolean horizontal, boolean vertical) {}
 
 	@Override
 	public void animationFinished() {

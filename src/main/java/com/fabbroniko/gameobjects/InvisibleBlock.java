@@ -33,18 +33,11 @@ public class InvisibleBlock extends AbstractGameObject {
 				.build();
 	}
 
-	/*
 	@Override
-	public void handleObjectCollisions(final CollisionDirection direction, final AbstractGameObject obj) 
-	{
-		if (obj instanceof Player && direction.equals(CollisionDirection.BOTTOM_COLLISION)) {
+	public void collisionHandler(final CollisionManager.CollisionResult collisionResult) {
+		if(collisionResult.getCollidedWith() instanceof Player && currentAnimation.getName().equals(INVISIBLE_BLOCK_INVISIBLE_ANIMATION_NAME)) {
 			this.setAnimation(visibleAnimation);
 			this.gameScene.getAudioManager().playEffect("hit");
 		}
 	}
-
-	 */
-
-	@Override
-	protected void movementDirection(boolean horizontal, boolean vertical) {}
 }

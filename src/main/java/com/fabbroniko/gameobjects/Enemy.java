@@ -9,13 +9,14 @@ public class Enemy extends AbstractGameObject implements AnimationListener {
 	private static final String spritePath = "/sprites/ghost.png";
 	private static final String ENEMY_WALK_ANIMATION_NAME = "ENEMY_WALK";
 	private static final String ENEMY_DEAD_ANIMATION_NAME = "ENEMY_DEAD";
-	private boolean init;
 	private final Animation deadAnimation;
 
 	public Enemy(final TileMap tileMap, final GameScene gameScene, final Vector2D position) {
 		super(tileMap, gameScene, position, spriteDimension);
-		//falling = true;
 		walkingSpeed = 300;
+
+		this.currentStates.add(State.MOVING_DOWN);
+		this.currentStates.add(State.MOVING_LEFT);
 
 		deadAnimation = Animation.builder()
 				.spriteSet(gameScene.getResourceManager().loadImageFromDisk(spritePath))
@@ -39,43 +40,28 @@ public class Enemy extends AbstractGameObject implements AnimationListener {
 				.build());
 	}
 
-	/*
 	@Override
-	public void handleMapCollisions(final CollisionDirection direction) {
-		super.handleMapCollisions(direction);
-		
-		if (direction.equals(CollisionDirection.BOTTOM_COLLISION) && !init) {
-			right = true;
-			facingRight = true;
-			init = true;
-		}
-		if (direction.equals(CollisionDirection.LEFT_COLLISION)) {
-			left = false;
-			facingRight = false;
-			right = true;
-		}
-		if (direction.equals(CollisionDirection.RIGHT_COLLISION)) {
-			right = false;
-			facingRight = true;
-			left = true;
-		}
-		
-	}
-	
-	@Override
-	public void handleObjectCollisions(final CollisionDirection direction, final AbstractGameObject obj) {
-		super.handleObjectCollisions(direction, obj);
-		
-		if (direction.equals(CollisionDirection.TOP_COLLISION) && obj instanceof Player && !currentAnimation.getName().equals(ENEMY_DEAD_ANIMATION_NAME)) {
-			this.setAnimation(deadAnimation);
-			this.gameScene.getAudioManager().playEffect("hit");
+	public void collisionHandler(final CollisionManager.CollisionResult collisionResult) {
+		if(!collisionResult.isHasCollided())
+			return;
+
+		if(collisionResult.getCollidedWith() == null) {
+			if(collisionResult.getCollisionDirection().equals(CollisionDirection.LEFT_COLLISION)) {
+				this.currentStates.remove(State.MOVING_LEFT);
+				this.currentStates.add(State.MOVING_RIGHT);
+				this.currentStates.add(State.FACING_RIGHT);
+			} else if (collisionResult.getCollisionDirection().equals(CollisionDirection.RIGHT_COLLISION)) {
+				this.currentStates.remove(State.FACING_RIGHT);
+				this.currentStates.remove(State.MOVING_RIGHT);
+				this.currentStates.add(State.MOVING_LEFT);
+			}
+		} else if (collisionResult.getCollidedWith() instanceof Player){
+			if(collisionResult.getCollisionDirection().equals(CollisionDirection.TOP_COLLISION) && !currentAnimation.getName().equals(ENEMY_DEAD_ANIMATION_NAME)) {
+				this.setAnimation(deadAnimation);
+				this.gameScene.getAudioManager().playEffect("hit");
+			}
 		}
 	}
-
-	 */
-
-	@Override
-	protected void movementDirection(boolean horizontal, boolean vertical) {}
 
 	@Override
 	public void animationFinished() {

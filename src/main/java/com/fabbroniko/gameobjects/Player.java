@@ -80,9 +80,10 @@ public class Player extends AbstractGameObject implements KeyListener {
 		tileMap.setPosition(currentPosition.getRoundedX() - (baseWindowSize.getRoundedX() / 2), currentPosition.getRoundedY() - (baseWindowSize.getRoundedY() / 2));
 
 		// Stop jumping if the maximum jump height has been reached
-		if(startJumpPosition != null && (startJumpPosition.getY() - currentPosition.getY() > 400))
+		if(startJumpPosition != null && (startJumpPosition.getY() - currentPosition.getY() > 400) && !gameScene.getGameManager().getSettings().isFlightMode())
 			currentStates.remove(State.MOVING_UP);
 
+		/*
 		if(currentStates.contains(State.MOVING_UP) || currentStates.contains(State.MOVING_DOWN)) {
 			setAnimation(jumpAnimation);
 		} else if (currentStates.contains(State.MOVING_LEFT) || currentStates.contains(State.MOVING_RIGHT)) {
@@ -90,6 +91,7 @@ public class Player extends AbstractGameObject implements KeyListener {
 		} else {
 			setAnimation(idleAnimation);
 		}
+		 */
 
 		if (isDead()) {
 			GameManager.getInstance().openScene(LostScene.class);
@@ -97,20 +99,7 @@ public class Player extends AbstractGameObject implements KeyListener {
 	}
 
 	@Override
-	protected void movementDirection(boolean horizontal, boolean vertical) {
-		/*
-		if(vertical && !currentAnimation.getName().equals(MARIO_JUMP_ANIMATION_NAME)) {
-			System.out.println("Setting jump animation for the player game object.");
-			setAnimation(jumpAnimation);
-		} else if (horizontal && !currentAnimation.getName().equals(MARIO_WALK_ANIMATION_NAME)) {
-			System.out.println("Setting walk animation for the player game object.");
-			setAnimation(walkAnimation);
-		} else if (!currentAnimation.getName().equals(MARIO_IDLE_ANIMATION_NAME)) {
-			System.out.println("Setting idle animation for the player game object.");
-			setAnimation(idleAnimation);
-		}
-		 */
-	}
+	public void collisionHandler(final CollisionManager.CollisionResult collisionResult) {}
 
 	@Override
 	public void keyPressed(final KeyEvent e) {

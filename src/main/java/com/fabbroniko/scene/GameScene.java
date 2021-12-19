@@ -46,7 +46,7 @@ public final class GameScene extends AbstractScene implements KeyListener {
         tileMap = new TileMap(gameManager.getResourceManager(), level.getMap(), gameManager.getCanvasSize());
         gameObjects = new ArrayList<>();
 
-        this.collisionManager = new CollisionManager(tileMap);
+        this.collisionManager = new CollisionManager(tileMap, this);
 
         final Player player = (Player) this.addNewObject(Player.class, level.getStartPosition().clone());
 
@@ -90,6 +90,10 @@ public final class GameScene extends AbstractScene implements KeyListener {
 
     public void levelFinished() {
         gameManager.openScene(WinScene.class);
+    }
+
+    public List<AbstractGameObject> getGameObjects() {
+        return new ArrayList<>(gameObjects);
     }
 
     public CollisionManager getCollisionManager() {

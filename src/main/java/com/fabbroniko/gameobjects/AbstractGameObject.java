@@ -93,7 +93,7 @@ public abstract class AbstractGameObject implements Drawable {
 			offset = collisionResult.getOffset();
 			currentPosition.setVector2D(currentPosition.getX() + offset.getX(), currentPosition.getY() + offset.getY());
 
-			movementDirection(offset.getX() != 0, offset.getY() != 0);
+			collisionHandler(collisionResult);
 
 			// Check if the new offset positions the game object outside the boundaries of the map.
 			// If it does, kill the game object.
@@ -105,12 +105,10 @@ public abstract class AbstractGameObject implements Drawable {
 				currentStates.clear();
 				currentStates.add(State.DEAD);
 			}
-		} else {
-			movementDirection(false, false);
 		}
 	}
 
-	protected abstract void movementDirection(final boolean horizontal, final boolean vertical);
+	public abstract void collisionHandler(final CollisionManager.CollisionResult collisionResult);
 	
 	@Override
 	public BufferedImage getDrawableImage() {
@@ -143,5 +141,15 @@ public abstract class AbstractGameObject implements Drawable {
 		MOVING_DOWN,
 
 		DEAD
+	}
+
+	@Override
+	public boolean equals(final Object o) {
+		if (!(o instanceof AbstractGameObject))
+			return false;
+
+		final AbstractGameObject abo = (AbstractGameObject)o;
+
+		return abo.currentPosition.equals(this.currentPosition) && abo.spriteDimension.equals(this.spriteDimension) && abo.currentAnimation.getName().equals(this.currentAnimation.getName());
 	}
 }

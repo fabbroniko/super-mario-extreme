@@ -1,14 +1,12 @@
 package com.fabbroniko.environment;
 
 import com.fabbroniko.gameobjects.AbstractGameObject;
+import com.fabbroniko.scene.GameScene;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.LineSegment;
-
-import java.util.LinkedList;
-import java.util.List;
 
 @Log4j2
 public class CollisionManager {
@@ -18,11 +16,11 @@ public class CollisionManager {
     private static final int MAX_MOVEMENT_OFFSET = 90;
 
     final private TileMap tileMap;
-    final private List<AbstractGameObject> gameObjects;
+    final private GameScene gameScene;
 
-    public CollisionManager(final TileMap tileMap) {
+    public CollisionManager(final TileMap tileMap, final GameScene gameScene) {
         this.tileMap = tileMap;
-        this.gameObjects = new LinkedList<>();
+        this.gameScene = gameScene;
     }
 
     public CollisionResult detectCollisions(final AbstractGameObject objectToMove, final Vector2D offset) {
@@ -32,12 +30,33 @@ public class CollisionManager {
         if(offset.getY() > MAX_MOVEMENT_OFFSET)
             offset.setY(MAX_MOVEMENT_OFFSET);
 
-        final Vector2D currentPosition = objectToMove.getPosition();
+        // Check collision with map - if the new computed offset is 0 then skip the check for game objects.
+        CollisionResult collisionResult = checkForMapCollision(objectToMove, offset);
+        if(collisionResult.getOffset().getX() == 0 && collisionResult.getOffset().getY() == 0)
+            return collisionResult;
 
-        return checkForMapCollision(currentPosition, offset, objectToMove.getSpriteDimension());
+        for(final AbstractGameObject obj : gameScene.getGameObjects()) {
+            if(!objectToMove.equals(obj))
+                collisionResult = checkForGameObjectsCollision(objectToMove, obj, collisionResult);
+        }
+
+        return collisionResult;
     }
 
-    public CollisionResult checkForMapCollision(final Vector2D currentPosition, final Vector2D offset, final Vector2D dimension) {
+    public CollisionResult checkForGameObjectsCollision(final AbstractGameObject objectToMove, final AbstractGameObject gameObjectToCheck, final CollisionResult postMapProcessingCollisionResult) {
+        final CollisionResult collisionResult = computeCollision(objectToMove.getPosition(), objectToMove.getSpriteDimension(), gameObjectToCheck.getPosition(), gameObjectToCheck.getSpriteDimension(), postMapProcessingCollisionResult.getOffset(), objectToMove);
+
+        if(collisionResult.isHasCollided()) {
+            gameObjectToCheck.collisionHandler(new CollisionResult(new Vector2D(), false, objectToMove, CollisionDirection.invert(collisionResult.getCollisionDirection())));
+        }
+
+        return collisionResult;
+    }
+
+    public CollisionResult checkForMapCollision(final AbstractGameObject objectToMove, final Vector2D offset) {
+        final Vector2D dimension = objectToMove.getSpriteDimension();
+        final Vector2D currentPosition = objectToMove.getPosition();
+
         // Temporary variables used to store temporary offset and final destination of the game object.
         Vector2D partialNewOffset = offset.clone();
         Vector2D partialFinalDestination = currentPosition.clone().sum(partialNewOffset);
@@ -48,7 +67,7 @@ public class CollisionManager {
                 partialFinalDestination.getRoundedX(),
                 partialFinalDestination.getRoundedY());
         if(topLeftCorner != null && topLeftCorner.getTileType().equals(TileType.BLOCKING)) {
-            final CollisionResult collisionResult = computeCollision(currentPosition, dimension, topLeftCorner.getOrigin(), topLeftCorner.getDimension(), partialNewOffset);
+            final CollisionResult collisionResult = computeCollision(currentPosition, dimension, topLeftCorner.getOrigin(), topLeftCorner.getDimension(), partialNewOffset, null);
             collisionDirection = collisionResult.getCollisionDirection();
             partialNewOffset = collisionResult.getOffset();
         }
@@ -59,7 +78,7 @@ public class CollisionManager {
                 partialFinalDestination.getRoundedX() + dimension.getRoundedX() - 1,
                 partialFinalDestination.getRoundedY());
         if(topRightCorner != null && topRightCorner.getTileType().equals(TileType.BLOCKING)) {
-            final CollisionResult collisionResult =  computeCollision(currentPosition, dimension, topRightCorner.getOrigin(), topRightCorner.getDimension(), partialNewOffset);
+            final CollisionResult collisionResult =  computeCollision(currentPosition, dimension, topRightCorner.getOrigin(), topRightCorner.getDimension(), partialNewOffset, null);
             partialNewOffset = collisionResult.getOffset();
 
             if(collisionDirection == null)
@@ -71,7 +90,7 @@ public class CollisionManager {
                 partialFinalDestination.getRoundedX(),
                 partialFinalDestination.getRoundedY() + dimension.getRoundedY() - 1);
         if(bottomLeftCorner != null && bottomLeftCorner.getTileType().equals(TileType.BLOCKING)) {
-            final CollisionResult collisionResult = computeCollision(currentPosition, dimension, bottomLeftCorner.getOrigin(), bottomLeftCorner.getDimension(), partialNewOffset);
+            final CollisionResult collisionResult = computeCollision(currentPosition, dimension, bottomLeftCorner.getOrigin(), bottomLeftCorner.getDimension(), partialNewOffset, null);
             partialNewOffset = collisionResult.getOffset();
 
             if(collisionDirection == null)
@@ -83,7 +102,7 @@ public class CollisionManager {
                 partialFinalDestination.getRoundedX() + dimension.getRoundedX() - 1,
                 partialFinalDestination.getRoundedY() + dimension.getRoundedY() - 1);
         if(bottomRightCorner != null && bottomRightCorner.getTileType().equals(TileType.BLOCKING)) {
-            final CollisionResult collisionResult = computeCollision(currentPosition, dimension, bottomRightCorner.getOrigin(), bottomRightCorner.getDimension(), partialNewOffset);
+            final CollisionResult collisionResult = computeCollision(currentPosition, dimension, bottomRightCorner.getOrigin(), bottomRightCorner.getDimension(), partialNewOffset, null);
             partialNewOffset = collisionResult.getOffset();
 
             if(collisionDirection == null)
@@ -97,7 +116,8 @@ public class CollisionManager {
                                             final Vector2D objectToMoveDimension,
                                             final Vector2D impactedObjectPosition,
                                             final Vector2D impactedObjectDimension,
-                                            final Vector2D offset) {
+                                            final Vector2D offset,
+                                            final AbstractGameObject objectToMove) {
 
         final LineSegment impactedObjectTopSegment = new LineSegment(impactedObjectPosition.getX(),
                 impactedObjectPosition.getY(),
@@ -154,7 +174,7 @@ public class CollisionManager {
             if(intersection1 != null || intersection2 != null) {
                 double tempX = intersection1 != null ? intersection1.getX() : intersection2.getX();
                 double newOffsetX = tempX - objectToMovePosition.getX() - objectToMoveDimension.getRoundedX();
-                return new CollisionResult(new Vector2D(newOffsetX, offset.getY()), true, null, CollisionDirection.RIGHT_COLLISION);
+                return new CollisionResult(new Vector2D(newOffsetX, offset.getY()), true, objectToMove, CollisionDirection.RIGHT_COLLISION);
             }
         } else if (offset.getX() < 0) {
             Coordinate intersection1 = objTopLeftProjection.intersection(impactedObjectRightSegment);
@@ -163,7 +183,7 @@ public class CollisionManager {
             if(intersection1 != null || intersection2 != null) {
                 double tempX = intersection1 != null ? intersection1.getX() : intersection2.getX();
                 double newOffsetX = tempX - objectToMovePosition.getX() + 1;
-                return new CollisionResult(new Vector2D(newOffsetX, offset.getY()), true, null, CollisionDirection.LEFT_COLLISION);
+                return new CollisionResult(new Vector2D(newOffsetX, offset.getY()), true, objectToMove, CollisionDirection.LEFT_COLLISION);
             }
         }
 
@@ -174,7 +194,7 @@ public class CollisionManager {
             if(intersection1 != null || intersection2 != null) {
                 double tempY = intersection1 != null ? intersection1.getY() : intersection2.getY();
                 double newOffsetY = tempY - objectToMovePosition.getY() - objectToMoveDimension.getRoundedY();
-                return new CollisionResult(new Vector2D(offset.getX(), newOffsetY), true, null, CollisionDirection.BOTTOM_COLLISION);
+                return new CollisionResult(new Vector2D(offset.getX(), newOffsetY), true, objectToMove, CollisionDirection.BOTTOM_COLLISION);
             }
         } else if (offset.getY() < 0) {
             Coordinate intersection1 = objTopLeftProjection.intersection(impactedObjectBottomSegment);
@@ -183,7 +203,7 @@ public class CollisionManager {
             if(intersection1 != null || intersection2 != null) {
                 double tempY = intersection1 != null ? intersection1.getY() : intersection2.getY();
                 double newOffsetY = tempY - objectToMovePosition.getY() + 1;
-                return new CollisionResult(new Vector2D(offset.getX(), newOffsetY), true, null, CollisionDirection.TOP_COLLISION);
+                return new CollisionResult(new Vector2D(offset.getX(), newOffsetY), true, objectToMove, CollisionDirection.TOP_COLLISION);
             }
         }
 

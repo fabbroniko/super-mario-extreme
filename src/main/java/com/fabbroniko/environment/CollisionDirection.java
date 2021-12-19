@@ -25,4 +25,15 @@ public enum CollisionDirection {
 	 * Collision from the right side.
 	 */
 	RIGHT_COLLISION;
+
+	public static CollisionDirection invert(final CollisionDirection original) {
+		if(TOP_COLLISION.equals(original))
+			return BOTTOM_COLLISION;
+		if(BOTTOM_COLLISION.equals(original))
+			return TOP_COLLISION;
+		if(RIGHT_COLLISION.equals(original))
+			return LEFT_COLLISION;
+
+		return RIGHT_COLLISION;
+	}
 }

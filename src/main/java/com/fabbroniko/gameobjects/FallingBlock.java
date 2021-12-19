@@ -22,17 +22,9 @@ public class FallingBlock extends AbstractGameObject {
 				.build());
 	}
 
-	/*
 	@Override
-	public void handleObjectCollisions(final CollisionDirection direction, final AbstractGameObject obj) {
-		super.handleObjectCollisions(direction, obj);
-
-		if (obj instanceof Player && direction.equals(CollisionDirection.TOP_COLLISION)) {
-			falling = true;
-		}
+	public void collisionHandler(final CollisionManager.CollisionResult collisionResult) {
+		if(collisionResult.getCollidedWith() instanceof Player && collisionResult.getCollisionDirection().equals(CollisionDirection.TOP_COLLISION))
+			currentStates.add(State.MOVING_DOWN);
 	}
-	 */
-
-	@Override
-	protected void movementDirection(boolean horizontal, boolean vertical) {}
 }
