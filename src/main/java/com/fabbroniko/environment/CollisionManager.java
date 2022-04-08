@@ -56,11 +56,27 @@ public class CollisionManager {
     public CollisionResult checkForMapCollision(final AbstractGameObject objectToMove, final Vector2D offset) {
         final Vector2D dimension = objectToMove.getSpriteDimension();
         final Vector2D currentPosition = objectToMove.getPosition();
+        final Vector2D adjustedOffset = offset.clone();
 
-        // Temporary variables used to store temporary offset and final destination of the game object.
-        Vector2D partialNewOffset = offset.clone();
-        Vector2D partialFinalDestination = currentPosition.clone().sum(partialNewOffset);
-        CollisionDirection collisionDirection = null;
+        if(offset.getY() > 0) {
+            final TileMap.TileInfo bottomLeftCorner = tileMap.getTileType(
+                currentPosition.getRoundedX(),
+                (int)Math.round(currentPosition.getY() + dimension.getY() + offset.getY())
+            );
+            final TileMap.TileInfo bottomRightCorner = tileMap.getTileType(
+                currentPosition.getRoundedX() + dimension.getRoundedX(),
+                (int)Math.round(currentPosition.getY() + dimension.getY() + offset.getY())
+            );
+
+            if(TileType.BLOCKING.equals(bottomLeftCorner.getTileType())) {
+                final CollisionResult collisionResult = computeCollision(currentPosition, dimension, bottomLeftCorner.getOrigin(), bottomLeftCorner.getDimension(), offset, objectToMove);
+            }
+        } else if (offset.getY() < 0) {
+
+        }
+
+
+
 
         // Checking collision for the top left corner of the game object's hit box
         final TileMap.TileInfo topLeftCorner = tileMap.getTileType(
