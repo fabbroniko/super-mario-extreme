@@ -1,15 +1,18 @@
 package com.fabbroniko.resource;
 
-import com.fabbroniko.resource.domain.Settings;
 import com.fabbroniko.error.ResourceNotFoundException;
 import com.fabbroniko.resource.domain.Background;
 import com.fabbroniko.resource.domain.Resource;
+import com.fabbroniko.resource.domain.Settings;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.extern.log4j.Log4j2;
 
 import javax.imageio.ImageIO;
-import javax.sound.sampled.*;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,11 +23,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-/**
- * The resource manager takes care of referencing, loading and caching resources such as audio clips, sprites and tilemap
- *
- * It uses a resource index as list of resources to load and what options are available to them.
- */
 @Log4j2
 public class ResourceManager {
 
@@ -42,10 +40,6 @@ public class ResourceManager {
         preLoadedImages = new HashMap<>();
     }
 
-    /**
-     * This method initializes the resource manager and preloads all resources with preload=true in memory for faster access.
-     * Concurrent access of this method should not be allowed
-     */
     public synchronized void preload() {
         if(resource != null)
             return;
@@ -72,13 +66,6 @@ public class ResourceManager {
         );
     }
 
-    /**
-     * Finds an audio clip from the name passed as parameter. This method looks for a match in the pre-loaded cache if
-     * available, otherwise it's loaded from disk.
-     *
-     * @param name The unique identifier for the resource found in the resource.index file
-     * @return An empty Optional if there was a problem retrieving the resource or the fully set up clip if it was successfully loaded
-     */
     public Optional<Clip> findAudioClipFromName(final String name) {
         // Attempts to retrieve the value from the pre-loaded cache first
         if(preLoadedAudioClips.containsKey(name)) {
@@ -104,12 +91,6 @@ public class ResourceManager {
         return optClip;
     }
 
-    /**
-     * Loads the audio clip from the disk.
-     *
-     * @param name Unique identifier specified in the resource.index file.
-     * @return The audio clip ready to be played.
-     */
     private Optional<Clip> loadAudioClipFromDisk(final String name) {
         log.trace("Loading audio clip from disk. Clip name {}", name);
 

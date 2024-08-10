@@ -1,6 +1,7 @@
 package com.fabbroniko.scene;
 
 import com.fabbroniko.environment.AudioManager;
+import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.main.GameManager;
 import com.fabbroniko.resource.ResourceManager;
@@ -21,14 +22,14 @@ public abstract class AbstractScene {
 	protected AudioManager audioManager;
 	protected ResourceManager resourceManager;
 
-	protected AbstractScene(final GameManager gameManager) {
+	protected AbstractScene(final GameManager gameManager, final AudioManager audioManager, final ResourceManager resourceManager) {
 		this.gameManager = gameManager;
-		this.audioManager = gameManager.getAudioManager();
-		this.resourceManager = gameManager.getResourceManager();
+		this.audioManager = audioManager;
+		this.resourceManager = resourceManager;
 	}
 
 	public void detachScene() {
-		audioManager.stopCurrent();
+		audioManager.stopMusic();
 	}
 
 	public abstract void init();
@@ -41,12 +42,12 @@ public abstract class AbstractScene {
 		return (dimension.getRoundedX() - g.getFontMetrics().stringWidth(text)) / 2;
 	}
 
-	protected int getCenteredXPositionFromSize(final Vector2D canvasDimension, final int secondaryWidth) {
-		return (canvasDimension.getRoundedX() - secondaryWidth) / 2;
+	protected int getCenteredXPositionForString(final String text, final Graphics2D g, final Dimension2D dimension) {
+		return (dimension.getWidth() - g.getFontMetrics().stringWidth(text)) / 2;
 	}
 
-	public GameManager getGameManager() {
-		return gameManager;
+	protected int getCenteredXPositionFromSize(final Vector2D canvasDimension, final int secondaryWidth) {
+		return (canvasDimension.getRoundedX() - secondaryWidth) / 2;
 	}
 
 	public AudioManager getAudioManager() {

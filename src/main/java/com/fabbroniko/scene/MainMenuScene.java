@@ -1,12 +1,15 @@
 package com.fabbroniko.scene;
 
+import com.fabbroniko.environment.AudioManager;
+import com.fabbroniko.environment.Background;
+import com.fabbroniko.environment.SceneContextFactory;
+import com.fabbroniko.environment.Vector2D;
+import com.fabbroniko.main.GameManager;
+import com.fabbroniko.resource.ResourceManager;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
-import com.fabbroniko.environment.Background;
-import com.fabbroniko.environment.Vector2D;
-import com.fabbroniko.main.GameManager;
 
 /**
  * The main menu shown as the first scene of the game.
@@ -44,8 +47,17 @@ public final class MainMenuScene extends AbstractScene implements KeyListener {
 	// the player hits ENTER and it allows the draw function to draw the option in a different color.
 	private int selectedOption;
 
-	public MainMenuScene(final GameManager gameManager) {
-		super(gameManager);
+	private final SceneContextFactory sceneContextFactory;
+	private final GameManager gameManager;
+	private final AudioManager audioManager;
+	private final ResourceManager resourceManager;
+
+	public MainMenuScene(final GameManager gameManager, SceneContextFactory sceneContextFactory, AudioManager audioManager, ResourceManager resourceManager) {
+		super(gameManager, audioManager, resourceManager);
+		this.sceneContextFactory = sceneContextFactory;
+		this.gameManager = gameManager;
+		this.audioManager = audioManager;
+		this.resourceManager = resourceManager;
 	}
 
 	/**

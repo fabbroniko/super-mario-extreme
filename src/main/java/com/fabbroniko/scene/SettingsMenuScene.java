@@ -4,9 +4,12 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import com.fabbroniko.environment.AudioManager;
 import com.fabbroniko.environment.Background;
+import com.fabbroniko.environment.SceneContextFactory;
 import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.main.GameManager;
+import com.fabbroniko.resource.ResourceManager;
 
 public final class SettingsMenuScene extends AbstractScene implements KeyListener {
 
@@ -38,8 +41,17 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 	private int currentSelection;
 	private boolean keyListening;
 
-	public SettingsMenuScene(final GameManager gameManager) {
-		super(gameManager);
+	private final SceneContextFactory sceneContextFactory;
+	private final GameManager gameManager;
+	private final AudioManager audioManager;
+	private final ResourceManager resourceManager;
+
+	public SettingsMenuScene(final GameManager gameManager, SceneContextFactory sceneContextFactory, AudioManager audioManager, ResourceManager resourceManager) {
+		super(gameManager, audioManager, resourceManager);
+		this.sceneContextFactory = sceneContextFactory;
+		this.gameManager = gameManager;
+		this.audioManager = audioManager;
+		this.resourceManager = resourceManager;
 	}
 
 	@Override

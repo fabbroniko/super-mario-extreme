@@ -2,5 +2,6 @@
 out/
 bin/
 target/
+.gradle/
 
 *.iml

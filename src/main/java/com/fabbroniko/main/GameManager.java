@@ -4,6 +4,9 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyListener;
 
 import com.fabbroniko.environment.AudioManager;
+import com.fabbroniko.environment.AudioManagerImpl;
+import com.fabbroniko.environment.SceneContextFactory;
+import com.fabbroniko.environment.SceneContextFactoryImpl;
 import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.resource.ResourceManager;
 import com.fabbroniko.resource.domain.Level;
@@ -21,6 +24,7 @@ public final class GameManager {
 
 	private final ResourceManager resourceManager;
 	private final AudioManager audioManager;
+	private final SceneContextFactory sceneContextFactory;
 
 	private final Settings settings;
 
@@ -31,9 +35,10 @@ public final class GameManager {
 
 	private GameManager() {
 		this.resourceManager = new ResourceManager();
-		this.audioManager = new AudioManager(this, resourceManager);
+		this.audioManager = new AudioManagerImpl(this, resourceManager);
 		this.settings = resourceManager.loadSettings();
 		this.deathCount = 0;
+		this.sceneContextFactory = new SceneContextFactoryImpl(1280, 960);
 
 		this.resourceManager.preload();
 	}
@@ -50,10 +55,10 @@ public final class GameManager {
 		AbstractScene newScene;
 
 		if(GameScene.class.equals(newSceneClass)) {
-			final Level defaultLevel = new XmlMapper().readValue(getClass().getResource("/levels/lvl1.xml"), Level.class);
-			newScene = newSceneClass.getConstructor(GameManager.class, Level.class).newInstance(this, defaultLevel);
+			final Level defaultLevel = new XmlMapper().readValue(getClass().getResource("/levels/testing.xml"), Level.class);
+			newScene = newSceneClass.getConstructor(GameManager.class, AudioManager.class, ResourceManager.class, Level.class).newInstance(this, audioManager, resourceManager, defaultLevel);
 		} else {
-			newScene = newSceneClass.getConstructor(GameManager.class).newInstance(this);
+			newScene = newSceneClass.getConstructor(GameManager.class, SceneContextFactory.class, AudioManager.class, ResourceManager.class).newInstance(this, sceneContextFactory, audioManager, resourceManager);
 		}
 
 		if(newScene instanceof LostScene) {

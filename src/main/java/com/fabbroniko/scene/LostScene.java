@@ -1,18 +1,17 @@
 package com.fabbroniko.scene;
 
-import java.awt.*;
-
+import com.fabbroniko.environment.AudioManager;
+import com.fabbroniko.environment.Dimension2D;
+import com.fabbroniko.environment.SceneContext;
+import com.fabbroniko.environment.SceneContextFactory;
 import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.main.GameManager;
+import com.fabbroniko.resource.ResourceManager;
 
-/**
- * The LostScene is a very simple scene, it just shows Game Over and the number of death on a simple background.
- * It also plays a music track. The user is redirected back to the level after the music track is over.
- *
- * Given the static nature of this scene it uses the drawOnce method that allows the program to draw the canvas only once
- * instead of drawing it for each frame.
- */
-public final class LostScene extends AbstractStaticScene {
+import java.awt.*;
+import java.awt.image.BufferedImage;
+
+public final class LostScene extends AbstractScene implements Scene {
 
 	private static final String GAME_OVER_MAIN_TEXT = "Game Over";
 	private static final String DEATH_COUNT_TEXT = "Death count: ";
@@ -21,8 +20,17 @@ public final class LostScene extends AbstractStaticScene {
 	private long initTime;
 	private final Vector2D origin = new Vector2D();
 
-	public LostScene(final GameManager gameManager) {
-		super(gameManager);
+	private final SceneContextFactory sceneContextFactory;
+	private final GameManager gameManager;
+	private final AudioManager audioManager;
+	private final ResourceManager resourceManager;
+
+	public LostScene(final GameManager gameManager, SceneContextFactory sceneContextFactory, AudioManager audioManager, ResourceManager resourceManager) {
+		super(gameManager, audioManager, resourceManager);
+		this.sceneContextFactory = sceneContextFactory;
+		this.gameManager = gameManager;
+		this.audioManager = audioManager;
+		this.resourceManager = resourceManager;
 	}
 
 	@Override
@@ -31,9 +39,6 @@ public final class LostScene extends AbstractStaticScene {
 		initTime = System.currentTimeMillis();
 	}
 
-	/**
-	 * On each frame check if enough time elapsed before opening the game scene.
-	 */
 	@Override
 	public void update() {
 		if((System.currentTimeMillis() - initTime) > SCENE_DURATION_MILLISECONDS) {
@@ -41,48 +46,37 @@ public final class LostScene extends AbstractStaticScene {
 		}
 	}
 
-	/**
-	 * Draw the Lost Scene in the Game Frame.
-	 * Due to the static nature of this scene it can be drawn only once rather than drawing it for each frame.
-	 * @param g The canvas we use to paint the scene.
-	 * @param gDimension The dimensions of the canvas.
-	 */
 	@Override
-	protected void drawOnce(final Graphics2D g, final Vector2D gDimension) {
-		// Filling the whole canvas with Black
-		g.setColor(Color.BLACK);
-		g.fillRect(origin.getRoundedX(), origin.getRoundedY(), gDimension.getRoundedX(), gDimension.getRoundedY());
+	public BufferedImage draw() {
+		final SceneContext sceneContext = sceneContextFactory.create();
+		final BufferedImage canvas = sceneContext.getSceneCanvas();
+		final Graphics2D graphics = (Graphics2D) canvas.getGraphics();
+		final Dimension2D canvasDimension = sceneContext.getCanvasDimension();
 
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		graphics.setColor(Color.BLACK);
+		graphics.fillRect(origin.getRoundedX(), origin.getRoundedY(), canvasDimension.getWidth(), canvasDimension.getHeight());
 
-		/*
-		 * Sets up the parameters for the Game Over string displayed in this scene.
-		 * Sets the color of the string to White.
-		 * Sets the Font
-		 * Calculates the coordinate of the origin of the string in order to center it in the X axis
-		 */
-		g.setColor(Color.WHITE);
-		g.setFont(H1_FONT);
-		int centeredX = getCenteredXPositionForString(GAME_OVER_MAIN_TEXT, g, gDimension);
-		int y = (gDimension.getRoundedY() - g.getFontMetrics().getHeight()) / 2;
+		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-		// Draw the Game Over string.
-		g.drawString(GAME_OVER_MAIN_TEXT, centeredX, y);
+		graphics.setColor(Color.WHITE);
+		graphics.setFont(H1_FONT);
+		int centeredX = getCenteredXPositionForString(GAME_OVER_MAIN_TEXT, graphics, canvasDimension);
+		int y = (canvasDimension.getHeight() - graphics.getFontMetrics().getHeight()) / 2;
 
-		/*
-		 * Sets up the parameters for the death count string.
-		 * Sets the font
-		 * Calculates the coordinate of the origin of the string in order for it to be centered in the X axis and below the Game Over string by a certain padding
-		 */
-		g.setFont(P_FONT);
+		graphics.drawString(GAME_OVER_MAIN_TEXT, centeredX, y);
+		graphics.setFont(P_FONT);
 		final String composedDeathCount = DEATH_COUNT_TEXT + gameManager.getDeathCount();
-		centeredX = getCenteredXPositionForString(composedDeathCount, g, gDimension);
-		y = (gDimension.getRoundedY() / 2) + (g.getFontMetrics().getHeight() / 2);
+		centeredX = getCenteredXPositionForString(composedDeathCount, graphics, canvasDimension);
+		y = (canvasDimension.getHeight() / 2) + (graphics.getFontMetrics().getHeight() / 2);
 
-		// Draw the death count string
-		g.drawString(composedDeathCount, centeredX, y);
+		graphics.drawString(composedDeathCount, centeredX, y);
+		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 
-		// Prevents this scene to be rendered again for subsequent frames and resets antialiasing
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+		return canvas;
+	}
+
+	@Override
+	public void draw(final Graphics2D graphics, final Vector2D canvasDimension) {
+		graphics.drawImage(draw(), null, 0, 0);
 	}
 }

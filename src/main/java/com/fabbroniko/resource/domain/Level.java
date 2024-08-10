@@ -9,6 +9,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -19,7 +20,7 @@ public class Level {
 
   @JacksonXmlElementWrapper(localName = "game-objects")
   @JacksonXmlProperty(localName = "game-object")
-  private List<GameObject> gameObjects;
+  private List<GameObject> gameObjects = new ArrayList<>();
 
   private Map map;
   private Vector2D startPosition;

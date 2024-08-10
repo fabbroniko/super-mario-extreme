@@ -10,6 +10,7 @@ import com.fabbroniko.gameobjects.InvisibleBlock;
 import com.fabbroniko.gameobjects.Player;
 import com.fabbroniko.main.GameManager;
 import com.fabbroniko.main.Time;
+import com.fabbroniko.resource.ResourceManager;
 import com.fabbroniko.resource.domain.Level;
 
 import java.awt.Color;
@@ -34,8 +35,8 @@ public final class GameScene extends AbstractScene implements KeyListener {
     private List<AbstractGameObject> gameObjects;
     private CollisionManager collisionManager;
 
-    public GameScene(final GameManager gameManager, final Level level) {
-        super(gameManager);
+    public GameScene(final GameManager gameManager, final AudioManager audioManager, final ResourceManager resourceManager, final Level level) {
+        super(gameManager, audioManager, resourceManager);
 
         this.level = level;
     }
