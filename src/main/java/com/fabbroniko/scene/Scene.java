@@ -20,4 +20,6 @@ public interface Scene {
     default int getCenteredXPositionFromSize(final Dimension2D canvasDimension, final int secondaryWidth) {
         return (canvasDimension.getWidth() - secondaryWidth) / 2;
     }
+
+    void detach();
 }

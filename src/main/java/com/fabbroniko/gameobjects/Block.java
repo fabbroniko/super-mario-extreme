@@ -1,6 +1,12 @@
 package com.fabbroniko.gameobjects;
 
-import com.fabbroniko.environment.*;
+import com.fabbroniko.environment.Animation;
+import com.fabbroniko.environment.AnimationListener;
+import com.fabbroniko.environment.AudioManager;
+import com.fabbroniko.environment.CollisionDirection;
+import com.fabbroniko.environment.TileMap;
+import com.fabbroniko.environment.Vector2D;
+import com.fabbroniko.resource.ResourceManager;
 import com.fabbroniko.scene.GameScene;
 
 /**
@@ -18,11 +24,15 @@ public class Block extends AbstractGameObject implements AnimationListener {
 
 	private final Animation breakingAnimation;
 
-	public Block(final TileMap tileMap, final GameScene gameScene, final Vector2D position) {
-		super(tileMap, gameScene, position, spriteDimension);
+	public Block(final TileMap tileMap,
+				 final GameScene gameScene,
+				 final ResourceManager resourceManager,
+				 final AudioManager audioManager,
+				 final Vector2D position) {
+		super(tileMap, gameScene, resourceManager, audioManager, position, spriteDimension);
 
 		breakingAnimation = Animation.builder()
-				.spriteSet(gameScene.getResourceManager().loadImageFromDisk(spritePath))
+				.spriteSet(resourceManager.loadImageFromDisk(spritePath))
 				.spriteDimension(spriteDimension)
 				.row(1)
 				.nFrames(6)
@@ -32,7 +42,7 @@ public class Block extends AbstractGameObject implements AnimationListener {
 				.build();
 
 		setAnimation(Animation.builder()
-				.spriteSet(gameScene.getResourceManager().loadImageFromDisk(spritePath))
+				.spriteSet(resourceManager.loadImageFromDisk(spritePath))
 				.spriteDimension(spriteDimension)
 				.row(0)
 				.nFrames(1)
@@ -46,7 +56,7 @@ public class Block extends AbstractGameObject implements AnimationListener {
 		
 		if (obj instanceof Player && direction.equals(CollisionDirection.BOTTOM_COLLISION) && !currentAnimation.getName().equals(BLOCK_BREAKING_ANIMATION_NAME)) {
 			this.setAnimation(breakingAnimation);
-			gameScene.getAudioManager().playEffect("breaking");
+			audioManager.playEffect("breaking");
 		}
 	}
 

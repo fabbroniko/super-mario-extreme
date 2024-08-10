@@ -1,6 +1,7 @@
 package com.fabbroniko.gameobjects;
 
 import com.fabbroniko.environment.*;
+import com.fabbroniko.resource.ResourceManager;
 import com.fabbroniko.scene.GameScene;
 
 public class Enemy extends AbstractGameObject implements AnimationListener {
@@ -12,13 +13,18 @@ public class Enemy extends AbstractGameObject implements AnimationListener {
 	private boolean init;
 	private final Animation deadAnimation;
 
-	public Enemy(final TileMap tileMap, final GameScene gameScene, final Vector2D position) {
-		super(tileMap, gameScene, position, spriteDimension);
+	public Enemy(final TileMap tileMap,
+				 final GameScene gameScene,
+				 final ResourceManager resourceManager,
+				 final AudioManager audioManager,
+				 final Vector2D position) {
+		super(tileMap, gameScene, resourceManager, audioManager, position, spriteDimension);
+
 		falling = true;
 		walkingSpeed = 300;
 
 		deadAnimation = Animation.builder()
-				.spriteSet(gameScene.getResourceManager().loadImageFromDisk(spritePath))
+				.spriteSet(resourceManager.loadImageFromDisk(spritePath))
 				.spriteDimension(spriteDimension)
 				.row(1)
 				.nFrames(1)
@@ -29,7 +35,7 @@ public class Enemy extends AbstractGameObject implements AnimationListener {
 				.build();
 
 		setAnimation(Animation.builder()
-				.spriteSet(gameScene.getResourceManager().loadImageFromDisk(spritePath))
+				.spriteSet(resourceManager.loadImageFromDisk(spritePath))
 				.spriteDimension(spriteDimension)
 				.row(0)
 				.nFrames(2)
@@ -67,7 +73,7 @@ public class Enemy extends AbstractGameObject implements AnimationListener {
 		
 		if (direction.equals(CollisionDirection.TOP_COLLISION) && obj instanceof Player && !currentAnimation.getName().equals(ENEMY_DEAD_ANIMATION_NAME)) {
 			this.setAnimation(deadAnimation);
-			this.gameScene.getAudioManager().playEffect("hit");
+			audioManager.playEffect("hit");
 		}
 	}
 

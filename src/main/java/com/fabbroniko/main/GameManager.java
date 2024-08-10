@@ -15,7 +15,11 @@ import com.fabbroniko.scene.AbstractScene;
 import com.fabbroniko.scene.GameScene;
 import com.fabbroniko.scene.LostScene;
 import com.fabbroniko.scene.MainMenuScene;
+import com.fabbroniko.scene.Scene;
+import com.fabbroniko.scene.SettingsMenuScene;
+import com.fabbroniko.scene.WinScene;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import lombok.Getter;
 import lombok.SneakyThrows;
 
 public final class GameManager {
@@ -25,12 +29,13 @@ public final class GameManager {
 	private final ResourceManager resourceManager;
 	private final AudioManager audioManager;
 	private final SceneContextFactory sceneContextFactory;
-
+	@Getter
 	private final Settings settings;
 
 	private GamePanel gamePanel;
 	private GameThread gameThread;
-	private AbstractScene currentState;
+	private Scene currentState;
+	@Getter
 	private int deathCount;
 
 	private GameManager() {
@@ -46,48 +51,35 @@ public final class GameManager {
 	public static GameManager getInstance() {
 		return instance;
 	}
-	
-	/**
-	 * Sets the specified state that has to be displayed on the screen.
-	 */
+
 	@SneakyThrows
 	public synchronized void openScene(final Class<? extends AbstractScene> newSceneClass) {
-		AbstractScene newScene;
+		Scene newScene;
 
-		if(GameScene.class.equals(newSceneClass)) {
+		if (GameScene.class.equals(newSceneClass)) {
 			final Level defaultLevel = new XmlMapper().readValue(getClass().getResource("/levels/testing.xml"), Level.class);
-			newScene = newSceneClass.getConstructor(GameManager.class, AudioManager.class, ResourceManager.class, Level.class).newInstance(this, audioManager, resourceManager, defaultLevel);
-		} else {
-			newScene = newSceneClass.getConstructor(GameManager.class, SceneContextFactory.class, AudioManager.class, ResourceManager.class).newInstance(this, sceneContextFactory, audioManager, resourceManager);
-		}
-
-		if(newScene instanceof LostScene) {
+			newScene = new GameScene(sceneContextFactory, this, audioManager, resourceManager, defaultLevel);
+		} else if (WinScene.class.equals(newSceneClass)) {
+			newScene = new WinScene(sceneContextFactory, this, audioManager);
+		} else if (LostScene.class.equals(newSceneClass)) {
 			deathCount++;
+			newScene = new LostScene(sceneContextFactory, this, audioManager);
+		} else if (MainMenuScene.class.equals(newSceneClass)) {
+			newScene = new MainMenuScene(sceneContextFactory, this, audioManager, resourceManager);
+		} else {
+			newScene = new SettingsMenuScene(sceneContextFactory, this, audioManager, resourceManager);
 		}
 
 		if(currentState != null) {
-			currentState.detachScene();
+			currentState.detach();
 		}
 
 		this.currentState = newScene;
 		this.currentState.init();
 	}
-	
-	/**	Updates the image that should be displayed.
-	 * 	@see com.fabbroniko.main.Drawable#update()
-	 */
+
 	public synchronized void update() {
 		if(currentState != null) this.currentState.update();
-	}
-
-	public AudioManager getAudioManager() {
-		return audioManager;
-	}
-
-	public ResourceManager getResourceManager() { return resourceManager; }
-
-	public Settings getSettings() {
-		return settings;
 	}
 
 	public void saveSettings() {
@@ -95,7 +87,11 @@ public final class GameManager {
 	}
 
 	public synchronized void draw(final Graphics2D g, final Vector2D canvasDimension) {
-		if(currentState != null) this.currentState.draw(g, canvasDimension);
+		if(currentState == null) {
+			return;
+		}
+
+		g.drawImage(this.currentState.draw(), null, 0, 0);
 	}
 	
 	public void exit() {
@@ -108,10 +104,6 @@ public final class GameManager {
 
 	public void removeKeyListener(final KeyListener keyDependent) {
 		gamePanel.removeKeyListener(keyDependent);
-	}
-
-	public int getDeathCount() {
-		return deathCount;
 	}
 
 	public void start() {

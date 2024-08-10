@@ -5,6 +5,7 @@ import java.awt.event.KeyListener;
 
 import com.fabbroniko.environment.*;
 import com.fabbroniko.main.GameManager;
+import com.fabbroniko.resource.ResourceManager;
 import com.fabbroniko.scene.GameScene;
 import com.fabbroniko.scene.LostScene;
 import lombok.extern.log4j.Log4j2;
@@ -33,15 +34,20 @@ public class Player extends AbstractGameObject implements KeyListener {
 	private final Animation idleAnimation;
 	private final Animation jumpAnimation;
 
-	public Player(final TileMap tileMap, final GameScene gameScene, final Vector2D position) {
-		super(tileMap, gameScene, position, spriteDimension);
+	public Player(final TileMap tileMap,
+				  final GameScene gameScene,
+				  final ResourceManager resourceManager,
+				  final AudioManager audioManager,
+				  final Vector2D position) {
+		super(tileMap, gameScene, resourceManager, audioManager, position, spriteDimension);
+
 		falling = true;
 		animationJump = true;
 		this.gameScene = gameScene;
 		this.baseWindowSize = GameManager.getInstance().getCanvasSize();
 
 		idleAnimation = Animation.builder()
-				.spriteSet(gameScene.getResourceManager().loadImageFromDisk(spritePath))
+				.spriteSet(resourceManager.loadImageFromDisk(spritePath))
 				.spriteDimension(spriteDimension)
 				.row(0)
 				.nFrames(1)
@@ -50,7 +56,7 @@ public class Player extends AbstractGameObject implements KeyListener {
 				.build();
 
 		jumpAnimation = Animation.builder()
-				.spriteSet(gameScene.getResourceManager().loadImageFromDisk(spritePath))
+				.spriteSet(resourceManager.loadImageFromDisk(spritePath))
 				.spriteDimension(spriteDimension)
 				.row(1)
 				.nFrames(1)
@@ -59,7 +65,7 @@ public class Player extends AbstractGameObject implements KeyListener {
 				.build();
 
 		walkAnimation = Animation.builder()
-				.spriteSet(gameScene.getResourceManager().loadImageFromDisk(spritePath))
+				.spriteSet(resourceManager.loadImageFromDisk(spritePath))
 				.spriteDimension(spriteDimension)
 				.row(2)
 				.nFrames(3)
@@ -140,7 +146,7 @@ public class Player extends AbstractGameObject implements KeyListener {
 			groundHit = false;
 			currentJump = 0;
 			animationJump = true;
-			gameScene.getAudioManager().playEffect("jump");
+			audioManager.playEffect("jump");
 		}
 	}
  

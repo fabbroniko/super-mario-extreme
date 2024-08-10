@@ -1,43 +1,45 @@
 package com.fabbroniko.scene;
 
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.Color;
-import java.awt.image.BufferedImage;
-
 import com.fabbroniko.environment.AudioManager;
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.environment.SceneContext;
 import com.fabbroniko.environment.SceneContextFactory;
-import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.main.GameManager;
-import com.fabbroniko.resource.ResourceManager;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public final class WinScene extends AbstractScene implements Scene {
 
 	private static final String LEVEL_COMPLETED = "Level Completed";
 	private static final int SCENE_DURATION_MILLISECONDS = 6000;
 
-	private long initTime;
-	private final Vector2D origin = new Vector2D();
-
 	private final SceneContextFactory sceneContextFactory;
-	private final GameManager gameManager;
 	private final AudioManager audioManager;
-	private final ResourceManager resourceManager;
+	private final GameManager gameManager;
 
-	public WinScene(final GameManager gameManager, SceneContextFactory sceneContextFactory, AudioManager audioManager, ResourceManager resourceManager) {
-		super(gameManager, audioManager, resourceManager);
+	private BufferedImage canvas;
+	private Graphics2D graphics;
+	private Dimension2D canvasDimension;
+	private long initTime;
+
+	public WinScene(final SceneContextFactory sceneContextFactory,
+					final GameManager gameManager,
+					final AudioManager audioManager) {
         this.sceneContextFactory = sceneContextFactory;
-		this.gameManager = gameManager;
         this.audioManager = audioManager;
-        this.resourceManager = resourceManager;
+        this.gameManager = gameManager;
     }
 
 	@Override
 	public void init() {
 		audioManager.playBackgroundMusic("victory", false);
 		initTime = System.currentTimeMillis();
+
+		final SceneContext sceneContext = sceneContextFactory.create();
+		this.canvas = sceneContext.getSceneCanvas();
+		this.graphics = (Graphics2D) canvas.getGraphics();
+		this.canvasDimension = sceneContext.getCanvasDimension();
 	}
 
 	@Override
@@ -49,14 +51,9 @@ public final class WinScene extends AbstractScene implements Scene {
 
 	@Override
 	public BufferedImage draw() {
-		final SceneContext sceneContext = sceneContextFactory.create();
-		final BufferedImage canvas = sceneContext.getSceneCanvas();
-		final Graphics2D graphics = (Graphics2D) canvas.getGraphics();
-		final Dimension2D canvasDimension = sceneContext.getCanvasDimension();
-
 		// Fill in the background
 		graphics.setColor(Color.BLACK);
-		graphics.fillRect(origin.getRoundedX(), origin.getRoundedY(), canvasDimension.getWidth(), canvasDimension.getHeight());
+		graphics.fillRect(0, 0, canvasDimension.getWidth(), canvasDimension.getHeight());
 
 		// Activating the antialiasing to smooth out the strings
 		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -76,7 +73,7 @@ public final class WinScene extends AbstractScene implements Scene {
 	}
 
 	@Override
-	public void draw(final Graphics2D g, final Vector2D canvasDimension) {
-		g.drawImage(draw(), null, 0, 0);
+	public void detach() {
+		audioManager.stopMusic();
 	}
 }

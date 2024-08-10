@@ -1,8 +1,10 @@
 package com.fabbroniko.gameobjects;
 
 import com.fabbroniko.environment.Animation;
+import com.fabbroniko.environment.AudioManager;
 import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.environment.TileMap;
+import com.fabbroniko.resource.ResourceManager;
 import com.fabbroniko.scene.GameScene;
 
 public class Castle extends AbstractGameObject {
@@ -12,11 +14,15 @@ public class Castle extends AbstractGameObject {
 
 	public static final String CASTLE_IDLE_ANIMATION_NAME = "CASTLE_IDLE";
 
-	public Castle(final TileMap tileMap, final GameScene gameScene, final Vector2D position) {
-		super(tileMap, gameScene, position, spriteDimension);
+	public Castle(final TileMap tileMap,
+				  final GameScene gameScene,
+				  final ResourceManager resourceManager,
+				  final AudioManager audioManager,
+				  final Vector2D position) {
+		super(tileMap, gameScene, resourceManager, audioManager, position, spriteDimension);
 
 		setAnimation(Animation.builder()
-				.spriteSet(gameScene.getResourceManager().loadImageFromDisk(spritePath))
+				.spriteSet(resourceManager.loadImageFromDisk(spritePath))
 				.spriteDimension(spriteDimension)
 				.row(0)
 				.nFrames(1)

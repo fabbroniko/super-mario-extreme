@@ -49,8 +49,14 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 	private final AudioManager audioManager;
 	private final ResourceManager resourceManager;
 
-	public SettingsMenuScene(final GameManager gameManager, SceneContextFactory sceneContextFactory, AudioManager audioManager, ResourceManager resourceManager) {
-		super(gameManager, audioManager, resourceManager);
+	private BufferedImage canvas;
+	private Graphics2D graphics;
+	private Dimension2D canvasDimension;
+
+	public SettingsMenuScene(final SceneContextFactory sceneContextFactory,
+							 final GameManager gameManager,
+							 final AudioManager audioManager,
+							 final ResourceManager resourceManager) {
 		this.sceneContextFactory = sceneContextFactory;
 		this.gameManager = gameManager;
 		this.audioManager = audioManager;
@@ -59,8 +65,13 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 
 	@Override
 	public void init() {
-		bg = new Background(gameManager.getResourceManager(), "menu");
+		bg = new Background(resourceManager, "menu");
 		gameManager.addKeyListener(this);
+
+		final SceneContext sceneContext = sceneContextFactory.create();
+		this.canvas = sceneContext.getSceneCanvas();
+		this.graphics = (Graphics2D) canvas.getGraphics();
+		this.canvasDimension = sceneContext.getCanvasDimension();
 	}
 
 	@Override
@@ -68,10 +79,6 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 
 	@Override
 	public BufferedImage draw() {
-		final SceneContext sceneContext = sceneContextFactory.create();
-		final BufferedImage canvas = sceneContext.getSceneCanvas();
-		final Graphics2D graphics = (Graphics2D) canvas.getGraphics();
-		final Dimension2D canvasDimension = sceneContext.getCanvasDimension();
 		final Vector2D bgPosition = bg.getDrawingPosition();
 		graphics.drawImage(bg.getDrawableImage(), bgPosition.getRoundedX(), bgPosition.getRoundedY(), canvasDimension.getWidth(), canvasDimension.getHeight(), null);
 
@@ -117,14 +124,9 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 	}
 
 	@Override
-	public void detachScene() {
-		super.detachScene();
-
+	public void detach() {
+		audioManager.stopMusic();
 		gameManager.removeKeyListener(this);
-	}
-	@Override
-	public void draw(final Graphics2D graphics, final Vector2D canvasDimension) {
-		graphics.drawImage(draw(), null, 0, 0);
 	}
 
 	@Override

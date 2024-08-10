@@ -1,6 +1,13 @@
 package com.fabbroniko.scene;
 
-import com.fabbroniko.environment.*;
+import com.fabbroniko.environment.AudioManager;
+import com.fabbroniko.environment.Background;
+import com.fabbroniko.environment.CollisionManager;
+import com.fabbroniko.environment.Dimension2D;
+import com.fabbroniko.environment.SceneContext;
+import com.fabbroniko.environment.SceneContextFactory;
+import com.fabbroniko.environment.TileMap;
+import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.gameobjects.AbstractGameObject;
 import com.fabbroniko.gameobjects.Block;
 import com.fabbroniko.gameobjects.Castle;
@@ -13,11 +20,10 @@ import com.fabbroniko.main.Time;
 import com.fabbroniko.resource.ResourceManager;
 import com.fabbroniko.resource.domain.Level;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +31,7 @@ import java.util.List;
  * First Level.
  * @author com.fabbroniko
  */
-public final class GameScene extends AbstractScene implements KeyListener {
+public final class GameScene extends AbstractScene implements KeyListener, Scene {
 
     private static final int FPS_OFFSET = 15;
 
@@ -35,16 +41,32 @@ public final class GameScene extends AbstractScene implements KeyListener {
     private List<AbstractGameObject> gameObjects;
     private CollisionManager collisionManager;
 
-    public GameScene(final GameManager gameManager, final AudioManager audioManager, final ResourceManager resourceManager, final Level level) {
-        super(gameManager, audioManager, resourceManager);
+    private final SceneContextFactory sceneContextFactory;
+    private final GameManager gameManager;
+    private final AudioManager audioManager;
+    private final ResourceManager resourceManager;
 
+    private BufferedImage canvas;
+    private Graphics2D graphics;
+    private Dimension2D canvasDimension;
+
+    public GameScene(final SceneContextFactory sceneContextFactory,
+                     final GameManager gameManager,
+                     final AudioManager audioManager,
+                     final ResourceManager resourceManager,
+                     final Level level) {
+
+        this.sceneContextFactory = sceneContextFactory;
+        this.gameManager = gameManager;
+        this.audioManager = audioManager;
+        this.resourceManager = resourceManager;
         this.level = level;
     }
 
     @Override
     public void init() {
-        bg = new Background(gameManager.getResourceManager(), "game");
-        tileMap = new TileMap(gameManager.getResourceManager(), level.getMap(), gameManager.getCanvasSize());
+        bg = new Background(resourceManager, "game");
+        tileMap = new TileMap(resourceManager, level.getMap(), gameManager.getCanvasSize());
         gameObjects = new ArrayList<>();
 
         this.collisionManager = new CollisionManager(tileMap, gameObjects);
@@ -60,23 +82,23 @@ public final class GameScene extends AbstractScene implements KeyListener {
         );
 
         audioManager.playBackgroundMusic("theme", true);
+
+        final SceneContext sceneContext = sceneContextFactory.create();
+        this.canvas = sceneContext.getSceneCanvas();
+        this.graphics = (Graphics2D) canvas.getGraphics();
+        this.canvasDimension = sceneContext.getCanvasDimension();
     }
 
     private Class<? extends AbstractGameObject> getClassFromName(final String name) {
-        switch (name) {
-            case "castle":
-                return Castle.class;
-            case "invisible-block":
-                return InvisibleBlock.class;
-            case "falling-platform":
-                return FallingBlock.class;
-            case "ghost-enemy":
-                return Enemy.class;
-            case "breakable-block":
-                return Block.class;
-            default:
-                throw new IllegalArgumentException("The specified game object with name " + name + " doesn't exist.");
-        }
+        return switch (name) {
+            case "castle" -> Castle.class;
+            case "invisible-block" -> InvisibleBlock.class;
+            case "falling-platform" -> FallingBlock.class;
+            case "ghost-enemy" -> Enemy.class;
+            case "breakable-block" -> Block.class;
+            default ->
+                    throw new IllegalArgumentException("The specified game object with name " + name + " doesn't exist.");
+        };
     }
 
     public final void checkForCollisions(final AbstractGameObject obj, final Vector2D offsetPosition) {
@@ -85,7 +107,13 @@ public final class GameScene extends AbstractScene implements KeyListener {
 
     private AbstractGameObject addNewObject(final Class<? extends AbstractGameObject> objectClass, final Vector2D position) {
         try {
-            final AbstractGameObject newGameObject = objectClass.getConstructor(TileMap.class, GameScene.class, Vector2D.class).newInstance(tileMap, this, position);
+            final AbstractGameObject newGameObject = objectClass.getConstructor(
+                    TileMap.class,
+                    GameScene.class,
+                    ResourceManager.class,
+                    AudioManager.class,
+                    Vector2D.class)
+                    .newInstance(tileMap, this, resourceManager, audioManager, position);
             gameObjects.add(newGameObject);
             return newGameObject;
         } catch (final Exception e) {
@@ -95,13 +123,6 @@ public final class GameScene extends AbstractScene implements KeyListener {
 
     public void levelFinished() {
         gameManager.openScene(WinScene.class);
-    }
-
-    @Override
-    public void detachScene() {
-        super.detachScene();
-
-        gameManager.removeKeyListener(this);
     }
 
     @Override
@@ -120,38 +141,46 @@ public final class GameScene extends AbstractScene implements KeyListener {
     }
 
     @Override
-    public void draw(final Graphics2D g, final Vector2D canvasDimension) {
+    public BufferedImage draw() {
         final Vector2D bgPosition = bg.getDrawingPosition();
-        g.drawImage(bg.getDrawableImage(), bgPosition.getRoundedX(), bgPosition.getRoundedY(), canvasDimension.getRoundedX(), canvasDimension.getRoundedY(), null);
+        graphics.drawImage(bg.getDrawableImage(), bgPosition.getRoundedX(), bgPosition.getRoundedY(), canvasDimension.getWidth(), canvasDimension.getHeight(), null);
 
         for (final AbstractGameObject i:gameObjects) {
             if (!i.isDead()) {
                 final Vector2D position = i.getDrawingPosition();
                 final Vector2D spriteDimension = i.getSpriteDimension();
 
-                g.drawImage(i.getDrawableImage(), position.getRoundedX(), position.getRoundedY(), spriteDimension.getRoundedX(), spriteDimension.getRoundedY(), null);
+                graphics.drawImage(i.getDrawableImage(), position.getRoundedX(), position.getRoundedY(), spriteDimension.getRoundedX(), spriteDimension.getRoundedY(), null);
             }
         }
 
         final Vector2D tileMapPosition = tileMap.getDrawingPosition();
-        g.drawImage(tileMap.getDrawableImage(), tileMapPosition.getRoundedX(), tileMapPosition.getRoundedY(), canvasDimension.getRoundedX(), canvasDimension.getRoundedY(), null);
+        graphics.drawImage(tileMap.getDrawableImage(), tileMapPosition.getRoundedX(), tileMapPosition.getRoundedY(), canvasDimension.getWidth(), canvasDimension.getHeight(), null);
 
         if(gameManager.getSettings().isShowFps()) {
             int currentFps = Time.getFps();
 
             if(currentFps < 30)
-                g.setColor(Color.RED);
+                graphics.setColor(Color.RED);
             else
-                g.setColor(Color.GREEN);
+                graphics.setColor(Color.GREEN);
 
-            g.setFont(P_FONT);
+            graphics.setFont(P_FONT);
 
-            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             final String currentFpsString = String.valueOf(currentFps);
-            final int fpsWidth = g.getFontMetrics().stringWidth(currentFpsString);
-            g.drawString(currentFpsString, canvasDimension.getRoundedX() - fpsWidth - FPS_OFFSET, g.getFontMetrics().getHeight());
-            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+            final int fpsWidth = graphics.getFontMetrics().stringWidth(currentFpsString);
+            graphics.drawString(currentFpsString, canvasDimension.getWidth() - fpsWidth - FPS_OFFSET, graphics.getFontMetrics().getHeight());
+            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
         }
+
+        return canvas;
+    }
+
+    @Override
+    public void detach() {
+        audioManager.stopMusic();
+        gameManager.removeKeyListener(this);
     }
 
     @Override

@@ -1,14 +1,19 @@
 package com.fabbroniko.gameobjects;
 
-import java.awt.Rectangle;
+import com.fabbroniko.environment.Animation;
+import com.fabbroniko.environment.AudioManager;
+import com.fabbroniko.environment.CollisionDirection;
+import com.fabbroniko.environment.TileMap;
+import com.fabbroniko.environment.Vector2D;
+import com.fabbroniko.main.Drawable;
+import com.fabbroniko.main.Time;
+import com.fabbroniko.resource.ResourceManager;
+import com.fabbroniko.scene.GameScene;
+
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.fabbroniko.environment.*;
-import com.fabbroniko.main.Drawable;
-import com.fabbroniko.main.Time;
-import com.fabbroniko.scene.GameScene;
 
 /**
  * Abstract Class representing a generic GameObject.
@@ -30,16 +35,11 @@ public abstract class AbstractGameObject implements Drawable {
 	protected Animation currentAnimation;
 
 	protected List<Animation> registeredAnimations;
-	
-	/**
-	 * TileMap on which it has to be placed.
-	 */
-	protected TileMap tileMap;
-	
-	/**
-	 * Level on which it has to be placed.
-	 */
-	protected GameScene gameScene;
+
+	protected final TileMap tileMap;
+	protected final GameScene gameScene;
+	protected final ResourceManager resourceManager;
+	protected final AudioManager audioManager;
 	
 	/**
 	 * Represents whether it's jumping or not.
@@ -89,12 +89,19 @@ public abstract class AbstractGameObject implements Drawable {
 	 */
 	protected Vector2D offset;
 
-	protected AbstractGameObject(final TileMap tileMapP, final GameScene gameScene, final Vector2D spawnPosition, final Vector2D spriteDimension) {
-		this.tileMap = tileMapP;
+	protected AbstractGameObject(final TileMap tileMap,
+								 final GameScene gameScene,
+								 final ResourceManager resourceManager,
+								 final AudioManager audioManager,
+								 final Vector2D position,
+								 final Vector2D spriteDimension) {
+		this.tileMap = tileMap;
 		this.gameScene = gameScene;
+		this.resourceManager = resourceManager;
+		this.audioManager = audioManager;
 		this.death = false;
 		
-		this.currentPosition = spawnPosition.clone();
+		this.currentPosition = position.clone();
 		this.spriteDimension = spriteDimension;
 		this.registeredAnimations = new ArrayList<>();
 

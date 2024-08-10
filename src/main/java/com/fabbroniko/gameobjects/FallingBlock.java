@@ -1,6 +1,7 @@
 package com.fabbroniko.gameobjects;
 
 import com.fabbroniko.environment.*;
+import com.fabbroniko.resource.ResourceManager;
 import com.fabbroniko.scene.GameScene;
 
 public class FallingBlock extends AbstractGameObject {
@@ -10,11 +11,15 @@ public class FallingBlock extends AbstractGameObject {
 
 	public static final String FALLING_BLOCK_IDLE_ANIMATION_NAME = "FALL_BLK_IDLE";
 
-	public FallingBlock(final TileMap tileMap, final GameScene gameScene, final Vector2D position) {
-		super(tileMap, gameScene, position, spriteDimension);
+	public FallingBlock(final TileMap tileMap,
+						final GameScene gameScene,
+						final ResourceManager resourceManager,
+						final AudioManager audioManager,
+						final Vector2D position) {
+		super(tileMap, gameScene, resourceManager, audioManager, position, spriteDimension);
 
 		setAnimation(Animation.builder()
-				.spriteSet(gameScene.getResourceManager().loadImageFromDisk(spritePath))
+				.spriteSet(resourceManager.loadImageFromDisk(spritePath))
 				.spriteDimension(spriteDimension)
 				.row(0)
 				.nFrames(1)
