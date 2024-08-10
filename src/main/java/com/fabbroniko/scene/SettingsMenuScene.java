@@ -1,17 +1,20 @@
 package com.fabbroniko.scene;
 
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
 import com.fabbroniko.environment.AudioManager;
 import com.fabbroniko.environment.Background;
+import com.fabbroniko.environment.Dimension2D;
+import com.fabbroniko.environment.SceneContext;
 import com.fabbroniko.environment.SceneContextFactory;
 import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.main.GameManager;
 import com.fabbroniko.resource.ResourceManager;
 
-public final class SettingsMenuScene extends AbstractScene implements KeyListener {
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+
+public final class SettingsMenuScene extends AbstractScene implements KeyListener, Scene {
 
 	// Constant strings
 	private static final String HINT_1 = "Arrow UP/DOWN to navigate. ENTER to modify.";
@@ -64,53 +67,64 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 	public void update() {}
 
 	@Override
-	public void detachScene() {
-		super.detachScene();
-
-		gameManager.removeKeyListener(this);
-	}
-	@Override
-	public void draw(final Graphics2D g, final Vector2D canvasDimension) {
+	public BufferedImage draw() {
+		final SceneContext sceneContext = sceneContextFactory.create();
+		final BufferedImage canvas = sceneContext.getSceneCanvas();
+		final Graphics2D graphics = (Graphics2D) canvas.getGraphics();
+		final Dimension2D canvasDimension = sceneContext.getCanvasDimension();
 		final Vector2D bgPosition = bg.getDrawingPosition();
-		g.drawImage(bg.getDrawableImage(), bgPosition.getRoundedX(), bgPosition.getRoundedY(), canvasDimension.getRoundedX(), canvasDimension.getRoundedY(), null);
+		graphics.drawImage(bg.getDrawableImage(), bgPosition.getRoundedX(), bgPosition.getRoundedY(), canvasDimension.getWidth(), canvasDimension.getHeight(), null);
 
 		// Setting up the shared parameters to all options
-		g.setFont(P_FONT);
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		graphics.setFont(P_FONT);
+		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 		/* Printing the options into the screen. The currently drawing option field is used to automatically print
 		 * a option in a new line every time the printOption method is called. This is also used to check if the option
 		 * we are currently drawing is also the one currently selected by the user.
 		 */
 		currentlyDrawingOption = 1;
-		printOption("Left Key: ", gameManager.getSettings().getLeftMovementKeyCode(), g);
-		printOption("Right Key: ", gameManager.getSettings().getRightMovementKeyCode(), g);
-		printOption("Jump Key: ", gameManager.getSettings().getJumpKeyCode(), g);
-		printOption("Music: ", gameManager.getSettings().isMusicActive(), g);
-		printOption("Effects: ", gameManager.getSettings().isEffectsAudioActive(), g);
-		printOption("Show FPS: ", gameManager.getSettings().isShowFps(), g);
-		printOption("FPS Cap: ", String.valueOf(gameManager.getSettings().getFpsCap()), g);
+		printOption("Left Key: ", gameManager.getSettings().getLeftMovementKeyCode(), graphics);
+		printOption("Right Key: ", gameManager.getSettings().getRightMovementKeyCode(), graphics);
+		printOption("Jump Key: ", gameManager.getSettings().getJumpKeyCode(), graphics);
+		printOption("Music: ", gameManager.getSettings().isMusicActive(), graphics);
+		printOption("Effects: ", gameManager.getSettings().isEffectsAudioActive(), graphics);
+		printOption("Show FPS: ", gameManager.getSettings().isShowFps(), graphics);
+		printOption("FPS Cap: ", String.valueOf(gameManager.getSettings().getFpsCap()), graphics);
 
 		// Setting up the configuration for the bottom page hints.
-		g.setColor(Color.WHITE);
-		g.setFont(P_S_FONT);
+		graphics.setColor(Color.WHITE);
+		graphics.setFont(P_S_FONT);
 
 		// Printing a hint depending on what the user is doing.
 		int x;
 		String hint;
 		if(!keyListening) {
-			x = getCenteredXPositionForString(HINT_1, g, canvasDimension);
+			x = getCenteredXPositionForString(HINT_1, graphics, canvasDimension);
 			hint = HINT_1;
 		} else {
-			x = getCenteredXPositionForString(HINT_2, g, canvasDimension);
+			x = getCenteredXPositionForString(HINT_2, graphics, canvasDimension);
 			hint = HINT_2;
 		}
 
 		// Draw the hint
-		g.drawString(hint, x, HINT_Y);
+		graphics.drawString(hint, x, HINT_Y);
 
 		// Disabling antialiasing
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+
+		return canvas;
+	}
+
+	@Override
+	public void detachScene() {
+		super.detachScene();
+
+		gameManager.removeKeyListener(this);
+	}
+	@Override
+	public void draw(final Graphics2D graphics, final Vector2D canvasDimension) {
+		graphics.drawImage(draw(), null, 0, 0);
 	}
 
 	@Override
@@ -272,16 +286,12 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 	}
 
 	private int nextFps(final int fps) {
-		switch (fps) {
-			case 30:
-				return 60;
-			case 60:
-				return 90;
-			case 90:
-				return 120;
-			default:
-				return 30;
-		}
+        return switch (fps) {
+            case 30 -> 60;
+            case 60 -> 90;
+            case 90 -> 120;
+            default -> 30;
+        };
 	}
 
 	/**

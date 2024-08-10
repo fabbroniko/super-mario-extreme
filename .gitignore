@@ -3,5 +3,6 @@ out/
 bin/
 target/
 .gradle/
+build/
 
 *.iml

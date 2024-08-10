@@ -38,18 +38,6 @@ public abstract class AbstractScene {
 
 	public abstract void draw(final Graphics2D g, final Vector2D canvasDimension);
 
-	protected int getCenteredXPositionForString(final String text, final Graphics2D g, final Vector2D dimension) {
-		return (dimension.getRoundedX() - g.getFontMetrics().stringWidth(text)) / 2;
-	}
-
-	protected int getCenteredXPositionForString(final String text, final Graphics2D g, final Dimension2D dimension) {
-		return (dimension.getWidth() - g.getFontMetrics().stringWidth(text)) / 2;
-	}
-
-	protected int getCenteredXPositionFromSize(final Vector2D canvasDimension, final int secondaryWidth) {
-		return (canvasDimension.getRoundedX() - secondaryWidth) / 2;
-	}
-
 	public AudioManager getAudioManager() {
 		return audioManager;
 	}
