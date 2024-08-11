@@ -5,9 +5,9 @@ import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.environment.SceneContext;
 import com.fabbroniko.environment.SceneContextFactory;
 import com.fabbroniko.environment.Vector2D;
-import com.fabbroniko.main.GameManager;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 public final class LostScene extends AbstractScene implements Scene {
@@ -16,11 +16,12 @@ public final class LostScene extends AbstractScene implements Scene {
 	private static final String DEATH_COUNT_TEXT = "Death count: ";
 	private static final int SCENE_DURATION_MILLISECONDS = 3000;
 
+	private int deathCount = 0;
 	private long initTime;
 	private final Vector2D origin = new Vector2D();
+	private boolean isClosed = false;
 
 	private final SceneContextFactory sceneContextFactory;
-	private final GameManager gameManager;
 	private final AudioManager audioManager;
 
 	private BufferedImage canvas;
@@ -28,10 +29,8 @@ public final class LostScene extends AbstractScene implements Scene {
 	private Dimension2D canvasDimension;
 
 	public LostScene(final SceneContextFactory sceneContextFactory,
-					 final GameManager gameManager,
 					 final AudioManager audioManager) {
 		this.sceneContextFactory = sceneContextFactory;
-		this.gameManager = gameManager;
 		this.audioManager = audioManager;
 	}
 
@@ -49,7 +48,7 @@ public final class LostScene extends AbstractScene implements Scene {
 	@Override
 	public void update() {
 		if((System.currentTimeMillis() - initTime) > SCENE_DURATION_MILLISECONDS) {
-			gameManager.openScene(GameScene.class);
+			isClosed = true;
 		}
 	}
 
@@ -67,7 +66,7 @@ public final class LostScene extends AbstractScene implements Scene {
 
 		graphics.drawString(GAME_OVER_MAIN_TEXT, centeredX, y);
 		graphics.setFont(P_FONT);
-		final String composedDeathCount = DEATH_COUNT_TEXT + gameManager.getDeathCount();
+		final String composedDeathCount = DEATH_COUNT_TEXT + ++deathCount;
 		centeredX = getCenteredXPositionForString(composedDeathCount, graphics, canvasDimension);
 		y = (canvasDimension.getHeight() / 2) + (graphics.getFontMetrics().getHeight() / 2);
 
@@ -80,5 +79,25 @@ public final class LostScene extends AbstractScene implements Scene {
 	@Override
 	public void detach() {
 		audioManager.stopMusic();
+	}
+
+	@Override
+	public boolean isClosed() {
+		return isClosed;
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+
 	}
 }

@@ -3,9 +3,10 @@ package com.fabbroniko.scene;
 import com.fabbroniko.environment.Dimension2D;
 
 import java.awt.*;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
-public interface Scene {
+public interface Scene extends KeyListener {
 
     void init();
 
@@ -22,4 +23,6 @@ public interface Scene {
     }
 
     void detach();
+
+    boolean isClosed();
 }

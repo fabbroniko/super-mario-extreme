@@ -49,7 +49,7 @@ public class ResourceManager {
             resource = new XmlMapper().readValue(getClass().getResource(RESOURCE_DESCRIPTOR_PATH), Resource.class);
         } catch (final IOException e) {
             log.fatal("Unable to initialize the resource manager. {}", e.getMessage());
-            throw new RuntimeException(); // TODO handle this properly once error management is refactored
+            throw new RuntimeException();
         }
 
         log.info("Pre-loading audio clips from disk.");

@@ -1,14 +1,19 @@
 package com.fabbroniko.gameobjects;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
-import com.fabbroniko.environment.*;
-import com.fabbroniko.main.GameManager;
+import com.fabbroniko.environment.Animation;
+import com.fabbroniko.environment.AudioManager;
+import com.fabbroniko.environment.CollisionDirection;
+import com.fabbroniko.environment.Dimension2D;
+import com.fabbroniko.environment.TileMap;
+import com.fabbroniko.environment.Vector2D;
+import com.fabbroniko.main.SceneManager;
+import com.fabbroniko.main.SettingsProvider;
 import com.fabbroniko.resource.ResourceManager;
 import com.fabbroniko.scene.GameScene;
-import com.fabbroniko.scene.LostScene;
 import lombok.extern.log4j.Log4j2;
+
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 /**
  * Represents the player's character.
@@ -28,23 +33,32 @@ public class Player extends AbstractGameObject implements KeyListener {
 	private boolean animationMove;
 	private final GameScene gameScene;
 	
-	private final Vector2D baseWindowSize;
+	private final Dimension2D baseWindowSize;
 	
 	private final Animation walkAnimation;
 	private final Animation idleAnimation;
 	private final Animation jumpAnimation;
 
+	private final SettingsProvider settingsProvider;
+	private final SceneManager sceneManager;
+
 	public Player(final TileMap tileMap,
+				  final Dimension2D baseWindowSize,
+				  final SettingsProvider settingsProvider,
 				  final GameScene gameScene,
 				  final ResourceManager resourceManager,
 				  final AudioManager audioManager,
-				  final Vector2D position) {
+				  final Vector2D position,
+				  final SceneManager sceneManager) {
 		super(tileMap, gameScene, resourceManager, audioManager, position, spriteDimension);
+
+		this.sceneManager = sceneManager;
+		this.settingsProvider = settingsProvider;
 
 		falling = true;
 		animationJump = true;
 		this.gameScene = gameScene;
-		this.baseWindowSize = GameManager.getInstance().getCanvasSize();
+		this.baseWindowSize = baseWindowSize;
 
 		idleAnimation = Animation.builder()
 				.spriteSet(resourceManager.loadImageFromDisk(spritePath))
@@ -84,9 +98,9 @@ public class Player extends AbstractGameObject implements KeyListener {
 	@Override
 	public void update() {
 		super.update();
-		tileMap.setPosition(currentPosition.getRoundedX() - (baseWindowSize.getRoundedX() / 2), currentPosition.getRoundedY() - (baseWindowSize.getRoundedY() / 2));
+		tileMap.setPosition(currentPosition.getRoundedX() - (baseWindowSize.getWidth() / 2), currentPosition.getRoundedY() - (baseWindowSize.getHeight() / 2));
 		if (death) {
-			GameManager.getInstance().openScene(LostScene.class);
+			sceneManager.openLostScene();
 		}
 
 		if (animationJump) {
@@ -130,18 +144,23 @@ public class Player extends AbstractGameObject implements KeyListener {
 	}
 
 	@Override
+	public void keyTyped(KeyEvent e) {
+
+	}
+
+	@Override
 	public void keyPressed(final KeyEvent e) {
-		if (e.getKeyCode() == GameManager.getInstance().getSettings().getLeftMovementKeyCode()) {
+		if (e.getKeyCode() == settingsProvider.getSettings().getLeftMovementKeyCode()) {
 			left = true;
 			animationMove = true;
 			facingRight = false;
 		}
-		if (e.getKeyCode() == GameManager.getInstance().getSettings().getRightMovementKeyCode()) {
+		if (e.getKeyCode() == settingsProvider.getSettings().getRightMovementKeyCode()) {
 			right = true;
 			animationMove = true;
 			facingRight = true;
 		}
-		if (e.getKeyCode() == GameManager.getInstance().getSettings().getJumpKeyCode() && !jumping && groundHit) {
+		if (e.getKeyCode() == settingsProvider.getSettings().getJumpKeyCode() && !jumping && groundHit) {
 			jumping = true;
 			groundHit = false;
 			currentJump = 0;
@@ -152,7 +171,7 @@ public class Player extends AbstractGameObject implements KeyListener {
  
 	@Override
 	public void keyReleased(final KeyEvent e) {
-		if (e.getKeyCode() == GameManager.getInstance().getSettings().getLeftMovementKeyCode()) {
+		if (e.getKeyCode() == settingsProvider.getSettings().getLeftMovementKeyCode()) {
 			left = false;
 			if(!right) {
 				animationMove = false;
@@ -160,7 +179,7 @@ public class Player extends AbstractGameObject implements KeyListener {
 				facingRight = true;
 			}
 		}
-		if (e.getKeyCode() == GameManager.getInstance().getSettings().getRightMovementKeyCode()) {
+		if (e.getKeyCode() == settingsProvider.getSettings().getRightMovementKeyCode()) {
 			right = false;
 			if(!left) {
 				animationMove = false;
@@ -168,11 +187,8 @@ public class Player extends AbstractGameObject implements KeyListener {
 				facingRight = false;
 			}
 		}
-		if (e.getKeyCode() == GameManager.getInstance().getSettings().getJumpKeyCode()) {
+		if (e.getKeyCode() == settingsProvider.getSettings().getJumpKeyCode()) {
 			jumping = false;
 		}
 	}
-
-	@Override
-	public void keyTyped(final KeyEvent e) {}
 }

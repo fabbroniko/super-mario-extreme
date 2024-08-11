@@ -6,7 +6,7 @@ import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.environment.SceneContext;
 import com.fabbroniko.environment.SceneContextFactory;
 import com.fabbroniko.environment.Vector2D;
-import com.fabbroniko.main.GameManager;
+import com.fabbroniko.main.SettingsProvider;
 import com.fabbroniko.resource.ResourceManager;
 
 import java.awt.*;
@@ -43,10 +43,11 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 	private int currentlyDrawingOption;
 	private int currentSelection;
 	private boolean keyListening;
+	private boolean isClosed = false;
 
 	private final SceneContextFactory sceneContextFactory;
-	private final GameManager gameManager;
 	private final AudioManager audioManager;
+	private final SettingsProvider settingsProvider;
 	private final ResourceManager resourceManager;
 
 	private BufferedImage canvas;
@@ -54,11 +55,12 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 	private Dimension2D canvasDimension;
 
 	public SettingsMenuScene(final SceneContextFactory sceneContextFactory,
-							 final GameManager gameManager,
+							 final SettingsProvider settingsProvider,
 							 final AudioManager audioManager,
 							 final ResourceManager resourceManager) {
+
 		this.sceneContextFactory = sceneContextFactory;
-		this.gameManager = gameManager;
+		this.settingsProvider = settingsProvider;
 		this.audioManager = audioManager;
 		this.resourceManager = resourceManager;
 	}
@@ -66,7 +68,6 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 	@Override
 	public void init() {
 		bg = new Background(resourceManager, "menu");
-		gameManager.addKeyListener(this);
 
 		final SceneContext sceneContext = sceneContextFactory.create();
 		this.canvas = sceneContext.getSceneCanvas();
@@ -91,13 +92,13 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 		 * we are currently drawing is also the one currently selected by the user.
 		 */
 		currentlyDrawingOption = 1;
-		printOption("Left Key: ", gameManager.getSettings().getLeftMovementKeyCode(), graphics);
-		printOption("Right Key: ", gameManager.getSettings().getRightMovementKeyCode(), graphics);
-		printOption("Jump Key: ", gameManager.getSettings().getJumpKeyCode(), graphics);
-		printOption("Music: ", gameManager.getSettings().isMusicActive(), graphics);
-		printOption("Effects: ", gameManager.getSettings().isEffectsAudioActive(), graphics);
-		printOption("Show FPS: ", gameManager.getSettings().isShowFps(), graphics);
-		printOption("FPS Cap: ", String.valueOf(gameManager.getSettings().getFpsCap()), graphics);
+		printOption("Left Key: ", settingsProvider.getSettings().getLeftMovementKeyCode(), graphics);
+		printOption("Right Key: ", settingsProvider.getSettings().getRightMovementKeyCode(), graphics);
+		printOption("Jump Key: ", settingsProvider.getSettings().getJumpKeyCode(), graphics);
+		printOption("Music: ", settingsProvider.getSettings().isMusicActive(), graphics);
+		printOption("Effects: ", settingsProvider.getSettings().isEffectsAudioActive(), graphics);
+		printOption("Show FPS: ", settingsProvider.getSettings().isShowFps(), graphics);
+		printOption("FPS Cap: ", String.valueOf(settingsProvider.getSettings().getFpsCap()), graphics);
 
 		// Setting up the configuration for the bottom page hints.
 		graphics.setColor(Color.WHITE);
@@ -126,14 +127,18 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 	@Override
 	public void detach() {
 		audioManager.stopMusic();
-		gameManager.removeKeyListener(this);
+	}
+
+	@Override
+	public boolean isClosed() {
+		return isClosed;
 	}
 
 	@Override
 	public void keyPressed(final KeyEvent e) {
 		switch(e.getKeyCode()) {
 			case KeyEvent.VK_ESCAPE: // ESC
-				gameManager.openScene(MainMenuScene.class);
+				isClosed = true;
 				break;
 			case KeyEvent.VK_UP: // Arrow UP
 				specialKeyUpHandler();
@@ -274,17 +279,17 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 	 */
 	private void specialKeyEnterHandler() {
 		if(currentSelection == SELECTION_EFFECTS)
-			gameManager.getSettings().invertEffectActive();
+			settingsProvider.getSettings().invertEffectActive();
 		else if (currentSelection == SELECTION_MUSIC)
-			gameManager.getSettings().invertMusicActive();
+			settingsProvider.getSettings().invertMusicActive();
 		else if (currentSelection == SELECTION_SHOW_FPS)
-			gameManager.getSettings().invertShowFps();
+			settingsProvider.getSettings().invertShowFps();
 		else if (currentSelection == SELECTION_FPS_CAP)
-			gameManager.getSettings().setFpsCap(nextFps(gameManager.getSettings().getFpsCap()));
+			settingsProvider.getSettings().setFpsCap(nextFps(settingsProvider.getSettings().getFpsCap()));
 		else
 			keyListening ^= true;
 
-		gameManager.saveSettings();
+		settingsProvider.saveSettings();
 	}
 
 	private int nextFps(final int fps) {
@@ -307,13 +312,13 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 
 		// Checks what option is currently selected and saves the key code to the appropriate user setting variable.
 		if(currentSelection == SELECTION_LEFT_KEY) {
-			gameManager.getSettings().setLeftMovementKeyCode(keyCode);
+			settingsProvider.getSettings().setLeftMovementKeyCode(keyCode);
 		} else if (currentSelection == SELECTION_RIGHT_KEY) {
-			gameManager.getSettings().setRightMovementKeyCode(keyCode);
+			settingsProvider.getSettings().setRightMovementKeyCode(keyCode);
 		} else if (currentSelection == SELECTION_JUMP_KEY) {
-			gameManager.getSettings().setJumpKeyCode(keyCode);
+			settingsProvider.getSettings().setJumpKeyCode(keyCode);
 		}
 
-		gameManager.saveSettings();
+		settingsProvider.saveSettings();
 	}
 }

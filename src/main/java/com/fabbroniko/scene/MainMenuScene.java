@@ -6,15 +6,19 @@ import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.environment.SceneContext;
 import com.fabbroniko.environment.SceneContextFactory;
 import com.fabbroniko.environment.Vector2D;
-import com.fabbroniko.main.GameManager;
+import com.fabbroniko.main.SceneManager;
 import com.fabbroniko.resource.ResourceManager;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
-public final class MainMenuScene extends AbstractScene implements KeyListener, Scene {
+import static java.awt.event.KeyEvent.VK_DOWN;
+import static java.awt.event.KeyEvent.VK_ENTER;
+import static java.awt.event.KeyEvent.VK_ESCAPE;
+import static java.awt.event.KeyEvent.VK_UP;
+
+public final class MainMenuScene extends AbstractScene implements Scene {
 
 	private static final String TITLE = "Super Mario Extreme Edition";
 	private static final String START_GAME_OPTION = "Start";
@@ -38,25 +42,25 @@ public final class MainMenuScene extends AbstractScene implements KeyListener, S
 	private Background bg;
 
 	private int selectedOption;
+	private boolean isClosed = false;
 
 	private final SceneContextFactory sceneContextFactory;
-	private final GameManager gameManager;
 	private final AudioManager audioManager;
 	private final ResourceManager resourceManager;
+	private final SceneManager sceneManager;
 
 	private BufferedImage canvas;
 	private Graphics2D graphics;
 	private Dimension2D canvasDimension;
 
-
 	public MainMenuScene(final SceneContextFactory sceneContextFactory,
-						 final GameManager gameManager,
 						 final AudioManager audioManager,
-						 final ResourceManager resourceManager) {
+						 final ResourceManager resourceManager,
+						 final SceneManager sceneManager) {
 		this.sceneContextFactory = sceneContextFactory;
-		this.gameManager = gameManager;
 		this.audioManager = audioManager;
 		this.resourceManager = resourceManager;
+		this.sceneManager = sceneManager;
 	}
 
 	@Override
@@ -64,7 +68,6 @@ public final class MainMenuScene extends AbstractScene implements KeyListener, S
 		bg = new Background(resourceManager, "menu");
 		selectedOption = 0;
 
-		gameManager.addKeyListener(this);
 		final SceneContext sceneContext = sceneContextFactory.create();
 		this.canvas = sceneContext.getSceneCanvas();
 		this.graphics = (Graphics2D) canvas.getGraphics();
@@ -113,47 +116,12 @@ public final class MainMenuScene extends AbstractScene implements KeyListener, S
 	@Override
 	public void detach() {
 		audioManager.stopMusic();
-		gameManager.removeKeyListener(this);
 	}
 
 	@Override
-	public void keyPressed(final KeyEvent e) {
-		switch(e.getKeyCode()) {
-		case KeyEvent.VK_DOWN:
-			selectedOption++;
-			break;
-		case KeyEvent.VK_UP:
-			selectedOption--;
-			break;
-		case KeyEvent.VK_ENTER:
-			if (selectedOption == START_OPTION_INDEX) {
-				gameManager.openScene(GameScene.class);
-			} else if (selectedOption == SETTINGS_OPTION_INDEX) {
-				gameManager.openScene(SettingsMenuScene.class);
-			} else {
-				gameManager.exit();
-			}
-			break;
-		case KeyEvent.VK_ESCAPE:
-			gameManager.exit();
-			break;
-		default:
-			break;
-		}
-
-		// Allows looping through the options
-		if (selectedOption < START_OPTION_INDEX) {
-			selectedOption = QUIT_OPTION_INDEX;
-		} else if (selectedOption > QUIT_OPTION_INDEX) {
-			selectedOption = START_OPTION_INDEX;
-		}
+	public boolean isClosed() {
+		return isClosed;
 	}
-
-	@Override
-	public void keyReleased(final KeyEvent e) {}
-
-	@Override
-	public void keyTyped(final KeyEvent e) {}
 
 	private void printMenuOption(final String text, final int y, final Graphics2D g, final Dimension2D canvasDimension, final boolean isSelected) {
 		// Sets up the requirements to draw the rounded rectangle
@@ -174,5 +142,48 @@ public final class MainMenuScene extends AbstractScene implements KeyListener, S
 
 		// Draws the option name within the rectangle
 		g.drawString(text, x, optionNameY);
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+
+	}
+
+	@Override
+	public void keyPressed(KeyEvent event) {
+		switch(event.getKeyCode()) {
+			case VK_DOWN:
+				selectedOption++;
+				break;
+			case VK_UP:
+				selectedOption--;
+				break;
+			case VK_ENTER:
+				if (selectedOption == START_OPTION_INDEX) {
+					sceneManager.openGameScene();
+				} else if (selectedOption == SETTINGS_OPTION_INDEX) {
+					sceneManager.openSettings();
+				} else {
+					isClosed = true;
+				}
+				break;
+			case VK_ESCAPE:
+				isClosed = true;
+				break;
+			default:
+				break;
+		}
+
+		// Allows looping through the options
+		if (selectedOption < START_OPTION_INDEX) {
+			selectedOption = QUIT_OPTION_INDEX;
+		} else if (selectedOption > QUIT_OPTION_INDEX) {
+			selectedOption = START_OPTION_INDEX;
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+
 	}
 }

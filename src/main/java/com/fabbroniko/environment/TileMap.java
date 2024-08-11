@@ -1,13 +1,11 @@
 package com.fabbroniko.environment;
 
-import com.fabbroniko.main.GameManager;
 import com.fabbroniko.main.Drawable;
 import com.fabbroniko.resource.ResourceManager;
 import com.fabbroniko.resource.domain.Map;
 import lombok.extern.log4j.Log4j2;
 
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,16 +23,16 @@ public class TileMap implements Drawable {
 	private Vector2D minLimits;
 	private Vector2D maxLimits;
 	private final Vector2D tileSize;
-	private final Vector2D canvasSize;
+	private final Dimension2D canvasSize;
 
 	private BufferedImage cachedTileMap;
 
-	public TileMap(final ResourceManager resourceManager, final Map map, final Vector2D canvasSize) {
+	public TileMap(final ResourceManager resourceManager, final Map map, final Dimension2D canvasSize) {
 		this.tileSize = new Vector2D(120, 120);
 		this.canvasSize = canvasSize;
 
 		loadTiles(resourceManager.getTileMapSet());
-		loadMap(map, GameManager.getInstance().getCanvasSize());
+		loadMap(map, canvasSize);
 	}
 
 	private void loadTiles(final BufferedImage tileSet) {
@@ -47,14 +45,14 @@ public class TileMap implements Drawable {
 		}
 	}
 
-	private void loadMap(final Map map, final Vector2D canvasSize) {
+	private void loadMap(final Map map, final Dimension2D canvasSize) {
 		final int nRows = map.getVerticalBlocks();
 		final int nCols = map.getHorizontalBlocks();
 
 		this.map = new int[nRows][nCols];
 		Vector2D mapSize = new Vector2D(nCols * tileSize.getRoundedX(), nRows * tileSize.getRoundedY());
 		minLimits = new Vector2D();
-		maxLimits = new Vector2D(mapSize.getRoundedX() - canvasSize.getRoundedX(), mapSize.getRoundedY() - canvasSize.getRoundedY());
+		maxLimits = new Vector2D(mapSize.getRoundedX() - canvasSize.getWidth(), mapSize.getRoundedY() - canvasSize.getHeight());
 
 		for(int i = 0; i < nRows; i++) {
 			for(int y = 0; y < nCols; y++) {
@@ -139,23 +137,7 @@ public class TileMap implements Drawable {
 		return this.mapPosition.clone();
 	}
 
-	/**
-	 * Retrieves the {@link TileType TileType} of the tile at the specified coordinates.
-	 * These coordinates can be any point in the map and it *doesn't have to* be rounded to the closest tile origin point
-	 * (multiples of tile-size).
-	 *
-	 * If the point is outside the limits of the map, null is returned.
-	 *
-	 * @param xPoint The X coordinate element of the point we want to check.
-	 * @param yPoint The Y coordinate element of the point we want to check.
-	 * @return Returns the tile type at the specified point or null if out of the map limits.
-	 */
 	public TileType getTileType(final int xPoint, final int yPoint) {
-		/* Calculate the index of the tile that includes the specified coordinate
-		 * For example if the tile size is 30x30px and we want to check a point with coordinates 35,61 we would get
-		 * 35/30 that rounded is 1 and 61/30 that rounded becomes 2, therefore we want to retried the tile at
-		 * map[2, 1]
-		 */
 		final int yIndex = yPoint / tileSize.getRoundedY();
 		final int xIndex = xPoint / tileSize.getRoundedX();
 
@@ -181,7 +163,7 @@ public class TileMap implements Drawable {
 			return cachedTileMap;
 		}
 
-		final BufferedImage tileMapImage = new BufferedImage(canvasSize.getRoundedX(), canvasSize.getRoundedY(), BufferedImage.TYPE_INT_ARGB);
+		final BufferedImage tileMapImage = new BufferedImage(canvasSize.getWidth(), canvasSize.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		final Graphics2D tileMapGraphics = tileMapImage.createGraphics();
 
 		final int startingXIndex = mapPosition.getRoundedX() / tileSize.getRoundedX();
@@ -195,10 +177,10 @@ public class TileMap implements Drawable {
 		int currentXIndexToDraw;
 		int currentYIndexToDraw = startingYIndex;
 		
-		while (currentPosToDraw.getY() < canvasSize.getRoundedY()) {
+		while (currentPosToDraw.getY() < canvasSize.getHeight()) {
 			currentXIndexToDraw = startingXIndex;
 			currentPosToDraw.setX(basePosToDraw.getX());
-			while (currentPosToDraw.getX() < canvasSize.getRoundedX()) {
+			while (currentPosToDraw.getX() < canvasSize.getWidth()) {
 				if (map[currentYIndexToDraw][currentXIndexToDraw] != NO_TILE) {
 					tileMapGraphics.drawImage(tiles.get(map[currentYIndexToDraw][currentXIndexToDraw]).getImage(), currentPosToDraw.getRoundedX(), currentPosToDraw.getRoundedY(), null);
 				}

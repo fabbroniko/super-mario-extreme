@@ -4,9 +4,9 @@ import com.fabbroniko.environment.AudioManager;
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.environment.SceneContext;
 import com.fabbroniko.environment.SceneContextFactory;
-import com.fabbroniko.main.GameManager;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 public final class WinScene extends AbstractScene implements Scene {
@@ -16,19 +16,17 @@ public final class WinScene extends AbstractScene implements Scene {
 
 	private final SceneContextFactory sceneContextFactory;
 	private final AudioManager audioManager;
-	private final GameManager gameManager;
 
 	private BufferedImage canvas;
 	private Graphics2D graphics;
 	private Dimension2D canvasDimension;
 	private long initTime;
+	private boolean isClosed = false;
 
 	public WinScene(final SceneContextFactory sceneContextFactory,
-					final GameManager gameManager,
 					final AudioManager audioManager) {
         this.sceneContextFactory = sceneContextFactory;
         this.audioManager = audioManager;
-        this.gameManager = gameManager;
     }
 
 	@Override
@@ -45,7 +43,7 @@ public final class WinScene extends AbstractScene implements Scene {
 	@Override
 	public void update() {
 		if((System.currentTimeMillis() - initTime) > SCENE_DURATION_MILLISECONDS) {
-			gameManager.openScene(MainMenuScene.class);
+			isClosed = true;
 		}
 	}
 
@@ -75,5 +73,25 @@ public final class WinScene extends AbstractScene implements Scene {
 	@Override
 	public void detach() {
 		audioManager.stopMusic();
+	}
+
+	@Override
+	public boolean isClosed() {
+		return isClosed;
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+
 	}
 }

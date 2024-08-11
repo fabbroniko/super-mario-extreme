@@ -1,49 +1,62 @@
 package com.fabbroniko.main;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import com.fabbroniko.environment.Dimension2D;
+import lombok.Getter;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
-import javax.swing.JPanel;
+public final class GamePanel extends JPanel implements ControlsSource, KeyListener {
 
-import com.fabbroniko.environment.Vector2D;
-
-public final class GamePanel extends JPanel {
-
-	private static final Vector2D origin = new Vector2D();
-
-	private final Vector2D windowSize;
-	private final Vector2D canvasSize;
+	private final Dimension2D windowSize;
+	@Getter
+	private final Dimension2D canvasSize;
 	private final BufferedImage canvasImage;
+	@Getter
 	private final Graphics2D canvas;
+	private KeyListener keyListener;
 
-	public GamePanel(final Vector2D canvasSize, final Vector2D windowSize) {
+	public GamePanel(final Dimension2D canvasSize, final Dimension2D windowSize) {
 		super();
 
 		this.canvasSize = canvasSize;
 		this.windowSize = windowSize;
+		this.keyListener = new NullCustomKeyListener();
 		
-		this.setPreferredSize(new Dimension(windowSize.getRoundedX(), windowSize.getRoundedY()));
+		this.setPreferredSize(new Dimension(windowSize.getWidth(), windowSize.getHeight()));
 		this.setFocusable(true);
 		this.requestFocus();
+		this.addKeyListener(this);
 
-		canvasImage = new BufferedImage(canvasSize.getRoundedX(), canvasSize.getRoundedY(), BufferedImage.TYPE_INT_RGB);
+		canvasImage = new BufferedImage(canvasSize.getWidth(), canvasSize.getHeight(), BufferedImage.TYPE_INT_RGB);
 		canvas = (Graphics2D) canvasImage.getGraphics();
-	}
-
-	public Graphics2D getCanvas() {
-		return canvas;
 	}
 
 	@Override
 	public void paintComponent(final Graphics cGraphics) {
 		super.paintComponent(cGraphics);
 
-		cGraphics.drawImage(canvasImage, origin.getRoundedX(), origin.getRoundedY(), windowSize.getRoundedX(), windowSize.getRoundedY(), null);
+		cGraphics.drawImage(canvasImage, 0, 0, windowSize.getWidth(), windowSize.getHeight(), null);
 	}
 
-	public Vector2D getCanvasSize() {
-		return canvasSize.clone();
+	@Override
+	public void setKeyListener(KeyListener keyListener) {
+		this.keyListener = keyListener;
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {}
+
+	@Override
+	public void keyPressed(KeyEvent event) {
+		keyListener.keyPressed(event);
+	}
+
+	@Override
+	public void keyReleased(KeyEvent event) {
+		keyListener.keyReleased(event);
 	}
 }

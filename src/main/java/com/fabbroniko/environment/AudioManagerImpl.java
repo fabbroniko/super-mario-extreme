@@ -1,6 +1,6 @@
 package com.fabbroniko.environment;
 
-import com.fabbroniko.main.GameManager;
+import com.fabbroniko.main.SettingsProvider;
 import com.fabbroniko.resource.ResourceManager;
 
 import javax.sound.sampled.Clip;
@@ -9,16 +9,16 @@ public final class AudioManagerImpl implements AudioManager {
 
 	private Clip music;
 	private final ResourceManager resourceManager;
-	private final GameManager gameManager;
+	private final SettingsProvider settingsProvider;
 
-	public AudioManagerImpl(final GameManager gameManager, final ResourceManager resourceManager) {
-		this.gameManager = gameManager;
+	public AudioManagerImpl(final SettingsProvider settingsProvider, final ResourceManager resourceManager) {
+		this.settingsProvider = settingsProvider;
 		this.resourceManager = resourceManager;
 	}
 
 	@Override
 	public void playBackgroundMusic(final String clipName, final boolean loop) {
-		if (!gameManager.getSettings().isMusicActive()) {
+		if (!settingsProvider.getSettings().isMusicActive()) {
 			return;
 		}
 
@@ -36,7 +36,7 @@ public final class AudioManagerImpl implements AudioManager {
 
 	@Override
 	public void playEffect(final String clipName) {
-		if (!gameManager.getSettings().isEffectsAudioActive()) {
+		if (!settingsProvider.getSettings().isEffectsAudioActive()) {
 			return; 
 		}
 
