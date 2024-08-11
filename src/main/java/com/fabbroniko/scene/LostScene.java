@@ -55,20 +55,20 @@ public final class LostScene extends AbstractScene implements Scene {
 	@Override
 	public BufferedImage draw() {
 		graphics.setColor(Color.BLACK);
-		graphics.fillRect(origin.getRoundedX(), origin.getRoundedY(), canvasDimension.getWidth(), canvasDimension.getHeight());
+		graphics.fillRect(origin.getRoundedX(), origin.getRoundedY(), canvasDimension.width(), canvasDimension.height());
 
 		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 		graphics.setColor(Color.WHITE);
 		graphics.setFont(H1_FONT);
 		int centeredX = getCenteredXPositionForString(GAME_OVER_MAIN_TEXT, graphics, canvasDimension);
-		int y = (canvasDimension.getHeight() - graphics.getFontMetrics().getHeight()) / 2;
+		int y = (canvasDimension.height() - graphics.getFontMetrics().getHeight()) / 2;
 
 		graphics.drawString(GAME_OVER_MAIN_TEXT, centeredX, y);
 		graphics.setFont(P_FONT);
 		final String composedDeathCount = DEATH_COUNT_TEXT + ++deathCount;
 		centeredX = getCenteredXPositionForString(composedDeathCount, graphics, canvasDimension);
-		y = (canvasDimension.getHeight() / 2) + (graphics.getFontMetrics().getHeight() / 2);
+		y = (canvasDimension.height() / 2) + (graphics.getFontMetrics().getHeight() / 2);
 
 		graphics.drawString(composedDeathCount, centeredX, y);
 		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);

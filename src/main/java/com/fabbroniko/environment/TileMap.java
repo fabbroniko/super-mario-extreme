@@ -52,7 +52,7 @@ public class TileMap implements Drawable {
 		this.map = new int[nRows][nCols];
 		Vector2D mapSize = new Vector2D(nCols * tileSize.getRoundedX(), nRows * tileSize.getRoundedY());
 		minLimits = new Vector2D();
-		maxLimits = new Vector2D(mapSize.getRoundedX() - canvasSize.getWidth(), mapSize.getRoundedY() - canvasSize.getHeight());
+		maxLimits = new Vector2D(mapSize.getRoundedX() - canvasSize.width(), mapSize.getRoundedY() - canvasSize.height());
 
 		for(int i = 0; i < nRows; i++) {
 			for(int y = 0; y < nCols; y++) {
@@ -149,7 +149,7 @@ public class TileMap implements Drawable {
 		if(tileId == NO_TILE)
 			return TileType.NON_BLOCKING;
 
-		return tiles.get(tileId).getType();
+		return tiles.get(tileId).type();
 	}
 
 	@Override
@@ -163,7 +163,7 @@ public class TileMap implements Drawable {
 			return cachedTileMap;
 		}
 
-		final BufferedImage tileMapImage = new BufferedImage(canvasSize.getWidth(), canvasSize.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		final BufferedImage tileMapImage = new BufferedImage(canvasSize.width(), canvasSize.height(), BufferedImage.TYPE_INT_ARGB);
 		final Graphics2D tileMapGraphics = tileMapImage.createGraphics();
 
 		final int startingXIndex = mapPosition.getRoundedX() / tileSize.getRoundedX();
@@ -177,12 +177,12 @@ public class TileMap implements Drawable {
 		int currentXIndexToDraw;
 		int currentYIndexToDraw = startingYIndex;
 		
-		while (currentPosToDraw.getY() < canvasSize.getHeight()) {
+		while (currentPosToDraw.getY() < canvasSize.height()) {
 			currentXIndexToDraw = startingXIndex;
 			currentPosToDraw.setX(basePosToDraw.getX());
-			while (currentPosToDraw.getX() < canvasSize.getWidth()) {
+			while (currentPosToDraw.getX() < canvasSize.width()) {
 				if (map[currentYIndexToDraw][currentXIndexToDraw] != NO_TILE) {
-					tileMapGraphics.drawImage(tiles.get(map[currentYIndexToDraw][currentXIndexToDraw]).getImage(), currentPosToDraw.getRoundedX(), currentPosToDraw.getRoundedY(), null);
+					tileMapGraphics.drawImage(tiles.get(map[currentYIndexToDraw][currentXIndexToDraw]).image(), currentPosToDraw.getRoundedX(), currentPosToDraw.getRoundedY(), null);
 				}
 				currentPosToDraw.setX(currentPosToDraw.getX() + tileSize.getRoundedX());
 				currentXIndexToDraw++;

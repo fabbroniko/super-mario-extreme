@@ -51,7 +51,7 @@ public final class WinScene extends AbstractScene implements Scene {
 	public BufferedImage draw() {
 		// Fill in the background
 		graphics.setColor(Color.BLACK);
-		graphics.fillRect(0, 0, canvasDimension.getWidth(), canvasDimension.getHeight());
+		graphics.fillRect(0, 0, canvasDimension.width(), canvasDimension.height());
 
 		// Activating the antialiasing to smooth out the strings
 		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -60,7 +60,7 @@ public final class WinScene extends AbstractScene implements Scene {
 		graphics.setColor(Color.WHITE);
 		graphics.setFont(H1_FONT);
 		int centeredX = getCenteredXPositionForString(LEVEL_COMPLETED, graphics, canvasDimension);
-		int y = (canvasDimension.getHeight() - graphics.getFontMetrics().getHeight()) / 2;
+		int y = (canvasDimension.height() - graphics.getFontMetrics().getHeight()) / 2;
 
 		// Draw the Game Over string.
 		graphics.drawString(LEVEL_COMPLETED, centeredX, y);

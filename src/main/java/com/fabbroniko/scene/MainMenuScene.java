@@ -81,7 +81,7 @@ public final class MainMenuScene extends AbstractScene implements Scene {
 	public BufferedImage draw() {
 		// Draw the background first
 		final Vector2D bgPosition = bg.getDrawingPosition();
-		graphics.drawImage(bg.getDrawableImage(), bgPosition.getRoundedX(), bgPosition.getRoundedY(), canvasDimension.getWidth(), canvasDimension.getHeight(), null);
+		graphics.drawImage(bg.getDrawableImage(), bgPosition.getRoundedX(), bgPosition.getRoundedY(), canvasDimension.width(), canvasDimension.height(), null);
 
 		// Activating antialiasing to soften up the look of the strings
 		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);

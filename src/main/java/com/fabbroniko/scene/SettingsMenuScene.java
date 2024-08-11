@@ -81,7 +81,7 @@ public final class SettingsMenuScene extends AbstractScene implements KeyListene
 	@Override
 	public BufferedImage draw() {
 		final Vector2D bgPosition = bg.getDrawingPosition();
-		graphics.drawImage(bg.getDrawableImage(), bgPosition.getRoundedX(), bgPosition.getRoundedY(), canvasDimension.getWidth(), canvasDimension.getHeight(), null);
+		graphics.drawImage(bg.getDrawableImage(), bgPosition.getRoundedX(), bgPosition.getRoundedY(), canvasDimension.width(), canvasDimension.height(), null);
 
 		// Setting up the shared parameters to all options
 		graphics.setFont(P_FONT);

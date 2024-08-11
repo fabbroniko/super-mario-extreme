@@ -26,12 +26,12 @@ public final class GamePanel extends JPanel implements ControlsSource, KeyListen
 		this.windowSize = windowSize;
 		this.keyListener = new NullCustomKeyListener();
 		
-		this.setPreferredSize(new Dimension(windowSize.getWidth(), windowSize.getHeight()));
+		this.setPreferredSize(new Dimension(windowSize.width(), windowSize.height()));
 		this.setFocusable(true);
 		this.requestFocus();
 		this.addKeyListener(this);
 
-		canvasImage = new BufferedImage(canvasSize.getWidth(), canvasSize.getHeight(), BufferedImage.TYPE_INT_RGB);
+		canvasImage = new BufferedImage(canvasSize.width(), canvasSize.height(), BufferedImage.TYPE_INT_RGB);
 		canvas = (Graphics2D) canvasImage.getGraphics();
 	}
 
@@ -39,7 +39,7 @@ public final class GamePanel extends JPanel implements ControlsSource, KeyListen
 	public void paintComponent(final Graphics cGraphics) {
 		super.paintComponent(cGraphics);
 
-		cGraphics.drawImage(canvasImage, 0, 0, windowSize.getWidth(), windowSize.getHeight(), null);
+		cGraphics.drawImage(canvasImage, 0, 0, windowSize.width(), windowSize.height(), null);
 	}
 
 	@Override

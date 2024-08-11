@@ -131,7 +131,7 @@ public final class GameScene extends AbstractScene implements Scene {
     @Override
     public BufferedImage draw() {
         final Vector2D bgPosition = bg.getDrawingPosition();
-        graphics.drawImage(bg.getDrawableImage(), bgPosition.getRoundedX(), bgPosition.getRoundedY(), canvasDimension.getWidth(), canvasDimension.getHeight(), null);
+        graphics.drawImage(bg.getDrawableImage(), bgPosition.getRoundedX(), bgPosition.getRoundedY(), canvasDimension.width(), canvasDimension.height(), null);
 
         for (final AbstractGameObject i:gameObjects) {
             if (!i.isDead()) {
@@ -143,7 +143,7 @@ public final class GameScene extends AbstractScene implements Scene {
         }
 
         final Vector2D tileMapPosition = tileMap.getDrawingPosition();
-        graphics.drawImage(tileMap.getDrawableImage(), tileMapPosition.getRoundedX(), tileMapPosition.getRoundedY(), canvasDimension.getWidth(), canvasDimension.getHeight(), null);
+        graphics.drawImage(tileMap.getDrawableImage(), tileMapPosition.getRoundedX(), tileMapPosition.getRoundedY(), canvasDimension.width(), canvasDimension.height(), null);
 
         if(settingsProvider.getSettings().isShowFps()) {
             int currentFps = Time.getFps();
@@ -158,7 +158,7 @@ public final class GameScene extends AbstractScene implements Scene {
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             final String currentFpsString = String.valueOf(currentFps);
             final int fpsWidth = graphics.getFontMetrics().stringWidth(currentFpsString);
-            graphics.drawString(currentFpsString, canvasDimension.getWidth() - fpsWidth - FPS_OFFSET, graphics.getFontMetrics().getHeight());
+            graphics.drawString(currentFpsString, canvasDimension.width() - fpsWidth - FPS_OFFSET, graphics.getFontMetrics().getHeight());
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
         }
 

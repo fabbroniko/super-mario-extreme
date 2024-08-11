@@ -16,6 +16,6 @@ public class SceneContextFactoryImpl implements SceneContextFactory {
     }
 
     private BufferedImage createImage() {
-        return new BufferedImage(sceneDimension.getWidth(), sceneDimension.getHeight(), BufferedImage.TYPE_INT_RGB);
+        return new BufferedImage(sceneDimension.width(), sceneDimension.height(), BufferedImage.TYPE_INT_RGB);
     }
 }
