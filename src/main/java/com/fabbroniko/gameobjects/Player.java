@@ -10,6 +10,7 @@ import com.fabbroniko.main.SceneManager;
 import com.fabbroniko.main.SettingsProvider;
 import com.fabbroniko.resource.ResourceManager;
 import com.fabbroniko.scene.GameScene;
+import com.fabbroniko.scene.TypedLessKeyListener;
 import lombok.extern.log4j.Log4j2;
 
 import java.awt.event.KeyEvent;
@@ -20,7 +21,7 @@ import java.awt.event.KeyListener;
  * @author com.fabbroniko
  */
 @Log4j2
-public class Player extends AbstractGameObject implements KeyListener {
+public class Player extends AbstractGameObject implements TypedLessKeyListener {
 
 	private static final Vector2D spriteDimension = new Vector2D(112, 104);
 	private static final String spritePath = "/sprites/mario.png";
@@ -141,11 +142,6 @@ public class Player extends AbstractGameObject implements KeyListener {
 				groundHit = true;
 			}
 		}
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-
 	}
 
 	@Override

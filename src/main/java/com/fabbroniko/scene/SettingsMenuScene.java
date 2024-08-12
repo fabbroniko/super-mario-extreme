@@ -13,10 +13,9 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
-public final class SettingsMenuScene implements KeyListener, Scene {
+public final class SettingsMenuScene implements Scene, UIKeyListener {
 
 	// Constant strings
 	private static final String HINT_1 = "Arrow UP/DOWN to navigate. ENTER to modify.";
@@ -100,14 +99,10 @@ public final class SettingsMenuScene implements KeyListener, Scene {
 
 		final String hint = keyListening ? HINT_2 : HINT_1;
 		final BufferedImage hintImage = textFactory.createSmallParagraph(hint, Color.WHITE);
-		int x = getCenteredXPosition(hintImage, canvasDimension);
+		int x = (canvasDimension.width() - hintImage.getWidth()) / 2;
 		graphics.drawImage(hintImage, null, x, HINT_Y);
 
 		return canvas;
-	}
-
-	@Override
-	public void keyPressed(final KeyEvent e) {
 	}
 
 	@Override
@@ -130,9 +125,6 @@ public final class SettingsMenuScene implements KeyListener, Scene {
 				break;
 		}
 	}
-
-	@Override
-	public void keyTyped(final KeyEvent e) {}
 
 	private void printOption(final String optionName,
 							 final int keyCode) {

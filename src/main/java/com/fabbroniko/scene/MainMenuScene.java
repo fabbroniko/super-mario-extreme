@@ -19,7 +19,7 @@ import static java.awt.event.KeyEvent.VK_ENTER;
 import static java.awt.event.KeyEvent.VK_ESCAPE;
 import static java.awt.event.KeyEvent.VK_UP;
 
-public final class MainMenuScene implements Scene {
+public final class MainMenuScene implements Scene, UIKeyListener {
 
 	private static final String TITLE = "Super Mario Extreme Edition";
 	private static final String START_GAME_OPTION = "Start";
@@ -88,16 +88,16 @@ public final class MainMenuScene implements Scene {
 		graphics.drawImage(bg.getDrawableImage(), bgPosition.getRoundedX(), bgPosition.getRoundedY(), canvasDimension.width(), canvasDimension.height(), null);
 
 		final BufferedImage title = textFactory.createHeader(TITLE, Color.GREEN);
-		int centeredXPosition = getCenteredXPosition(title, canvasDimension);
-		graphics.drawImage(title, null, centeredXPosition, TITLE_Y);
+		int x = x = (canvasDimension.width() - title.getWidth()) / 2;
+		graphics.drawImage(title, null, x, TITLE_Y);
 
 		printMenuOption(START_GAME_OPTION, START_OPTION_Y, selectedOption == START_OPTION_INDEX);
 		printMenuOption(SETTINGS_OPTION, SETTINGS_OPTION_Y, selectedOption == SETTINGS_OPTION_INDEX);
 		printMenuOption(QUIT_OPTION, QUIT_OPTION_Y, selectedOption == QUIT_OPTION_INDEX);
 
 		final BufferedImage hint = textFactory.createSmallParagraph(HINT, Color.WHITE);
-		centeredXPosition = getCenteredXPosition(hint, canvasDimension);
-		graphics.drawImage(hint, null, centeredXPosition, HINT_Y);
+		x = (canvasDimension.width() - hint.getWidth()) / 2;
+		graphics.drawImage(hint, null, x, HINT_Y);
 
 		return canvas;
 	}
@@ -106,16 +106,8 @@ public final class MainMenuScene implements Scene {
 		final Color color = isSelected ? Color.GREEN : Color.WHITE;
 
 		final BufferedImage startGameOption = optionFactory.getMainMenuOption(text, color);
-		int x = getCenteredXPosition(startGameOption, canvasDimension);
+		int x = (canvasDimension.width() - startGameOption.getWidth()) / 2;
 		graphics.drawImage(startGameOption, null, x, y);
-	}
-
-	@Override
-	public void keyPressed(final KeyEvent event) {
-	}
-
-	@Override
-	public void keyTyped(final KeyEvent event) {
 	}
 
 	@Override

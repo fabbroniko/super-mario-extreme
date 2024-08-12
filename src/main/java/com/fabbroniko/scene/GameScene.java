@@ -26,7 +26,7 @@ import java.util.List;
 
 import static java.awt.event.KeyEvent.VK_ESCAPE;
 
-public final class GameScene implements Scene {
+public final class GameScene implements Scene, TypedLessKeyListener {
 
     private static final int FPS_OFFSET = 15;
 
@@ -161,11 +161,6 @@ public final class GameScene implements Scene {
         }
 
         return canvas;
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-
     }
 
     @Override
