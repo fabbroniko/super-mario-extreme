@@ -5,33 +5,43 @@ import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.environment.SceneContext;
 import com.fabbroniko.environment.SceneContextFactory;
 import com.fabbroniko.environment.Vector2D;
+import com.fabbroniko.main.SceneManager;
 
-import java.awt.*;
-import java.awt.event.KeyEvent;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
-public final class LostScene extends AbstractScene implements Scene {
+public final class LostScene implements Scene, ActionLessKeyListener {
 
 	private static final String GAME_OVER_MAIN_TEXT = "Game Over";
 	private static final String DEATH_COUNT_TEXT = "Death count: ";
 	private static final int SCENE_DURATION_MILLISECONDS = 3000;
 
-	private int deathCount = 0;
 	private long initTime;
 	private final Vector2D origin = new Vector2D();
-	private boolean isClosed = false;
 
 	private final SceneContextFactory sceneContextFactory;
 	private final AudioManager audioManager;
+	private final SceneManager sceneManager;
+	private final TextFactory textFactory;
+	private final int deathCount;
 
 	private BufferedImage canvas;
 	private Graphics2D graphics;
 	private Dimension2D canvasDimension;
 
 	public LostScene(final SceneContextFactory sceneContextFactory,
-					 final AudioManager audioManager) {
+					 final AudioManager audioManager,
+					 final SceneManager sceneManager,
+					 final TextFactory textFactory,
+					 final int deathCount) {
+
 		this.sceneContextFactory = sceneContextFactory;
 		this.audioManager = audioManager;
+		this.sceneManager = sceneManager;
+		this.textFactory = textFactory;
+		this.deathCount = deathCount;
 	}
 
 	@Override
@@ -43,12 +53,14 @@ public final class LostScene extends AbstractScene implements Scene {
 		this.canvas = sceneContext.getSceneCanvas();
 		this.graphics = (Graphics2D) canvas.getGraphics();
 		this.canvasDimension = sceneContext.getCanvasDimension();
+
+		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 	}
 
 	@Override
 	public void update() {
 		if((System.currentTimeMillis() - initTime) > SCENE_DURATION_MILLISECONDS) {
-			isClosed = true;
+			sceneManager.openGameScene();
 		}
 	}
 
@@ -57,47 +69,14 @@ public final class LostScene extends AbstractScene implements Scene {
 		graphics.setColor(Color.BLACK);
 		graphics.fillRect(origin.getRoundedX(), origin.getRoundedY(), canvasDimension.width(), canvasDimension.height());
 
-		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		final BufferedImage gameOver = textFactory.createParagraph(GAME_OVER_MAIN_TEXT, Color.WHITE);
+		int x = (canvasDimension.width() - gameOver.getWidth()) / 2;
+		graphics.drawImage(gameOver, null, x, 200);
 
-		graphics.setColor(Color.WHITE);
-		graphics.setFont(H1_FONT);
-		int centeredX = getCenteredXPositionForString(GAME_OVER_MAIN_TEXT, graphics, canvasDimension);
-		int y = (canvasDimension.height() - graphics.getFontMetrics().getHeight()) / 2;
-
-		graphics.drawString(GAME_OVER_MAIN_TEXT, centeredX, y);
-		graphics.setFont(P_FONT);
-		final String composedDeathCount = DEATH_COUNT_TEXT + ++deathCount;
-		centeredX = getCenteredXPositionForString(composedDeathCount, graphics, canvasDimension);
-		y = (canvasDimension.height() / 2) + (graphics.getFontMetrics().getHeight() / 2);
-
-		graphics.drawString(composedDeathCount, centeredX, y);
-		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+		final BufferedImage deathCountImage = textFactory.createSmallParagraph(DEATH_COUNT_TEXT + deathCount, Color.WHITE);
+		x = (canvasDimension.width() - deathCountImage.getWidth()) / 2;
+		graphics.drawImage(deathCountImage, null, x, 300);
 
 		return canvas;
-	}
-
-	@Override
-	public void detach() {
-		audioManager.stopMusic();
-	}
-
-	@Override
-	public boolean isClosed() {
-		return isClosed;
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-
 	}
 }

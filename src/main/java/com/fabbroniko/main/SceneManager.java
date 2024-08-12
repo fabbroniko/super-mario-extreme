@@ -11,4 +11,6 @@ public interface SceneManager {
     void openLostScene();
 
     void openGameScene();
+
+    void quit();
 }

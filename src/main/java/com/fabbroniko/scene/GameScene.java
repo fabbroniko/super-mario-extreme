@@ -26,7 +26,7 @@ import java.util.List;
 
 import static java.awt.event.KeyEvent.VK_ESCAPE;
 
-public final class GameScene extends AbstractScene implements Scene {
+public final class GameScene implements Scene {
 
     private static final int FPS_OFFSET = 15;
 
@@ -35,7 +35,6 @@ public final class GameScene extends AbstractScene implements Scene {
     private TileMap tileMap;
     private List<AbstractGameObject> gameObjects;
     private CollisionManager collisionManager;
-    private boolean isClosed = false;
     private Player player;
 
     private final SceneContextFactory sceneContextFactory;
@@ -44,6 +43,7 @@ public final class GameScene extends AbstractScene implements Scene {
     private final SettingsProvider settingsProvider;
     private final SceneManager sceneManager;
     private final GameObjectFactory gameObjectFactory;
+    private final TextFactory textFactory;
 
     private BufferedImage canvas;
     private Graphics2D graphics;
@@ -54,6 +54,7 @@ public final class GameScene extends AbstractScene implements Scene {
                      final AudioManager audioManager,
                      final ResourceManager resourceManager,
                      final SceneManager sceneManager,
+                     final TextFactory textFactory,
                      final Level level) {
 
         this.gameObjectFactory = new GameObjectFactoryImpl(audioManager, resourceManager, settingsProvider, sceneManager);
@@ -62,6 +63,7 @@ public final class GameScene extends AbstractScene implements Scene {
         this.audioManager = audioManager;
         this.resourceManager = resourceManager;
         this.sceneManager = sceneManager;
+        this.textFactory = textFactory;
         this.level = level;
     }
 
@@ -148,31 +150,17 @@ public final class GameScene extends AbstractScene implements Scene {
         if(settingsProvider.getSettings().isShowFps()) {
             int currentFps = Time.getFps();
 
-            if(currentFps < 30)
-                graphics.setColor(Color.RED);
-            else
-                graphics.setColor(Color.GREEN);
+            Color color = Color.GREEN;
+            if(currentFps < 30) {
+                color = Color.RED;
+            }
 
-            graphics.setFont(P_FONT);
-
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            final String currentFpsString = String.valueOf(currentFps);
-            final int fpsWidth = graphics.getFontMetrics().stringWidth(currentFpsString);
-            graphics.drawString(currentFpsString, canvasDimension.width() - fpsWidth - FPS_OFFSET, graphics.getFontMetrics().getHeight());
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+            final BufferedImage fpsImage = textFactory.createParagraph(String.valueOf(currentFps), color);
+            final int x = canvasDimension.width() - fpsImage.getWidth() - FPS_OFFSET;
+            graphics.drawImage(fpsImage, null, x, 10);
         }
 
         return canvas;
-    }
-
-    @Override
-    public void detach() {
-        audioManager.stopMusic();
-    }
-
-    @Override
-    public boolean isClosed() {
-        return isClosed;
     }
 
     @Override
@@ -185,16 +173,16 @@ public final class GameScene extends AbstractScene implements Scene {
         if(player != null) {
             player.keyPressed(event);
         }
-
-        if (VK_ESCAPE == event.getKeyCode()) {
-            isClosed = true;
-        }
     }
 
     @Override
     public void keyReleased(KeyEvent event) {
         if(player != null) {
             player.keyReleased(event);
+        }
+
+        if (VK_ESCAPE == event.getKeyCode()) {
+            sceneManager.openMainMenu();
         }
     }
 }

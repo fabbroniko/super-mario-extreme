@@ -1,20 +1,17 @@
 package com.fabbroniko.main;
 
+import com.fabbroniko.environment.AudioManager;
 import com.fabbroniko.resource.ResourceManager;
-import com.fabbroniko.scene.GameScene;
-import com.fabbroniko.scene.LostScene;
-import com.fabbroniko.scene.MainMenuScene;
 import com.fabbroniko.scene.Scene;
 import com.fabbroniko.scene.SceneFactory;
-import com.fabbroniko.scene.SettingsMenuScene;
-import com.fabbroniko.scene.WinScene;
 import lombok.SneakyThrows;
 
-import java.awt.*;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 public final class GameManager implements Runnable, SceneManager {
 
+	private final AudioManager audioManager;
     private final SceneFactory sceneFactory;
 	private final ResourceManager resourceManager;
 	private final SettingsProvider settingsProvider;
@@ -22,12 +19,15 @@ public final class GameManager implements Runnable, SceneManager {
 
 	private volatile boolean running = false;
 	private Scene currentState;
+	private int deathCount = 0;
 
-	public GameManager(final GamePanel gamePanel,
+	public GameManager(final AudioManager audioManager,
+					   final GamePanel gamePanel,
 					   final ResourceManager resourceManager,
-                       final SettingsProvider settingsProvider,
-                       final SceneFactory sceneFactory) {
+					   final SettingsProvider settingsProvider,
+					   final SceneFactory sceneFactory) {
 
+		this.audioManager = audioManager;
         this.settingsProvider = settingsProvider;
 		this.resourceManager = resourceManager;
 		this.sceneFactory = sceneFactory;
@@ -39,17 +39,17 @@ public final class GameManager implements Runnable, SceneManager {
 	}
 
 	public void openSettings() {
-		openScene(sceneFactory.createSettingsScene());
+		openScene(sceneFactory.createSettingsScene(this));
 	}
 
 	@Override
 	public void openWinScene() {
-		openScene(sceneFactory.createWinScene());
+		openScene(sceneFactory.createWinScene(this));
 	}
 
 	@Override
 	public void openLostScene() {
-		openScene(sceneFactory.createLostScene());
+		openScene(sceneFactory.createLostScene(this, ++deathCount));
 	}
 
 	@Override
@@ -57,12 +57,14 @@ public final class GameManager implements Runnable, SceneManager {
 		openScene(sceneFactory.createGameScene(this));
 	}
 
-	@SneakyThrows
-	private synchronized void openScene(Scene scene) {
-		if(currentState != null) {
-			currentState.detach();
-		}
+	@Override
+	public void quit() {
+		exit();
+	}
 
+	@SneakyThrows
+	private synchronized void openScene(final Scene scene) {
+		audioManager.stopMusic();
 		this.currentState = scene;
 		this.gamePanel.setKeyListener(scene);
 		this.currentState.init();
@@ -74,19 +76,6 @@ public final class GameManager implements Runnable, SceneManager {
 		}
 
 		this.currentState.update();
-		if(currentState.isClosed()) {
-			if (currentState.getClass().equals(MainMenuScene.class)) {
-				exit();
-			} else if (currentState.getClass().equals(SettingsMenuScene.class)) {
-				openMainMenu();
-			} else if (currentState.getClass().equals(LostScene.class)) {
-				openGameScene();
-			} else if (currentState.getClass().equals(WinScene.class)) {
-				openMainMenu();
-			} else if (currentState.getClass().equals(GameScene.class)) {
-				openMainMenu();
-			}
-		}
 	}
 
 	public synchronized BufferedImage draw() {

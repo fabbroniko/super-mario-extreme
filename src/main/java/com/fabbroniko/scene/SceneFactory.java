@@ -6,11 +6,11 @@ public interface SceneFactory {
 
     Scene createMainMenuScene(final SceneManager sceneManager);
 
-    Scene createSettingsScene();
+    Scene createSettingsScene(final SceneManager sceneManager);
 
     Scene createGameScene(final SceneManager sceneManager);
 
-    Scene createLostScene();
+    Scene createLostScene(final SceneManager sceneManager, final int deathCount);
 
-    Scene createWinScene();
+    Scene createWinScene(final SceneManager sceneManager);
 }

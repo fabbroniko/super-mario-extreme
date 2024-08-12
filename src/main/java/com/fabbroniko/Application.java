@@ -11,8 +11,13 @@ import com.fabbroniko.main.GameWindow;
 import com.fabbroniko.main.SettingsProvider;
 import com.fabbroniko.main.SettingsProviderImpl;
 import com.fabbroniko.resource.ResourceManager;
+import com.fabbroniko.scene.AwtTextFactory;
+import com.fabbroniko.scene.FontProviderImpl;
+import com.fabbroniko.scene.OptionFactory;
+import com.fabbroniko.scene.OptionFactoryImpl;
 import com.fabbroniko.scene.SceneFactory;
 import com.fabbroniko.scene.SceneFactoryImpl;
+import com.fabbroniko.scene.TextFactory;
 
 import java.awt.*;
 
@@ -26,13 +31,15 @@ public class Application {
         final SettingsProvider settingsProvider = new SettingsProviderImpl(resourceManager);
         final SceneContextFactory sceneContextFactory = new SceneContextFactoryImpl(CANVAS_WIDTH, CANVAS_HEIGHT);
         final AudioManager audioManager = new AudioManagerImpl(settingsProvider, resourceManager);
-        final SceneFactory sceneFactory = new SceneFactoryImpl(sceneContextFactory, settingsProvider, audioManager, resourceManager);
+        final TextFactory textFactory = new AwtTextFactory(new FontProviderImpl());
+        final OptionFactory optionFactory = new OptionFactoryImpl(textFactory);
+        final SceneFactory sceneFactory = new SceneFactoryImpl(sceneContextFactory, settingsProvider, audioManager, resourceManager, textFactory, optionFactory);
         final Dimension2D canvasDimension = new Dimension2D(CANVAS_WIDTH, CANVAS_HEIGHT);
         final java.awt.Dimension screenDimensions = Toolkit.getDefaultToolkit().getScreenSize();
         final Dimension2D windowDimension = new Dimension2D((int) screenDimensions.getWidth(), (int) screenDimensions.getHeight());;
         final GamePanel gamePanel = new GamePanel(canvasDimension, windowDimension);
         new GameWindow(gamePanel);
-        final GameManager gameManager = new GameManager(gamePanel, resourceManager, settingsProvider, sceneFactory);
+        final GameManager gameManager = new GameManager(audioManager, gamePanel, resourceManager, settingsProvider, sceneFactory);
 
         gameManager.start();
     }
