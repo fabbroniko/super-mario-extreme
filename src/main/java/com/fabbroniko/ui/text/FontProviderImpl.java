@@ -1,4 +1,4 @@
-package com.fabbroniko.ui;
+package com.fabbroniko.ui.text;
 
 import javax.swing.*;
 import java.awt.Font;

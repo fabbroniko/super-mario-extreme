@@ -2,11 +2,10 @@ package com.fabbroniko.scene;
 
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.input.UIKeyListener;
-import com.fabbroniko.main.BackgroundLoader;
-import com.fabbroniko.main.DrawableResource;
-import com.fabbroniko.main.SceneManager;
-import com.fabbroniko.main.SettingsProvider;
-import com.fabbroniko.ui.TextFactory;
+import com.fabbroniko.ui.background.BackgroundLoader;
+import com.fabbroniko.ui.DrawableResource;
+import com.fabbroniko.environment.SettingsProvider;
+import com.fabbroniko.ui.text.TextFactory;
 
 import java.awt.Color;
 import java.awt.Graphics2D;

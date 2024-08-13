@@ -1,4 +1,4 @@
-package com.fabbroniko.main;
+package com.fabbroniko.scene;
 
 public interface SceneManager {
 

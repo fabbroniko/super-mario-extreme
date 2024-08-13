@@ -1,10 +1,8 @@
-package com.fabbroniko.main;
+package com.fabbroniko.gameobjects;
 
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.map.TileMap;
 import com.fabbroniko.environment.Vector2D;
-import com.fabbroniko.gameobjects.AbstractGameObject;
-import com.fabbroniko.gameobjects.Player;
 import com.fabbroniko.scene.GameScene;
 
 public interface GameObjectFactory {

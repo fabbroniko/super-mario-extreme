@@ -1,4 +1,6 @@
-package com.fabbroniko.main;
+package com.fabbroniko.ui.background;
+
+import com.fabbroniko.ui.Drawable;
 
 public interface BackgroundLoader {
 

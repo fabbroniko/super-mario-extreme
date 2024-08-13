@@ -1,4 +1,4 @@
-package com.fabbroniko.main;
+package com.fabbroniko.ui;
 
 public interface Drawable {
 

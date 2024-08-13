@@ -1,16 +1,11 @@
-package com.fabbroniko.main;
+package com.fabbroniko.gameobjects;
 
 import com.fabbroniko.audio.AudioManager;
 import com.fabbroniko.environment.Dimension2D;
+import com.fabbroniko.scene.SceneManager;
+import com.fabbroniko.environment.SettingsProvider;
 import com.fabbroniko.map.TileMap;
 import com.fabbroniko.environment.Vector2D;
-import com.fabbroniko.gameobjects.AbstractGameObject;
-import com.fabbroniko.gameobjects.Block;
-import com.fabbroniko.gameobjects.Castle;
-import com.fabbroniko.gameobjects.Enemy;
-import com.fabbroniko.gameobjects.FallingBlock;
-import com.fabbroniko.gameobjects.InvisibleBlock;
-import com.fabbroniko.gameobjects.Player;
 import com.fabbroniko.resource.ResourceManager;
 import com.fabbroniko.scene.GameScene;
 

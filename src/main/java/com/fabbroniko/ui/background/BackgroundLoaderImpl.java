@@ -1,7 +1,8 @@
-package com.fabbroniko.main;
+package com.fabbroniko.ui.background;
 
 import com.fabbroniko.environment.ImmutablePosition;
-import com.fabbroniko.ui.StaticBackground;
+import com.fabbroniko.ui.Drawable;
+import com.fabbroniko.ui.DrawableResourceFactory;
 import com.fabbroniko.resource.ResourceManager;
 
 public class BackgroundLoaderImpl implements BackgroundLoader {

@@ -1,4 +1,4 @@
-package com.fabbroniko.main;
+package com.fabbroniko.ui;
 
 import com.fabbroniko.environment.Position;
 

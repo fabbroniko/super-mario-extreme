@@ -1,4 +1,4 @@
-package com.fabbroniko.main;
+package com.fabbroniko.environment;
 
 import com.fabbroniko.resource.domain.Settings;
 

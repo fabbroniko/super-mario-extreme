@@ -1,8 +1,10 @@
 package com.fabbroniko.main;
 
 import com.fabbroniko.audio.AudioManager;
+import com.fabbroniko.environment.SettingsProvider;
 import com.fabbroniko.resource.ResourceManager;
 import com.fabbroniko.scene.Scene;
+import com.fabbroniko.scene.SceneManager;
 import com.fabbroniko.scene.factory.SceneFactory;
 import lombok.SneakyThrows;
 

@@ -4,8 +4,7 @@ import com.fabbroniko.audio.AudioManager;
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.input.ActionLessKeyListener;
-import com.fabbroniko.main.SceneManager;
-import com.fabbroniko.ui.TextFactory;
+import com.fabbroniko.ui.text.TextFactory;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
