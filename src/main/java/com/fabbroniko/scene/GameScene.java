@@ -1,7 +1,6 @@
 package com.fabbroniko.scene;
 
 import com.fabbroniko.environment.AudioManager;
-import com.fabbroniko.environment.Background;
 import com.fabbroniko.environment.CollisionManager;
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.environment.SceneContext;
@@ -10,6 +9,8 @@ import com.fabbroniko.environment.TileMap;
 import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.gameobjects.AbstractGameObject;
 import com.fabbroniko.gameobjects.Player;
+import com.fabbroniko.main.BackgroundLoader;
+import com.fabbroniko.main.DrawableResource;
 import com.fabbroniko.main.GameObjectFactory;
 import com.fabbroniko.main.GameObjectFactoryImpl;
 import com.fabbroniko.main.SceneManager;
@@ -18,7 +19,8 @@ import com.fabbroniko.main.Time;
 import com.fabbroniko.resource.ResourceManager;
 import com.fabbroniko.resource.domain.Level;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -31,7 +33,7 @@ public final class GameScene implements Scene, TypedLessKeyListener {
     private static final int FPS_OFFSET = 15;
 
     private final Level level;
-    private Background bg;
+    private DrawableResource background;
     private TileMap tileMap;
     private List<AbstractGameObject> gameObjects;
     private CollisionManager collisionManager;
@@ -44,6 +46,7 @@ public final class GameScene implements Scene, TypedLessKeyListener {
     private final SceneManager sceneManager;
     private final GameObjectFactory gameObjectFactory;
     private final TextFactory textFactory;
+    private final BackgroundLoader backgroundLoader;
 
     private BufferedImage canvas;
     private Graphics2D graphics;
@@ -55,6 +58,7 @@ public final class GameScene implements Scene, TypedLessKeyListener {
                      final ResourceManager resourceManager,
                      final SceneManager sceneManager,
                      final TextFactory textFactory,
+                     final BackgroundLoader backgroundLoader,
                      final Level level) {
 
         this.gameObjectFactory = new GameObjectFactoryImpl(audioManager, resourceManager, settingsProvider, sceneManager);
@@ -64,6 +68,7 @@ public final class GameScene implements Scene, TypedLessKeyListener {
         this.resourceManager = resourceManager;
         this.sceneManager = sceneManager;
         this.textFactory = textFactory;
+        this.backgroundLoader = backgroundLoader;
         this.level = level;
     }
 
@@ -74,7 +79,7 @@ public final class GameScene implements Scene, TypedLessKeyListener {
         this.graphics = (Graphics2D) canvas.getGraphics();
         this.canvasDimension = sceneContext.getCanvasDimension();
 
-        bg = new Background(resourceManager, "game");
+        background = backgroundLoader.createStaticBackground("game").getDrawableResource();
         tileMap = new TileMap(resourceManager, level.getMap(), canvasDimension);
         gameObjects = new ArrayList<>();
 
@@ -132,20 +137,26 @@ public final class GameScene implements Scene, TypedLessKeyListener {
 
     @Override
     public BufferedImage draw() {
-        final Vector2D bgPosition = bg.getDrawingPosition();
-        graphics.drawImage(bg.getDrawableImage(), bgPosition.getRoundedX(), bgPosition.getRoundedY(), canvasDimension.width(), canvasDimension.height(), null);
+        graphics.drawImage(
+                background.image(),
+                background.position().getRoundedX(),
+                background.position().getRoundedY(),
+                canvasDimension.width(),
+                canvasDimension.height(),
+                null
+        );
 
         for (final AbstractGameObject i:gameObjects) {
             if (!i.isDead()) {
-                final Vector2D position = i.getDrawingPosition();
+                final DrawableResource res = i.getDrawableResource();
                 final Vector2D spriteDimension = i.getSpriteDimension();
 
-                graphics.drawImage(i.getDrawableImage(), position.getRoundedX(), position.getRoundedY(), spriteDimension.getRoundedX(), spriteDimension.getRoundedY(), null);
+                graphics.drawImage(res.image(), res.position().getRoundedX(), res.position().getRoundedY(), spriteDimension.getRoundedX(), spriteDimension.getRoundedY(), null);
             }
         }
 
-        final Vector2D tileMapPosition = tileMap.getDrawingPosition();
-        graphics.drawImage(tileMap.getDrawableImage(), tileMapPosition.getRoundedX(), tileMapPosition.getRoundedY(), canvasDimension.width(), canvasDimension.height(), null);
+        final DrawableResource tileMapResource = tileMap.getDrawableResource();
+        graphics.drawImage(tileMapResource.image(), tileMapResource.position().getRoundedX(), tileMapResource.position().getRoundedY(), canvasDimension.width(), canvasDimension.height(), null);
 
         if(settingsProvider.getSettings().isShowFps()) {
             int currentFps = Time.getFps();

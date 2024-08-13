@@ -1,6 +1,8 @@
 package com.fabbroniko.environment;
 
 import com.fabbroniko.main.Drawable;
+import com.fabbroniko.main.DrawableResource;
+import com.fabbroniko.main.DrawableResourceImpl;
 import com.fabbroniko.resource.ResourceManager;
 import com.fabbroniko.resource.domain.Map;
 import lombok.extern.log4j.Log4j2;
@@ -152,15 +154,12 @@ public class TileMap implements Drawable {
 		return tiles.get(tileId).type();
 	}
 
-	@Override
-	public void update() {}
-
 	// Add cache - if the position is not moved then use previously built tilemap
 	@Override
-	public BufferedImage getDrawableImage() {
+	public DrawableResource getDrawableResource() {
 		if(cachedTileMap != null) {
 			log.trace("tile_map,get_drawable_image,using_cached_image");
-			return cachedTileMap;
+			return new DrawableResourceImpl(cachedTileMap, new ImmutablePosition(0, 0));
 		}
 
 		final BufferedImage tileMapImage = new BufferedImage(canvasSize.width(), canvasSize.height(), BufferedImage.TYPE_INT_ARGB);
@@ -193,11 +192,6 @@ public class TileMap implements Drawable {
 
 		cachedTileMap = tileMapImage;
 		log.trace("tile_map,get_drawable_image,drawn_new_image");
-		return cachedTileMap;
-	}
-
-	@Override
-	public Vector2D getDrawingPosition() {
-		return new Vector2D();
+		return new DrawableResourceImpl(cachedTileMap, new ImmutablePosition(0, 0));
 	}
 }

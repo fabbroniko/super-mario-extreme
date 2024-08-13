@@ -1,12 +1,11 @@
 package com.fabbroniko.scene;
 
-import com.fabbroniko.environment.Background;
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.environment.SceneContext;
 import com.fabbroniko.environment.SceneContextFactory;
-import com.fabbroniko.environment.Vector2D;
+import com.fabbroniko.main.BackgroundLoader;
+import com.fabbroniko.main.DrawableResource;
 import com.fabbroniko.main.SceneManager;
-import com.fabbroniko.resource.ResourceManager;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -37,36 +36,36 @@ public final class MainMenuScene implements Scene, UIKeyListener {
 	private static final int QUIT_OPTION_Y = 660;
 	private static final int HINT_Y = 920;
 
-	private Background bg;
+	private DrawableResource background;
 
 	private int selectedOption;
 
 	private final SceneContextFactory sceneContextFactory;
-	private final ResourceManager resourceManager;
 	private final SceneManager sceneManager;
 	private final TextFactory textFactory;
 	private final OptionFactory optionFactory;
+	private final BackgroundLoader backgroundLoader;
 
 	private BufferedImage canvas;
 	private Graphics2D graphics;
 	private Dimension2D canvasDimension;
 
 	public MainMenuScene(final SceneContextFactory sceneContextFactory,
-                         final ResourceManager resourceManager,
                          final SceneManager sceneManager,
                          final TextFactory textFactory,
-						 final OptionFactory optionFactory) {
+						 final OptionFactory optionFactory,
+						 final BackgroundLoader backgroundLoader) {
 
 		this.sceneContextFactory = sceneContextFactory;
-		this.resourceManager = resourceManager;
 		this.sceneManager = sceneManager;
 		this.textFactory = textFactory;
         this.optionFactory = optionFactory;
+		this.backgroundLoader = backgroundLoader;
     }
 
 	@Override
 	public void init() {
-		bg = new Background(resourceManager, "menu");
+		background = backgroundLoader.createStaticBackground("menu").getDrawableResource();
 		selectedOption = 0;
 
 		final SceneContext sceneContext = sceneContextFactory.create();
@@ -79,16 +78,21 @@ public final class MainMenuScene implements Scene, UIKeyListener {
 
 	@Override
 	public void update() {
-		bg.update();
 	}
 
 	@Override
 	public BufferedImage draw() {
-		final Vector2D bgPosition = bg.getDrawingPosition();
-		graphics.drawImage(bg.getDrawableImage(), bgPosition.getRoundedX(), bgPosition.getRoundedY(), canvasDimension.width(), canvasDimension.height(), null);
+		graphics.drawImage(
+				background.image(),
+				background.position().getRoundedX(),
+				background.position().getRoundedY(),
+				canvasDimension.width(),
+				canvasDimension.height(),
+				null
+		);
 
 		final BufferedImage title = textFactory.createHeader(TITLE, Color.GREEN);
-		int x = x = (canvasDimension.width() - title.getWidth()) / 2;
+		int x = (canvasDimension.width() - title.getWidth()) / 2;
 		graphics.drawImage(title, null, x, TITLE_Y);
 
 		printMenuOption(START_GAME_OPTION, START_OPTION_Y, selectedOption == START_OPTION_INDEX);

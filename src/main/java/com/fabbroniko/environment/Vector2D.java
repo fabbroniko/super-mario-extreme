@@ -6,7 +6,7 @@ import lombok.SneakyThrows;
 
 @Data
 @AllArgsConstructor
-public class Vector2D implements Cloneable {
+public class Vector2D implements Cloneable, Position {
 
 	private double x;
 	private double y;
@@ -24,10 +24,12 @@ public class Vector2D implements Cloneable {
 		this.y = y;
 	}
 
+	@Override
 	public int getRoundedX() {
 		return (int)Math.round(x);
 	}
 
+	@Override
 	public int getRoundedY() {
 		return (int)Math.round(y);
 	}

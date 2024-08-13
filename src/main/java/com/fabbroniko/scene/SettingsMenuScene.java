@@ -1,13 +1,12 @@
 package com.fabbroniko.scene;
 
-import com.fabbroniko.environment.Background;
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.environment.SceneContext;
 import com.fabbroniko.environment.SceneContextFactory;
-import com.fabbroniko.environment.Vector2D;
+import com.fabbroniko.main.BackgroundLoader;
+import com.fabbroniko.main.DrawableResource;
 import com.fabbroniko.main.SceneManager;
 import com.fabbroniko.main.SettingsProvider;
-import com.fabbroniko.resource.ResourceManager;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -40,16 +39,16 @@ public final class SettingsMenuScene implements Scene, UIKeyListener {
 	private static final int MAX_SELECTION = 6;
 
 	// Fields
-	private Background bg;
+	private DrawableResource background;
 	private int currentlyDrawingOption;
 	private int currentSelection;
 	private boolean keyListening;
 
 	private final SceneContextFactory sceneContextFactory;
 	private final SettingsProvider settingsProvider;
-	private final ResourceManager resourceManager;
 	private final SceneManager sceneManager;
 	private final TextFactory textFactory;
+	private final BackgroundLoader backgroundLoader;
 
 	private BufferedImage canvas;
 	private Graphics2D graphics;
@@ -58,19 +57,19 @@ public final class SettingsMenuScene implements Scene, UIKeyListener {
 	public SettingsMenuScene(final SceneContextFactory sceneContextFactory,
                              final SettingsProvider settingsProvider,
                              final SceneManager sceneManager,
-                             final ResourceManager resourceManager,
-							 final TextFactory textFactory) {
+                             final TextFactory textFactory,
+							 final BackgroundLoader backgroundLoader) {
 
 		this.sceneContextFactory = sceneContextFactory;
 		this.settingsProvider = settingsProvider;
-		this.resourceManager = resourceManager;
 		this.sceneManager = sceneManager;
         this.textFactory = textFactory;
+        this.backgroundLoader = backgroundLoader;
     }
 
 	@Override
 	public void init() {
-		bg = new Background(resourceManager, "menu");
+		background = backgroundLoader.createStaticBackground("menu").getDrawableResource();
 
 		final SceneContext sceneContext = sceneContextFactory.create();
 		this.canvas = sceneContext.getSceneCanvas();
@@ -85,8 +84,13 @@ public final class SettingsMenuScene implements Scene, UIKeyListener {
 
 	@Override
 	public BufferedImage draw() {
-		final Vector2D bgPosition = bg.getDrawingPosition();
-		graphics.drawImage(bg.getDrawableImage(), bgPosition.getRoundedX(), bgPosition.getRoundedY(), canvasDimension.width(), canvasDimension.height(), null);
+		graphics.drawImage(background.image(),
+				background.position().getRoundedX(),
+				background.position().getRoundedY(),
+				canvasDimension.width(),
+				canvasDimension.height(),
+				null
+		);
 
 		currentlyDrawingOption = 1;
 		printOption("Left Key: ", settingsProvider.getSettings().getLeftMovementKeyCode());

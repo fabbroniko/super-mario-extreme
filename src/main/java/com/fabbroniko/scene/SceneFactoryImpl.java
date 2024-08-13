@@ -2,6 +2,7 @@ package com.fabbroniko.scene;
 
 import com.fabbroniko.environment.AudioManager;
 import com.fabbroniko.environment.SceneContextFactory;
+import com.fabbroniko.main.BackgroundLoader;
 import com.fabbroniko.main.SceneManager;
 import com.fabbroniko.main.SettingsProvider;
 import com.fabbroniko.resource.ResourceManager;
@@ -17,13 +18,15 @@ public class SceneFactoryImpl implements SceneFactory {
     private final ResourceManager resourceManager;
     private final TextFactory textFactory;
     private final OptionFactory optionFactory;
+    private final BackgroundLoader backgroundLoader;
 
     public SceneFactoryImpl(final SceneContextFactory sceneContextFactory,
                             final SettingsProvider settingsProvider,
                             final AudioManager audioManager,
                             final ResourceManager resourceManager,
                             final TextFactory textFactory,
-                            final OptionFactory optionFactory) {
+                            final OptionFactory optionFactory,
+                            final BackgroundLoader backgroundLoader) {
 
         this.sceneContextFactory = sceneContextFactory;
         this.settingsProvider = settingsProvider;
@@ -31,23 +34,24 @@ public class SceneFactoryImpl implements SceneFactory {
         this.resourceManager = resourceManager;
         this.textFactory = textFactory;
         this.optionFactory = optionFactory;
+        this.backgroundLoader = backgroundLoader;
     }
 
     @Override
     public Scene createMainMenuScene(final SceneManager sceneManager) {
-        return new MainMenuScene(sceneContextFactory, resourceManager, sceneManager, textFactory, optionFactory);
+        return new MainMenuScene(sceneContextFactory, sceneManager, textFactory, optionFactory, backgroundLoader);
     }
 
     @Override
     public Scene createSettingsScene(final SceneManager sceneManager) {
-        return new SettingsMenuScene(sceneContextFactory, settingsProvider, sceneManager, resourceManager, textFactory);
+        return new SettingsMenuScene(sceneContextFactory, settingsProvider, sceneManager, textFactory, backgroundLoader);
     }
 
     @SneakyThrows
     @Override
     public Scene createGameScene(final SceneManager sceneManager) {
         final Level level = new XmlMapper().readValue(getClass().getResource("/levels/testing.xml"), Level.class);
-        return new GameScene(sceneContextFactory, settingsProvider, audioManager, resourceManager, sceneManager, textFactory, level);
+        return new GameScene(sceneContextFactory, settingsProvider, audioManager, resourceManager, sceneManager, textFactory, backgroundLoader, level);
     }
 
     @Override

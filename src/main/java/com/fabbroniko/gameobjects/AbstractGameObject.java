@@ -3,90 +3,49 @@ package com.fabbroniko.gameobjects;
 import com.fabbroniko.environment.Animation;
 import com.fabbroniko.environment.AudioManager;
 import com.fabbroniko.environment.CollisionDirection;
+import com.fabbroniko.environment.ImmutablePosition;
+import com.fabbroniko.environment.Position;
 import com.fabbroniko.environment.TileMap;
 import com.fabbroniko.environment.Vector2D;
-import com.fabbroniko.main.Drawable;
+import com.fabbroniko.main.DrawableResource;
+import com.fabbroniko.main.DrawableResourceImpl;
+import com.fabbroniko.main.DynamicDrawable;
 import com.fabbroniko.main.Time;
 import com.fabbroniko.resource.ResourceManager;
 import com.fabbroniko.scene.GameScene;
+import lombok.Getter;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Abstract Class representing a generic GameObject.
- * @author com.fabbroniko
- */
-public abstract class AbstractGameObject implements Drawable {
+public abstract class AbstractGameObject implements DynamicDrawable {
 
 	protected Vector2D currentPosition;
 
+	@Getter
 	protected Vector2D spriteDimension;
-	/**
-	 * Map's Position.
-	 */
 	protected Vector2D mapPosition;
-	
-	/**
-	 * Object's current animation.
-	 */
 	protected Animation currentAnimation;
-
 	protected List<Animation> registeredAnimations;
-
 	protected final TileMap tileMap;
 	protected final GameScene gameScene;
 	protected final ResourceManager resourceManager;
 	protected final AudioManager audioManager;
-	
-	/**
-	 * Represents whether it's jumping or not.
-	 */
+
 	protected boolean jumping;
-	
-	/**
-	 * Represents whether it's falling or not.
-	 */
 	protected boolean falling;
-	
-	/**
-	 * Represents it's going in the left direction.
-	 */
-	protected boolean left; 
-	
-	/**
-	 * Represents it's going in the right direction.
-	 */
+	protected boolean left;
 	protected boolean right;
-
 	protected boolean facingRight;
-	
-	/**
-	 * Represents whether it hit the ground or not.
-	 */
 	protected boolean groundHit;
-	
-	/**
-	 * Represents the current jumping height.
-	 */
 	protected int currentJump;
-	
-	/**
-	 * Represents whether it's dead or not.
-	 */
 	protected boolean death;
+	protected int jumpSpeed = -1000;
+	protected int gravitySpeed = 600;
+	protected int walkingSpeed = 600;
+	protected int maxJump = 400;
 
-	protected int jumpSpeed = -1000; // Pixels per second
-	protected int gravitySpeed = 600; // Pixels per second
-	protected int walkingSpeed = 600; // Pixels per second
-	protected int maxJump = 400; // Pixels
-	
-	// Collision rectangle
-	/**
-	 * Movement's offset.
-	 */
 	protected Vector2D offset;
 
 	protected AbstractGameObject(final TileMap tileMap,
@@ -109,10 +68,6 @@ public abstract class AbstractGameObject implements Drawable {
 		mapPosition = new Vector2D();
 	}
 
-	/**
-	 * Handles collisions with the map.
-	 * @param direction Collision's direction.
-	 */
 	public void handleMapCollisions(final CollisionDirection direction) {
 		if (direction.equals(CollisionDirection.BOTTOM_COLLISION)) {
 			groundHit = true;
@@ -126,11 +81,7 @@ public abstract class AbstractGameObject implements Drawable {
 			offset.setX(0);
 		}
 	}
-	
-	/**
-	 * Handles collisions with other objects.
-	 * @param direction Collision's Direction.
-	 */
+
 	public void handleObjectCollisions(final CollisionDirection direction, final AbstractGameObject obj) {
 		handleMapCollisions(direction);
 	}
@@ -143,11 +94,7 @@ public abstract class AbstractGameObject implements Drawable {
 	public final Rectangle getRectangle() {
 		return new Rectangle(currentPosition.getRoundedX(), currentPosition.getRoundedY(), spriteDimension.getRoundedX(), spriteDimension.getRoundedY());
 	}
-	
-	/**
-	 * Checks if the object is dead.
-	 * @return Return true if it's dead, false otherwise.
-	 */
+
 	public boolean isDead() {
 		return death;
 	}
@@ -192,20 +139,12 @@ public abstract class AbstractGameObject implements Drawable {
 	}
 	
 	@Override
-	public BufferedImage getDrawableImage() {
+	public DrawableResource getDrawableResource() {
+		final Position position = new ImmutablePosition(currentPosition.getX() - mapPosition.getX(), currentPosition.getY() - mapPosition.getY());
 		if(facingRight) {
-			return currentAnimation.getImage();
+			return new DrawableResourceImpl(currentAnimation.getImage(), position);
 		} else {
-			return currentAnimation.getMirroredImage();
+			return new DrawableResourceImpl(currentAnimation.getMirroredImage(), position);
 		}
-	}
-
-	@Override
-	public Vector2D getDrawingPosition() {
-		return new Vector2D(currentPosition.getX() - mapPosition.getX(), currentPosition.getY() - mapPosition.getY());
-	}
-
-	public Vector2D getSpriteDimension() {
-		return spriteDimension;
 	}
 }
