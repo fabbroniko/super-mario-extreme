@@ -3,7 +3,7 @@ package com.fabbroniko.main;
 import com.fabbroniko.environment.AudioManager;
 import com.fabbroniko.resource.ResourceManager;
 import com.fabbroniko.scene.Scene;
-import com.fabbroniko.scene.SceneFactory;
+import com.fabbroniko.scene.factory.SceneFactory;
 import lombok.SneakyThrows;
 
 import java.awt.Graphics2D;

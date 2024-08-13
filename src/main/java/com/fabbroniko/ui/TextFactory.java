@@ -1,4 +1,4 @@
-package com.fabbroniko.scene;
+package com.fabbroniko.ui;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;

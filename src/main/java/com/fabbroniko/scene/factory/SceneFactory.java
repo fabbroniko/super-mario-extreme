@@ -1,6 +1,7 @@
-package com.fabbroniko.scene;
+package com.fabbroniko.scene.factory;
 
 import com.fabbroniko.main.SceneManager;
+import com.fabbroniko.scene.Scene;
 
 public interface SceneFactory {
 

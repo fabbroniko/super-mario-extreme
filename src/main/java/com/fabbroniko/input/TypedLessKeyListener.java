@@ -1,4 +1,4 @@
-package com.fabbroniko.scene;
+package com.fabbroniko.input;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;

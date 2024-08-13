@@ -1,9 +1,9 @@
-package com.fabbroniko.scene;
+package com.fabbroniko.input;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public interface ActionLessKeyListener extends KeyListener {
+public interface UIKeyListener extends KeyListener {
 
     @Override
     default void keyTyped(KeyEvent e) {
@@ -11,9 +11,5 @@ public interface ActionLessKeyListener extends KeyListener {
 
     @Override
     default void keyPressed(KeyEvent e) {
-    }
-
-    @Override
-    default void keyReleased(KeyEvent e) {
     }
 }

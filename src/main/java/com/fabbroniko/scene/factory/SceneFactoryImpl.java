@@ -1,12 +1,20 @@
-package com.fabbroniko.scene;
+package com.fabbroniko.scene.factory;
 
 import com.fabbroniko.environment.AudioManager;
-import com.fabbroniko.environment.SceneContextFactory;
+import com.fabbroniko.scene.SceneContextFactory;
 import com.fabbroniko.main.BackgroundLoader;
 import com.fabbroniko.main.SceneManager;
 import com.fabbroniko.main.SettingsProvider;
 import com.fabbroniko.resource.ResourceManager;
 import com.fabbroniko.resource.domain.Level;
+import com.fabbroniko.scene.GameScene;
+import com.fabbroniko.scene.LostScene;
+import com.fabbroniko.scene.MainMenuScene;
+import com.fabbroniko.scene.Scene;
+import com.fabbroniko.scene.SettingsMenuScene;
+import com.fabbroniko.scene.WinScene;
+import com.fabbroniko.ui.OptionFactory;
+import com.fabbroniko.ui.TextFactory;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.SneakyThrows;
 

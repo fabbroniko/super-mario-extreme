@@ -10,11 +10,10 @@ import com.fabbroniko.main.SceneManager;
 import com.fabbroniko.main.SettingsProvider;
 import com.fabbroniko.resource.ResourceManager;
 import com.fabbroniko.scene.GameScene;
-import com.fabbroniko.scene.TypedLessKeyListener;
+import com.fabbroniko.input.TypedLessKeyListener;
 import lombok.extern.log4j.Log4j2;
 
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 /**
  * Represents the player's character.

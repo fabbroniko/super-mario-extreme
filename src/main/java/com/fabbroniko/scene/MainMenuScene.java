@@ -1,11 +1,12 @@
 package com.fabbroniko.scene;
 
 import com.fabbroniko.environment.Dimension2D;
-import com.fabbroniko.environment.SceneContext;
-import com.fabbroniko.environment.SceneContextFactory;
+import com.fabbroniko.input.UIKeyListener;
 import com.fabbroniko.main.BackgroundLoader;
 import com.fabbroniko.main.DrawableResource;
 import com.fabbroniko.main.SceneManager;
+import com.fabbroniko.ui.OptionFactory;
+import com.fabbroniko.ui.TextFactory;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -69,9 +70,9 @@ public final class MainMenuScene implements Scene, UIKeyListener {
 		selectedOption = 0;
 
 		final SceneContext sceneContext = sceneContextFactory.create();
-		this.canvas = sceneContext.getSceneCanvas();
+		this.canvas = sceneContext.canvas();
 		this.graphics = (Graphics2D) canvas.getGraphics();
-		this.canvasDimension = sceneContext.getCanvasDimension();
+		this.canvasDimension = sceneContext.canvasDimension();
 
 		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 	}

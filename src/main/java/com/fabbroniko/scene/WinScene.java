@@ -2,9 +2,9 @@ package com.fabbroniko.scene;
 
 import com.fabbroniko.environment.AudioManager;
 import com.fabbroniko.environment.Dimension2D;
-import com.fabbroniko.environment.SceneContext;
-import com.fabbroniko.environment.SceneContextFactory;
+import com.fabbroniko.input.ActionLessKeyListener;
 import com.fabbroniko.main.SceneManager;
+import com.fabbroniko.ui.TextFactory;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -43,9 +43,9 @@ public final class WinScene implements Scene, ActionLessKeyListener {
 		initTime = System.currentTimeMillis();
 
 		final SceneContext sceneContext = sceneContextFactory.create();
-		this.canvas = sceneContext.getSceneCanvas();
+		this.canvas = sceneContext.canvas();
 		this.graphics = (Graphics2D) canvas.getGraphics();
-		this.canvasDimension = sceneContext.getCanvasDimension();
+		this.canvasDimension = sceneContext.canvasDimension();
 
 		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 	}

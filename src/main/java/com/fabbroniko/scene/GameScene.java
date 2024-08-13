@@ -3,12 +3,11 @@ package com.fabbroniko.scene;
 import com.fabbroniko.environment.AudioManager;
 import com.fabbroniko.environment.CollisionManager;
 import com.fabbroniko.environment.Dimension2D;
-import com.fabbroniko.environment.SceneContext;
-import com.fabbroniko.environment.SceneContextFactory;
 import com.fabbroniko.environment.TileMap;
 import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.gameobjects.AbstractGameObject;
 import com.fabbroniko.gameobjects.Player;
+import com.fabbroniko.input.TypedLessKeyListener;
 import com.fabbroniko.main.BackgroundLoader;
 import com.fabbroniko.main.DrawableResource;
 import com.fabbroniko.main.GameObjectFactory;
@@ -18,6 +17,7 @@ import com.fabbroniko.main.SettingsProvider;
 import com.fabbroniko.main.Time;
 import com.fabbroniko.resource.ResourceManager;
 import com.fabbroniko.resource.domain.Level;
+import com.fabbroniko.ui.TextFactory;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -75,9 +75,9 @@ public final class GameScene implements Scene, TypedLessKeyListener {
     @Override
     public void init() {
         final SceneContext sceneContext = sceneContextFactory.create();
-        this.canvas = sceneContext.getSceneCanvas();
+        this.canvas = sceneContext.canvas();
         this.graphics = (Graphics2D) canvas.getGraphics();
-        this.canvasDimension = sceneContext.getCanvasDimension();
+        this.canvasDimension = sceneContext.canvasDimension();
 
         background = backgroundLoader.createStaticBackground("game").getDrawableResource();
         tileMap = new TileMap(resourceManager, level.getMap(), canvasDimension);

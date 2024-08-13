@@ -1,4 +1,4 @@
-package com.fabbroniko.scene;
+package com.fabbroniko.ui;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

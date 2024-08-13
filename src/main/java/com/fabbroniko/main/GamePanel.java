@@ -1,6 +1,7 @@
 package com.fabbroniko.main;
 
 import com.fabbroniko.environment.Dimension2D;
+import com.fabbroniko.input.ControlsSource;
 import lombok.Getter;
 
 import javax.swing.*;
