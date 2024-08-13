@@ -1,8 +1,10 @@
 package com.fabbroniko;
 
-import com.fabbroniko.audio.AudioManager;
-import com.fabbroniko.audio.AudioManagerImpl;
+import com.fabbroniko.audio.AudioPlayer;
+import com.fabbroniko.audio.AudioPlayerImpl;
 import com.fabbroniko.environment.Dimension2D;
+import com.fabbroniko.gameobjects.GameObjectFactory;
+import com.fabbroniko.gameobjects.GameObjectFactoryImpl;
 import com.fabbroniko.scene.SceneContextFactory;
 import com.fabbroniko.scene.SceneContextFactoryImpl;
 import com.fabbroniko.ui.background.BackgroundLoader;
@@ -34,18 +36,19 @@ public class Application {
         final ResourceManager resourceManager = new ResourceManager();
         final SettingsProvider settingsProvider = new SettingsProviderImpl(resourceManager);
         final SceneContextFactory sceneContextFactory = new SceneContextFactoryImpl(CANVAS_WIDTH, CANVAS_HEIGHT);
-        final AudioManager audioManager = new AudioManagerImpl(settingsProvider, resourceManager);
+        final AudioPlayer audioPlayer = new AudioPlayerImpl(settingsProvider, resourceManager);
         final TextFactory textFactory = new AwtTextFactory(new FontProviderImpl());
         final OptionFactory optionFactory = new OptionFactoryImpl(textFactory);
         final DrawableResourceFactory drawableResourceFactory = new DrawableResourceFactoryImpl();
         final BackgroundLoader backgroundLoader = new BackgroundLoaderImpl(resourceManager, drawableResourceFactory);
-        final SceneFactory sceneFactory = new SceneFactoryImpl(sceneContextFactory, settingsProvider, audioManager, resourceManager, textFactory, optionFactory, backgroundLoader);
+        final GameObjectFactory gameObjectFactory = new GameObjectFactoryImpl(audioPlayer, resourceManager, settingsProvider);
+        final SceneFactory sceneFactory = new SceneFactoryImpl(sceneContextFactory, settingsProvider, audioPlayer, resourceManager, textFactory, optionFactory, backgroundLoader, gameObjectFactory);
         final Dimension2D canvasDimension = new Dimension2D(CANVAS_WIDTH, CANVAS_HEIGHT);
         final java.awt.Dimension screenDimensions = Toolkit.getDefaultToolkit().getScreenSize();
         final Dimension2D windowDimension = new Dimension2D((int) screenDimensions.getWidth(), (int) screenDimensions.getHeight());;
         final GamePanel gamePanel = new GamePanel(canvasDimension, windowDimension);
         new GameWindow(gamePanel);
-        final GameManager gameManager = new GameManager(audioManager, gamePanel, resourceManager, settingsProvider, sceneFactory);
+        final GameManager gameManager = new GameManager(audioPlayer, gamePanel, resourceManager, settingsProvider, sceneFactory);
 
         gameManager.start();
     }

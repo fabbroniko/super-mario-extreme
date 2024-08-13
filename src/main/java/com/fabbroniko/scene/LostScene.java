@@ -1,6 +1,6 @@
 package com.fabbroniko.scene;
 
-import com.fabbroniko.audio.AudioManager;
+import com.fabbroniko.audio.MusicPlayer;
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.input.ActionLessKeyListener;
 import com.fabbroniko.ui.DrawableResource;
@@ -22,7 +22,7 @@ public final class LostScene implements Scene, ActionLessKeyListener {
 	private long initTime;
 
 	private final SceneContextFactory sceneContextFactory;
-	private final AudioManager audioManager;
+	private final MusicPlayer musicPlayer;
 	private final SceneManager sceneManager;
 	private final TextFactory textFactory;
 	private final int deathCount;
@@ -34,14 +34,14 @@ public final class LostScene implements Scene, ActionLessKeyListener {
 	private DrawableResource background;
 
 	public LostScene(final SceneContextFactory sceneContextFactory,
-					 final AudioManager audioManager,
+					 final MusicPlayer musicPlayer,
 					 final SceneManager sceneManager,
 					 final TextFactory textFactory,
 					 final int deathCount,
 					 final BackgroundLoader backgroundLoader) {
 
 		this.sceneContextFactory = sceneContextFactory;
-		this.audioManager = audioManager;
+		this.musicPlayer = musicPlayer;
 		this.sceneManager = sceneManager;
 		this.textFactory = textFactory;
 		this.deathCount = deathCount;
@@ -50,7 +50,7 @@ public final class LostScene implements Scene, ActionLessKeyListener {
 
 	@Override
 	public void init() {
-		audioManager.playBackgroundMusic("death", false);
+		musicPlayer.playBackgroundMusic("death", false);
 		initTime = System.currentTimeMillis();
 
 		final SceneContext sceneContext = sceneContextFactory.create();

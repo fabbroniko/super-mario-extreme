@@ -1,6 +1,6 @@
 package com.fabbroniko.gameobjects;
 
-import com.fabbroniko.audio.AudioManager;
+import com.fabbroniko.audio.EffectPlayer;
 import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.map.TileMap;
 import com.fabbroniko.resource.ResourceManager;
@@ -16,9 +16,9 @@ public class Castle extends AbstractGameObject {
 	public Castle(final TileMap tileMap,
 				  final GameScene gameScene,
 				  final ResourceManager resourceManager,
-				  final AudioManager audioManager,
+				  final EffectPlayer effectPlayer,
 				  final Vector2D position) {
-		super(tileMap, gameScene, resourceManager, audioManager, position, spriteDimension);
+		super(tileMap, gameScene, resourceManager, effectPlayer, position, spriteDimension);
 
 		setAnimation(Animation.builder()
 				.spriteSet(resourceManager.loadImageFromDisk(spritePath))

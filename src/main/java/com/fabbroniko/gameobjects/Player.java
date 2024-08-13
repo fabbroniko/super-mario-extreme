@@ -1,15 +1,14 @@
 package com.fabbroniko.gameobjects;
 
-import com.fabbroniko.audio.AudioManager;
+import com.fabbroniko.audio.EffectPlayer;
 import com.fabbroniko.collision.CollisionDirection;
 import com.fabbroniko.environment.Dimension2D;
-import com.fabbroniko.map.TileMap;
-import com.fabbroniko.environment.Vector2D;
-import com.fabbroniko.scene.SceneManager;
 import com.fabbroniko.environment.SettingsProvider;
+import com.fabbroniko.environment.Vector2D;
+import com.fabbroniko.input.TypedLessKeyListener;
+import com.fabbroniko.map.TileMap;
 import com.fabbroniko.resource.ResourceManager;
 import com.fabbroniko.scene.GameScene;
-import com.fabbroniko.input.TypedLessKeyListener;
 import lombok.extern.log4j.Log4j2;
 
 import java.awt.event.KeyEvent;
@@ -30,6 +29,7 @@ public class Player extends AbstractGameObject implements TypedLessKeyListener {
 
 	private boolean animationJump;
 	private boolean animationMove;
+
 	private final GameScene gameScene;
 	
 	private final Dimension2D baseWindowSize;
@@ -39,19 +39,16 @@ public class Player extends AbstractGameObject implements TypedLessKeyListener {
 	private final Animation jumpAnimation;
 
 	private final SettingsProvider settingsProvider;
-	private final SceneManager sceneManager;
 
 	public Player(final TileMap tileMap,
 				  final Dimension2D baseWindowSize,
 				  final SettingsProvider settingsProvider,
 				  final GameScene gameScene,
 				  final ResourceManager resourceManager,
-				  final AudioManager audioManager,
-				  final Vector2D position,
-				  final SceneManager sceneManager) {
-		super(tileMap, gameScene, resourceManager, audioManager, position, spriteDimension);
+				  final EffectPlayer effectPlayer,
+				  final Vector2D position) {
+		super(tileMap, gameScene, resourceManager, effectPlayer, position, spriteDimension);
 
-		this.sceneManager = sceneManager;
 		this.settingsProvider = settingsProvider;
 
 		falling = true;
@@ -98,9 +95,6 @@ public class Player extends AbstractGameObject implements TypedLessKeyListener {
 	public void update() {
 		super.update();
 		tileMap.setPosition(currentPosition.getRoundedX() - (baseWindowSize.width() / 2), currentPosition.getRoundedY() - (baseWindowSize.height() / 2));
-		if (death) {
-			sceneManager.openLostScene();
-		}
 
 		if (animationJump) {
 			setAnimation(jumpAnimation);
@@ -159,7 +153,7 @@ public class Player extends AbstractGameObject implements TypedLessKeyListener {
 			groundHit = false;
 			currentJump = 0;
 			animationJump = true;
-			audioManager.playEffect("jump");
+			effectPlayer.playEffect("jump");
 		}
 	}
  

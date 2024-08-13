@@ -1,9 +1,9 @@
 package com.fabbroniko.gameobjects;
 
-import com.fabbroniko.audio.AudioManager;
+import com.fabbroniko.audio.EffectPlayer;
 import com.fabbroniko.collision.CollisionDirection;
-import com.fabbroniko.map.TileMap;
 import com.fabbroniko.environment.Vector2D;
+import com.fabbroniko.map.TileMap;
 import com.fabbroniko.resource.ResourceManager;
 import com.fabbroniko.scene.GameScene;
 
@@ -25,9 +25,9 @@ public class Block extends AbstractGameObject implements AnimationListener {
 	public Block(final TileMap tileMap,
 				 final GameScene gameScene,
 				 final ResourceManager resourceManager,
-				 final AudioManager audioManager,
+				 final EffectPlayer effectPlayer,
 				 final Vector2D position) {
-		super(tileMap, gameScene, resourceManager, audioManager, position, spriteDimension);
+		super(tileMap, gameScene, resourceManager, effectPlayer, position, spriteDimension);
 
 		breakingAnimation = Animation.builder()
 				.spriteSet(resourceManager.loadImageFromDisk(spritePath))
@@ -54,7 +54,7 @@ public class Block extends AbstractGameObject implements AnimationListener {
 		
 		if (obj instanceof Player && direction.equals(CollisionDirection.BOTTOM_COLLISION) && !currentAnimation.getName().equals(BLOCK_BREAKING_ANIMATION_NAME)) {
 			this.setAnimation(breakingAnimation);
-			audioManager.playEffect("breaking");
+			effectPlayer.playEffect("breaking");
 		}
 	}
 

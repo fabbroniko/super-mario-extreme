@@ -1,9 +1,9 @@
 package com.fabbroniko.gameobjects;
 
-import com.fabbroniko.audio.AudioManager;
+import com.fabbroniko.audio.EffectPlayer;
 import com.fabbroniko.collision.CollisionDirection;
 import com.fabbroniko.environment.Vector2D;
-import com.fabbroniko.map.*;
+import com.fabbroniko.map.TileMap;
 import com.fabbroniko.resource.ResourceManager;
 import com.fabbroniko.scene.GameScene;
 
@@ -19,9 +19,9 @@ public class Enemy extends AbstractGameObject implements AnimationListener {
 	public Enemy(final TileMap tileMap,
 				 final GameScene gameScene,
 				 final ResourceManager resourceManager,
-				 final AudioManager audioManager,
+				 final EffectPlayer effectPlayer,
 				 final Vector2D position) {
-		super(tileMap, gameScene, resourceManager, audioManager, position, spriteDimension);
+		super(tileMap, gameScene, resourceManager, effectPlayer, position, spriteDimension);
 
 		falling = true;
 		walkingSpeed = 300;
@@ -76,7 +76,7 @@ public class Enemy extends AbstractGameObject implements AnimationListener {
 		
 		if (direction.equals(CollisionDirection.TOP_COLLISION) && obj instanceof Player && !currentAnimation.getName().equals(ENEMY_DEAD_ANIMATION_NAME)) {
 			this.setAnimation(deadAnimation);
-			audioManager.playEffect("hit");
+			effectPlayer.playEffect("hit");
 		}
 	}
 

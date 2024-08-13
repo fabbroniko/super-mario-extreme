@@ -5,13 +5,13 @@ import com.fabbroniko.resource.ResourceManager;
 
 import javax.sound.sampled.Clip;
 
-public final class AudioManagerImpl implements AudioManager {
+public final class AudioPlayerImpl implements AudioPlayer {
 
 	private Clip music;
 	private final ResourceManager resourceManager;
 	private final SettingsProvider settingsProvider;
 
-	public AudioManagerImpl(final SettingsProvider settingsProvider, final ResourceManager resourceManager) {
+	public AudioPlayerImpl(final SettingsProvider settingsProvider, final ResourceManager resourceManager) {
 		this.settingsProvider = settingsProvider;
 		this.resourceManager = resourceManager;
 	}

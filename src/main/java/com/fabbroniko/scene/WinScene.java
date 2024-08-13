@@ -1,6 +1,6 @@
 package com.fabbroniko.scene;
 
-import com.fabbroniko.audio.AudioManager;
+import com.fabbroniko.audio.MusicPlayer;
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.input.ActionLessKeyListener;
 import com.fabbroniko.ui.DrawableResource;
@@ -19,7 +19,7 @@ public final class WinScene implements Scene, ActionLessKeyListener {
 	private static final int SCENE_DURATION_MILLISECONDS = 6000;
 
 	private final SceneContextFactory sceneContextFactory;
-	private final AudioManager audioManager;
+	private final MusicPlayer musicPlayer;
 	private final SceneManager sceneManager;
 	private final TextFactory textFactory;
 	private final BackgroundLoader backgroundLoader;
@@ -31,13 +31,13 @@ public final class WinScene implements Scene, ActionLessKeyListener {
 	private DrawableResource background;
 
 	public WinScene(final SceneContextFactory sceneContextFactory,
-                    final AudioManager audioManager,
+                    final MusicPlayer musicPlayer,
                     final SceneManager sceneManager,
 					final TextFactory textFactory,
 					final BackgroundLoader backgroundLoader) {
 
         this.sceneContextFactory = sceneContextFactory;
-        this.audioManager = audioManager;
+        this.musicPlayer = musicPlayer;
 		this.sceneManager = sceneManager;
         this.textFactory = textFactory;
 		this.backgroundLoader = backgroundLoader;
@@ -45,7 +45,7 @@ public final class WinScene implements Scene, ActionLessKeyListener {
 
 	@Override
 	public void init() {
-		audioManager.playBackgroundMusic("victory", false);
+		musicPlayer.playBackgroundMusic("victory", false);
 		initTime = System.currentTimeMillis();
 
 		final SceneContext sceneContext = sceneContextFactory.create();

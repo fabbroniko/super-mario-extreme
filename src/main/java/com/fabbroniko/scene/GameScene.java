@@ -1,22 +1,21 @@
 package com.fabbroniko.scene;
 
-import com.fabbroniko.audio.AudioManager;
+import com.fabbroniko.audio.MusicPlayer;
 import com.fabbroniko.collision.CollisionManager;
 import com.fabbroniko.environment.Dimension2D;
-import com.fabbroniko.map.TileMap;
+import com.fabbroniko.environment.SettingsProvider;
 import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.gameobjects.AbstractGameObject;
+import com.fabbroniko.gameobjects.GameObjectFactory;
 import com.fabbroniko.gameobjects.Player;
 import com.fabbroniko.input.TypedLessKeyListener;
-import com.fabbroniko.ui.InitializableDrawable;
-import com.fabbroniko.ui.background.BackgroundLoader;
-import com.fabbroniko.ui.DrawableResource;
-import com.fabbroniko.gameobjects.GameObjectFactory;
-import com.fabbroniko.gameobjects.GameObjectFactoryImpl;
-import com.fabbroniko.environment.SettingsProvider;
 import com.fabbroniko.main.Time;
+import com.fabbroniko.map.TileMap;
 import com.fabbroniko.resource.ResourceManager;
 import com.fabbroniko.resource.dto.Level;
+import com.fabbroniko.ui.DrawableResource;
+import com.fabbroniko.ui.InitializableDrawable;
+import com.fabbroniko.ui.background.BackgroundLoader;
 import com.fabbroniko.ui.text.TextFactory;
 
 import java.awt.Color;
@@ -40,7 +39,7 @@ public final class GameScene implements Scene, TypedLessKeyListener {
     private Player player;
 
     private final SceneContextFactory sceneContextFactory;
-    private final AudioManager audioManager;
+    private final MusicPlayer musicPlayer;
     private final ResourceManager resourceManager;
     private final SettingsProvider settingsProvider;
     private final SceneManager sceneManager;
@@ -54,17 +53,18 @@ public final class GameScene implements Scene, TypedLessKeyListener {
 
     public GameScene(final SceneContextFactory sceneContextFactory,
                      final SettingsProvider settingsProvider,
-                     final AudioManager audioManager,
+                     final MusicPlayer musicPlayer,
                      final ResourceManager resourceManager,
                      final SceneManager sceneManager,
                      final TextFactory textFactory,
                      final BackgroundLoader backgroundLoader,
+                     final GameObjectFactory gameObjectFactory,
                      final Level level) {
 
-        this.gameObjectFactory = new GameObjectFactoryImpl(audioManager, resourceManager, settingsProvider, sceneManager);
+        this.gameObjectFactory = gameObjectFactory;
         this.sceneContextFactory = sceneContextFactory;
         this.settingsProvider = settingsProvider;
-        this.audioManager = audioManager;
+        this.musicPlayer = musicPlayer;
         this.resourceManager = resourceManager;
         this.sceneManager = sceneManager;
         this.textFactory = textFactory;
@@ -96,7 +96,7 @@ public final class GameScene implements Scene, TypedLessKeyListener {
                 new Vector2D(gameObject.getX(), gameObject.getY())))
         );
 
-        audioManager.playBackgroundMusic("theme", true);
+        musicPlayer.playBackgroundMusic("theme", true);
     }
 
     private AbstractGameObject createGameObject(final String name, final Vector2D startPosition) {
@@ -125,6 +125,10 @@ public final class GameScene implements Scene, TypedLessKeyListener {
 
     @Override
     public void update() {
+        if(player.isDead()) {
+            sceneManager.openLostScene();
+        }
+
         final List<AbstractGameObject> deadGameObjects = new ArrayList<>();
 
         for(final AbstractGameObject go : gameObjects) {

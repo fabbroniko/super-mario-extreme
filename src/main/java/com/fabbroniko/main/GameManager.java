@@ -1,6 +1,6 @@
 package com.fabbroniko.main;
 
-import com.fabbroniko.audio.AudioManager;
+import com.fabbroniko.audio.AudioPlayer;
 import com.fabbroniko.environment.SettingsProvider;
 import com.fabbroniko.resource.ResourceManager;
 import com.fabbroniko.scene.Scene;
@@ -13,7 +13,7 @@ import java.awt.image.BufferedImage;
 
 public final class GameManager implements Runnable, SceneManager {
 
-	private final AudioManager audioManager;
+	private final AudioPlayer audioPlayer;
     private final SceneFactory sceneFactory;
 	private final ResourceManager resourceManager;
 	private final SettingsProvider settingsProvider;
@@ -23,13 +23,13 @@ public final class GameManager implements Runnable, SceneManager {
 	private Scene currentState;
 	private int deathCount = 0;
 
-	public GameManager(final AudioManager audioManager,
+	public GameManager(final AudioPlayer audioPlayer,
 					   final GamePanel gamePanel,
 					   final ResourceManager resourceManager,
 					   final SettingsProvider settingsProvider,
 					   final SceneFactory sceneFactory) {
 
-		this.audioManager = audioManager;
+		this.audioPlayer = audioPlayer;
         this.settingsProvider = settingsProvider;
 		this.resourceManager = resourceManager;
 		this.sceneFactory = sceneFactory;
@@ -66,7 +66,7 @@ public final class GameManager implements Runnable, SceneManager {
 
 	@SneakyThrows
 	private synchronized void openScene(final Scene scene) {
-		audioManager.stopMusic();
+		audioPlayer.stopMusic();
 		this.currentState = scene;
 		this.gamePanel.setKeyListener(scene);
 		this.currentState.init();
