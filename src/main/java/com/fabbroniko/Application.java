@@ -33,6 +33,7 @@ import com.fabbroniko.ui.text.TextFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.sound.sampled.LineListener;
+import java.awt.Dimension;
 import java.awt.Toolkit;
 
 public class Application {
@@ -54,8 +55,8 @@ public class Application {
         final GameObjectFactory gameObjectFactory = new GameObjectFactoryImpl(audioPlayer, resourceManager, settingsProvider);
         final SceneFactory sceneFactory = new SceneFactoryImpl(sceneContextFactory, settingsProvider, audioPlayer, resourceManager, textFactory, optionFactory, backgroundLoader, gameObjectFactory);
         final Dimension2D canvasDimension = new Dimension2D(CANVAS_WIDTH, CANVAS_HEIGHT);
-        final java.awt.Dimension screenDimensions = Toolkit.getDefaultToolkit().getScreenSize();
-        final Dimension2D windowDimension = new Dimension2D((int) screenDimensions.getWidth(), (int) screenDimensions.getHeight());;
+        final Dimension screenDimensions = Toolkit.getDefaultToolkit().getScreenSize();
+        final Dimension2D windowDimension = new Dimension2D((int) screenDimensions.getWidth(), (int) screenDimensions.getHeight());
         final GamePanel gamePanel = new GamePanel(canvasDimension, windowDimension);
         new GameWindow(gamePanel);
         final GameManager gameManager = new GameManager(audioPlayer, gamePanel, resourceManager, settingsProvider, sceneFactory);
