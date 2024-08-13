@@ -1,9 +1,11 @@
 package com.fabbroniko.ui.background;
 
-import com.fabbroniko.environment.ImmutablePosition;
-import com.fabbroniko.ui.Drawable;
-import com.fabbroniko.ui.DrawableResourceFactory;
+import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.resource.ResourceManager;
+import com.fabbroniko.ui.DrawableResourceFactory;
+import com.fabbroniko.ui.InitializableDrawable;
+
+import java.awt.Color;
 
 public class BackgroundLoaderImpl implements BackgroundLoader {
 
@@ -17,7 +19,12 @@ public class BackgroundLoaderImpl implements BackgroundLoader {
     }
 
     @Override
-    public Drawable createStaticBackground(String resourceName) {
-        return new StaticBackground(resourceManager.findBackgroundFromName(resourceName), new ImmutablePosition(0, 0), drawableResourceFactory);
+    public InitializableDrawable createStaticBackground(final String resourceName) {
+        return new StaticBackground(resourceManager.findBackgroundFromName(resourceName), drawableResourceFactory);
+    }
+
+    @Override
+    public InitializableDrawable createSimpleColorBackground(final Color color, final Dimension2D canvasDimension) {
+        return new SimpleColorBackground(color, canvasDimension, drawableResourceFactory);
     }
 }

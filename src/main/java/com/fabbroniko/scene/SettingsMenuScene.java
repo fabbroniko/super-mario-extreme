@@ -2,6 +2,7 @@ package com.fabbroniko.scene;
 
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.input.UIKeyListener;
+import com.fabbroniko.ui.InitializableDrawable;
 import com.fabbroniko.ui.background.BackgroundLoader;
 import com.fabbroniko.ui.DrawableResource;
 import com.fabbroniko.environment.SettingsProvider;
@@ -68,7 +69,9 @@ public final class SettingsMenuScene implements Scene, UIKeyListener {
 
 	@Override
 	public void init() {
-		background = backgroundLoader.createStaticBackground("menu").getDrawableResource();
+		final InitializableDrawable initializableBackground = backgroundLoader.createStaticBackground("menu");
+		initializableBackground.init();
+		background = initializableBackground.getDrawableResource();
 
 		final SceneContext sceneContext = sceneContextFactory.create();
 		this.canvas = sceneContext.canvas();

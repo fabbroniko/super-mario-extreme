@@ -3,6 +3,9 @@ package com.fabbroniko.scene;
 import com.fabbroniko.audio.AudioManager;
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.input.ActionLessKeyListener;
+import com.fabbroniko.ui.DrawableResource;
+import com.fabbroniko.ui.InitializableDrawable;
+import com.fabbroniko.ui.background.BackgroundLoader;
 import com.fabbroniko.ui.text.TextFactory;
 
 import java.awt.Color;
@@ -19,21 +22,25 @@ public final class WinScene implements Scene, ActionLessKeyListener {
 	private final AudioManager audioManager;
 	private final SceneManager sceneManager;
 	private final TextFactory textFactory;
+	private final BackgroundLoader backgroundLoader;
 
 	private BufferedImage canvas;
 	private Graphics2D graphics;
 	private Dimension2D canvasDimension;
 	private long initTime;
+	private DrawableResource background;
 
 	public WinScene(final SceneContextFactory sceneContextFactory,
                     final AudioManager audioManager,
                     final SceneManager sceneManager,
-					final TextFactory textFactory) {
+					final TextFactory textFactory,
+					final BackgroundLoader backgroundLoader) {
 
         this.sceneContextFactory = sceneContextFactory;
         this.audioManager = audioManager;
 		this.sceneManager = sceneManager;
         this.textFactory = textFactory;
+		this.backgroundLoader = backgroundLoader;
     }
 
 	@Override
@@ -45,6 +52,10 @@ public final class WinScene implements Scene, ActionLessKeyListener {
 		this.canvas = sceneContext.canvas();
 		this.graphics = (Graphics2D) canvas.getGraphics();
 		this.canvasDimension = sceneContext.canvasDimension();
+
+		final InitializableDrawable initializableBackground = backgroundLoader.createSimpleColorBackground(Color.BLACK, canvasDimension);
+		initializableBackground.init();
+		this.background = initializableBackground.getDrawableResource();
 
 		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 	}
@@ -58,8 +69,14 @@ public final class WinScene implements Scene, ActionLessKeyListener {
 
 	@Override
 	public BufferedImage draw() {
-		graphics.setColor(Color.BLACK);
-		graphics.fillRect(0, 0, canvasDimension.width(), canvasDimension.height());
+		graphics.drawImage(
+				background.image(),
+				background.position().getRoundedX(),
+				background.position().getRoundedY(),
+				canvasDimension.width(),
+				canvasDimension.height(),
+				null
+		);
 
 		final BufferedImage levelCompleted = textFactory.createParagraph(LEVEL_COMPLETED, Color.WHITE);
 		int x = (canvasDimension.width() - levelCompleted.getWidth()) / 2;

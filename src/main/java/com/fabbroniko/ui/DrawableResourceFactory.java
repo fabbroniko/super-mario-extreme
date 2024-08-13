@@ -6,5 +6,7 @@ import java.awt.image.BufferedImage;
 
 public interface DrawableResourceFactory {
 
+    DrawableResource createDrawableResource(final BufferedImage image);
+
     DrawableResource createDrawableResource(final BufferedImage image, final Position position);
 }

@@ -64,11 +64,11 @@ public class SceneFactoryImpl implements SceneFactory {
 
     @Override
     public Scene createLostScene(final SceneManager sceneManager, final int deathCount) {
-        return new LostScene(sceneContextFactory, audioManager, sceneManager, textFactory, deathCount);
+        return new LostScene(sceneContextFactory, audioManager, sceneManager, textFactory, deathCount, backgroundLoader);
     }
 
     @Override
     public Scene createWinScene(final SceneManager sceneManager) {
-        return new WinScene(sceneContextFactory, audioManager, sceneManager, textFactory);
+        return new WinScene(sceneContextFactory, audioManager, sceneManager, textFactory, backgroundLoader);
     }
 }

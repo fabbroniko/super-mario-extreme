@@ -1,8 +1,13 @@
 package com.fabbroniko.ui.background;
 
-import com.fabbroniko.ui.Drawable;
+import com.fabbroniko.environment.Dimension2D;
+import com.fabbroniko.ui.InitializableDrawable;
+
+import java.awt.Color;
 
 public interface BackgroundLoader {
 
-    Drawable createStaticBackground(final String resourceName);
+    InitializableDrawable createStaticBackground(final String resourceName);
+
+    InitializableDrawable createSimpleColorBackground(final Color color, final Dimension2D canvasDimension);
 }

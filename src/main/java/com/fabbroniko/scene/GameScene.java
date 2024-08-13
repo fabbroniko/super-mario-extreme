@@ -8,6 +8,7 @@ import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.gameobjects.AbstractGameObject;
 import com.fabbroniko.gameobjects.Player;
 import com.fabbroniko.input.TypedLessKeyListener;
+import com.fabbroniko.ui.InitializableDrawable;
 import com.fabbroniko.ui.background.BackgroundLoader;
 import com.fabbroniko.ui.DrawableResource;
 import com.fabbroniko.gameobjects.GameObjectFactory;
@@ -78,7 +79,10 @@ public final class GameScene implements Scene, TypedLessKeyListener {
         this.graphics = (Graphics2D) canvas.getGraphics();
         this.canvasDimension = sceneContext.canvasDimension();
 
-        background = backgroundLoader.createStaticBackground("game").getDrawableResource();
+        final InitializableDrawable initializableBackground = backgroundLoader.createStaticBackground("game");
+        initializableBackground.init();
+        background = initializableBackground.getDrawableResource();
+
         tileMap = new TileMap(resourceManager, level.getMap(), canvasDimension);
         gameObjects = new ArrayList<>();
 

@@ -1,22 +1,29 @@
 package com.fabbroniko.ui.background;
 
-import com.fabbroniko.environment.Position;
-import com.fabbroniko.ui.Drawable;
 import com.fabbroniko.ui.DrawableResource;
 import com.fabbroniko.ui.DrawableResourceFactory;
+import com.fabbroniko.ui.InitializableDrawable;
 import lombok.Getter;
 
 import java.awt.image.BufferedImage;
 
-@Getter
-public class StaticBackground implements Drawable {
+public class StaticBackground implements InitializableDrawable {
 
-	private final DrawableResource drawableResource;
+	private final BufferedImage image;
+	private final DrawableResourceFactory drawableResourceFactory;
+
+	@Getter
+	private DrawableResource drawableResource;
 
 	public StaticBackground(final BufferedImage image,
-							final Position position,
 							final DrawableResourceFactory drawableResourceFactory) {
 
-		this.drawableResource = drawableResourceFactory.createDrawableResource(image, position);
+		this.image = image;
+		this.drawableResourceFactory = drawableResourceFactory;
+	}
+
+	@Override
+	public void init() {
+		this.drawableResource = drawableResourceFactory.createDrawableResource(image);
 	}
 }

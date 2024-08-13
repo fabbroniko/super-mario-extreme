@@ -2,8 +2,10 @@ package com.fabbroniko.scene;
 
 import com.fabbroniko.audio.AudioManager;
 import com.fabbroniko.environment.Dimension2D;
-import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.input.ActionLessKeyListener;
+import com.fabbroniko.ui.DrawableResource;
+import com.fabbroniko.ui.InitializableDrawable;
+import com.fabbroniko.ui.background.BackgroundLoader;
 import com.fabbroniko.ui.text.TextFactory;
 
 import java.awt.Color;
@@ -18,29 +20,32 @@ public final class LostScene implements Scene, ActionLessKeyListener {
 	private static final int SCENE_DURATION_MILLISECONDS = 3000;
 
 	private long initTime;
-	private final Vector2D origin = new Vector2D();
 
 	private final SceneContextFactory sceneContextFactory;
 	private final AudioManager audioManager;
 	private final SceneManager sceneManager;
 	private final TextFactory textFactory;
 	private final int deathCount;
+	private final BackgroundLoader backgroundLoader;
 
 	private BufferedImage canvas;
 	private Graphics2D graphics;
 	private Dimension2D canvasDimension;
+	private DrawableResource background;
 
 	public LostScene(final SceneContextFactory sceneContextFactory,
 					 final AudioManager audioManager,
 					 final SceneManager sceneManager,
 					 final TextFactory textFactory,
-					 final int deathCount) {
+					 final int deathCount,
+					 final BackgroundLoader backgroundLoader) {
 
 		this.sceneContextFactory = sceneContextFactory;
 		this.audioManager = audioManager;
 		this.sceneManager = sceneManager;
 		this.textFactory = textFactory;
 		this.deathCount = deathCount;
+		this.backgroundLoader = backgroundLoader;
 	}
 
 	@Override
@@ -52,6 +57,10 @@ public final class LostScene implements Scene, ActionLessKeyListener {
 		this.canvas = sceneContext.canvas();
 		this.graphics = (Graphics2D) canvas.getGraphics();
 		this.canvasDimension = sceneContext.canvasDimension();
+
+		final InitializableDrawable initializableBackground = backgroundLoader.createSimpleColorBackground(Color.BLACK, canvasDimension);
+		initializableBackground.init();
+		this.background = initializableBackground.getDrawableResource();
 
 		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 	}
@@ -65,8 +74,14 @@ public final class LostScene implements Scene, ActionLessKeyListener {
 
 	@Override
 	public BufferedImage draw() {
-		graphics.setColor(Color.BLACK);
-		graphics.fillRect(origin.getRoundedX(), origin.getRoundedY(), canvasDimension.width(), canvasDimension.height());
+		graphics.drawImage(
+				background.image(),
+				background.position().getRoundedX(),
+				background.position().getRoundedY(),
+				canvasDimension.width(),
+				canvasDimension.height(),
+				null
+		);
 
 		final BufferedImage gameOver = textFactory.createParagraph(GAME_OVER_MAIN_TEXT, Color.WHITE);
 		int x = (canvasDimension.width() - gameOver.getWidth()) / 2;
