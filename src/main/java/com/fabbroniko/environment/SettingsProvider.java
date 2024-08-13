@@ -1,6 +1,6 @@
 package com.fabbroniko.environment;
 
-import com.fabbroniko.resource.domain.Settings;
+import com.fabbroniko.resource.dto.Settings;
 
 public interface SettingsProvider {
 

@@ -1,7 +1,7 @@
 package com.fabbroniko.environment;
 
 import com.fabbroniko.resource.ResourceManager;
-import com.fabbroniko.resource.domain.Settings;
+import com.fabbroniko.resource.dto.Settings;
 
 public class SettingsProviderImpl implements SettingsProvider {
 

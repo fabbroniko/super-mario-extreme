@@ -1,9 +1,9 @@
 package com.fabbroniko.resource;
 
 import com.fabbroniko.error.ResourceNotFoundException;
-import com.fabbroniko.resource.domain.Background;
-import com.fabbroniko.resource.domain.Resource;
-import com.fabbroniko.resource.domain.Settings;
+import com.fabbroniko.resource.dto.Background;
+import com.fabbroniko.resource.dto.Resource;
+import com.fabbroniko.resource.dto.Settings;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.extern.log4j.Log4j2;
@@ -95,7 +95,7 @@ public class ResourceManager {
         log.trace("Loading audio clip from disk. Clip name {}", name);
 
         // Find the clip descriptor from the resource index
-        final Optional<com.fabbroniko.resource.domain.Clip> optResourceClip = resource.getClips()
+        final Optional<com.fabbroniko.resource.dto.Clip> optResourceClip = resource.getClips()
                 .stream()
                 .filter(c -> c.getName().equals(name))
                 .findAny();

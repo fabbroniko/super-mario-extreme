@@ -1,16 +1,18 @@
-package com.fabbroniko.resource.domain;
+package com.fabbroniko.resource.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategies.KebabCaseStrategy.class)
-public class Tile {
+public class TileMap {
 
-    private int id;
-    private int verticalIndex;
-    private int horizontalIndex;
+  private int tileSize;
+
+  @JacksonXmlText
+  private String path;
 }

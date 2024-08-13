@@ -15,7 +15,7 @@ import com.fabbroniko.gameobjects.GameObjectFactoryImpl;
 import com.fabbroniko.environment.SettingsProvider;
 import com.fabbroniko.main.Time;
 import com.fabbroniko.resource.ResourceManager;
-import com.fabbroniko.resource.domain.Level;
+import com.fabbroniko.resource.dto.Level;
 import com.fabbroniko.ui.text.TextFactory;
 
 import java.awt.Color;

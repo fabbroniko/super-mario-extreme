@@ -7,7 +7,7 @@ import com.fabbroniko.ui.Drawable;
 import com.fabbroniko.ui.DrawableResource;
 import com.fabbroniko.ui.DrawableResourceImpl;
 import com.fabbroniko.resource.ResourceManager;
-import com.fabbroniko.resource.domain.Map;
+import com.fabbroniko.resource.dto.Map;
 import lombok.extern.log4j.Log4j2;
 
 import java.awt.*;
@@ -65,7 +65,7 @@ public class TileMap implements Drawable {
 			}
 		}
 
-		for(final com.fabbroniko.resource.domain.Tile t : map.getTiles()) {
+		for(final com.fabbroniko.resource.dto.Tile t : map.getTiles()) {
 			this.map[t.getVerticalIndex()][t.getHorizontalIndex()] = t.getId();
 		}
 	}

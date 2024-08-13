@@ -1,3 +1,3 @@
-package com.fabbroniko.resource.domain;
+package com.fabbroniko.resource.dto;
 
 public class Background extends SimpleResource{ }

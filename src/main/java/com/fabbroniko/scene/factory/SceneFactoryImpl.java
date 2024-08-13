@@ -6,7 +6,7 @@ import com.fabbroniko.ui.background.BackgroundLoader;
 import com.fabbroniko.scene.SceneManager;
 import com.fabbroniko.environment.SettingsProvider;
 import com.fabbroniko.resource.ResourceManager;
-import com.fabbroniko.resource.domain.Level;
+import com.fabbroniko.resource.dto.Level;
 import com.fabbroniko.scene.GameScene;
 import com.fabbroniko.scene.LostScene;
 import com.fabbroniko.scene.MainMenuScene;

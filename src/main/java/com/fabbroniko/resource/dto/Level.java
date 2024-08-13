@@ -1,4 +1,4 @@
-package com.fabbroniko.resource.domain;
+package com.fabbroniko.resource.dto;
 
 import com.fabbroniko.environment.Vector2D;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;

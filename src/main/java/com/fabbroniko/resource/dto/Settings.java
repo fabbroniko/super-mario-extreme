@@ -1,4 +1,4 @@
-package com.fabbroniko.resource.domain;
+package com.fabbroniko.resource.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
