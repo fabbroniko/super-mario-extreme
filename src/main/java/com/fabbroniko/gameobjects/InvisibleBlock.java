@@ -1,6 +1,9 @@
 package com.fabbroniko.gameobjects;
 
-import com.fabbroniko.environment.*;
+import com.fabbroniko.audio.AudioManager;
+import com.fabbroniko.collision.CollisionDirection;
+import com.fabbroniko.environment.Vector2D;
+import com.fabbroniko.map.*;
 import com.fabbroniko.resource.ResourceManager;
 import com.fabbroniko.scene.GameScene;
 
@@ -39,7 +42,7 @@ public class InvisibleBlock extends AbstractGameObject {
 	}
 	
 	@Override
-	public void handleObjectCollisions(final CollisionDirection direction, final AbstractGameObject obj) 
+	public void handleObjectCollisions(final CollisionDirection direction, final AbstractGameObject obj)
 	{
 		if (obj instanceof Player && direction.equals(CollisionDirection.BOTTOM_COLLISION)) {
 			this.setAnimation(visibleAnimation);

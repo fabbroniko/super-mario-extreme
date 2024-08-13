@@ -1,6 +1,9 @@
 package com.fabbroniko.gameobjects;
 
-import com.fabbroniko.environment.*;
+import com.fabbroniko.audio.AudioManager;
+import com.fabbroniko.collision.CollisionDirection;
+import com.fabbroniko.environment.Vector2D;
+import com.fabbroniko.map.*;
 import com.fabbroniko.resource.ResourceManager;
 import com.fabbroniko.scene.GameScene;
 

@@ -1,6 +1,6 @@
 package com.fabbroniko.scene.factory;
 
-import com.fabbroniko.environment.AudioManager;
+import com.fabbroniko.audio.AudioManager;
 import com.fabbroniko.scene.SceneContextFactory;
 import com.fabbroniko.main.BackgroundLoader;
 import com.fabbroniko.main.SceneManager;

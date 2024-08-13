@@ -1,5 +1,6 @@
-package com.fabbroniko.environment;
+package com.fabbroniko.gameobjects;
 
+import com.fabbroniko.environment.Vector2D;
 import lombok.extern.log4j.Log4j2;
 
 import java.awt.Graphics2D;

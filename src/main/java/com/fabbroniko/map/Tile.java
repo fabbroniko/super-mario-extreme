@@ -1,4 +1,4 @@
-package com.fabbroniko.environment;
+package com.fabbroniko.map;
 
 import java.awt.image.BufferedImage;
 

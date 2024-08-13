@@ -1,5 +1,6 @@
-package com.fabbroniko.environment;
+package com.fabbroniko.ui;
 
+import com.fabbroniko.environment.Position;
 import com.fabbroniko.main.Drawable;
 import com.fabbroniko.main.DrawableResource;
 import com.fabbroniko.main.DrawableResourceFactory;

@@ -1,4 +1,4 @@
-package com.fabbroniko.environment;
+package com.fabbroniko.map;
 
 public enum TileType {
 

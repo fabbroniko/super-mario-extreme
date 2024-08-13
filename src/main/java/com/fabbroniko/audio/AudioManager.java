@@ -1,4 +1,4 @@
-package com.fabbroniko.environment;
+package com.fabbroniko.audio;
 
 public interface AudioManager {
 

@@ -1,9 +1,11 @@
-package com.fabbroniko.environment;
+package com.fabbroniko.collision;
 
 import java.awt.Rectangle;
 import java.util.List;
 
+import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.gameobjects.AbstractGameObject;
+import com.fabbroniko.map.TileMap;
 
 public class CollisionManager {
 

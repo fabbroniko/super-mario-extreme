@@ -1,5 +1,8 @@
-package com.fabbroniko.environment;
+package com.fabbroniko.map;
 
+import com.fabbroniko.environment.Dimension2D;
+import com.fabbroniko.environment.ImmutablePosition;
+import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.main.Drawable;
 import com.fabbroniko.main.DrawableResource;
 import com.fabbroniko.main.DrawableResourceImpl;

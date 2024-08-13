@@ -1,4 +1,4 @@
-package com.fabbroniko.environment;
+package com.fabbroniko.collision;
 
 /**
  * Represents the direction of a collision.

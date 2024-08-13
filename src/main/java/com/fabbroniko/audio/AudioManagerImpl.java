@@ -1,4 +1,4 @@
-package com.fabbroniko.environment;
+package com.fabbroniko.audio;
 
 import com.fabbroniko.main.SettingsProvider;
 import com.fabbroniko.resource.ResourceManager;

@@ -1,6 +1,6 @@
 package com.fabbroniko.scene;
 
-import com.fabbroniko.environment.AudioManager;
+import com.fabbroniko.audio.AudioManager;
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.input.ActionLessKeyListener;
 import com.fabbroniko.main.SceneManager;

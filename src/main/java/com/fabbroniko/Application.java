@@ -1,7 +1,7 @@
 package com.fabbroniko;
 
-import com.fabbroniko.environment.AudioManager;
-import com.fabbroniko.environment.AudioManagerImpl;
+import com.fabbroniko.audio.AudioManager;
+import com.fabbroniko.audio.AudioManagerImpl;
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.scene.SceneContextFactory;
 import com.fabbroniko.scene.SceneContextFactoryImpl;
