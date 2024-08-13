@@ -1,22 +1,22 @@
 package com.fabbroniko.environment;
 
-import com.fabbroniko.resource.ResourceManager;
+import com.fabbroniko.resource.UserSettingsLoader;
 import com.fabbroniko.resource.dto.Settings;
 
 public class SettingsProviderImpl implements SettingsProvider {
 
-    private final ResourceManager resourceManager;
+    private final UserSettingsLoader userSettingsLoader;
 
     private Settings settings;
 
-    public SettingsProviderImpl(final ResourceManager resourceManager) {
-        this.resourceManager = resourceManager;
+    public SettingsProviderImpl(final UserSettingsLoader userSettingsLoader) {
+        this.userSettingsLoader = userSettingsLoader;
     }
 
     @Override
     public Settings getSettings() {
         if(settings == null) {
-            settings = resourceManager.loadSettings();
+            settings = userSettingsLoader.load();
         }
 
         return settings;
@@ -24,6 +24,6 @@ public class SettingsProviderImpl implements SettingsProvider {
 
     @Override
     public void saveSettings() {
-        resourceManager.saveSettings(settings);
+        userSettingsLoader.save(settings);
     }
 }

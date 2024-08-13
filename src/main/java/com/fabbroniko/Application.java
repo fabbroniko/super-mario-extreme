@@ -14,7 +14,9 @@ import com.fabbroniko.main.GameWindow;
 import com.fabbroniko.resource.AudioLoader;
 import com.fabbroniko.resource.CacheLessAudioLoader;
 import com.fabbroniko.resource.CachedAudioLoader;
+import com.fabbroniko.resource.DiskUserSettingsLoader;
 import com.fabbroniko.resource.ResourceManager;
+import com.fabbroniko.resource.UserSettingsLoader;
 import com.fabbroniko.scene.SceneContextFactory;
 import com.fabbroniko.scene.SceneContextFactoryImpl;
 import com.fabbroniko.scene.factory.SceneFactory;
@@ -28,6 +30,7 @@ import com.fabbroniko.ui.background.BackgroundLoaderImpl;
 import com.fabbroniko.ui.text.AwtTextFactory;
 import com.fabbroniko.ui.text.FontProviderImpl;
 import com.fabbroniko.ui.text.TextFactory;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.sound.sampled.LineListener;
 import java.awt.Toolkit;
@@ -39,7 +42,9 @@ public class Application {
 
     public static void main(final String[] args) {
         final ResourceManager resourceManager = new ResourceManager();
-        final SettingsProvider settingsProvider = new SettingsProviderImpl(resourceManager);
+        final ObjectMapper jsonMapper = new ObjectMapper();
+        final UserSettingsLoader userSettingsLoader = new DiskUserSettingsLoader(jsonMapper);
+        final SettingsProvider settingsProvider = new SettingsProviderImpl(userSettingsLoader);
         final SceneContextFactory sceneContextFactory = new SceneContextFactoryImpl(CANVAS_WIDTH, CANVAS_HEIGHT);
         final AudioPlayer audioPlayer = getAudioPlayer(resourceManager, settingsProvider);
         final TextFactory textFactory = new AwtTextFactory(new FontProviderImpl());

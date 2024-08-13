@@ -1,6 +1,5 @@
 package com.fabbroniko.resource;
 
-import com.fabbroniko.resource.dto.Resource;
 import lombok.extern.log4j.Log4j2;
 
 import javax.sound.sampled.AudioInputStream;
