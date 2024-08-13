@@ -1,19 +1,19 @@
 package com.fabbroniko.audio;
 
 import com.fabbroniko.environment.SettingsProvider;
-import com.fabbroniko.resource.ResourceManager;
+import com.fabbroniko.resource.AudioLoader;
 
 import javax.sound.sampled.Clip;
 
 public final class AudioPlayerImpl implements AudioPlayer {
 
 	private Clip music;
-	private final ResourceManager resourceManager;
+	private final AudioLoader audioLoader;
 	private final SettingsProvider settingsProvider;
 
-	public AudioPlayerImpl(final SettingsProvider settingsProvider, final ResourceManager resourceManager) {
+	public AudioPlayerImpl(final SettingsProvider settingsProvider, final AudioLoader audioLoader) {
 		this.settingsProvider = settingsProvider;
-		this.resourceManager = resourceManager;
+		this.audioLoader = audioLoader;
 	}
 
 	@Override
@@ -22,10 +22,9 @@ public final class AudioPlayerImpl implements AudioPlayer {
 			return;
 		}
 
-		// Making sure there is only one music clip active at a time
 		stopMusic();
 
-		resourceManager.findAudioClipFromName(clipName).ifPresent(c -> {
+		audioLoader.findClipByName(clipName).ifPresent(c -> {
 			if(loop)
 				c.loop(Clip.LOOP_CONTINUOUSLY);
 
@@ -40,7 +39,7 @@ public final class AudioPlayerImpl implements AudioPlayer {
 			return; 
 		}
 
-		resourceManager.findAudioClipFromName(clipName).ifPresent(Clip::start);
+		audioLoader.findClipByName(clipName).ifPresent(Clip::start);
 	}
 
 	@Override
