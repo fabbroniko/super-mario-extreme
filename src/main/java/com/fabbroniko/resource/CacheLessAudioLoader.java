@@ -1,5 +1,6 @@
 package com.fabbroniko.resource;
 
+import com.fabbroniko.resource.dto.Resource;
 import lombok.extern.log4j.Log4j2;
 
 import javax.sound.sampled.AudioInputStream;
@@ -12,11 +13,11 @@ import java.util.Optional;
 @Log4j2
 public class CacheLessAudioLoader implements AudioLoader {
 
-    private final ResourceManager resourceManager;
+    private final Resource resource;
     private final LineListener lineListener;
 
-    public CacheLessAudioLoader(final ResourceManager resourceManager, final LineListener lineListener) {
-        this.resourceManager = resourceManager;
+    public CacheLessAudioLoader(final Resource resource, final LineListener lineListener) {
+        this.resource = resource;
         this.lineListener = lineListener;
     }
 
@@ -31,7 +32,7 @@ public class CacheLessAudioLoader implements AudioLoader {
     private Optional<Clip> loadAudioClipFromDisk(final String name) {
         log.trace("Loading audio clip from disk. Clip name {}", name);
 
-        final Optional<com.fabbroniko.resource.dto.Clip> optResourceClip = resourceManager.getClips()
+        final Optional<com.fabbroniko.resource.dto.Clip> optResourceClip = resource.getClips()
                 .stream()
                 .filter(c -> c.getName().equals(name))
                 .findAny();

@@ -4,14 +4,9 @@ import com.fabbroniko.audio.EffectPlayer;
 import com.fabbroniko.collision.CollisionDirection;
 import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.map.TileMap;
-import com.fabbroniko.resource.ResourceManager;
+import com.fabbroniko.resource.ImageLoader;
 import com.fabbroniko.scene.GameScene;
 
-/**
- * Represents the simplest block in the game.
- * It can be break if hit from the bottom.
- * @author com.fabbroniko
- */
 public class Block extends AbstractGameObject implements AnimationListener {
 
 	private static final Vector2D spriteDimension = new Vector2D(120, 120);
@@ -24,13 +19,13 @@ public class Block extends AbstractGameObject implements AnimationListener {
 
 	public Block(final TileMap tileMap,
 				 final GameScene gameScene,
-				 final ResourceManager resourceManager,
+				 final ImageLoader imageLoader,
 				 final EffectPlayer effectPlayer,
 				 final Vector2D position) {
-		super(tileMap, gameScene, resourceManager, effectPlayer, position, spriteDimension);
+		super(tileMap, gameScene, imageLoader, effectPlayer, position, spriteDimension);
 
 		breakingAnimation = Animation.builder()
-				.spriteSet(resourceManager.loadImageFromDisk(spritePath))
+				.spriteSet(imageLoader.findSpritesByName(spritePath))
 				.spriteDimension(spriteDimension)
 				.row(1)
 				.nFrames(6)
@@ -40,7 +35,7 @@ public class Block extends AbstractGameObject implements AnimationListener {
 				.build();
 
 		setAnimation(Animation.builder()
-				.spriteSet(resourceManager.loadImageFromDisk(spritePath))
+				.spriteSet(imageLoader.findSpritesByName(spritePath))
 				.spriteDimension(spriteDimension)
 				.row(0)
 				.nFrames(1)

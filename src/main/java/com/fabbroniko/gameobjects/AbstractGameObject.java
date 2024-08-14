@@ -7,7 +7,7 @@ import com.fabbroniko.environment.Position;
 import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.main.Time;
 import com.fabbroniko.map.TileMap;
-import com.fabbroniko.resource.ResourceManager;
+import com.fabbroniko.resource.ImageLoader;
 import com.fabbroniko.scene.GameScene;
 import com.fabbroniko.ui.DrawableResource;
 import com.fabbroniko.ui.DrawableResourceImpl;
@@ -29,7 +29,7 @@ public abstract class AbstractGameObject implements DynamicDrawable {
 	protected List<Animation> registeredAnimations;
 	protected final TileMap tileMap;
 	protected final GameScene gameScene;
-	protected final ResourceManager resourceManager;
+	protected final ImageLoader imageLoader;
 	protected final EffectPlayer effectPlayer;
 
 	protected boolean jumping;
@@ -49,13 +49,13 @@ public abstract class AbstractGameObject implements DynamicDrawable {
 
 	protected AbstractGameObject(final TileMap tileMap,
 								 final GameScene gameScene,
-								 final ResourceManager resourceManager,
+								 final ImageLoader imageLoader,
 								 final EffectPlayer effectPlayer,
 								 final Vector2D position,
 								 final Vector2D spriteDimension) {
 		this.tileMap = tileMap;
 		this.gameScene = gameScene;
-		this.resourceManager = resourceManager;
+		this.imageLoader = imageLoader;
 		this.effectPlayer = effectPlayer;
 		this.death = false;
 		

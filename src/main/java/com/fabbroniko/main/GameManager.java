@@ -2,7 +2,6 @@ package com.fabbroniko.main;
 
 import com.fabbroniko.audio.AudioPlayer;
 import com.fabbroniko.environment.SettingsProvider;
-import com.fabbroniko.resource.ResourceManager;
 import com.fabbroniko.scene.Scene;
 import com.fabbroniko.scene.SceneManager;
 import com.fabbroniko.scene.factory.SceneFactory;
@@ -15,7 +14,6 @@ public final class GameManager implements Runnable, SceneManager {
 
 	private final AudioPlayer audioPlayer;
     private final SceneFactory sceneFactory;
-	private final ResourceManager resourceManager;
 	private final SettingsProvider settingsProvider;
     private final GamePanel gamePanel;
 
@@ -25,13 +23,11 @@ public final class GameManager implements Runnable, SceneManager {
 
 	public GameManager(final AudioPlayer audioPlayer,
 					   final GamePanel gamePanel,
-					   final ResourceManager resourceManager,
 					   final SettingsProvider settingsProvider,
 					   final SceneFactory sceneFactory) {
 
 		this.audioPlayer = audioPlayer;
         this.settingsProvider = settingsProvider;
-		this.resourceManager = resourceManager;
 		this.sceneFactory = sceneFactory;
         this.gamePanel = gamePanel;
 	}
@@ -89,7 +85,6 @@ public final class GameManager implements Runnable, SceneManager {
 	}
 
 	public void start() {
-		resourceManager.preload();
 		openMainMenu();
 
 		new Thread(this).start();

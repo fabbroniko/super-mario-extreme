@@ -3,14 +3,15 @@ package com.fabbroniko.map;
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.environment.ImmutablePosition;
 import com.fabbroniko.environment.Vector2D;
+import com.fabbroniko.resource.ImageLoader;
+import com.fabbroniko.resource.dto.Map;
 import com.fabbroniko.ui.Drawable;
 import com.fabbroniko.ui.DrawableResource;
 import com.fabbroniko.ui.DrawableResourceImpl;
-import com.fabbroniko.resource.ResourceManager;
-import com.fabbroniko.resource.dto.Map;
 import lombok.extern.log4j.Log4j2;
 
-import java.awt.*;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,11 +33,11 @@ public class TileMap implements Drawable {
 
 	private BufferedImage cachedTileMap;
 
-	public TileMap(final ResourceManager resourceManager, final Map map, final Dimension2D canvasSize) {
+	public TileMap(final ImageLoader imageLoader, final Map map, final Dimension2D canvasSize) {
 		this.tileSize = new Vector2D(120, 120);
 		this.canvasSize = canvasSize;
 
-		loadTiles(resourceManager.getTileMapSet());
+		loadTiles(imageLoader.findTileMap());
 		loadMap(map, canvasSize);
 	}
 

@@ -11,7 +11,7 @@ import com.fabbroniko.gameobjects.Player;
 import com.fabbroniko.input.TypedLessKeyListener;
 import com.fabbroniko.main.Time;
 import com.fabbroniko.map.TileMap;
-import com.fabbroniko.resource.ResourceManager;
+import com.fabbroniko.resource.ImageLoader;
 import com.fabbroniko.resource.dto.Level;
 import com.fabbroniko.ui.DrawableResource;
 import com.fabbroniko.ui.InitializableDrawable;
@@ -40,7 +40,7 @@ public final class GameScene implements Scene, TypedLessKeyListener {
 
     private final SceneContextFactory sceneContextFactory;
     private final MusicPlayer musicPlayer;
-    private final ResourceManager resourceManager;
+    private final ImageLoader imageLoader;
     private final SettingsProvider settingsProvider;
     private final SceneManager sceneManager;
     private final GameObjectFactory gameObjectFactory;
@@ -54,7 +54,7 @@ public final class GameScene implements Scene, TypedLessKeyListener {
     public GameScene(final SceneContextFactory sceneContextFactory,
                      final SettingsProvider settingsProvider,
                      final MusicPlayer musicPlayer,
-                     final ResourceManager resourceManager,
+                     final ImageLoader imageLoader,
                      final SceneManager sceneManager,
                      final TextFactory textFactory,
                      final BackgroundLoader backgroundLoader,
@@ -65,7 +65,7 @@ public final class GameScene implements Scene, TypedLessKeyListener {
         this.sceneContextFactory = sceneContextFactory;
         this.settingsProvider = settingsProvider;
         this.musicPlayer = musicPlayer;
-        this.resourceManager = resourceManager;
+        this.imageLoader = imageLoader;
         this.sceneManager = sceneManager;
         this.textFactory = textFactory;
         this.backgroundLoader = backgroundLoader;
@@ -83,7 +83,7 @@ public final class GameScene implements Scene, TypedLessKeyListener {
         initializableBackground.init();
         background = initializableBackground.getDrawableResource();
 
-        tileMap = new TileMap(resourceManager, level.getMap(), canvasDimension);
+        tileMap = new TileMap(imageLoader, level.getMap(), canvasDimension);
         gameObjects = new ArrayList<>();
 
         this.collisionManager = new CollisionManager(tileMap, gameObjects);

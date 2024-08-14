@@ -4,7 +4,7 @@ import com.fabbroniko.audio.EffectPlayer;
 import com.fabbroniko.collision.CollisionDirection;
 import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.map.TileMap;
-import com.fabbroniko.resource.ResourceManager;
+import com.fabbroniko.resource.ImageLoader;
 import com.fabbroniko.scene.GameScene;
 
 public class FallingBlock extends AbstractGameObject {
@@ -16,13 +16,13 @@ public class FallingBlock extends AbstractGameObject {
 
 	public FallingBlock(final TileMap tileMap,
 						final GameScene gameScene,
-						final ResourceManager resourceManager,
+						final ImageLoader imageLoader,
 						final EffectPlayer effectPlayer,
 						final Vector2D position) {
-		super(tileMap, gameScene, resourceManager, effectPlayer, position, spriteDimension);
+		super(tileMap, gameScene, imageLoader, effectPlayer, position, spriteDimension);
 
 		setAnimation(Animation.builder()
-				.spriteSet(resourceManager.loadImageFromDisk(spritePath))
+				.spriteSet(imageLoader.findSpritesByName(spritePath))
 				.spriteDimension(spriteDimension)
 				.row(0)
 				.nFrames(1)

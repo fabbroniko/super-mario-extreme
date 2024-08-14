@@ -3,7 +3,7 @@ package com.fabbroniko.scene.factory;
 import com.fabbroniko.audio.MusicPlayer;
 import com.fabbroniko.environment.SettingsProvider;
 import com.fabbroniko.gameobjects.GameObjectFactory;
-import com.fabbroniko.resource.ResourceManager;
+import com.fabbroniko.resource.ImageLoader;
 import com.fabbroniko.resource.dto.Level;
 import com.fabbroniko.scene.GameScene;
 import com.fabbroniko.scene.LostScene;
@@ -24,7 +24,7 @@ public class SceneFactoryImpl implements SceneFactory {
     private final SceneContextFactory sceneContextFactory;
     private final SettingsProvider settingsProvider;
     private final MusicPlayer musicPlayer;
-    private final ResourceManager resourceManager;
+    private final ImageLoader imageLoader;
     private final TextFactory textFactory;
     private final OptionFactory optionFactory;
     private final BackgroundLoader backgroundLoader;
@@ -33,7 +33,7 @@ public class SceneFactoryImpl implements SceneFactory {
     public SceneFactoryImpl(final SceneContextFactory sceneContextFactory,
                             final SettingsProvider settingsProvider,
                             final MusicPlayer musicPlayer,
-                            final ResourceManager resourceManager,
+                            final ImageLoader imageLoader,
                             final TextFactory textFactory,
                             final OptionFactory optionFactory,
                             final BackgroundLoader backgroundLoader, GameObjectFactory gameObjectFactory) {
@@ -41,7 +41,7 @@ public class SceneFactoryImpl implements SceneFactory {
         this.sceneContextFactory = sceneContextFactory;
         this.settingsProvider = settingsProvider;
         this.musicPlayer = musicPlayer;
-        this.resourceManager = resourceManager;
+        this.imageLoader = imageLoader;
         this.textFactory = textFactory;
         this.optionFactory = optionFactory;
         this.backgroundLoader = backgroundLoader;
@@ -62,7 +62,7 @@ public class SceneFactoryImpl implements SceneFactory {
     @Override
     public Scene createGameScene(final SceneManager sceneManager) {
         final Level level = new XmlMapper().readValue(getClass().getResource("/levels/testing.xml"), Level.class);
-        return new GameScene(sceneContextFactory, settingsProvider, musicPlayer, resourceManager, sceneManager, textFactory, backgroundLoader, gameObjectFactory, level);
+        return new GameScene(sceneContextFactory, settingsProvider, musicPlayer, imageLoader, sceneManager, textFactory, backgroundLoader, gameObjectFactory, level);
     }
 
     @Override
