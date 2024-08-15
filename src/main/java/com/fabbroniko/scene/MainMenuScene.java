@@ -2,6 +2,7 @@ package com.fabbroniko.scene;
 
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.input.UIKeyListener;
+import com.fabbroniko.scene.factory.SceneContextFactory;
 import com.fabbroniko.ui.InitializableDrawable;
 import com.fabbroniko.ui.background.BackgroundLoader;
 import com.fabbroniko.ui.DrawableResource;
@@ -147,5 +148,9 @@ public final class MainMenuScene implements Scene, UIKeyListener {
 		} else if (selectedOption > QUIT_OPTION_INDEX) {
 			selectedOption = START_OPTION_INDEX;
 		}
+	}
+
+	@Override
+	public void close() {
 	}
 }

@@ -13,6 +13,7 @@ import com.fabbroniko.main.Time;
 import com.fabbroniko.map.TileMap;
 import com.fabbroniko.resource.ImageLoader;
 import com.fabbroniko.resource.dto.Level;
+import com.fabbroniko.scene.factory.SceneContextFactory;
 import com.fabbroniko.ui.DrawableResource;
 import com.fabbroniko.ui.InitializableDrawable;
 import com.fabbroniko.ui.background.BackgroundLoader;
@@ -179,6 +180,11 @@ public final class GameScene implements Scene, TypedLessKeyListener {
         }
 
         return canvas;
+    }
+
+    @Override
+    public void close() {
+        musicPlayer.stopMusic();
     }
 
     @Override

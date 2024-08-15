@@ -1,8 +1,10 @@
 package com.fabbroniko;
 
-import com.fabbroniko.audio.AudioPlayer;
-import com.fabbroniko.audio.AudioPlayerImpl;
-import com.fabbroniko.audio.ResetClipLineListener;
+import com.fabbroniko.audio.EffectPlayer;
+import com.fabbroniko.audio.EffectPlayerImpl;
+import com.fabbroniko.audio.MusicPlayer;
+import com.fabbroniko.audio.MusicPlayerImpl;
+import com.fabbroniko.audio.line.ResetClipLineListener;
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.environment.SettingsProvider;
 import com.fabbroniko.environment.SettingsProviderImpl;
@@ -25,8 +27,8 @@ import com.fabbroniko.resource.ResourceIndexLoader;
 import com.fabbroniko.resource.ResourceLocator;
 import com.fabbroniko.resource.UserSettingsLoader;
 import com.fabbroniko.resource.dto.Resource;
-import com.fabbroniko.scene.SceneContextFactory;
-import com.fabbroniko.scene.SceneContextFactoryImpl;
+import com.fabbroniko.scene.factory.SceneContextFactory;
+import com.fabbroniko.scene.factory.SceneContextFactoryImpl;
 import com.fabbroniko.scene.factory.SceneFactory;
 import com.fabbroniko.scene.factory.SceneFactoryImpl;
 import com.fabbroniko.ui.DrawableResourceFactory;
@@ -56,16 +58,20 @@ public class Application {
         final ImageLoader imageLoader = imageLoader(resource);
         final SettingsProvider settingsProvider = settingsProvider();
         final SceneContextFactory sceneContextFactory = new SceneContextFactoryImpl(CANVAS_WIDTH, CANVAS_HEIGHT);
-        final AudioPlayer audioPlayer = getAudioPlayer(resource, settingsProvider);
+        final LineListener lineListener = new ResetClipLineListener();
+        final AudioLoader diskAudioLoader = new CacheLessAudioLoader(resource, lineListener);
+        final AudioLoader cachedAudioLoader = new CachedAudioLoader(diskAudioLoader);
+        final EffectPlayer effectPlayer = new EffectPlayerImpl(settingsProvider, cachedAudioLoader);
+        final MusicPlayer musicPlayer = new MusicPlayerImpl(settingsProvider, cachedAudioLoader);
         final TextFactory textFactory = new AwtTextFactory(new FontProviderImpl());
         final OptionFactory optionFactory = new OptionFactoryImpl(textFactory);
         final DrawableResourceFactory drawableResourceFactory = new DrawableResourceFactoryImpl();
         final BackgroundLoader backgroundLoader = new BackgroundLoaderImpl(imageLoader, drawableResourceFactory);
-        final GameObjectFactory gameObjectFactory = new GameObjectFactoryImpl(audioPlayer, imageLoader, settingsProvider);
-        final SceneFactory sceneFactory = new SceneFactoryImpl(sceneContextFactory, settingsProvider, audioPlayer, imageLoader, textFactory, optionFactory, backgroundLoader, gameObjectFactory);
+        final GameObjectFactory gameObjectFactory = new GameObjectFactoryImpl(effectPlayer, imageLoader, settingsProvider);
+        final SceneFactory sceneFactory = new SceneFactoryImpl(sceneContextFactory, settingsProvider, musicPlayer, imageLoader, textFactory, optionFactory, backgroundLoader, gameObjectFactory);
 
         final GamePanel gamePanel = getGamePanel();
-        final GameManager gameManager = new GameManager(audioPlayer, gamePanel, settingsProvider, sceneFactory);
+        final GameManager gameManager = new GameManager(gamePanel, settingsProvider, sceneFactory);
         gameManager.start();
     }
 
@@ -95,12 +101,5 @@ public class Application {
         final GamePanel gamePanel = new GamePanel(canvasDimension, windowDimension);
         new GameWindow(gamePanel);
         return gamePanel;
-    }
-
-    private static AudioPlayer getAudioPlayer(final Resource resource, final SettingsProvider settingsProvider) {
-        final LineListener lineListener = new ResetClipLineListener();
-        final AudioLoader diskAudioLoader = new CacheLessAudioLoader(resource, lineListener);
-        final AudioLoader cachedAudioLoader = new CachedAudioLoader(diskAudioLoader);
-        return new AudioPlayerImpl(settingsProvider, cachedAudioLoader);
     }
 }

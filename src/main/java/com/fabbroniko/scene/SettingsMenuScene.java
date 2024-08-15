@@ -2,6 +2,7 @@ package com.fabbroniko.scene;
 
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.input.UIKeyListener;
+import com.fabbroniko.scene.factory.SceneContextFactory;
 import com.fabbroniko.ui.InitializableDrawable;
 import com.fabbroniko.ui.background.BackgroundLoader;
 import com.fabbroniko.ui.DrawableResource;
@@ -130,6 +131,10 @@ public final class SettingsMenuScene implements Scene, UIKeyListener {
 				keyHandler(e.getKeyCode());
 				break;
 		}
+	}
+
+	@Override
+	public void close() {
 	}
 
 	private void printOption(final String optionName,

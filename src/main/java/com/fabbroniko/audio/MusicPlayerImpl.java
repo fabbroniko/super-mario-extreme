@@ -5,13 +5,13 @@ import com.fabbroniko.resource.AudioLoader;
 
 import javax.sound.sampled.Clip;
 
-public final class AudioPlayerImpl implements AudioPlayer {
+public final class MusicPlayerImpl implements MusicPlayer {
 
 	private Clip music;
 	private final AudioLoader audioLoader;
 	private final SettingsProvider settingsProvider;
 
-	public AudioPlayerImpl(final SettingsProvider settingsProvider, final AudioLoader audioLoader) {
+	public MusicPlayerImpl(final SettingsProvider settingsProvider, final AudioLoader audioLoader) {
 		this.settingsProvider = settingsProvider;
 		this.audioLoader = audioLoader;
 	}
@@ -31,15 +31,6 @@ public final class AudioPlayerImpl implements AudioPlayer {
 			music = c;
 			c.start();
 		});
-	}
-
-	@Override
-	public void playEffect(final String clipName) {
-		if (!settingsProvider.getSettings().isEffectsAudioActive()) {
-			return; 
-		}
-
-		audioLoader.findClipByName(clipName).ifPresent(Clip::start);
 	}
 
 	@Override

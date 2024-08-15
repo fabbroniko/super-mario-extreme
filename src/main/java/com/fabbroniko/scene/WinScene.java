@@ -3,6 +3,7 @@ package com.fabbroniko.scene;
 import com.fabbroniko.audio.MusicPlayer;
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.input.ActionLessKeyListener;
+import com.fabbroniko.scene.factory.SceneContextFactory;
 import com.fabbroniko.ui.DrawableResource;
 import com.fabbroniko.ui.InitializableDrawable;
 import com.fabbroniko.ui.background.BackgroundLoader;
@@ -83,5 +84,10 @@ public final class WinScene implements Scene, ActionLessKeyListener {
 		graphics.drawImage(levelCompleted, null, x, 200);
 
 		return canvas;
+	}
+
+	@Override
+	public void close() {
+		musicPlayer.stopMusic();
 	}
 }

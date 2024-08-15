@@ -1,7 +1,7 @@
 package com.fabbroniko.main;
 
-import com.fabbroniko.audio.AudioPlayer;
 import com.fabbroniko.environment.SettingsProvider;
+import com.fabbroniko.scene.NullScene;
 import com.fabbroniko.scene.Scene;
 import com.fabbroniko.scene.SceneManager;
 import com.fabbroniko.scene.factory.SceneFactory;
@@ -12,21 +12,18 @@ import java.awt.image.BufferedImage;
 
 public final class GameManager implements Runnable, SceneManager {
 
-	private final AudioPlayer audioPlayer;
     private final SceneFactory sceneFactory;
 	private final SettingsProvider settingsProvider;
     private final GamePanel gamePanel;
 
 	private volatile boolean running = false;
-	private Scene currentState;
+	private Scene currentState = new NullScene();
 	private int deathCount = 0;
 
-	public GameManager(final AudioPlayer audioPlayer,
-					   final GamePanel gamePanel,
+	public GameManager(final GamePanel gamePanel,
 					   final SettingsProvider settingsProvider,
 					   final SceneFactory sceneFactory) {
 
-		this.audioPlayer = audioPlayer;
         this.settingsProvider = settingsProvider;
 		this.sceneFactory = sceneFactory;
         this.gamePanel = gamePanel;
@@ -62,25 +59,17 @@ public final class GameManager implements Runnable, SceneManager {
 
 	@SneakyThrows
 	private synchronized void openScene(final Scene scene) {
-		audioPlayer.stopMusic();
+		this.currentState.close();
 		this.currentState = scene;
 		this.gamePanel.setKeyListener(scene);
 		this.currentState.init();
 	}
 
 	public synchronized void update() {
-		if(currentState == null) {
-			return;
-		}
-
 		this.currentState.update();
 	}
 
 	public synchronized BufferedImage draw() {
-		if(currentState == null) {
-			return null;
-		}
-
 		return this.currentState.draw();
 	}
 

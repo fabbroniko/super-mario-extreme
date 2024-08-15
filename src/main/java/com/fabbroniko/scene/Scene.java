@@ -10,4 +10,6 @@ public interface Scene extends KeyListener {
     void update();
 
     BufferedImage draw();
+
+    void close();
 }

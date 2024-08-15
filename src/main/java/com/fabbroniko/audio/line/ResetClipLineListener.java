@@ -1,4 +1,4 @@
-package com.fabbroniko.audio;
+package com.fabbroniko.audio.line;
 
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineEvent;

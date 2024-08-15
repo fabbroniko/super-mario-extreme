@@ -9,7 +9,6 @@ import com.fabbroniko.scene.GameScene;
 import com.fabbroniko.scene.LostScene;
 import com.fabbroniko.scene.MainMenuScene;
 import com.fabbroniko.scene.Scene;
-import com.fabbroniko.scene.SceneContextFactory;
 import com.fabbroniko.scene.SceneManager;
 import com.fabbroniko.scene.SettingsMenuScene;
 import com.fabbroniko.scene.WinScene;

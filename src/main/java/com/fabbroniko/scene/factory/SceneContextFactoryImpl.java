@@ -1,6 +1,7 @@
-package com.fabbroniko.scene;
+package com.fabbroniko.scene.factory;
 
 import com.fabbroniko.environment.Dimension2D;
+import com.fabbroniko.scene.SceneContext;
 
 import java.awt.image.BufferedImage;
 
