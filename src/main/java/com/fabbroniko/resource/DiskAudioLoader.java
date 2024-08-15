@@ -11,12 +11,12 @@ import java.io.InputStream;
 import java.util.Optional;
 
 @Log4j2
-public class CacheLessAudioLoader implements AudioLoader {
+public class DiskAudioLoader implements AudioLoader {
 
     private final Resource resource;
     private final LineListener lineListener;
 
-    public CacheLessAudioLoader(final Resource resource, final LineListener lineListener) {
+    public DiskAudioLoader(final Resource resource, final LineListener lineListener) {
         this.resource = resource;
         this.lineListener = lineListener;
     }

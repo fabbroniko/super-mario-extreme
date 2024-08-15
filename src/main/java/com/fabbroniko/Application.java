@@ -14,7 +14,7 @@ import com.fabbroniko.main.GameManager;
 import com.fabbroniko.main.GamePanel;
 import com.fabbroniko.main.GameWindow;
 import com.fabbroniko.resource.AudioLoader;
-import com.fabbroniko.resource.CacheLessAudioLoader;
+import com.fabbroniko.resource.DiskAudioLoader;
 import com.fabbroniko.resource.CachedAudioLoader;
 import com.fabbroniko.resource.CachedImageLoader;
 import com.fabbroniko.resource.CachedResourceIndexLoader;
@@ -59,7 +59,7 @@ public class Application {
         final SettingsProvider settingsProvider = settingsProvider();
         final SceneContextFactory sceneContextFactory = new SceneContextFactoryImpl(CANVAS_WIDTH, CANVAS_HEIGHT);
         final LineListener lineListener = new ResetClipLineListener();
-        final AudioLoader diskAudioLoader = new CacheLessAudioLoader(resource, lineListener);
+        final AudioLoader diskAudioLoader = new DiskAudioLoader(resource, lineListener);
         final AudioLoader cachedAudioLoader = new CachedAudioLoader(diskAudioLoader);
         final EffectPlayer effectPlayer = new EffectPlayerImpl(settingsProvider, cachedAudioLoader);
         final MusicPlayer musicPlayer = new MusicPlayerImpl(settingsProvider, cachedAudioLoader);
