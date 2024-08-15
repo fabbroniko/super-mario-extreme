@@ -16,11 +16,11 @@ public final class EffectPlayerImpl implements EffectPlayer {
 	}
 
 	@Override
-	public void playEffect(final String clipName) {
+	public void play(final String name) {
 		if (!settingsProvider.getSettings().isEffectsAudioActive()) {
 			return; 
 		}
 
-		audioLoader.findClipByName(clipName).ifPresent(Clip::start);
+		audioLoader.findClipByName(name).ifPresent(Clip::start);
 	}
 }

@@ -2,5 +2,5 @@ package com.fabbroniko.audio;
 
 public interface EffectPlayer {
 
-    void playEffect(final String clipName);
+    void play(final String name);
 }

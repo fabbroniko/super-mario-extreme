@@ -49,7 +49,7 @@ public class Block extends AbstractGameObject implements AnimationListener {
 		
 		if (obj instanceof Player && direction.equals(CollisionDirection.BOTTOM_COLLISION) && !currentAnimation.getName().equals(BLOCK_BREAKING_ANIMATION_NAME)) {
 			this.setAnimation(breakingAnimation);
-			effectPlayer.playEffect("breaking");
+			effectPlayer.play("breaking");
 		}
 	}
 

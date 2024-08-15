@@ -17,14 +17,14 @@ public final class MusicPlayerImpl implements MusicPlayer {
 	}
 
 	@Override
-	public void playBackgroundMusic(final String clipName, final boolean loop) {
+	public void play(final String name, final boolean loop) {
 		if (!settingsProvider.getSettings().isMusicActive()) {
 			return;
 		}
 
-		stopMusic();
+		stop();
 
-		audioLoader.findClipByName(clipName).ifPresent(c -> {
+		audioLoader.findClipByName(name).ifPresent(c -> {
 			if(loop)
 				c.loop(Clip.LOOP_CONTINUOUSLY);
 
@@ -34,7 +34,7 @@ public final class MusicPlayerImpl implements MusicPlayer {
 	}
 
 	@Override
-	public void stopMusic() {
+	public void stop() {
 		if (music != null) {
 			music.stop();
 		}

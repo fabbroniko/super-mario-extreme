@@ -51,7 +51,7 @@ public final class LostScene implements Scene, ActionLessKeyListener {
 
 	@Override
 	public void init() {
-		musicPlayer.playBackgroundMusic("death", false);
+		musicPlayer.play("death", false);
 		initTime = System.currentTimeMillis();
 
 		final SceneContext sceneContext = sceneContextFactory.create();
@@ -97,6 +97,6 @@ public final class LostScene implements Scene, ActionLessKeyListener {
 
 	@Override
 	public void close() {
-		musicPlayer.stopMusic();
+		musicPlayer.stop();
 	}
 }

@@ -97,7 +97,7 @@ public final class GameScene implements Scene, TypedLessKeyListener {
                 new Vector2D(gameObject.getX(), gameObject.getY())))
         );
 
-        musicPlayer.playBackgroundMusic("theme", true);
+        musicPlayer.play("theme", true);
     }
 
     private AbstractGameObject createGameObject(final String name, final Vector2D startPosition) {
@@ -184,7 +184,7 @@ public final class GameScene implements Scene, TypedLessKeyListener {
 
     @Override
     public void close() {
-        musicPlayer.stopMusic();
+        musicPlayer.stop();
     }
 
     @Override

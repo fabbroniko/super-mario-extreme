@@ -76,7 +76,7 @@ public class Enemy extends AbstractGameObject implements AnimationListener {
 		
 		if (direction.equals(CollisionDirection.TOP_COLLISION) && obj instanceof Player && !currentAnimation.getName().equals(ENEMY_DEAD_ANIMATION_NAME)) {
 			this.setAnimation(deadAnimation);
-			effectPlayer.playEffect("hit");
+			effectPlayer.play("hit");
 		}
 	}
 

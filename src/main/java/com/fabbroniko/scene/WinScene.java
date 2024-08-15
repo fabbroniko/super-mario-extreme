@@ -46,7 +46,7 @@ public final class WinScene implements Scene, ActionLessKeyListener {
 
 	@Override
 	public void init() {
-		musicPlayer.playBackgroundMusic("victory", false);
+		musicPlayer.play("victory", false);
 		initTime = System.currentTimeMillis();
 
 		final SceneContext sceneContext = sceneContextFactory.create();
@@ -88,6 +88,6 @@ public final class WinScene implements Scene, ActionLessKeyListener {
 
 	@Override
 	public void close() {
-		musicPlayer.stopMusic();
+		musicPlayer.stop();
 	}
 }

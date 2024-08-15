@@ -153,7 +153,7 @@ public class Player extends AbstractGameObject implements TypedLessKeyListener {
 			groundHit = false;
 			currentJump = 0;
 			animationJump = true;
-			effectPlayer.playEffect("jump");
+			effectPlayer.play("jump");
 		}
 	}
  

@@ -30,8 +30,6 @@ public class DiskAudioLoader implements AudioLoader {
     }
 
     private Optional<Clip> loadAudioClipFromDisk(final String name) {
-        log.trace("Loading audio clip from disk. Clip name {}", name);
-
         final Optional<com.fabbroniko.resource.dto.Clip> optResourceClip = resource.getClips()
                 .stream()
                 .filter(c -> c.getName().equals(name))
@@ -55,7 +53,6 @@ public class DiskAudioLoader implements AudioLoader {
 
             clip.open(ais);
 
-            log.info("Successfully loaded audio clip {} from disk.", name);
             retValue = Optional.of(clip);
         } catch (final Exception e) {
             log.error("An exception occurred while loading audio clip {}. Exception message {}", name, e.getMessage());
