@@ -59,7 +59,7 @@ public class Application {
         final SettingsProvider settingsProvider = settingsProvider();
         final SceneContextFactory sceneContextFactory = new SceneContextFactoryImpl(CANVAS_WIDTH, CANVAS_HEIGHT);
         final LineListener lineListener = new ResetClipLineListener();
-        final AudioLoader diskAudioLoader = new DiskAudioLoader(resource, lineListener);
+        final AudioLoader diskAudioLoader = new DiskAudioLoader(resource);
         final AudioLoader cachedAudioLoader = new CachedAudioLoader(diskAudioLoader);
         final EffectPlayer effectPlayer = new EffectPlayerImpl(settingsProvider, cachedAudioLoader);
         final MusicPlayer musicPlayer = new MusicPlayerImpl(settingsProvider, cachedAudioLoader);

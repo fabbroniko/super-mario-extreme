@@ -1,13 +1,9 @@
 package com.fabbroniko.resource;
 
-import lombok.extern.log4j.Log4j2;
-
 import javax.sound.sampled.Clip;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
-@Log4j2
 public class CachedAudioLoader implements AudioLoader {
 
     private final Map<String, Clip> cache;
@@ -19,19 +15,15 @@ public class CachedAudioLoader implements AudioLoader {
     }
 
     @Override
-    public Optional<Clip> findClipByName(final String name) {
-        if(cache.containsKey(name)) {
-            final Clip clip = cache.get(name);
-
-            clip.stop();
-            clip.setFramePosition(0);
-
-            log.info("Fetched clip named {} from cache", name);
-            return Optional.of(clip);
+    public Clip findClipByName(final String name) {
+        if (!cache.containsKey(name)) {
+           cache.put(name, alternateSource.findClipByName(name));
         }
 
-        Optional<Clip> alternate = alternateSource.findClipByName(name);
-        alternate.ifPresent(clip -> cache.put(name, clip));
-        return alternate;
+        final Clip clip = cache.get(name);
+        clip.stop();
+        clip.setFramePosition(0);
+
+        return clip;
     }
 }

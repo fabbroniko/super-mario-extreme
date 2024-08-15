@@ -24,13 +24,12 @@ public final class MusicPlayerImpl implements MusicPlayer {
 
 		stop();
 
-		audioLoader.findClipByName(name).ifPresent(c -> {
-			if(loop)
-				c.loop(Clip.LOOP_CONTINUOUSLY);
+		music = audioLoader.findClipByName(name);
+		if(loop) {
+			music.loop(Clip.LOOP_CONTINUOUSLY);
+		}
 
-			music = c;
-			c.start();
-		});
+		music.start();
 	}
 
 	@Override

@@ -21,6 +21,7 @@ public final class EffectPlayerImpl implements EffectPlayer {
 			return; 
 		}
 
-		audioLoader.findClipByName(name).ifPresent(Clip::start);
+		final Clip effect = audioLoader.findClipByName(name);
+		effect.start();
 	}
 }
