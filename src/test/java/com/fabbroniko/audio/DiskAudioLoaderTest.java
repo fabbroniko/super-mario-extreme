@@ -35,8 +35,6 @@ class DiskAudioLoaderTest {
     @Mock
     private AudioFactory audioFactory;
     @Mock
-    private ClipConfigurator clipConfigurator;
-    @Mock
     private Clip clip;
     @Mock
     private InputStream inputStream;
@@ -51,7 +49,6 @@ class DiskAudioLoaderTest {
         when(resourceLocator.findByName(anyString())).thenReturn(RESOURCE_PATH);
         when(resourceLoader.load(anyString())).thenReturn(inputStream);
         when(audioFactory.createAudioInputStream(any())).thenReturn(audioInputStream);
-        when(clipConfigurator.configureLineListener(any())).thenReturn(clip);
     }
 
     @Test
@@ -90,13 +87,6 @@ class DiskAudioLoaderTest {
     }
 
     @Test
-    void shouldConfigureClip() {
-        diskAudioLoader.loadClipByName(RESOURCE_NAME);
-
-        verify(clipConfigurator).configureLineListener(clip);
-    }
-
-    @Test
     void shouldReturnClip() {
         assertThat(diskAudioLoader.loadClipByName(RESOURCE_NAME))
                 .isEqualTo(clip);
@@ -106,7 +96,6 @@ class DiskAudioLoaderTest {
     void shouldThrowResourceLoadingExceptionWhenCreateClipThrows() {
         final Throwable exception = new RuntimeException();
         reset(audioFactory);
-        reset(clipConfigurator);
         when(audioFactory.createClip()).thenThrow(exception);
 
         assertThatThrownBy(() -> diskAudioLoader.loadClipByName(RESOURCE_NAME))
@@ -118,7 +107,6 @@ class DiskAudioLoaderTest {
     void shouldThrowExceptionWhenCreateAudioInputStreamFails() {
         final Throwable exception = new RuntimeException();
         when(audioFactory.createAudioInputStream(any())).thenThrow(exception);
-        reset(clipConfigurator);
 
         assertThatThrownBy(() -> diskAudioLoader.loadClipByName(RESOURCE_NAME))
                 .isInstanceOf(ResourceLoadingException.class)

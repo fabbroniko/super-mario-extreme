@@ -12,17 +12,14 @@ public class DiskAudioLoader implements AudioLoader {
     private final ResourceLoader resourceLoader;
     private final ResourceLocator resourceLocator;
     private final AudioFactory audioFactory;
-    private final ClipConfigurator clipConfigurator;
 
     public DiskAudioLoader(final ResourceLoader resourceLoader,
                            final ResourceLocator resourceLocator,
-                           final AudioFactory audioFactory,
-                           final ClipConfigurator clipConfigurator) {
+                           final AudioFactory audioFactory) {
 
         this.resourceLoader = resourceLoader;
         this.resourceLocator = resourceLocator;
         this.audioFactory = audioFactory;
-        this.clipConfigurator = clipConfigurator;
     }
 
     @Override
@@ -33,7 +30,7 @@ public class DiskAudioLoader implements AudioLoader {
             final Clip clip = audioFactory.createClip();
             clip.open(audioFactory.createAudioInputStream(inputStream));
 
-           return clipConfigurator.configureLineListener(clip);
+           return clip;
         } catch (final Exception exception) {
             throw new ResourceLoadingException(exception);
         }

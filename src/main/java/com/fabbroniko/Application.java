@@ -8,7 +8,6 @@ import com.fabbroniko.audio.EffectPlayer;
 import com.fabbroniko.audio.EffectPlayerImpl;
 import com.fabbroniko.audio.MusicPlayer;
 import com.fabbroniko.audio.MusicPlayerImpl;
-import com.fabbroniko.audio.ResetLineClipConfigurator;
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.environment.SettingsProvider;
 import com.fabbroniko.environment.SettingsProviderImpl;
@@ -60,7 +59,7 @@ public class Application {
         final ImageLoader imageLoader = imageLoader(resourceDto);
         final SettingsProvider settingsProvider = settingsProvider();
         final SceneContextFactory sceneContextFactory = new SceneContextFactoryImpl(CANVAS_WIDTH, CANVAS_HEIGHT);
-        final AudioLoader diskAudioLoader = new DiskAudioLoader(new DefaultResourceLoader(), new AudioResourceLocator(resourceDto), new AudioFactoryImpl(), new ResetLineClipConfigurator());
+        final AudioLoader diskAudioLoader = new DiskAudioLoader(new DefaultResourceLoader(), new AudioResourceLocator(resourceDto), new AudioFactoryImpl());
         final AudioLoader cachedAudioLoader = new CachedAudioLoader(diskAudioLoader, new HashMap<>());
         final EffectPlayer effectPlayer = new EffectPlayerImpl(settingsProvider, cachedAudioLoader);
         final MusicPlayer musicPlayer = new MusicPlayerImpl(settingsProvider, cachedAudioLoader);
