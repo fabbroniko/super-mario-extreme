@@ -1,7 +1,6 @@
 package com.fabbroniko.audio;
 
 import com.fabbroniko.environment.SettingsProvider;
-import com.fabbroniko.resource.AudioLoader;
 
 import javax.sound.sampled.Clip;
 
@@ -21,7 +20,9 @@ public final class EffectPlayerImpl implements EffectPlayer {
 			return; 
 		}
 
-		final Clip effect = audioLoader.findClipByName(name);
+		final Clip effect = audioLoader.loadClipByName(name);
+		effect.stop();
+		effect.setFramePosition(0);
 		effect.start();
 	}
 }

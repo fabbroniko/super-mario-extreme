@@ -1,7 +1,6 @@
 package com.fabbroniko.audio;
 
 import com.fabbroniko.environment.SettingsProvider;
-import com.fabbroniko.resource.AudioLoader;
 
 import javax.sound.sampled.Clip;
 
@@ -24,7 +23,7 @@ public final class MusicPlayerImpl implements MusicPlayer {
 
 		stop();
 
-		music = audioLoader.findClipByName(name);
+		music = audioLoader.loadClipByName(name);
 		if(loop) {
 			music.loop(Clip.LOOP_CONTINUOUSLY);
 		}
@@ -36,6 +35,7 @@ public final class MusicPlayerImpl implements MusicPlayer {
 	public void stop() {
 		if (music != null) {
 			music.stop();
+			music.setFramePosition(0);
 		}
 	}
 }

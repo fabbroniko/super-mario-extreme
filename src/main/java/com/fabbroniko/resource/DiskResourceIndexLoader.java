@@ -9,17 +9,17 @@ import lombok.extern.log4j.Log4j2;
 public class DiskResourceIndexLoader implements ResourceIndexLoader {
 
     private final ObjectMapper mapper;
-    private final ResourceLocator resourceLocator;
+    private final PathToUrlConverter pathToUrlConverter;
 
     public DiskResourceIndexLoader(final ObjectMapper mapper,
-                               final ResourceLocator resourceLocator) {
+                               final PathToUrlConverter pathToUrlConverter) {
 
         this.mapper = mapper;
-        this.resourceLocator = resourceLocator;
+        this.pathToUrlConverter = pathToUrlConverter;
     }
 
     @SneakyThrows
     public Resource load(final String path) {
-        return mapper.readValue(resourceLocator.locate(path), Resource.class);
+        return mapper.readValue(pathToUrlConverter.locate(path), Resource.class);
     }
 }
