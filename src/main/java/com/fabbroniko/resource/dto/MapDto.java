@@ -13,12 +13,12 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategies.KebabCaseStrategy.class)
-public class Map {
+public class MapDto {
 
   private int verticalBlocks;
   private int horizontalBlocks;
 
   @JacksonXmlElementWrapper(useWrapping = false)
   @JacksonXmlProperty(localName = "tile")
-  final List<Tile> tiles = new ArrayList<>();
+  final List<TileDto> tileDtos = new ArrayList<>();
 }

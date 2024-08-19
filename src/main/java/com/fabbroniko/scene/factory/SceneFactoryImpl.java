@@ -4,7 +4,7 @@ import com.fabbroniko.audio.MusicPlayer;
 import com.fabbroniko.environment.SettingsProvider;
 import com.fabbroniko.gameobjects.GameObjectFactory;
 import com.fabbroniko.resource.ImageLoader;
-import com.fabbroniko.resource.dto.Level;
+import com.fabbroniko.resource.dto.LevelDto;
 import com.fabbroniko.scene.GameScene;
 import com.fabbroniko.scene.LostScene;
 import com.fabbroniko.scene.MainMenuScene;
@@ -60,7 +60,7 @@ public class SceneFactoryImpl implements SceneFactory {
     @SneakyThrows
     @Override
     public Scene createGameScene(final SceneManager sceneManager) {
-        final Level level = new XmlMapper().readValue(getClass().getResource("/levels/testing.xml"), Level.class);
+        final LevelDto level = new XmlMapper().readValue(getClass().getResource("/levels/testing.xml"), LevelDto.class);
         return new GameScene(sceneContextFactory, settingsProvider, musicPlayer, imageLoader, sceneManager, textFactory, backgroundLoader, gameObjectFactory, level);
     }
 

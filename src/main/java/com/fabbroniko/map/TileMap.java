@@ -4,7 +4,8 @@ import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.environment.ImmutablePosition;
 import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.resource.ImageLoader;
-import com.fabbroniko.resource.dto.Map;
+import com.fabbroniko.resource.dto.MapDto;
+import com.fabbroniko.resource.dto.TileDto;
 import com.fabbroniko.ui.Drawable;
 import com.fabbroniko.ui.DrawableResource;
 import com.fabbroniko.ui.DrawableResourceImpl;
@@ -33,7 +34,7 @@ public class TileMap implements Drawable {
 
 	private BufferedImage cachedTileMap;
 
-	public TileMap(final ImageLoader imageLoader, final Map map, final Dimension2D canvasSize) {
+	public TileMap(final ImageLoader imageLoader, final MapDto map, final Dimension2D canvasSize) {
 		this.tileSize = new Vector2D(120, 120);
 		this.canvasSize = canvasSize;
 
@@ -51,7 +52,7 @@ public class TileMap implements Drawable {
 		}
 	}
 
-	private void loadMap(final Map map, final Dimension2D canvasSize) {
+	private void loadMap(final MapDto map, final Dimension2D canvasSize) {
 		final int nRows = map.getVerticalBlocks();
 		final int nCols = map.getHorizontalBlocks();
 
@@ -66,7 +67,7 @@ public class TileMap implements Drawable {
 			}
 		}
 
-		for(final com.fabbroniko.resource.dto.Tile t : map.getTiles()) {
+		for(final TileDto t : map.getTileDtos()) {
 			this.map[t.getVerticalIndex()][t.getHorizontalIndex()] = t.getId();
 		}
 	}

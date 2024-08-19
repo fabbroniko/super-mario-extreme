@@ -1,6 +1,6 @@
 package com.fabbroniko.resource;
 
-import com.fabbroniko.resource.dto.Resource;
+import com.fabbroniko.resource.dto.ResourceDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
@@ -19,7 +19,7 @@ public class DiskResourceIndexLoader implements ResourceIndexLoader {
     }
 
     @SneakyThrows
-    public Resource load(final String path) {
-        return mapper.readValue(pathToUrlConverter.locate(path), Resource.class);
+    public ResourceDto load(final String path) {
+        return mapper.readValue(pathToUrlConverter.locate(path), ResourceDto.class);
     }
 }

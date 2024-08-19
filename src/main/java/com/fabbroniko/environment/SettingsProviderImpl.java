@@ -1,20 +1,20 @@
 package com.fabbroniko.environment;
 
 import com.fabbroniko.resource.UserSettingsLoader;
-import com.fabbroniko.resource.dto.Settings;
+import com.fabbroniko.resource.dto.SettingsDto;
 
 public class SettingsProviderImpl implements SettingsProvider {
 
     private final UserSettingsLoader userSettingsLoader;
 
-    private Settings settings;
+    private SettingsDto settings;
 
     public SettingsProviderImpl(final UserSettingsLoader userSettingsLoader) {
         this.userSettingsLoader = userSettingsLoader;
     }
 
     @Override
-    public Settings getSettings() {
+    public SettingsDto getSettings() {
         if(settings == null) {
             settings = userSettingsLoader.load();
         }

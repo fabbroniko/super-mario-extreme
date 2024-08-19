@@ -19,7 +19,6 @@ import com.fabbroniko.main.GamePanel;
 import com.fabbroniko.main.GameWindow;
 import com.fabbroniko.resource.AudioResourceLocator;
 import com.fabbroniko.resource.CachedImageLoader;
-import com.fabbroniko.resource.CachedResourceIndexLoader;
 import com.fabbroniko.resource.DefaultPathToUrlConverter;
 import com.fabbroniko.resource.DefaultResourceLoader;
 import com.fabbroniko.resource.DiskImageLoader;
@@ -29,7 +28,7 @@ import com.fabbroniko.resource.ImageLoader;
 import com.fabbroniko.resource.PathToUrlConverter;
 import com.fabbroniko.resource.ResourceIndexLoader;
 import com.fabbroniko.resource.UserSettingsLoader;
-import com.fabbroniko.resource.dto.Resource;
+import com.fabbroniko.resource.dto.ResourceDto;
 import com.fabbroniko.scene.factory.SceneContextFactory;
 import com.fabbroniko.scene.factory.SceneContextFactoryImpl;
 import com.fabbroniko.scene.factory.SceneFactory;
@@ -57,11 +56,11 @@ public class Application {
     private static final String RESOURCE_INDEX_LOCATION = "/resources.index";
 
     public static void main(final String[] args) {
-        final Resource resource = getResource();
-        final ImageLoader imageLoader = imageLoader(resource);
+        final ResourceDto resourceDto = getResource();
+        final ImageLoader imageLoader = imageLoader(resourceDto);
         final SettingsProvider settingsProvider = settingsProvider();
         final SceneContextFactory sceneContextFactory = new SceneContextFactoryImpl(CANVAS_WIDTH, CANVAS_HEIGHT);
-        final AudioLoader diskAudioLoader = new DiskAudioLoader(new DefaultResourceLoader(), new AudioResourceLocator(resource), new AudioFactoryImpl(), new ResetLineClipConfigurator());
+        final AudioLoader diskAudioLoader = new DiskAudioLoader(new DefaultResourceLoader(), new AudioResourceLocator(resourceDto), new AudioFactoryImpl(), new ResetLineClipConfigurator());
         final AudioLoader cachedAudioLoader = new CachedAudioLoader(diskAudioLoader, new HashMap<>());
         final EffectPlayer effectPlayer = new EffectPlayerImpl(settingsProvider, cachedAudioLoader);
         final MusicPlayer musicPlayer = new MusicPlayerImpl(settingsProvider, cachedAudioLoader);
@@ -83,16 +82,15 @@ public class Application {
         return new SettingsProviderImpl(userSettingsLoader);
     }
 
-    private static Resource getResource() {
+    private static ResourceDto getResource() {
         final PathToUrlConverter pathToUrlConverter = new DefaultPathToUrlConverter();
         final ObjectMapper xmlMapper = new XmlMapper();
         final ResourceIndexLoader diskResourceIndexLoader = new DiskResourceIndexLoader(xmlMapper, pathToUrlConverter);
-        final ResourceIndexLoader cachedResourceIndexLoader = new CachedResourceIndexLoader(diskResourceIndexLoader);
-        return cachedResourceIndexLoader.load(RESOURCE_INDEX_LOCATION);
+        return diskResourceIndexLoader.load(RESOURCE_INDEX_LOCATION);
     }
 
-    private static ImageLoader imageLoader(final Resource resource) {
-        final ImageLoader diskImageLoader = new DiskImageLoader(resource);
+    private static ImageLoader imageLoader(final ResourceDto resourceDto) {
+        final ImageLoader diskImageLoader = new DiskImageLoader(resourceDto);
         return new CachedImageLoader(diskImageLoader);
     }
 

@@ -9,9 +9,9 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @JacksonXmlRootElement(localName = "resource")
-public class Resource {
+public class ResourceDto {
 
-    private List<Clip> clips;
-    private List<Background> backgrounds;
-    private TileMap tilemap;
+    private List<ClipDto> clips;
+    private List<BackgroundDto> backgrounds;
+    private TileMapDto tileMap;
 }

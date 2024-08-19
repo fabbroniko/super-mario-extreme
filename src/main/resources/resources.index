@@ -1,18 +1,18 @@
 <resource>
     <clips>
-        <clip name="theme" preload="true">/sound/super-mario-theme.wav</clip>
-        <clip name="victory" preload="false">/sound/victory.wav</clip>
-        <clip name="death" preload="false">/sound/game-over.wav</clip>
+        <clip name="theme">/sound/super-mario-theme.wav</clip>
+        <clip name="victory">/sound/victory.wav</clip>
+        <clip name="death">/sound/game-over.wav</clip>
 
-        <clip name="jump" preload="true">/sound/jump.wav</clip>
-        <clip name="hit" preload="true">/sound/hit.wav</clip>
-        <clip name="breaking" preload="true">/sound/breaking-block.wav</clip>
+        <clip name="jump">/sound/jump.wav</clip>
+        <clip name="hit">/sound/hit.wav</clip>
+        <clip name="breaking">/sound/breaking-block.wav</clip>
     </clips>
 
     <backgrounds>
-        <background name="menu" preload="false">/backgrounds/menus.png</background>
-        <background name="game" preload="true">/backgrounds/in-game.png</background>
+        <background name="menu">/backgrounds/menus.png</background>
+        <background name="game">/backgrounds/in-game.png</background>
     </backgrounds>
 
-    <tilemap tile-size="120">/tilemaps/default-sl.png</tilemap>
+    <tileMap tile-size="120">/tilemaps/default-sl.png</tileMap>
 </resource>

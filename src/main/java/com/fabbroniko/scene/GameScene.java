@@ -12,7 +12,7 @@ import com.fabbroniko.input.TypedLessKeyListener;
 import com.fabbroniko.main.Time;
 import com.fabbroniko.map.TileMap;
 import com.fabbroniko.resource.ImageLoader;
-import com.fabbroniko.resource.dto.Level;
+import com.fabbroniko.resource.dto.LevelDto;
 import com.fabbroniko.scene.factory.SceneContextFactory;
 import com.fabbroniko.ui.DrawableResource;
 import com.fabbroniko.ui.InitializableDrawable;
@@ -32,7 +32,7 @@ public final class GameScene implements Scene, TypedLessKeyListener {
 
     private static final int FPS_OFFSET = 15;
 
-    private final Level level;
+    private final LevelDto level;
     private DrawableResource background;
     private TileMap tileMap;
     private List<AbstractGameObject> gameObjects;
@@ -60,7 +60,7 @@ public final class GameScene implements Scene, TypedLessKeyListener {
                      final TextFactory textFactory,
                      final BackgroundLoader backgroundLoader,
                      final GameObjectFactory gameObjectFactory,
-                     final Level level) {
+                     final LevelDto level) {
 
         this.gameObjectFactory = gameObjectFactory;
         this.sceneContextFactory = sceneContextFactory;

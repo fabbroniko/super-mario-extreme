@@ -1,8 +1,8 @@
 package com.fabbroniko.resource;
 
-import com.fabbroniko.resource.dto.Resource;
+import com.fabbroniko.resource.dto.ResourceDto;
 
 public interface ResourceIndexLoader {
 
-    Resource load(final String path);
+    ResourceDto load(final String path);
 }

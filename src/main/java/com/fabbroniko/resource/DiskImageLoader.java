@@ -1,8 +1,8 @@
 package com.fabbroniko.resource;
 
 import com.fabbroniko.error.ResourceNotFoundException;
-import com.fabbroniko.resource.dto.Background;
-import com.fabbroniko.resource.dto.Resource;
+import com.fabbroniko.resource.dto.BackgroundDto;
+import com.fabbroniko.resource.dto.ResourceDto;
 import lombok.extern.log4j.Log4j2;
 
 import javax.imageio.ImageIO;
@@ -12,17 +12,17 @@ import java.io.InputStream;
 @Log4j2
 public class DiskImageLoader implements ImageLoader {
 
-    private final Resource resource;
+    private final ResourceDto resourceDto;
 
-    public DiskImageLoader(final Resource resource) {
-        this.resource = resource;
+    public DiskImageLoader(final ResourceDto resourceDto) {
+        this.resourceDto = resourceDto;
     }
 
 
     @Override
     public BufferedImage findBackgroundByName(String name) {
         log.trace("Loading background image {} from disk.", name);
-        final Background background = resource.getBackgrounds()
+        final BackgroundDto background = resourceDto.getBackgrounds()
                 .stream()
                 .filter(c -> c.getName().equals(name))
                 .findAny()
@@ -35,7 +35,7 @@ public class DiskImageLoader implements ImageLoader {
     public BufferedImage findTileMap() {
         log.trace("Loading tile map set (uncut).");
 
-        return loadImageFromDisk(resource.getTilemap().getPath());
+        return loadImageFromDisk(resourceDto.getTileMap().getPath());
     }
 
     @Override

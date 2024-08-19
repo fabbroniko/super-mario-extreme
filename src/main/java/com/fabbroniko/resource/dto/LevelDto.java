@@ -16,13 +16,13 @@ import java.util.List;
 @NoArgsConstructor
 @JacksonXmlRootElement
 @JsonNaming(PropertyNamingStrategies.KebabCaseStrategy.class)
-public class Level {
+public class LevelDto {
 
   @JacksonXmlElementWrapper(localName = "game-objects")
   @JacksonXmlProperty(localName = "game-object")
-  private List<GameObject> gameObjects = new ArrayList<>();
+  private List<GameObjectDto> gameObjects = new ArrayList<>();
 
-  private Map map;
+  private MapDto map;
   private Vector2D startPosition;
 
   @JacksonXmlProperty(isAttribute = true)

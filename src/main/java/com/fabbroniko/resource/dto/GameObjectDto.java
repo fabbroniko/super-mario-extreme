@@ -7,14 +7,14 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class SimpleResource {
+public class GameObjectDto {
 
-    @JacksonXmlProperty(isAttribute = true)
-    private String name;
+  @JacksonXmlProperty(isAttribute = true)
+  private int x;
 
-    @JacksonXmlProperty(isAttribute = true)
-    private boolean preload;
+  @JacksonXmlProperty(isAttribute = true)
+  private int y;
 
-    @JacksonXmlText
-    private String path;
+  @JacksonXmlText
+  private String type;
 }

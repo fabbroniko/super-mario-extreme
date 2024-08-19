@@ -1,19 +1,19 @@
 package com.fabbroniko.resource;
 
 import com.fabbroniko.error.UndefinedResourceException;
-import com.fabbroniko.resource.dto.Resource;
+import com.fabbroniko.resource.dto.ResourceDto;
 
 public class AudioResourceLocator implements ResourceLocator {
 
-    private final Resource resource;
+    private final ResourceDto resourceDto;
 
-    public AudioResourceLocator(final Resource resource) {
-        this.resource = resource;
+    public AudioResourceLocator(final ResourceDto resourceDto) {
+        this.resourceDto = resourceDto;
     }
 
     @Override
     public String findByName(final String name) {
-        return resource.getClips()
+        return resourceDto.getClips()
                 .stream()
                 .filter(c -> c.getName().equals(name))
                 .findAny()

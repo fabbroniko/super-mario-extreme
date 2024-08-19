@@ -1,10 +1,10 @@
 package com.fabbroniko.resource;
 
-import com.fabbroniko.resource.dto.Settings;
+import com.fabbroniko.resource.dto.SettingsDto;
 
 public interface UserSettingsLoader {
 
-    Settings load();
+    SettingsDto load();
 
-    void save(final Settings settings);
+    void save(final SettingsDto settings);
 }

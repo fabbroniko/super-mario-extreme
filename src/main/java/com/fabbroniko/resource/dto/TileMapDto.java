@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategies.KebabCaseStrategy.class)
-public class TileMap {
+public class TileMapDto {
 
   private int tileSize;
 

@@ -1,6 +1,6 @@
 package com.fabbroniko.resource;
 
-import com.fabbroniko.resource.dto.Settings;
+import com.fabbroniko.resource.dto.SettingsDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
 
@@ -20,17 +20,17 @@ public class DiskUserSettingsLoader implements UserSettingsLoader {
         this.objectMapper = objectMapper;
     }
 
-    public Settings load() {
+    public SettingsDto load() {
         try (FileInputStream fis = new FileInputStream(SUPER_MARIO_USER_HOME_DIR + SETTINGS_FILE_NAME)) {
-            return objectMapper.readValue(fis, Settings.class);
+            return objectMapper.readValue(fis, SettingsDto.class);
         } catch (final IOException e) {
             log.error("Unable to load settings from the user home directory {}. Exception {}", SUPER_MARIO_USER_HOME_DIR + SETTINGS_FILE_NAME, e.getMessage());
         }
 
-        return new Settings();
+        return new SettingsDto();
     }
 
-    public void save(final Settings settings) {
+    public void save(final SettingsDto settings) {
         final File homeDirectory = new File(SUPER_MARIO_USER_HOME_DIR);
         final File settingsFile = new File(homeDirectory, SETTINGS_FILE_NAME);
 

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategies.KebabCaseStrategy.class)
-public class Tile {
+public class TileDto {
 
     private int id;
     private int verticalIndex;

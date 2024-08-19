@@ -1,10 +1,10 @@
 package com.fabbroniko.environment;
 
-import com.fabbroniko.resource.dto.Settings;
+import com.fabbroniko.resource.dto.SettingsDto;
 
 public interface SettingsProvider {
 
-    Settings getSettings();
+    SettingsDto getSettings();
 
     void saveSettings();
 }
