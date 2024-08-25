@@ -1,12 +1,16 @@
-package com.fabbroniko.scene;
+package com.fabbroniko.scene.mainmenu;
 
+import com.fabbroniko.environment.BiDirectionalState;
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.input.UIKeyListener;
+import com.fabbroniko.scene.Scene;
+import com.fabbroniko.scene.SceneContext;
+import com.fabbroniko.scene.SceneManager;
 import com.fabbroniko.scene.factory.SceneContextFactory;
-import com.fabbroniko.ui.InitializableDrawable;
-import com.fabbroniko.ui.background.BackgroundLoader;
 import com.fabbroniko.ui.DrawableResource;
+import com.fabbroniko.ui.InitializableDrawable;
 import com.fabbroniko.ui.OptionFactory;
+import com.fabbroniko.ui.background.BackgroundLoader;
 import com.fabbroniko.ui.text.TextFactory;
 
 import java.awt.Color;
@@ -14,6 +18,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 import static java.awt.event.KeyEvent.VK_DOWN;
 import static java.awt.event.KeyEvent.VK_ENTER;
@@ -28,10 +33,6 @@ public final class MainMenuScene implements Scene, UIKeyListener {
 	private static final String QUIT_OPTION = "Quit";
 	private static final String HINT = "Arrow UP/DOWN to navigate. ENTER to confirm.";
 
-	private static final int START_OPTION_INDEX = 0;
-	private static final int SETTINGS_OPTION_INDEX = 1;
-	private static final int QUIT_OPTION_INDEX = 2;
-
 	private static final int TITLE_Y = 120;
 	private static final int START_OPTION_Y = 260;
 	private static final int SETTINGS_OPTION_Y = 460;
@@ -40,7 +41,7 @@ public final class MainMenuScene implements Scene, UIKeyListener {
 
 	private DrawableResource background;
 
-	private int selectedOption;
+	private final BiDirectionalState<MainMenuState> states;
 
 	private final SceneContextFactory sceneContextFactory;
 	private final SceneManager sceneManager;
@@ -56,13 +57,15 @@ public final class MainMenuScene implements Scene, UIKeyListener {
                          final SceneManager sceneManager,
                          final TextFactory textFactory,
 						 final OptionFactory optionFactory,
-						 final BackgroundLoader backgroundLoader) {
+						 final BackgroundLoader backgroundLoader,
+						 final StateFactory<MainMenuState> stateStateFactory) {
 
 		this.sceneContextFactory = sceneContextFactory;
 		this.sceneManager = sceneManager;
 		this.textFactory = textFactory;
         this.optionFactory = optionFactory;
 		this.backgroundLoader = backgroundLoader;
+		this.states = stateStateFactory.create();
     }
 
 	@Override
@@ -70,7 +73,6 @@ public final class MainMenuScene implements Scene, UIKeyListener {
 		final InitializableDrawable initializableBackground = backgroundLoader.createStaticBackground("menu");
 		initializableBackground.init();
 		background = initializableBackground.getDrawableResource();
-		selectedOption = 0;
 
 		final SceneContext sceneContext = sceneContextFactory.create();
 		this.canvas = sceneContext.canvas();
@@ -99,9 +101,11 @@ public final class MainMenuScene implements Scene, UIKeyListener {
 		int x = (canvasDimension.width() - title.getWidth()) / 2;
 		graphics.drawImage(title, null, x, TITLE_Y);
 
-		printMenuOption(START_GAME_OPTION, START_OPTION_Y, selectedOption == START_OPTION_INDEX);
-		printMenuOption(SETTINGS_OPTION, SETTINGS_OPTION_Y, selectedOption == SETTINGS_OPTION_INDEX);
-		printMenuOption(QUIT_OPTION, QUIT_OPTION_Y, selectedOption == QUIT_OPTION_INDEX);
+		// TODO proper use of state pattern here
+		final List<MenuOption> menuOptions = states.getCurrent().getOptions();
+		printMenuOption(START_GAME_OPTION, START_OPTION_Y, menuOptions.get(0).selected());
+		printMenuOption(SETTINGS_OPTION, SETTINGS_OPTION_Y, menuOptions.get(1).selected());
+		printMenuOption(QUIT_OPTION, QUIT_OPTION_Y, menuOptions.get(2).selected());
 
 		final BufferedImage hint = textFactory.createSmallParagraph(HINT, Color.WHITE);
 		x = (canvasDimension.width() - hint.getWidth()) / 2;
@@ -120,33 +124,14 @@ public final class MainMenuScene implements Scene, UIKeyListener {
 
 	@Override
 	public void keyReleased(final KeyEvent event) {
-		switch(event.getKeyCode()) {
-			case VK_DOWN:
-				selectedOption++;
-				break;
-			case VK_UP:
-				selectedOption--;
-				break;
-			case VK_ENTER:
-				if (selectedOption == START_OPTION_INDEX) {
-					sceneManager.openGameScene();
-				} else if (selectedOption == SETTINGS_OPTION_INDEX) {
-					sceneManager.openSettings();
-				} else {
-					sceneManager.quit();
-				}
-				break;
-			case VK_ESCAPE:
-				sceneManager.quit();
-				break;
-			default:
-				break;
-		}
-
-		if (selectedOption < START_OPTION_INDEX) {
-			selectedOption = QUIT_OPTION_INDEX;
-		} else if (selectedOption > QUIT_OPTION_INDEX) {
-			selectedOption = START_OPTION_INDEX;
+		if(VK_DOWN == event.getKeyCode()) {
+			states.next();
+		} else if (VK_UP == event.getKeyCode()) {
+			states.previous();
+		} else if (VK_ENTER == event.getKeyCode()) {
+			states.getCurrent().onConfirm();
+		} else if (VK_ESCAPE == event.getKeyCode()) {
+			sceneManager.quit();
 		}
 	}
 

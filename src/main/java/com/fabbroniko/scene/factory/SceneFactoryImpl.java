@@ -1,13 +1,14 @@
 package com.fabbroniko.scene.factory;
 
 import com.fabbroniko.audio.MusicPlayer;
+import com.fabbroniko.scene.mainmenu.MainStateFactory;
 import com.fabbroniko.settings.SettingsProvider;
 import com.fabbroniko.gameobjects.GameObjectFactory;
 import com.fabbroniko.resource.ImageLoader;
 import com.fabbroniko.resource.dto.LevelDto;
 import com.fabbroniko.scene.GameScene;
 import com.fabbroniko.scene.LostScene;
-import com.fabbroniko.scene.MainMenuScene;
+import com.fabbroniko.scene.mainmenu.MainMenuScene;
 import com.fabbroniko.scene.Scene;
 import com.fabbroniko.scene.SceneManager;
 import com.fabbroniko.scene.SettingsMenuScene;
@@ -49,7 +50,7 @@ public class SceneFactoryImpl implements SceneFactory {
 
     @Override
     public Scene createMainMenuScene(final SceneManager sceneManager) {
-        return new MainMenuScene(sceneContextFactory, sceneManager, textFactory, optionFactory, backgroundLoader);
+        return new MainMenuScene(sceneContextFactory, sceneManager, textFactory, optionFactory, backgroundLoader, new MainStateFactory(sceneManager));
     }
 
     @Override
