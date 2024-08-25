@@ -3,7 +3,7 @@ package com.fabbroniko.scene;
 import com.fabbroniko.audio.MusicPlayer;
 import com.fabbroniko.collision.CollisionManager;
 import com.fabbroniko.environment.Dimension2D;
-import com.fabbroniko.environment.SettingsProvider;
+import com.fabbroniko.settings.SettingsProvider;
 import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.gameobjects.AbstractGameObject;
 import com.fabbroniko.gameobjects.GameObjectFactory;

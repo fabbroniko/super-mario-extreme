@@ -1,4 +1,4 @@
-package com.fabbroniko.resource;
+package com.fabbroniko.settings;
 
 import com.fabbroniko.resource.dto.SettingsDto;
 import com.fasterxml.jackson.databind.ObjectMapper;

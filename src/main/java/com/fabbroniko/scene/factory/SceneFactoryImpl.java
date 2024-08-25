@@ -1,7 +1,7 @@
 package com.fabbroniko.scene.factory;
 
 import com.fabbroniko.audio.MusicPlayer;
-import com.fabbroniko.environment.SettingsProvider;
+import com.fabbroniko.settings.SettingsProvider;
 import com.fabbroniko.gameobjects.GameObjectFactory;
 import com.fabbroniko.resource.ImageLoader;
 import com.fabbroniko.resource.dto.LevelDto;

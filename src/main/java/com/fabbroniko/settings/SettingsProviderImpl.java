@@ -1,6 +1,5 @@
-package com.fabbroniko.environment;
+package com.fabbroniko.settings;
 
-import com.fabbroniko.resource.UserSettingsLoader;
 import com.fabbroniko.resource.dto.SettingsDto;
 
 public class SettingsProviderImpl implements SettingsProvider {

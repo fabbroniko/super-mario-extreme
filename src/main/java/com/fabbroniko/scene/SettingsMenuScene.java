@@ -6,7 +6,7 @@ import com.fabbroniko.scene.factory.SceneContextFactory;
 import com.fabbroniko.ui.InitializableDrawable;
 import com.fabbroniko.ui.background.BackgroundLoader;
 import com.fabbroniko.ui.DrawableResource;
-import com.fabbroniko.environment.SettingsProvider;
+import com.fabbroniko.settings.SettingsProvider;
 import com.fabbroniko.ui.text.TextFactory;
 
 import java.awt.Color;

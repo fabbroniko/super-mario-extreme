@@ -3,7 +3,7 @@ package com.fabbroniko.gameobjects;
 import com.fabbroniko.audio.EffectPlayer;
 import com.fabbroniko.collision.CollisionDirection;
 import com.fabbroniko.environment.Dimension2D;
-import com.fabbroniko.environment.SettingsProvider;
+import com.fabbroniko.settings.SettingsProvider;
 import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.input.TypedLessKeyListener;
 import com.fabbroniko.map.TileMap;

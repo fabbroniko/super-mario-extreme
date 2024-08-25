@@ -1,6 +1,6 @@
 package com.fabbroniko.main;
 
-import com.fabbroniko.environment.SettingsProvider;
+import com.fabbroniko.settings.SettingsProvider;
 import com.fabbroniko.scene.NullScene;
 import com.fabbroniko.scene.Scene;
 import com.fabbroniko.scene.SceneManager;

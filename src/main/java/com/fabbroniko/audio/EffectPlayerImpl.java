@@ -1,6 +1,6 @@
 package com.fabbroniko.audio;
 
-import com.fabbroniko.environment.SettingsProvider;
+import com.fabbroniko.settings.SettingsProvider;
 
 import javax.sound.sampled.Clip;
 

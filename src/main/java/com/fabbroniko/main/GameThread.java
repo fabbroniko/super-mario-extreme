@@ -1,6 +1,6 @@
 package com.fabbroniko.main;
 
-import com.fabbroniko.environment.SettingsProvider;
+import com.fabbroniko.settings.SettingsProvider;
 import lombok.SneakyThrows;
 
 import java.awt.*;
