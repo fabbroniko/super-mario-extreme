@@ -2,9 +2,11 @@ package com.fabbroniko.ui;
 
 import com.fabbroniko.environment.ImmutablePosition;
 import com.fabbroniko.environment.Position;
+import org.example.annotation.Component;
 
 import java.awt.image.BufferedImage;
 
+@Component
 public class DrawableResourceFactoryImpl implements DrawableResourceFactory {
 
     @Override

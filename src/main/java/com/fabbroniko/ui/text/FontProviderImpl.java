@@ -1,8 +1,11 @@
 package com.fabbroniko.ui.text;
 
+import org.example.annotation.Component;
+
 import javax.swing.*;
 import java.awt.Font;
 
+@Component
 public class FontProviderImpl implements FontProvider {
 
     protected static final Font HEADER_FONT = new JPanel().getFont().deriveFont(Font.BOLD, 80);

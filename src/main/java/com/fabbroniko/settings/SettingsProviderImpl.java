@@ -1,7 +1,9 @@
 package com.fabbroniko.settings;
 
 import com.fabbroniko.resource.dto.SettingsDto;
+import org.example.annotation.Component;
 
+@Component
 public class SettingsProviderImpl implements SettingsProvider {
 
     private final UserSettingsLoader userSettingsLoader;

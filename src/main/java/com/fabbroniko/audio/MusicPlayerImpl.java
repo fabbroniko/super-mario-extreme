@@ -1,16 +1,19 @@
 package com.fabbroniko.audio;
 
 import com.fabbroniko.settings.SettingsProvider;
+import org.example.annotation.Component;
+import org.example.annotation.Qualifier;
 
 import javax.sound.sampled.Clip;
 
+@Component
 public final class MusicPlayerImpl implements MusicPlayer {
 
 	private Clip music;
 	private final AudioLoader audioLoader;
 	private final SettingsProvider settingsProvider;
 
-	public MusicPlayerImpl(final SettingsProvider settingsProvider, final AudioLoader audioLoader) {
+	public MusicPlayerImpl(final SettingsProvider settingsProvider, @Qualifier("cachedAudioLoader") final AudioLoader audioLoader) {
 		this.settingsProvider = settingsProvider;
 		this.audioLoader = audioLoader;
 	}

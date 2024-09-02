@@ -18,6 +18,7 @@ import com.fabbroniko.ui.DrawableResource;
 import com.fabbroniko.ui.InitializableDrawable;
 import com.fabbroniko.ui.background.BackgroundLoader;
 import com.fabbroniko.ui.text.TextFactory;
+import org.example.annotation.Qualifier;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -55,7 +56,7 @@ public final class GameScene implements Scene, TypedLessKeyListener {
     public GameScene(final SceneContextFactory sceneContextFactory,
                      final SettingsProvider settingsProvider,
                      final MusicPlayer musicPlayer,
-                     final ImageLoader imageLoader,
+                     @Qualifier("cachedImageLoader") final ImageLoader imageLoader,
                      final SceneManager sceneManager,
                      final TextFactory textFactory,
                      final BackgroundLoader backgroundLoader,

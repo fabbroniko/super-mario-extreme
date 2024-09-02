@@ -18,7 +18,10 @@ import com.fabbroniko.ui.background.BackgroundLoader;
 import com.fabbroniko.ui.text.TextFactory;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.SneakyThrows;
+import org.example.annotation.Component;
+import org.example.annotation.Qualifier;
 
+@Component
 public class SceneFactoryImpl implements SceneFactory {
 
     private final SceneContextFactory sceneContextFactory;
@@ -33,7 +36,7 @@ public class SceneFactoryImpl implements SceneFactory {
     public SceneFactoryImpl(final SceneContextFactory sceneContextFactory,
                             final SettingsProvider settingsProvider,
                             final MusicPlayer musicPlayer,
-                            final ImageLoader imageLoader,
+                            @Qualifier("cachedImageLoader") final ImageLoader imageLoader,
                             final TextFactory textFactory,
                             final OptionFactory optionFactory,
                             final BackgroundLoader backgroundLoader, GameObjectFactory gameObjectFactory) {

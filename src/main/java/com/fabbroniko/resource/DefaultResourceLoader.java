@@ -1,9 +1,11 @@
 package com.fabbroniko.resource;
 
 import com.fabbroniko.error.ResourceNotFoundException;
+import org.example.annotation.Component;
 
 import java.io.InputStream;
 
+@Component
 public class DefaultResourceLoader implements ResourceLoader {
 
     @Override

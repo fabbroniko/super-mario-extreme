@@ -2,19 +2,24 @@ package com.fabbroniko.gameobjects;
 
 import com.fabbroniko.audio.EffectPlayer;
 import com.fabbroniko.environment.Dimension2D;
-import com.fabbroniko.settings.SettingsProvider;
 import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.map.TileMap;
 import com.fabbroniko.resource.ImageLoader;
 import com.fabbroniko.scene.GameScene;
+import com.fabbroniko.settings.SettingsProvider;
+import org.example.annotation.Component;
+import org.example.annotation.Qualifier;
 
+@Component
 public class GameObjectFactoryImpl implements GameObjectFactory {
 
     private final EffectPlayer effectPlayer;
     private final ImageLoader imageLoader;
     private final SettingsProvider settingsProvider;
 
-    public GameObjectFactoryImpl(EffectPlayer effectPlayer, ImageLoader imageLoader, SettingsProvider settingsProvider) {
+    public GameObjectFactoryImpl(final EffectPlayer effectPlayer,
+                                 @Qualifier("cachedImageLoader") final ImageLoader imageLoader,
+                                 final SettingsProvider settingsProvider) {
         this.effectPlayer = effectPlayer;
         this.imageLoader = imageLoader;
         this.settingsProvider = settingsProvider;

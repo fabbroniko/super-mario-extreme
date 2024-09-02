@@ -2,8 +2,10 @@ package com.fabbroniko.resource.dto;
 
 import com.fabbroniko.resource.ResourceIndexLoader;
 import lombok.Getter;
+import org.example.annotation.Component;
 
 @Getter
+@Component
 public class PreLoadedResource {
 
     private static final String RESOURCE_INDEX_LOCATION = "/resources.index";

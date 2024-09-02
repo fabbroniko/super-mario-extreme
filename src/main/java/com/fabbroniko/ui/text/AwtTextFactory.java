@@ -1,8 +1,11 @@
 package com.fabbroniko.ui.text;
 
+import org.example.annotation.Component;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+@Component
 public class AwtTextFactory implements TextFactory {
 
     private final FontProvider fontProvider;

@@ -1,5 +1,7 @@
 package com.fabbroniko.main;
 
+import org.example.annotation.Component;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Dimension;
@@ -7,6 +9,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 
+@Component
 public final class SwingGameRenderer implements GameRenderer {
 
 	private final Dimension windowSize;
