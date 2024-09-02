@@ -7,18 +7,18 @@ import java.awt.image.BufferedImage;
 
 public class SceneContextFactoryImpl implements SceneContextFactory {
 
-    private final Dimension2D sceneDimension;
+    private final Dimension2D canvasSize;
 
-    public SceneContextFactoryImpl(final int width, final int height) {
-        this.sceneDimension = new Dimension2D(width, height);
+    public SceneContextFactoryImpl(final Dimension2D canvasSize) {
+        this.canvasSize = canvasSize;
     }
 
     @Override
     public SceneContext create() {
-        return new SceneContext(createImage(), sceneDimension);
+        return new SceneContext(createImage(), canvasSize);
     }
 
     private BufferedImage createImage() {
-        return new BufferedImage(sceneDimension.width(), sceneDimension.height(), BufferedImage.TYPE_INT_RGB);
+        return new BufferedImage(canvasSize.width(), canvasSize.height(), BufferedImage.TYPE_INT_RGB);
     }
 }

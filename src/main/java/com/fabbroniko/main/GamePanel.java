@@ -1,8 +1,5 @@
 package com.fabbroniko.main;
 
-import com.fabbroniko.environment.Dimension2D;
-import lombok.Getter;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Dimension;
@@ -13,17 +10,13 @@ import java.awt.image.BufferedImage;
 public final class GamePanel implements GameRenderer {
 
 	private final Dimension windowSize;
-	@Getter
-	private final Dimension2D canvasSize;
 	private final KeyListener keyListener;
 	private JFrame window;
 	private JPanel drawablePanel;
 
-	public GamePanel(final Dimension2D canvasSize,
-					 final WindowSizeResolver windowSizeResolver,
+	public GamePanel(final WindowSizeResolver windowSizeResolver,
 					 final KeyListener keyListener) {
 
-		this.canvasSize = canvasSize;
 		this.windowSize = windowSizeResolver.dimension();
 		this.keyListener = keyListener;
 	}
