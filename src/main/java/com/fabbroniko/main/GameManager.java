@@ -13,19 +13,19 @@ public final class GameManager implements Runnable, SceneManager {
 
     private final SceneFactory sceneFactory;
 	private final SettingsProvider settingsProvider;
-    private final GameCanvas gameCanvas;
+    private final GameRenderer gameRenderer;
 
 	private volatile boolean running = false;
 	private Scene currentState = new NullScene();
 	private int deathCount = 0;
 
-	public GameManager(final GameCanvas gameCanvas,
+	public GameManager(final GameRenderer gameRenderer,
 					   final SettingsProvider settingsProvider,
 					   final SceneFactory sceneFactory) {
 
         this.settingsProvider = settingsProvider;
 		this.sceneFactory = sceneFactory;
-        this.gameCanvas = gameCanvas;
+        this.gameRenderer = gameRenderer;
 	}
 
 	public void openMainMenu() {
@@ -60,7 +60,7 @@ public final class GameManager implements Runnable, SceneManager {
 	private synchronized void openScene(final Scene scene) {
 		this.currentState.close();
 		this.currentState = scene;
-		this.gameCanvas.setKeyListener(scene);
+		this.gameRenderer.setKeyListener(scene);
 		this.currentState.init();
 	}
 
@@ -73,7 +73,7 @@ public final class GameManager implements Runnable, SceneManager {
 	}
 
 	public void start() {
-		gameCanvas.init();
+		gameRenderer.init();
 
 		openMainMenu();
 
@@ -87,11 +87,11 @@ public final class GameManager implements Runnable, SceneManager {
 
 		while (running) {
 			this.update();
-			gameCanvas.draw(this.draw());
+			gameRenderer.draw(this.draw());
 			Time.sync(settingsProvider.getSettings().getFpsCap());
 		}
 
-		gameCanvas.close();
+		gameRenderer.close();
 	}
 
 	public void exit() {

@@ -14,7 +14,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 
-public final class GamePanel extends JPanel implements GameCanvas {
+public final class GamePanel extends JPanel implements GameRenderer, KeyListener {
 
 	private final Dimension windowSize;
 	@Getter
