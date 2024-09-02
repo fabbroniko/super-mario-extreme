@@ -11,16 +11,19 @@ public final class GameManager implements SceneManager, CycleListener {
     private final SceneFactory sceneFactory;
     private final GameRenderer gameRenderer;
 	private final GameCycle gameCycle;
+	private final CustomKeyListener customKeyListener;
 	private Scene currentState = new NullScene();
 	private int deathCount = 0;
 
 	public GameManager(final GameRenderer gameRenderer,
                        final SceneFactory sceneFactory,
-					   final GameCycle gameCycle) {
+                       final GameCycle gameCycle,
+					   final CustomKeyListener customKeyListener) {
 
 		this.sceneFactory = sceneFactory;
         this.gameRenderer = gameRenderer;
         this.gameCycle = gameCycle;
+        this.customKeyListener = customKeyListener;
     }
 
 	public void openMainMenu() {
@@ -55,7 +58,7 @@ public final class GameManager implements SceneManager, CycleListener {
 	private synchronized void openScene(final Scene scene) {
 		this.currentState.close();
 		this.currentState = scene;
-		this.gameRenderer.setKeyListener(scene);
+		this.customKeyListener.setKeyListener(scene);
 		this.currentState.init();
 	}
 

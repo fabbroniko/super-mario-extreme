@@ -9,8 +9,10 @@ import com.fabbroniko.audio.EffectPlayerImpl;
 import com.fabbroniko.audio.MusicPlayer;
 import com.fabbroniko.audio.MusicPlayerImpl;
 import com.fabbroniko.environment.Dimension2D;
+import com.fabbroniko.main.BridgedKeyListener;
 import com.fabbroniko.main.ScreenSizeResolver;
 import com.fabbroniko.main.FPSGameCycle;
+import com.fabbroniko.main.CustomKeyListener;
 import com.fabbroniko.settings.SettingsProvider;
 import com.fabbroniko.settings.SettingsProviderImpl;
 import com.fabbroniko.gameobjects.GameObjectFactory;
@@ -69,8 +71,9 @@ public class Application {
         final GameObjectFactory gameObjectFactory = new GameObjectFactoryImpl(effectPlayer, imageLoader, settingsProvider);
         final SceneFactory sceneFactory = new SceneFactoryImpl(sceneContextFactory, settingsProvider, musicPlayer, imageLoader, textFactory, optionFactory, backgroundLoader, gameObjectFactory);
 
-        final GamePanel gamePanel = getGamePanel();
-        final GameManager gameManager = new GameManager(gamePanel, sceneFactory, new FPSGameCycle(settingsProvider));
+        final CustomKeyListener customKeyListener = new BridgedKeyListener();
+        final GamePanel gamePanel = getGamePanel(customKeyListener);
+        final GameManager gameManager = new GameManager(gamePanel, sceneFactory, new FPSGameCycle(settingsProvider), customKeyListener);
         gameManager.start();
     }
 
@@ -92,8 +95,8 @@ public class Application {
         return new CachedImageLoader(diskImageLoader);
     }
 
-    private static GamePanel getGamePanel() {
+    private static GamePanel getGamePanel(final CustomKeyListener customKeyListener) {
         final Dimension2D canvasDimension = new Dimension2D(CANVAS_WIDTH, CANVAS_HEIGHT);
-        return new GamePanel(canvasDimension, new ScreenSizeResolver());
+        return new GamePanel(canvasDimension, new ScreenSizeResolver(), customKeyListener);
     }
 }

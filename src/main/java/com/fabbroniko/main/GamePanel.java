@@ -1,48 +1,31 @@
 package com.fabbroniko.main;
 
 import com.fabbroniko.environment.Dimension2D;
-import com.fabbroniko.input.NullCustomKeyListener;
 import lombok.Getter;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Dimension;
-import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 
-public final class GamePanel implements GameRenderer, KeyListener {
+public final class GamePanel implements GameRenderer {
 
 	private final Dimension windowSize;
 	@Getter
 	private final Dimension2D canvasSize;
-	private KeyListener keyListener;
+	private final KeyListener keyListener;
 	private JFrame window;
 	private JPanel drawablePanel;
 
-	public GamePanel(final Dimension2D canvasSize, final WindowSizeResolver windowSizeResolver) {
+	public GamePanel(final Dimension2D canvasSize,
+					 final WindowSizeResolver windowSizeResolver,
+					 final KeyListener keyListener) {
+
 		this.canvasSize = canvasSize;
 		this.windowSize = windowSizeResolver.dimension();
-		this.keyListener = new NullCustomKeyListener();
-	}
-
-	@Override
-	public void setKeyListener(KeyListener keyListener) {
 		this.keyListener = keyListener;
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {}
-
-	@Override
-	public void keyPressed(KeyEvent event) {
-		keyListener.keyPressed(event);
-	}
-
-	@Override
-	public void keyReleased(KeyEvent event) {
-		keyListener.keyReleased(event);
 	}
 
 	@Override
@@ -51,7 +34,7 @@ public final class GamePanel implements GameRenderer, KeyListener {
 		drawablePanel.setPreferredSize(windowSize);
 		drawablePanel.setFocusable(true);
 		drawablePanel.requestFocus();
-		drawablePanel.addKeyListener(this);
+		drawablePanel.addKeyListener(keyListener);
 
 		window = new JFrame();
 		window.setTitle("Super Mario Bros Extreme Edition");
