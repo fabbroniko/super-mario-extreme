@@ -9,13 +9,13 @@ import com.fabbroniko.audio.EffectPlayerImpl;
 import com.fabbroniko.audio.MusicPlayer;
 import com.fabbroniko.audio.MusicPlayerImpl;
 import com.fabbroniko.environment.Dimension2D;
+import com.fabbroniko.main.ScreenSizeResolver;
 import com.fabbroniko.settings.SettingsProvider;
 import com.fabbroniko.settings.SettingsProviderImpl;
 import com.fabbroniko.gameobjects.GameObjectFactory;
 import com.fabbroniko.gameobjects.GameObjectFactoryImpl;
 import com.fabbroniko.main.GameManager;
 import com.fabbroniko.main.GamePanel;
-import com.fabbroniko.main.GameWindow;
 import com.fabbroniko.resource.AudioResourceLocator;
 import com.fabbroniko.resource.CachedImageLoader;
 import com.fabbroniko.resource.DefaultPathToUrlConverter;
@@ -44,8 +44,6 @@ import com.fabbroniko.ui.text.TextFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.util.HashMap;
 
 public class Application {
@@ -95,10 +93,6 @@ public class Application {
 
     private static GamePanel getGamePanel() {
         final Dimension2D canvasDimension = new Dimension2D(CANVAS_WIDTH, CANVAS_HEIGHT);
-        final Dimension screenDimensions = Toolkit.getDefaultToolkit().getScreenSize();
-        final Dimension2D windowDimension = new Dimension2D((int) screenDimensions.getWidth(), (int) screenDimensions.getHeight());
-        final GamePanel gamePanel = new GamePanel(canvasDimension, windowDimension);
-        new GameWindow(gamePanel);
-        return gamePanel;
+        return new GamePanel(canvasDimension, new ScreenSizeResolver());
     }
 }

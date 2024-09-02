@@ -1,34 +1,38 @@
 package com.fabbroniko.main;
 
-import com.fabbroniko.input.NullCustomKeyListener;
 import com.fabbroniko.environment.Dimension2D;
-import com.fabbroniko.input.ControlsSource;
+import com.fabbroniko.input.NullCustomKeyListener;
 import lombok.Getter;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 
-public final class GamePanel extends JPanel implements ControlsSource, KeyListener {
+public final class GamePanel extends JPanel implements GameCanvas {
 
-	private final Dimension2D windowSize;
+	private final Dimension windowSize;
 	@Getter
 	private final Dimension2D canvasSize;
 	private final BufferedImage canvasImage;
 	@Getter
 	private final Graphics2D canvas;
 	private KeyListener keyListener;
+	private JFrame window;
 
-	public GamePanel(final Dimension2D canvasSize, final Dimension2D windowSize) {
+	public GamePanel(final Dimension2D canvasSize, final WindowSizeResolver windowSizeResolver) {
 		super();
 
 		this.canvasSize = canvasSize;
-		this.windowSize = windowSize;
+		this.windowSize = windowSizeResolver.dimension();
 		this.keyListener = new NullCustomKeyListener();
 		
-		this.setPreferredSize(new Dimension(windowSize.width(), windowSize.height()));
+		this.setPreferredSize(windowSize);
 		this.setFocusable(true);
 		this.requestFocus();
 		this.addKeyListener(this);
@@ -41,7 +45,7 @@ public final class GamePanel extends JPanel implements ControlsSource, KeyListen
 	public void paintComponent(final Graphics cGraphics) {
 		super.paintComponent(cGraphics);
 
-		cGraphics.drawImage(canvasImage, 0, 0, windowSize.width(), windowSize.height(), null);
+		cGraphics.drawImage(canvasImage, 0, 0, (int) windowSize.getWidth(), (int) windowSize.getHeight(), null);
 	}
 
 	@Override
@@ -60,5 +64,29 @@ public final class GamePanel extends JPanel implements ControlsSource, KeyListen
 	@Override
 	public void keyReleased(KeyEvent event) {
 		keyListener.keyReleased(event);
+	}
+
+	@Override
+	public void init() {
+		window = new JFrame();
+		window.setTitle("Super Mario Bros Extreme Edition");
+		window.setContentPane(this);
+		window.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		window.setUndecorated(true);
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		window.setResizable(false);
+		window.pack();
+		window.setVisible(true);
+	}
+
+	@Override
+	public void draw(final BufferedImage frame) {
+		canvas.drawImage(frame, null, 0, 0);
+		repaint();
+	}
+
+	@Override
+	public void close() {
+		window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
 	}
 }

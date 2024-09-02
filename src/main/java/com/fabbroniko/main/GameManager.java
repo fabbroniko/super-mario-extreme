@@ -1,32 +1,31 @@
 package com.fabbroniko.main;
 
-import com.fabbroniko.settings.SettingsProvider;
 import com.fabbroniko.scene.NullScene;
 import com.fabbroniko.scene.Scene;
 import com.fabbroniko.scene.SceneManager;
 import com.fabbroniko.scene.factory.SceneFactory;
+import com.fabbroniko.settings.SettingsProvider;
 import lombok.SneakyThrows;
 
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 public final class GameManager implements Runnable, SceneManager {
 
     private final SceneFactory sceneFactory;
 	private final SettingsProvider settingsProvider;
-    private final GamePanel gamePanel;
+    private final GameCanvas gameCanvas;
 
 	private volatile boolean running = false;
 	private Scene currentState = new NullScene();
 	private int deathCount = 0;
 
-	public GameManager(final GamePanel gamePanel,
+	public GameManager(final GameCanvas gameCanvas,
 					   final SettingsProvider settingsProvider,
 					   final SceneFactory sceneFactory) {
 
         this.settingsProvider = settingsProvider;
 		this.sceneFactory = sceneFactory;
-        this.gamePanel = gamePanel;
+        this.gameCanvas = gameCanvas;
 	}
 
 	public void openMainMenu() {
@@ -61,7 +60,7 @@ public final class GameManager implements Runnable, SceneManager {
 	private synchronized void openScene(final Scene scene) {
 		this.currentState.close();
 		this.currentState = scene;
-		this.gamePanel.setKeyListener(scene);
+		this.gameCanvas.setKeyListener(scene);
 		this.currentState.init();
 	}
 
@@ -74,6 +73,8 @@ public final class GameManager implements Runnable, SceneManager {
 	}
 
 	public void start() {
+		gameCanvas.init();
+
 		openMainMenu();
 
 		new Thread(this).start();
@@ -82,24 +83,15 @@ public final class GameManager implements Runnable, SceneManager {
 	@SneakyThrows
 	@Override
 	public void run() {
-		final Graphics2D canvas = gamePanel.getCanvas();
 		running = true;
 
-		// Game Loop
 		while (running) {
 			this.update();
-
-			final BufferedImage frame = this.draw();
-			if(frame != null) {
-				canvas.drawImage(this.draw(), null, 0, 0);
-
-				gamePanel.repaint();
-			}
-
+			gameCanvas.draw(this.draw());
 			Time.sync(settingsProvider.getSettings().getFpsCap());
 		}
 
-		System.exit(0);
+		gameCanvas.close();
 	}
 
 	public void exit() {
