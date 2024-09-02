@@ -7,45 +7,24 @@ import lombok.Getter;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 
-public final class GamePanel extends JPanel implements GameRenderer, KeyListener {
+public final class GamePanel implements GameRenderer, KeyListener {
 
 	private final Dimension windowSize;
 	@Getter
 	private final Dimension2D canvasSize;
-	private final BufferedImage canvasImage;
-	@Getter
-	private final Graphics2D canvas;
 	private KeyListener keyListener;
 	private JFrame window;
+	private JPanel drawablePanel;
 
 	public GamePanel(final Dimension2D canvasSize, final WindowSizeResolver windowSizeResolver) {
-		super();
-
 		this.canvasSize = canvasSize;
 		this.windowSize = windowSizeResolver.dimension();
 		this.keyListener = new NullCustomKeyListener();
-		
-		this.setPreferredSize(windowSize);
-		this.setFocusable(true);
-		this.requestFocus();
-		this.addKeyListener(this);
-
-		canvasImage = new BufferedImage(canvasSize.width(), canvasSize.height(), BufferedImage.TYPE_INT_RGB);
-		canvas = (Graphics2D) canvasImage.getGraphics();
-	}
-
-	@Override
-	public void paintComponent(final Graphics cGraphics) {
-		super.paintComponent(cGraphics);
-
-		cGraphics.drawImage(canvasImage, 0, 0, (int) windowSize.getWidth(), (int) windowSize.getHeight(), null);
 	}
 
 	@Override
@@ -68,9 +47,15 @@ public final class GamePanel extends JPanel implements GameRenderer, KeyListener
 
 	@Override
 	public void init() {
+		drawablePanel = new JPanel();
+		drawablePanel.setPreferredSize(windowSize);
+		drawablePanel.setFocusable(true);
+		drawablePanel.requestFocus();
+		drawablePanel.addKeyListener(this);
+
 		window = new JFrame();
 		window.setTitle("Super Mario Bros Extreme Edition");
-		window.setContentPane(this);
+		window.setContentPane(drawablePanel);
 		window.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		window.setUndecorated(true);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -81,8 +66,7 @@ public final class GamePanel extends JPanel implements GameRenderer, KeyListener
 
 	@Override
 	public void draw(final BufferedImage frame) {
-		canvas.drawImage(frame, null, 0, 0);
-		repaint();
+		drawablePanel.getGraphics().drawImage(frame, 0, 0, (int) windowSize.getWidth(), (int) windowSize.getHeight(), null);
 	}
 
 	@Override
