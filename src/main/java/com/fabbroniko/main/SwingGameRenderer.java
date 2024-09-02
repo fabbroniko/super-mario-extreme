@@ -7,15 +7,15 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 
-public final class GamePanel implements GameRenderer {
+public final class SwingGameRenderer implements GameRenderer {
 
 	private final Dimension windowSize;
 	private final KeyListener keyListener;
 	private JFrame window;
 	private JPanel drawablePanel;
 
-	public GamePanel(final WindowSizeResolver windowSizeResolver,
-					 final KeyListener keyListener) {
+	public SwingGameRenderer(final WindowSizeResolver windowSizeResolver,
+							 final KeyListener keyListener) {
 
 		this.windowSize = windowSizeResolver.dimension();
 		this.keyListener = keyListener;

@@ -19,7 +19,7 @@ import com.fabbroniko.settings.SettingsProviderImpl;
 import com.fabbroniko.gameobjects.GameObjectFactory;
 import com.fabbroniko.gameobjects.GameObjectFactoryImpl;
 import com.fabbroniko.main.GameManager;
-import com.fabbroniko.main.GamePanel;
+import com.fabbroniko.main.SwingGameRenderer;
 import com.fabbroniko.resource.AudioResourceLocator;
 import com.fabbroniko.resource.CachedImageLoader;
 import com.fabbroniko.resource.DefaultPathToUrlConverter;
@@ -74,8 +74,8 @@ public class Application {
         final SceneFactory sceneFactory = new SceneFactoryImpl(sceneContextFactory, settingsProvider, musicPlayer, imageLoader, textFactory, optionFactory, backgroundLoader, gameObjectFactory);
 
         final CustomKeyListener customKeyListener = new BridgedKeyListener();
-        final GamePanel gamePanel = getGamePanel(customKeyListener);
-        final GameManager gameManager = new GameManager(gamePanel, sceneFactory, new FPSGameCycle(settingsProvider), customKeyListener);
+        final SwingGameRenderer gameRenderer = getGamePanel(customKeyListener);
+        final GameManager gameManager = new GameManager(gameRenderer, sceneFactory, new FPSGameCycle(settingsProvider), customKeyListener);
         gameManager.start();
     }
 
@@ -97,7 +97,7 @@ public class Application {
         return new CachedImageLoader(diskImageLoader);
     }
 
-    private static GamePanel getGamePanel(final CustomKeyListener customKeyListener) {
-        return new GamePanel(new ScreenSizeResolver(), customKeyListener);
+    private static SwingGameRenderer getGamePanel(final CustomKeyListener customKeyListener) {
+        return new SwingGameRenderer(new ScreenSizeResolver(), customKeyListener);
     }
 }
