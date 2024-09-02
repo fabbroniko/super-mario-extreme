@@ -10,6 +10,7 @@ import com.fabbroniko.audio.MusicPlayer;
 import com.fabbroniko.audio.MusicPlayerImpl;
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.main.ScreenSizeResolver;
+import com.fabbroniko.main.FPSGameCycle;
 import com.fabbroniko.settings.SettingsProvider;
 import com.fabbroniko.settings.SettingsProviderImpl;
 import com.fabbroniko.gameobjects.GameObjectFactory;
@@ -69,7 +70,7 @@ public class Application {
         final SceneFactory sceneFactory = new SceneFactoryImpl(sceneContextFactory, settingsProvider, musicPlayer, imageLoader, textFactory, optionFactory, backgroundLoader, gameObjectFactory);
 
         final GamePanel gamePanel = getGamePanel();
-        final GameManager gameManager = new GameManager(gamePanel, settingsProvider, sceneFactory);
+        final GameManager gameManager = new GameManager(gamePanel, sceneFactory, new FPSGameCycle(settingsProvider));
         gameManager.start();
     }
 

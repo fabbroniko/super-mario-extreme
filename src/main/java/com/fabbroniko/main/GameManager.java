@@ -4,29 +4,24 @@ import com.fabbroniko.scene.NullScene;
 import com.fabbroniko.scene.Scene;
 import com.fabbroniko.scene.SceneManager;
 import com.fabbroniko.scene.factory.SceneFactory;
-import com.fabbroniko.settings.SettingsProvider;
 import lombok.SneakyThrows;
 
-import java.awt.image.BufferedImage;
-
-public final class GameManager implements Runnable, SceneManager {
+public final class GameManager implements SceneManager, CycleListener {
 
     private final SceneFactory sceneFactory;
-	private final SettingsProvider settingsProvider;
     private final GameRenderer gameRenderer;
-
-	private volatile boolean running = false;
+	private final GameCycle gameCycle;
 	private Scene currentState = new NullScene();
 	private int deathCount = 0;
 
 	public GameManager(final GameRenderer gameRenderer,
-					   final SettingsProvider settingsProvider,
-					   final SceneFactory sceneFactory) {
+                       final SceneFactory sceneFactory,
+					   final GameCycle gameCycle) {
 
-        this.settingsProvider = settingsProvider;
 		this.sceneFactory = sceneFactory;
         this.gameRenderer = gameRenderer;
-	}
+        this.gameCycle = gameCycle;
+    }
 
 	public void openMainMenu() {
 		openScene(sceneFactory.createMainMenuScene(this));
@@ -53,7 +48,7 @@ public final class GameManager implements Runnable, SceneManager {
 
 	@Override
 	public void quit() {
-		exit();
+		gameCycle.stop();
 	}
 
 	@SneakyThrows
@@ -64,37 +59,29 @@ public final class GameManager implements Runnable, SceneManager {
 		this.currentState.init();
 	}
 
-	public synchronized void update() {
-		this.currentState.update();
-	}
-
-	public synchronized BufferedImage draw() {
-		return this.currentState.draw();
-	}
-
 	public void start() {
 		gameRenderer.init();
 
 		openMainMenu();
 
-		new Thread(this).start();
+		gameCycle.run(this);
 	}
 
-	@SneakyThrows
 	@Override
-	public void run() {
-		running = true;
-
-		while (running) {
-			this.update();
-			gameRenderer.draw(this.draw());
-			Time.sync(settingsProvider.getSettings().getFpsCap());
-		}
-
-		gameRenderer.close();
+	public void init() {
+		gameRenderer.init();
 	}
 
-	public void exit() {
-		running = false;
+	public synchronized void update() {
+		this.currentState.update();
+	}
+
+	public synchronized void draw() {
+		this.gameRenderer.draw(currentState.draw());
+	}
+
+	@Override
+	public void close() {
+		gameRenderer.close();
 	}
 }
