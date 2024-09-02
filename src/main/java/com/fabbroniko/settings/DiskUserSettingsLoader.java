@@ -7,6 +7,7 @@ import lombok.extern.log4j.Log4j2;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.function.Supplier;
 
 @Log4j2
 public class DiskUserSettingsLoader implements UserSettingsLoader {
@@ -16,8 +17,8 @@ public class DiskUserSettingsLoader implements UserSettingsLoader {
 
     private final ObjectMapper objectMapper;
 
-    public DiskUserSettingsLoader(final ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
+    public DiskUserSettingsLoader(final Supplier<ObjectMapper> jsonObjectMapper) {
+        this.objectMapper = jsonObjectMapper.get();
     }
 
     public SettingsDto load() {

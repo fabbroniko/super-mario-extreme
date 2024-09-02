@@ -2,6 +2,7 @@ package com.fabbroniko.resource;
 
 import com.fabbroniko.error.ResourceNotFoundException;
 import com.fabbroniko.resource.dto.BackgroundDto;
+import com.fabbroniko.resource.dto.PreLoadedResource;
 import com.fabbroniko.resource.dto.ResourceDto;
 import lombok.extern.log4j.Log4j2;
 
@@ -14,8 +15,8 @@ public class DiskImageLoader implements ImageLoader {
 
     private final ResourceDto resourceDto;
 
-    public DiskImageLoader(final ResourceDto resourceDto) {
-        this.resourceDto = resourceDto;
+    public DiskImageLoader(final PreLoadedResource preLoadedResource) {
+        this.resourceDto = preLoadedResource.getResourceDto();
     }
 
 

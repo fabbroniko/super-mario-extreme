@@ -1,14 +1,15 @@
 package com.fabbroniko.resource;
 
 import com.fabbroniko.error.UndefinedResourceException;
+import com.fabbroniko.resource.dto.PreLoadedResource;
 import com.fabbroniko.resource.dto.ResourceDto;
 
 public class AudioResourceLocator implements ResourceLocator {
 
     private final ResourceDto resourceDto;
 
-    public AudioResourceLocator(final ResourceDto resourceDto) {
-        this.resourceDto = resourceDto;
+    public AudioResourceLocator(final PreLoadedResource preLoadedResource) {
+        this.resourceDto = preLoadedResource.getResourceDto();
     }
 
     @Override
