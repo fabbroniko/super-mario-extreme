@@ -3,10 +3,12 @@ package com.fabbroniko.audio;
 import com.fabbroniko.error.ResourceLoadingException;
 import com.fabbroniko.resource.ResourceLoader;
 import com.fabbroniko.resource.ResourceLocator;
+import com.fabbroniko.sdi.annotation.Component;
 
 import javax.sound.sampled.Clip;
 import java.io.InputStream;
 
+@Component
 public class DiskAudioLoader implements AudioLoader {
 
     private final ResourceLoader resourceLoader;

@@ -1,14 +1,18 @@
 package com.fabbroniko.audio;
 
+import com.fabbroniko.sdi.annotation.Component;
+import com.fabbroniko.sdi.annotation.Qualifier;
+
 import javax.sound.sampled.Clip;
 import java.util.Map;
 
+@Component
 public class CachedAudioLoader implements AudioLoader {
 
     private final Map<String, Clip> cache;
     private final AudioLoader alternativeAudioLoader;
 
-    public CachedAudioLoader(final AudioLoader alternativeAudioLoader, final Map<String, Clip> cache) {
+    public CachedAudioLoader(@Qualifier("diskAudioLoader") final AudioLoader alternativeAudioLoader, final Map<String, Clip> cache) {
         this.alternativeAudioLoader = alternativeAudioLoader;
         this.cache = cache;
     }

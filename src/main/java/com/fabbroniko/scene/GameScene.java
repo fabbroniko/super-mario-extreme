@@ -3,6 +3,7 @@ package com.fabbroniko.scene;
 import com.fabbroniko.audio.MusicPlayer;
 import com.fabbroniko.collision.CollisionManager;
 import com.fabbroniko.environment.Dimension2D;
+import com.fabbroniko.sdi.annotation.Qualifier;
 import com.fabbroniko.settings.SettingsProvider;
 import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.gameobjects.AbstractGameObject;
@@ -55,7 +56,7 @@ public final class GameScene implements Scene, TypedLessKeyListener {
     public GameScene(final SceneContextFactory sceneContextFactory,
                      final SettingsProvider settingsProvider,
                      final MusicPlayer musicPlayer,
-                     final ImageLoader imageLoader,
+                     @Qualifier("cachedImageLoader") final ImageLoader imageLoader,
                      final SceneManager sceneManager,
                      final TextFactory textFactory,
                      final BackgroundLoader backgroundLoader,

@@ -1,5 +1,6 @@
 package com.fabbroniko.ui;
 
+import com.fabbroniko.sdi.annotation.Component;
 import com.fabbroniko.ui.text.TextFactory;
 
 import java.awt.BasicStroke;
@@ -7,6 +8,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
+@Component
 public class OptionFactoryImpl implements OptionFactory {
 
     private final TextFactory textFactory;

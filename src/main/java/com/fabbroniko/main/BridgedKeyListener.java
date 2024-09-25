@@ -1,8 +1,11 @@
 package com.fabbroniko.main;
 
+import com.fabbroniko.sdi.annotation.Component;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+@Component
 public class BridgedKeyListener implements CustomKeyListener {
 
     private KeyListener keyListener;

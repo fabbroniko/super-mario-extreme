@@ -1,6 +1,8 @@
 package com.fabbroniko.settings;
 
 import com.fabbroniko.resource.dto.SettingsDto;
+import com.fabbroniko.sdi.annotation.Component;
+import com.fabbroniko.sdi.annotation.Qualifier;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
 
@@ -10,6 +12,7 @@ import java.io.IOException;
 import java.util.function.Supplier;
 
 @Log4j2
+@Component
 public class DiskUserSettingsLoader implements UserSettingsLoader {
 
     private static final String SUPER_MARIO_USER_HOME_DIR = System.getProperty("user.home") + File.separator + "super-mario-extreme" + File.separator;
@@ -17,7 +20,7 @@ public class DiskUserSettingsLoader implements UserSettingsLoader {
 
     private final ObjectMapper objectMapper;
 
-    public DiskUserSettingsLoader(final Supplier<ObjectMapper> jsonObjectMapper) {
+    public DiskUserSettingsLoader(@Qualifier("jsonMapperSupplier") final Supplier<ObjectMapper> jsonObjectMapper) {
         this.objectMapper = jsonObjectMapper.get();
     }
 

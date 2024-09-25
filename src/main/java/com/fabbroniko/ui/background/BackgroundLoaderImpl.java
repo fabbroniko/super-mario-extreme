@@ -2,17 +2,20 @@ package com.fabbroniko.ui.background;
 
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.resource.ImageLoader;
+import com.fabbroniko.sdi.annotation.Component;
+import com.fabbroniko.sdi.annotation.Qualifier;
 import com.fabbroniko.ui.DrawableResourceFactory;
 import com.fabbroniko.ui.InitializableDrawable;
 
 import java.awt.Color;
 
+@Component
 public class BackgroundLoaderImpl implements BackgroundLoader {
 
     private final ImageLoader imageLoader;
     private final DrawableResourceFactory drawableResourceFactory;
 
-    public BackgroundLoaderImpl(final ImageLoader imageLoader,
+    public BackgroundLoaderImpl(@Qualifier("cachedImageLoader") final ImageLoader imageLoader,
                                 final DrawableResourceFactory drawableResourceFactory) {
         this.imageLoader = imageLoader;
         this.drawableResourceFactory = drawableResourceFactory;

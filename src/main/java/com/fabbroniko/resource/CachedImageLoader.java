@@ -1,9 +1,13 @@
 package com.fabbroniko.resource;
 
+import com.fabbroniko.sdi.annotation.Component;
+import com.fabbroniko.sdi.annotation.Qualifier;
+
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
 public class CachedImageLoader implements ImageLoader {
 
     private final ImageLoader imageLoader;
@@ -11,7 +15,7 @@ public class CachedImageLoader implements ImageLoader {
 
     private BufferedImage tileMap;
 
-    public CachedImageLoader(final ImageLoader imageLoader) {
+    public CachedImageLoader(@Qualifier("diskImageLoader") final ImageLoader imageLoader) {
         this.imageLoader = imageLoader;
     }
 

@@ -2,6 +2,8 @@ package com.fabbroniko.scene.factory;
 
 import com.fabbroniko.audio.MusicPlayer;
 import com.fabbroniko.scene.mainmenu.MainStateFactory;
+import com.fabbroniko.sdi.annotation.Component;
+import com.fabbroniko.sdi.annotation.Qualifier;
 import com.fabbroniko.settings.SettingsProvider;
 import com.fabbroniko.gameobjects.GameObjectFactory;
 import com.fabbroniko.resource.ImageLoader;
@@ -19,6 +21,7 @@ import com.fabbroniko.ui.text.TextFactory;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.SneakyThrows;
 
+@Component
 public class SceneFactoryImpl implements SceneFactory {
 
     private final SceneContextFactory sceneContextFactory;
@@ -33,7 +36,7 @@ public class SceneFactoryImpl implements SceneFactory {
     public SceneFactoryImpl(final SceneContextFactory sceneContextFactory,
                             final SettingsProvider settingsProvider,
                             final MusicPlayer musicPlayer,
-                            final ImageLoader imageLoader,
+                            @Qualifier("cachedImageLoader") final ImageLoader imageLoader,
                             final TextFactory textFactory,
                             final OptionFactory optionFactory,
                             final BackgroundLoader backgroundLoader, GameObjectFactory gameObjectFactory) {
