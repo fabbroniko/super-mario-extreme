@@ -1,7 +1,7 @@
 package com.fabbroniko.resource;
 
-import org.example.annotation.Component;
-import org.example.annotation.Qualifier;
+import com.fabbroniko.sdi.annotation.Component;
+import com.fabbroniko.sdi.annotation.Qualifier;
 
 import java.awt.image.BufferedImage;
 import java.util.HashMap;

@@ -3,7 +3,7 @@ package com.fabbroniko.resource;
 import com.fabbroniko.error.UndefinedResourceException;
 import com.fabbroniko.resource.dto.PreLoadedResource;
 import com.fabbroniko.resource.dto.ResourceDto;
-import org.example.annotation.Component;
+import com.fabbroniko.sdi.annotation.Component;
 
 @Component
 public class AudioResourceLocator implements ResourceLocator {

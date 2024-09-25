@@ -1,6 +1,6 @@
 package com.fabbroniko.main;
 
-import org.example.annotation.Component;
+import com.fabbroniko.sdi.annotation.Component;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;

@@ -1,7 +1,7 @@
 package com.fabbroniko.mapper;
 
+import com.fabbroniko.sdi.annotation.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.annotation.Component;
 
 import java.util.function.Supplier;
 

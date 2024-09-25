@@ -1,7 +1,7 @@
 package com.fabbroniko.audio;
 
+import com.fabbroniko.sdi.annotation.Component;
 import lombok.SneakyThrows;
-import org.example.annotation.Component;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;

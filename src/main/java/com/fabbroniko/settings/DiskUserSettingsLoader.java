@@ -1,10 +1,10 @@
 package com.fabbroniko.settings;
 
 import com.fabbroniko.resource.dto.SettingsDto;
+import com.fabbroniko.sdi.annotation.Component;
+import com.fabbroniko.sdi.annotation.Qualifier;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
-import org.example.annotation.Component;
-import org.example.annotation.Qualifier;
 
 import java.io.File;
 import java.io.FileInputStream;

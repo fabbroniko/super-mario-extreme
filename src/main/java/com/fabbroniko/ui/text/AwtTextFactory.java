@@ -1,6 +1,6 @@
 package com.fabbroniko.ui.text;
 
-import org.example.annotation.Component;
+import com.fabbroniko.sdi.annotation.Component;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

@@ -4,8 +4,8 @@ import com.fabbroniko.error.ResourceNotFoundException;
 import com.fabbroniko.resource.dto.BackgroundDto;
 import com.fabbroniko.resource.dto.PreLoadedResource;
 import com.fabbroniko.resource.dto.ResourceDto;
+import com.fabbroniko.sdi.annotation.Component;
 import lombok.extern.log4j.Log4j2;
-import org.example.annotation.Component;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

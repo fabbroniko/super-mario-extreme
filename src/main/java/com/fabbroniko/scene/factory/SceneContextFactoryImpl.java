@@ -2,7 +2,7 @@ package com.fabbroniko.scene.factory;
 
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.scene.SceneContext;
-import org.example.annotation.Component;
+import com.fabbroniko.sdi.annotation.Component;
 
 import java.awt.image.BufferedImage;
 

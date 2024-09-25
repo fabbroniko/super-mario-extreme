@@ -1,7 +1,7 @@
 package com.fabbroniko.ui;
 
+import com.fabbroniko.sdi.annotation.Component;
 import com.fabbroniko.ui.text.TextFactory;
-import org.example.annotation.Component;
 
 import java.awt.BasicStroke;
 import java.awt.Color;

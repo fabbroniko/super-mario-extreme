@@ -1,6 +1,6 @@
 package com.fabbroniko.environment;
 
-import org.example.annotation.Component;
+import com.fabbroniko.sdi.annotation.Component;
 
 import javax.sound.sampled.Clip;
 import java.util.HashMap;

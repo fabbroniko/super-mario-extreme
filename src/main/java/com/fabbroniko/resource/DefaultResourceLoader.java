@@ -1,7 +1,7 @@
 package com.fabbroniko.resource;
 
 import com.fabbroniko.error.ResourceNotFoundException;
-import org.example.annotation.Component;
+import com.fabbroniko.sdi.annotation.Component;
 
 import java.io.InputStream;
 

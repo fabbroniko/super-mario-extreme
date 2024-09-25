@@ -1,6 +1,6 @@
 package com.fabbroniko.ui.text;
 
-import org.example.annotation.Component;
+import com.fabbroniko.sdi.annotation.Component;
 
 import javax.swing.*;
 import java.awt.Font;

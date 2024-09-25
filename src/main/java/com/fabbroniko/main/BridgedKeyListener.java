@@ -1,6 +1,6 @@
 package com.fabbroniko.main;
 
-import org.example.annotation.Component;
+import com.fabbroniko.sdi.annotation.Component;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;

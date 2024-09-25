@@ -1,7 +1,7 @@
 package com.fabbroniko.audio;
 
-import org.example.annotation.Component;
-import org.example.annotation.Qualifier;
+import com.fabbroniko.sdi.annotation.Component;
+import com.fabbroniko.sdi.annotation.Qualifier;
 
 import javax.sound.sampled.Clip;
 import java.util.Map;

@@ -1,8 +1,8 @@
 package com.fabbroniko.resource.dto;
 
 import com.fabbroniko.resource.ResourceIndexLoader;
+import com.fabbroniko.sdi.annotation.Component;
 import lombok.Getter;
-import org.example.annotation.Component;
 
 @Getter
 @Component

@@ -3,7 +3,7 @@ package com.fabbroniko.audio;
 import com.fabbroniko.error.ResourceLoadingException;
 import com.fabbroniko.resource.ResourceLoader;
 import com.fabbroniko.resource.ResourceLocator;
-import org.example.annotation.Component;
+import com.fabbroniko.sdi.annotation.Component;
 
 import javax.sound.sampled.Clip;
 import java.io.InputStream;

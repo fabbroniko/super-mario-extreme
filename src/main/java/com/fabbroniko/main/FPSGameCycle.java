@@ -1,8 +1,8 @@
 package com.fabbroniko.main;
 
+import com.fabbroniko.sdi.annotation.Component;
 import com.fabbroniko.settings.SettingsProvider;
 import lombok.SneakyThrows;
-import org.example.annotation.Component;
 
 @Component
 public class FPSGameCycle implements GameCycle {

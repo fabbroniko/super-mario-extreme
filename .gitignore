@@ -4,5 +4,5 @@ bin/
 target/
 .gradle/
 build/
-
+gradle.properties
 *.iml

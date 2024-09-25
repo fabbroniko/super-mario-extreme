@@ -1,6 +1,6 @@
 package com.fabbroniko.resource;
 
-import org.example.annotation.Component;
+import com.fabbroniko.sdi.annotation.Component;
 
 import java.net.URL;
 

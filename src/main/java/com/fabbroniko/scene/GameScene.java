@@ -3,6 +3,7 @@ package com.fabbroniko.scene;
 import com.fabbroniko.audio.MusicPlayer;
 import com.fabbroniko.collision.CollisionManager;
 import com.fabbroniko.environment.Dimension2D;
+import com.fabbroniko.sdi.annotation.Qualifier;
 import com.fabbroniko.settings.SettingsProvider;
 import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.gameobjects.AbstractGameObject;
@@ -18,7 +19,6 @@ import com.fabbroniko.ui.DrawableResource;
 import com.fabbroniko.ui.InitializableDrawable;
 import com.fabbroniko.ui.background.BackgroundLoader;
 import com.fabbroniko.ui.text.TextFactory;
-import org.example.annotation.Qualifier;
 
 import java.awt.Color;
 import java.awt.Graphics2D;

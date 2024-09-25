@@ -1,7 +1,7 @@
 package com.fabbroniko.settings;
 
 import com.fabbroniko.resource.dto.SettingsDto;
-import org.example.annotation.Component;
+import com.fabbroniko.sdi.annotation.Component;
 
 @Component
 public class SettingsProviderImpl implements SettingsProvider {

@@ -2,10 +2,10 @@ package com.fabbroniko.ui.background;
 
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.resource.ImageLoader;
+import com.fabbroniko.sdi.annotation.Component;
+import com.fabbroniko.sdi.annotation.Qualifier;
 import com.fabbroniko.ui.DrawableResourceFactory;
 import com.fabbroniko.ui.InitializableDrawable;
-import org.example.annotation.Component;
-import org.example.annotation.Qualifier;
 
 import java.awt.Color;
 

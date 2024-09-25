@@ -1,6 +1,6 @@
 package com.fabbroniko.environment;
 
-import org.example.annotation.Component;
+import com.fabbroniko.sdi.annotation.Component;
 
 @Component
 public class CanvasSizeDimension implements Dimension2D {
