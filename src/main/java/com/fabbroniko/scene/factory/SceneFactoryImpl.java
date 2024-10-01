@@ -4,6 +4,7 @@ import com.fabbroniko.audio.MusicPlayer;
 import com.fabbroniko.scene.mainmenu.MainStateFactory;
 import com.fabbroniko.sdi.annotation.Component;
 import com.fabbroniko.sdi.annotation.Qualifier;
+import com.fabbroniko.sdi.context.ApplicationContext;
 import com.fabbroniko.settings.SettingsProvider;
 import com.fabbroniko.gameobjects.GameObjectFactory;
 import com.fabbroniko.resource.ImageLoader;
@@ -32,6 +33,7 @@ public class SceneFactoryImpl implements SceneFactory {
     private final OptionFactory optionFactory;
     private final BackgroundLoader backgroundLoader;
     private final GameObjectFactory gameObjectFactory;
+    private final ApplicationContext applicationContext;
 
     public SceneFactoryImpl(final SceneContextFactory sceneContextFactory,
                             final SettingsProvider settingsProvider,
@@ -39,7 +41,8 @@ public class SceneFactoryImpl implements SceneFactory {
                             @Qualifier("cachedImageLoader") final ImageLoader imageLoader,
                             final TextFactory textFactory,
                             final OptionFactory optionFactory,
-                            final BackgroundLoader backgroundLoader, GameObjectFactory gameObjectFactory) {
+                            final BackgroundLoader backgroundLoader, GameObjectFactory gameObjectFactory,
+                            final ApplicationContext applicationContext) {
 
         this.sceneContextFactory = sceneContextFactory;
         this.settingsProvider = settingsProvider;
@@ -49,6 +52,7 @@ public class SceneFactoryImpl implements SceneFactory {
         this.optionFactory = optionFactory;
         this.backgroundLoader = backgroundLoader;
         this.gameObjectFactory = gameObjectFactory;
+        this.applicationContext = applicationContext;
     }
 
     @Override
@@ -69,8 +73,8 @@ public class SceneFactoryImpl implements SceneFactory {
     }
 
     @Override
-    public Scene createLostScene(final SceneManager sceneManager, final int deathCount) {
-        return new LostScene(sceneContextFactory, musicPlayer, sceneManager, textFactory, deathCount, backgroundLoader);
+    public Scene createLostScene(final SceneManager sceneManager) {
+        return applicationContext.getInstance(LostScene.class);
     }
 
     @Override

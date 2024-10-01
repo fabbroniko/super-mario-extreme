@@ -11,7 +11,7 @@ public interface SceneFactory {
 
     Scene createGameScene(final SceneManager sceneManager);
 
-    Scene createLostScene(final SceneManager sceneManager, final int deathCount);
+    Scene createLostScene(final SceneManager sceneManager);
 
     Scene createWinScene(final SceneManager sceneManager);
 }
