@@ -3,6 +3,8 @@ package com.fabbroniko.scene;
 import com.fabbroniko.audio.MusicPlayer;
 import com.fabbroniko.collision.CollisionManager;
 import com.fabbroniko.environment.Dimension2D;
+import com.fabbroniko.environment.LevelProvider;
+import com.fabbroniko.sdi.annotation.Component;
 import com.fabbroniko.sdi.annotation.Qualifier;
 import com.fabbroniko.settings.SettingsProvider;
 import com.fabbroniko.environment.Vector2D;
@@ -29,11 +31,12 @@ import java.util.List;
 
 import static java.awt.event.KeyEvent.VK_ESCAPE;
 
+@Component
 public final class GameScene implements Scene, TypedLessKeyListener {
 
     private static final int FPS_OFFSET = 15;
 
-    private final LevelDto level;
+    private final LevelProvider levelProvider;
     private DrawableResource background;
     private TileMap tileMap;
     private List<AbstractGameObject> gameObjects;
@@ -61,7 +64,7 @@ public final class GameScene implements Scene, TypedLessKeyListener {
                      final TextFactory textFactory,
                      final BackgroundLoader backgroundLoader,
                      final GameObjectFactory gameObjectFactory,
-                     final LevelDto level) {
+                     final LevelProvider levelProvider) {
 
         this.gameObjectFactory = gameObjectFactory;
         this.sceneContextFactory = sceneContextFactory;
@@ -71,7 +74,7 @@ public final class GameScene implements Scene, TypedLessKeyListener {
         this.sceneManager = sceneManager;
         this.textFactory = textFactory;
         this.backgroundLoader = backgroundLoader;
-        this.level = level;
+        this.levelProvider = levelProvider;
     }
 
     @Override
@@ -85,6 +88,7 @@ public final class GameScene implements Scene, TypedLessKeyListener {
         initializableBackground.init();
         background = initializableBackground.getDrawableResource();
 
+        final LevelDto level = levelProvider.getLevel();
         tileMap = new TileMap(imageLoader, level.getMap(), canvasDimension);
         gameObjects = new ArrayList<>();
 
