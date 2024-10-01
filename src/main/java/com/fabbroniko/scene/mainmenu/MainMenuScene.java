@@ -7,6 +7,7 @@ import com.fabbroniko.scene.Scene;
 import com.fabbroniko.scene.SceneContext;
 import com.fabbroniko.scene.SceneManager;
 import com.fabbroniko.scene.factory.SceneContextFactory;
+import com.fabbroniko.sdi.annotation.Component;
 import com.fabbroniko.ui.DrawableResource;
 import com.fabbroniko.ui.InitializableDrawable;
 import com.fabbroniko.ui.OptionFactory;
@@ -25,6 +26,7 @@ import static java.awt.event.KeyEvent.VK_ENTER;
 import static java.awt.event.KeyEvent.VK_ESCAPE;
 import static java.awt.event.KeyEvent.VK_UP;
 
+@Component
 public final class MainMenuScene implements Scene, UIKeyListener {
 
 	private static final String TITLE = "Super Mario Extreme Edition";

@@ -1,9 +1,11 @@
 package com.fabbroniko.scene;
 
 import com.fabbroniko.audio.MusicPlayer;
+import com.fabbroniko.environment.DeathCountProvider;
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.input.ActionLessKeyListener;
 import com.fabbroniko.scene.factory.SceneContextFactory;
+import com.fabbroniko.sdi.annotation.Component;
 import com.fabbroniko.ui.DrawableResource;
 import com.fabbroniko.ui.InitializableDrawable;
 import com.fabbroniko.ui.background.BackgroundLoader;
@@ -14,6 +16,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
+@Component
 public final class LostScene implements Scene, ActionLessKeyListener {
 
 	private static final String GAME_OVER_MAIN_TEXT = "Game Over";
@@ -26,27 +29,28 @@ public final class LostScene implements Scene, ActionLessKeyListener {
 	private final MusicPlayer musicPlayer;
 	private final SceneManager sceneManager;
 	private final TextFactory textFactory;
-	private final int deathCount;
+	private final DeathCountProvider deathCountProvider;
 	private final BackgroundLoader backgroundLoader;
 
 	private BufferedImage canvas;
 	private Graphics2D graphics;
 	private Dimension2D canvasDimension;
 	private DrawableResource background;
+	private int deathCount;
 
 	public LostScene(final SceneContextFactory sceneContextFactory,
 					 final MusicPlayer musicPlayer,
 					 final SceneManager sceneManager,
 					 final TextFactory textFactory,
-					 final int deathCount,
+					 final DeathCountProvider deathCountProvider,
 					 final BackgroundLoader backgroundLoader) {
 
 		this.sceneContextFactory = sceneContextFactory;
 		this.musicPlayer = musicPlayer;
 		this.sceneManager = sceneManager;
 		this.textFactory = textFactory;
-		this.deathCount = deathCount;
 		this.backgroundLoader = backgroundLoader;
+		this.deathCountProvider = deathCountProvider;
 	}
 
 	@Override
@@ -58,6 +62,7 @@ public final class LostScene implements Scene, ActionLessKeyListener {
 		this.canvas = sceneContext.canvas();
 		this.graphics = (Graphics2D) canvas.getGraphics();
 		this.canvasDimension = sceneContext.canvasDimension();
+		this.deathCount = deathCountProvider.getAndIncrement();
 
 		final InitializableDrawable initializableBackground = backgroundLoader.createSimpleColorBackground(Color.BLACK, canvasDimension);
 		initializableBackground.init();

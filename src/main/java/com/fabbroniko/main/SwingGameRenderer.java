@@ -1,6 +1,7 @@
 package com.fabbroniko.main;
 
 import com.fabbroniko.sdi.annotation.Component;
+import com.fabbroniko.sdi.annotation.Qualifier;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -18,7 +19,7 @@ public final class SwingGameRenderer implements GameRenderer {
 	private JPanel drawablePanel;
 
 	public SwingGameRenderer(final WindowSizeResolver windowSizeResolver,
-							 final KeyListener keyListener) {
+							 @Qualifier("bridgedKeyListener") final KeyListener keyListener) {
 
 		this.windowSize = windowSizeResolver.dimension();
 		this.keyListener = keyListener;

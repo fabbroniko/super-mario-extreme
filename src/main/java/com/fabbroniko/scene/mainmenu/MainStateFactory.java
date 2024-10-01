@@ -2,10 +2,12 @@ package com.fabbroniko.scene.mainmenu;
 
 import com.fabbroniko.environment.CircularState;
 import com.fabbroniko.scene.SceneManager;
+import com.fabbroniko.sdi.annotation.Component;
 
 import java.util.ArrayDeque;
 import java.util.List;
 
+@Component
 public class MainStateFactory implements StateFactory<MainMenuState> {
 
     private final SceneManager sceneManager;

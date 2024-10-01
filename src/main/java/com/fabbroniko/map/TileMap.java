@@ -9,7 +9,6 @@ import com.fabbroniko.resource.dto.TileDto;
 import com.fabbroniko.ui.Drawable;
 import com.fabbroniko.ui.DrawableResource;
 import com.fabbroniko.ui.DrawableResourceImpl;
-import lombok.extern.log4j.Log4j2;
 
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -17,7 +16,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-@Log4j2
 public class TileMap implements Drawable {
 
 	private static final int NO_TILE = -1;
@@ -163,7 +161,6 @@ public class TileMap implements Drawable {
 	@Override
 	public DrawableResource getDrawableResource() {
 		if(cachedTileMap != null) {
-			log.trace("tile_map,get_drawable_image,using_cached_image");
 			return new DrawableResourceImpl(cachedTileMap, new ImmutablePosition(0, 0));
 		}
 
@@ -196,7 +193,6 @@ public class TileMap implements Drawable {
 		}
 
 		cachedTileMap = tileMapImage;
-		log.trace("tile_map,get_drawable_image,drawn_new_image");
 		return new DrawableResourceImpl(cachedTileMap, new ImmutablePosition(0, 0));
 	}
 }

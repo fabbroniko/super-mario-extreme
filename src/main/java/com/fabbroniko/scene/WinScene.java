@@ -4,6 +4,7 @@ import com.fabbroniko.audio.MusicPlayer;
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.input.ActionLessKeyListener;
 import com.fabbroniko.scene.factory.SceneContextFactory;
+import com.fabbroniko.sdi.annotation.Component;
 import com.fabbroniko.ui.DrawableResource;
 import com.fabbroniko.ui.InitializableDrawable;
 import com.fabbroniko.ui.background.BackgroundLoader;
@@ -14,6 +15,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
+@Component
 public final class WinScene implements Scene, ActionLessKeyListener {
 
 	private static final String LEVEL_COMPLETED = "Level Completed";

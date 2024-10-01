@@ -4,8 +4,10 @@ import com.fabbroniko.scene.NullScene;
 import com.fabbroniko.scene.Scene;
 import com.fabbroniko.scene.SceneManager;
 import com.fabbroniko.scene.factory.SceneFactory;
+import com.fabbroniko.sdi.annotation.Component;
 import lombok.SneakyThrows;
 
+@Component
 public final class GameManager implements SceneManager, CycleListener {
 
     private final SceneFactory sceneFactory;
@@ -13,7 +15,6 @@ public final class GameManager implements SceneManager, CycleListener {
 	private final GameCycle gameCycle;
 	private final CustomKeyListener customKeyListener;
 	private Scene currentState = new NullScene();
-	private int deathCount = 0;
 
 	public GameManager(final GameRenderer gameRenderer,
                        final SceneFactory sceneFactory,
@@ -41,7 +42,7 @@ public final class GameManager implements SceneManager, CycleListener {
 
 	@Override
 	public void openLostScene() {
-		openScene(sceneFactory.createLostScene(this, ++deathCount));
+		openScene(sceneFactory.createLostScene(this));
 	}
 
 	@Override

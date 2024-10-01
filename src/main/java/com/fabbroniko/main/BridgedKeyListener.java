@@ -5,7 +5,7 @@ import com.fabbroniko.sdi.annotation.Component;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-@Component
+@Component("bridgedKeyListener")
 public class BridgedKeyListener implements CustomKeyListener {
 
     private KeyListener keyListener;
