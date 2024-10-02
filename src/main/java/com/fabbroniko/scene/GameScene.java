@@ -1,13 +1,9 @@
 package com.fabbroniko.scene;
 
-import com.fabbroniko.audio.MusicPlayer;
+import com.fabbroniko.audio.MusicPlayerProvider;
 import com.fabbroniko.collision.CollisionManager;
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.environment.LevelProvider;
-import com.fabbroniko.scene.mainmenu.MainMenuScene;
-import com.fabbroniko.sdi.annotation.Component;
-import com.fabbroniko.sdi.annotation.Qualifier;
-import com.fabbroniko.settings.SettingsProvider;
 import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.gameobjects.AbstractGameObject;
 import com.fabbroniko.gameobjects.GameObjectFactory;
@@ -18,6 +14,10 @@ import com.fabbroniko.map.TileMap;
 import com.fabbroniko.resource.ImageLoader;
 import com.fabbroniko.resource.dto.LevelDto;
 import com.fabbroniko.scene.factory.SceneContextFactory;
+import com.fabbroniko.scene.mainmenu.MainMenuScene;
+import com.fabbroniko.sdi.annotation.Component;
+import com.fabbroniko.sdi.annotation.Qualifier;
+import com.fabbroniko.settings.SettingsProvider;
 import com.fabbroniko.ui.DrawableResource;
 import com.fabbroniko.ui.InitializableDrawable;
 import com.fabbroniko.ui.background.BackgroundLoader;
@@ -45,7 +45,7 @@ public final class GameScene implements Scene, TypedLessKeyListener {
     private Player player;
 
     private final SceneContextFactory sceneContextFactory;
-    private final MusicPlayer musicPlayer;
+    private final MusicPlayerProvider musicPlayerProvider;
     private final ImageLoader imageLoader;
     private final SettingsProvider settingsProvider;
     private final SceneManager sceneManager;
@@ -59,7 +59,7 @@ public final class GameScene implements Scene, TypedLessKeyListener {
 
     public GameScene(final SceneContextFactory sceneContextFactory,
                      final SettingsProvider settingsProvider,
-                     final MusicPlayer musicPlayer,
+                     final MusicPlayerProvider musicPlayerProvider,
                      @Qualifier("cachedImageLoader") final ImageLoader imageLoader,
                      final SceneManager sceneManager,
                      final TextFactory textFactory,
@@ -70,7 +70,7 @@ public final class GameScene implements Scene, TypedLessKeyListener {
         this.gameObjectFactory = gameObjectFactory;
         this.sceneContextFactory = sceneContextFactory;
         this.settingsProvider = settingsProvider;
-        this.musicPlayer = musicPlayer;
+        this.musicPlayerProvider = musicPlayerProvider;
         this.imageLoader = imageLoader;
         this.sceneManager = sceneManager;
         this.textFactory = textFactory;
@@ -103,7 +103,7 @@ public final class GameScene implements Scene, TypedLessKeyListener {
                 new Vector2D(gameObject.getX(), gameObject.getY())))
         );
 
-        musicPlayer.play("theme", true);
+        musicPlayerProvider.getMusicPlayer().play("theme", true);
     }
 
     private AbstractGameObject createGameObject(final String name, final Vector2D startPosition) {
@@ -190,7 +190,7 @@ public final class GameScene implements Scene, TypedLessKeyListener {
 
     @Override
     public void close() {
-        musicPlayer.stop();
+        musicPlayerProvider.getMusicPlayer().stop();
     }
 
     @Override

@@ -2,28 +2,21 @@ package com.fabbroniko.audio;
 
 import com.fabbroniko.sdi.annotation.Component;
 import com.fabbroniko.sdi.annotation.Qualifier;
-import com.fabbroniko.settings.SettingsProvider;
 
 import javax.sound.sampled.Clip;
 
 @Component
-public final class MusicPlayerImpl implements MusicPlayer {
+public final class DefaultMusicPlayer implements MusicPlayer {
 
 	private Clip music;
 	private final AudioLoader audioLoader;
-	private final SettingsProvider settingsProvider;
 
-	public MusicPlayerImpl(final SettingsProvider settingsProvider, @Qualifier("cachedAudioLoader") final AudioLoader audioLoader) {
-		this.settingsProvider = settingsProvider;
+	public DefaultMusicPlayer(@Qualifier("cachedAudioLoader") final AudioLoader audioLoader) {
 		this.audioLoader = audioLoader;
 	}
 
 	@Override
 	public void play(final String name, final boolean loop) {
-		if (!settingsProvider.getSettings().isMusicActive()) {
-			return;
-		}
-
 		stop();
 
 		music = audioLoader.loadClipByName(name);
