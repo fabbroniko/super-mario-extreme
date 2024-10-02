@@ -74,7 +74,7 @@ public final class LostScene implements Scene, ActionLessKeyListener {
 	@Override
 	public void update() {
 		if((System.currentTimeMillis() - initTime) > SCENE_DURATION_MILLISECONDS) {
-			sceneManager.openGameScene();
+			sceneManager.openScene(GameScene.class);
 		}
 	}
 

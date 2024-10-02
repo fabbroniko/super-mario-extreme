@@ -4,6 +4,7 @@ import com.fabbroniko.audio.MusicPlayer;
 import com.fabbroniko.collision.CollisionManager;
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.environment.LevelProvider;
+import com.fabbroniko.scene.mainmenu.MainMenuScene;
 import com.fabbroniko.sdi.annotation.Component;
 import com.fabbroniko.sdi.annotation.Qualifier;
 import com.fabbroniko.settings.SettingsProvider;
@@ -126,13 +127,13 @@ public final class GameScene implements Scene, TypedLessKeyListener {
     }
 
     public void levelFinished() {
-       sceneManager.openWinScene();
+       sceneManager.openScene(WinScene.class);
     }
 
     @Override
     public void update() {
         if(player.isDead()) {
-            sceneManager.openLostScene();
+            sceneManager.openScene(LostScene.class);
         }
 
         final List<AbstractGameObject> deadGameObjects = new ArrayList<>();
@@ -206,7 +207,7 @@ public final class GameScene implements Scene, TypedLessKeyListener {
         }
 
         if (VK_ESCAPE == event.getKeyCode()) {
-            sceneManager.openMainMenu();
+            sceneManager.openScene(MainMenuScene.class);
         }
     }
 }

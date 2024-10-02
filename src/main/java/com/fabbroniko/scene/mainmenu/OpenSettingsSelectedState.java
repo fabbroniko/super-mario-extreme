@@ -1,6 +1,7 @@
 package com.fabbroniko.scene.mainmenu;
 
 import com.fabbroniko.scene.SceneManager;
+import com.fabbroniko.scene.SettingsMenuScene;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class OpenSettingsSelectedState implements MainMenuState {
 
     @Override
     public void onConfirm() {
-        sceneManager.openSettings();
+        sceneManager.openScene(SettingsMenuScene.class);
     }
 
     @Override

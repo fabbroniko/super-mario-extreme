@@ -4,6 +4,7 @@ import com.fabbroniko.audio.MusicPlayer;
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.input.ActionLessKeyListener;
 import com.fabbroniko.scene.factory.SceneContextFactory;
+import com.fabbroniko.scene.mainmenu.MainMenuScene;
 import com.fabbroniko.sdi.annotation.Component;
 import com.fabbroniko.ui.DrawableResource;
 import com.fabbroniko.ui.InitializableDrawable;
@@ -66,7 +67,7 @@ public final class WinScene implements Scene, ActionLessKeyListener {
 	@Override
 	public void update() {
 		if((System.currentTimeMillis() - initTime) > SCENE_DURATION_MILLISECONDS) {
-			sceneManager.openMainMenu();
+			sceneManager.openScene(MainMenuScene.class);
 		}
 	}
 
