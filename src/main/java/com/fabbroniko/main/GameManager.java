@@ -3,70 +3,49 @@ package com.fabbroniko.main;
 import com.fabbroniko.scene.NullScene;
 import com.fabbroniko.scene.Scene;
 import com.fabbroniko.scene.SceneManager;
-import com.fabbroniko.scene.factory.SceneFactory;
+import com.fabbroniko.scene.mainmenu.MainMenuScene;
 import com.fabbroniko.sdi.annotation.Component;
+import com.fabbroniko.sdi.context.ApplicationContext;
 import lombok.SneakyThrows;
 
 @Component
 public final class GameManager implements SceneManager, CycleListener {
 
-    private final SceneFactory sceneFactory;
+    private final ApplicationContext applicationContext;
     private final GameRenderer gameRenderer;
 	private final GameCycle gameCycle;
 	private final CustomKeyListener customKeyListener;
 	private Scene currentState = new NullScene();
 
-	public GameManager(final GameRenderer gameRenderer,
-                       final SceneFactory sceneFactory,
+	public GameManager(final ApplicationContext applicationContext,
+					   final GameRenderer gameRenderer,
                        final GameCycle gameCycle,
 					   final CustomKeyListener customKeyListener) {
 
-		this.sceneFactory = sceneFactory;
+		this.applicationContext = applicationContext;
         this.gameRenderer = gameRenderer;
         this.gameCycle = gameCycle;
         this.customKeyListener = customKeyListener;
     }
-
-	public void openMainMenu() {
-		openScene(sceneFactory.createMainMenuScene(this));
-	}
-
-	public void openSettings() {
-		openScene(sceneFactory.createSettingsScene(this));
-	}
-
-	@Override
-	public void openWinScene() {
-		openScene(sceneFactory.createWinScene(this));
-	}
-
-	@Override
-	public void openLostScene() {
-		openScene(sceneFactory.createLostScene(this));
-	}
-
-	@Override
-	public void openGameScene() {
-		openScene(sceneFactory.createGameScene(this));
-	}
 
 	@Override
 	public void quit() {
 		gameCycle.stop();
 	}
 
+	@Override
 	@SneakyThrows
-	private synchronized void openScene(final Scene scene) {
+	public synchronized void openScene(final Class<? extends Scene> scene) {
 		this.currentState.close();
-		this.currentState = scene;
-		this.customKeyListener.setKeyListener(scene);
+		this.currentState = applicationContext.getInstance(scene);
+		this.customKeyListener.setKeyListener(currentState);
 		this.currentState.init();
 	}
 
 	public void start() {
 		gameRenderer.init();
 
-		openMainMenu();
+		openScene(MainMenuScene.class);
 
 		gameCycle.run(this);
 	}
