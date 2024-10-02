@@ -21,11 +21,30 @@ repositories {
     }
 }
 
-application {
-    mainClass = 'com.fabbroniko.Application'
+sourceSets {
+    integrationTest {
+        compileClasspath += main.output
+        runtimeClasspath += main.output
+    }
 }
 
+configurations {
+    integrationTestImplementation.extendsFrom testImplementation
+}
+
+tasks.register('integrationTest', Test) {
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    shouldRunAfter test
+}
+
+check.dependsOn integrationTest
+
 test {
+    useJUnitPlatform()
+}
+
+integrationTest {
     useJUnitPlatform()
 }
 
@@ -39,6 +58,10 @@ jar {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
+application {
+    mainClass = 'com.fabbroniko.Application'
 }
 
 dependencies {

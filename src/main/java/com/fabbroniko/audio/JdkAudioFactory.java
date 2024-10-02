@@ -10,7 +10,7 @@ import java.io.BufferedInputStream;
 import java.io.InputStream;
 
 @Component
-public class AudioFactoryImpl implements AudioFactory {
+public class JdkAudioFactory implements AudioFactory {
 
     @SneakyThrows
     @Override
