@@ -1,10 +1,17 @@
 package com.fabbroniko.error;
 
 import com.fabbroniko.resource.ResourceType;
+import com.fabbroniko.resource.dto.ResourceDto;
 
 public class UndefinedResourceException extends RuntimeException {
 
-    public UndefinedResourceException(final String name, final ResourceType resourceType) {
-        super("The %s resource '%s' was not defined in the resource index file.".formatted(resourceType, name));
+    private static final String ERROR_MESSAGE = """
+        Resource '%s' of type '%s' was not defined in the resource index file.
+        The following resources are defined:
+        
+        %s
+        """;
+    public UndefinedResourceException(final String name, final ResourceType resourceType, final ResourceDto resources) {
+        super(ERROR_MESSAGE.formatted(name, resourceType, resources));
     }
 }

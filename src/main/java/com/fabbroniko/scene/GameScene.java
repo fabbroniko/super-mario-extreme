@@ -11,12 +11,10 @@ import com.fabbroniko.gameobjects.Player;
 import com.fabbroniko.input.TypedLessKeyListener;
 import com.fabbroniko.main.Time;
 import com.fabbroniko.map.TileMap;
-import com.fabbroniko.resource.ImageLoader;
 import com.fabbroniko.resource.dto.LevelDto;
 import com.fabbroniko.scene.factory.SceneContextFactory;
 import com.fabbroniko.scene.mainmenu.MainMenuScene;
 import com.fabbroniko.sdi.annotation.Component;
-import com.fabbroniko.sdi.annotation.Qualifier;
 import com.fabbroniko.settings.SettingsProvider;
 import com.fabbroniko.ui.DrawableResource;
 import com.fabbroniko.ui.InitializableDrawable;
@@ -37,21 +35,20 @@ public final class GameScene implements Scene, TypedLessKeyListener {
 
     private static final int FPS_OFFSET = 15;
 
-    private final LevelProvider levelProvider;
     private DrawableResource background;
-    private TileMap tileMap;
     private List<AbstractGameObject> gameObjects;
-    private CollisionManager collisionManager;
     private Player player;
 
     private final SceneContextFactory sceneContextFactory;
     private final MusicPlayerProvider musicPlayerProvider;
-    private final ImageLoader imageLoader;
     private final SettingsProvider settingsProvider;
     private final SceneManager sceneManager;
     private final GameObjectFactory gameObjectFactory;
     private final TextFactory textFactory;
     private final BackgroundLoader backgroundLoader;
+    private final LevelProvider levelProvider;
+    private final TileMap tileMap;
+    private final CollisionManager collisionManager;
 
     private BufferedImage canvas;
     private Graphics2D graphics;
@@ -60,22 +57,24 @@ public final class GameScene implements Scene, TypedLessKeyListener {
     public GameScene(final SceneContextFactory sceneContextFactory,
                      final SettingsProvider settingsProvider,
                      final MusicPlayerProvider musicPlayerProvider,
-                     @Qualifier("cachedImageLoader") final ImageLoader imageLoader,
                      final SceneManager sceneManager,
                      final TextFactory textFactory,
                      final BackgroundLoader backgroundLoader,
                      final GameObjectFactory gameObjectFactory,
-                     final LevelProvider levelProvider) {
+                     final LevelProvider levelProvider,
+                     final TileMap tileMap,
+                     final CollisionManager collisionManager) {
 
         this.gameObjectFactory = gameObjectFactory;
         this.sceneContextFactory = sceneContextFactory;
         this.settingsProvider = settingsProvider;
         this.musicPlayerProvider = musicPlayerProvider;
-        this.imageLoader = imageLoader;
         this.sceneManager = sceneManager;
         this.textFactory = textFactory;
         this.backgroundLoader = backgroundLoader;
         this.levelProvider = levelProvider;
+        this.tileMap = tileMap;
+        this.collisionManager = collisionManager;
     }
 
     @Override
@@ -90,10 +89,7 @@ public final class GameScene implements Scene, TypedLessKeyListener {
         background = initializableBackground.getDrawableResource();
 
         final LevelDto level = levelProvider.getLevel();
-        tileMap = new TileMap(imageLoader, level.getMap(), canvasDimension);
         gameObjects = new ArrayList<>();
-
-        this.collisionManager = new CollisionManager(tileMap, gameObjects);
 
         player = gameObjectFactory.createPlayer(canvasDimension, this, level.getStartPosition(), tileMap);
         this.addNewObject(player);
@@ -119,7 +115,7 @@ public final class GameScene implements Scene, TypedLessKeyListener {
     }
 
     public void checkForCollisions(final AbstractGameObject obj, final Vector2D offsetPosition) {
-        this.collisionManager.checkForCollisions(obj, offsetPosition);
+        this.collisionManager.checkForCollisions(obj, offsetPosition, gameObjects);
     }
 
     private void addNewObject(final AbstractGameObject gameObject) {
