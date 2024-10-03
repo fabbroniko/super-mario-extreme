@@ -3,6 +3,7 @@ package com.fabbroniko.audio;
 import com.fabbroniko.error.ResourceLoadingException;
 import com.fabbroniko.resource.ResourceLoader;
 import com.fabbroniko.resource.ResourceLocator;
+import com.fabbroniko.ul.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,6 +40,8 @@ class DiskAudioLoaderTest {
     @Mock
     private InputStream inputStream;
     @Mock
+    private Logger logger;
+    @Mock
     private AudioInputStream audioInputStream;
     @InjectMocks
     private DiskAudioLoader diskAudioLoader;
@@ -56,6 +59,13 @@ class DiskAudioLoaderTest {
         diskAudioLoader.loadClipByName(RESOURCE_NAME);
 
         verify(resourceLocator).findByName(RESOURCE_NAME);
+    }
+
+    @Test
+    void shouldLogLoading() {
+        diskAudioLoader.loadClipByName(RESOURCE_NAME);
+
+        verify(logger).trace("loading_clip", RESOURCE_NAME, RESOURCE_PATH);
     }
 
     @Test
@@ -87,6 +97,13 @@ class DiskAudioLoaderTest {
     }
 
     @Test
+    void shouldLogLoaded() {
+        diskAudioLoader.loadClipByName(RESOURCE_NAME);
+
+        verify(logger).info("loaded_clip", RESOURCE_NAME);
+    }
+
+    @Test
     void shouldReturnClip() {
         assertThat(diskAudioLoader.loadClipByName(RESOURCE_NAME))
                 .isEqualTo(clip);
@@ -111,5 +128,16 @@ class DiskAudioLoaderTest {
         assertThatThrownBy(() -> diskAudioLoader.loadClipByName(RESOURCE_NAME))
                 .isInstanceOf(ResourceLoadingException.class)
                 .hasCause(exception);
+    }
+
+    @Test
+    void shouldLogException() {
+        final Throwable exception = new RuntimeException();
+        when(audioFactory.createAudioInputStream(any())).thenThrow(exception);
+
+        assertThatThrownBy(() -> diskAudioLoader.loadClipByName(RESOURCE_NAME))
+            .isInstanceOf(Throwable.class);
+
+        verify(logger).fatal("clip_loading_exception", exception, RESOURCE_NAME);
     }
 }

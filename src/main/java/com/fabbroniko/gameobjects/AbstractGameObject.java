@@ -1,6 +1,6 @@
 package com.fabbroniko.gameobjects;
 
-import com.fabbroniko.audio.EffectPlayer;
+import com.fabbroniko.audio.EffectPlayerProvider;
 import com.fabbroniko.collision.CollisionDirection;
 import com.fabbroniko.environment.ImmutablePosition;
 import com.fabbroniko.environment.Position;
@@ -30,7 +30,7 @@ public abstract class AbstractGameObject implements DynamicDrawable {
 	protected final TileMap tileMap;
 	protected final GameScene gameScene;
 	protected final ImageLoader imageLoader;
-	protected final EffectPlayer effectPlayer;
+	protected final EffectPlayerProvider effectPlayerProvider;
 
 	protected boolean jumping;
 	protected boolean falling;
@@ -50,13 +50,13 @@ public abstract class AbstractGameObject implements DynamicDrawable {
 	protected AbstractGameObject(final TileMap tileMap,
 								 final GameScene gameScene,
 								 final ImageLoader imageLoader,
-								 final EffectPlayer effectPlayer,
+								 final EffectPlayerProvider effectPlayerProvider,
 								 final Vector2D position,
 								 final Vector2D spriteDimension) {
 		this.tileMap = tileMap;
 		this.gameScene = gameScene;
 		this.imageLoader = imageLoader;
-		this.effectPlayer = effectPlayer;
+		this.effectPlayerProvider = effectPlayerProvider;
 		this.death = false;
 		
 		this.currentPosition = position.clone();

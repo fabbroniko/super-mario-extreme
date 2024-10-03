@@ -1,6 +1,6 @@
 package com.fabbroniko.scene;
 
-import com.fabbroniko.audio.MusicPlayer;
+import com.fabbroniko.audio.MusicPlayerProvider;
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.input.ActionLessKeyListener;
 import com.fabbroniko.scene.factory.SceneContextFactory;
@@ -23,7 +23,7 @@ public final class WinScene implements Scene, ActionLessKeyListener {
 	private static final int SCENE_DURATION_MILLISECONDS = 6000;
 
 	private final SceneContextFactory sceneContextFactory;
-	private final MusicPlayer musicPlayer;
+	private final MusicPlayerProvider musicPlayerProvider;
 	private final SceneManager sceneManager;
 	private final TextFactory textFactory;
 	private final BackgroundLoader backgroundLoader;
@@ -35,13 +35,13 @@ public final class WinScene implements Scene, ActionLessKeyListener {
 	private DrawableResource background;
 
 	public WinScene(final SceneContextFactory sceneContextFactory,
-                    final MusicPlayer musicPlayer,
+                    final MusicPlayerProvider musicPlayerProvider,
                     final SceneManager sceneManager,
 					final TextFactory textFactory,
 					final BackgroundLoader backgroundLoader) {
 
         this.sceneContextFactory = sceneContextFactory;
-        this.musicPlayer = musicPlayer;
+        this.musicPlayerProvider = musicPlayerProvider;
 		this.sceneManager = sceneManager;
         this.textFactory = textFactory;
 		this.backgroundLoader = backgroundLoader;
@@ -49,7 +49,7 @@ public final class WinScene implements Scene, ActionLessKeyListener {
 
 	@Override
 	public void init() {
-		musicPlayer.play("victory", false);
+		musicPlayerProvider.getMusicPlayer().play("victory", false);
 		initTime = System.currentTimeMillis();
 
 		final SceneContext sceneContext = sceneContextFactory.create();
@@ -91,6 +91,6 @@ public final class WinScene implements Scene, ActionLessKeyListener {
 
 	@Override
 	public void close() {
-		musicPlayer.stop();
+		musicPlayerProvider.getMusicPlayer().stop();
 	}
 }
