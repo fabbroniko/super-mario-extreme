@@ -2,10 +2,13 @@ package com.fabbroniko.map;
 
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.environment.ImmutablePosition;
+import com.fabbroniko.environment.LevelProvider;
 import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.resource.ImageLoader;
 import com.fabbroniko.resource.dto.MapDto;
 import com.fabbroniko.resource.dto.TileDto;
+import com.fabbroniko.sdi.annotation.Component;
+import com.fabbroniko.sdi.annotation.Qualifier;
 import com.fabbroniko.ui.Drawable;
 import com.fabbroniko.ui.DrawableResource;
 import com.fabbroniko.ui.DrawableResourceImpl;
@@ -16,6 +19,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class TileMap implements Drawable {
 
 	private static final int NO_TILE = -1;
@@ -32,12 +36,14 @@ public class TileMap implements Drawable {
 
 	private BufferedImage cachedTileMap;
 
-	public TileMap(final ImageLoader imageLoader, final MapDto map, final Dimension2D canvasSize) {
+	public TileMap(@Qualifier("cachedImageLoader") final ImageLoader imageLoader,
+				   final LevelProvider levelProvider,
+				   final Dimension2D canvasSize) {
 		this.tileSize = new Vector2D(120, 120);
 		this.canvasSize = canvasSize;
 
 		loadTiles(imageLoader.findTileMap());
-		loadMap(map, canvasSize);
+		loadMap(levelProvider.getLevel().getMap(), canvasSize);
 	}
 
 	private void loadTiles(final BufferedImage tileSet) {
@@ -157,7 +163,6 @@ public class TileMap implements Drawable {
 		return tiles.get(tileId).type();
 	}
 
-	// Add cache - if the position is not moved then use previously built tilemap
 	@Override
 	public DrawableResource getDrawableResource() {
 		if(cachedTileMap != null) {

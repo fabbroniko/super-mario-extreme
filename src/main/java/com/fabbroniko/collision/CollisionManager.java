@@ -6,18 +6,18 @@ import java.util.List;
 import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.gameobjects.AbstractGameObject;
 import com.fabbroniko.map.TileMap;
+import com.fabbroniko.sdi.annotation.Component;
 
+@Component
 public class CollisionManager {
 
 	private final TileMap tileMap;
-	private final List<AbstractGameObject> objects;
 	
-	public CollisionManager(final TileMap tileMap, final List<AbstractGameObject> objects) {
+	public CollisionManager(final TileMap tileMap) {
 		this.tileMap = tileMap;
-		this.objects = objects;
 	}
 	
-	public void checkForCollisions(final AbstractGameObject obj, final Vector2D tmpOffsetPosition) {
+	public void checkForCollisions(final AbstractGameObject obj, final Vector2D tmpOffsetPosition, final List<AbstractGameObject> objects) {
 		final Vector2D offsetPosition = tmpOffsetPosition.clone();
 		final Vector2D currentPosition = obj.getPosition().clone();
 		final Vector2D objectDimension = obj.getDimension();
@@ -37,7 +37,7 @@ public class CollisionManager {
 			obj.notifyDeath();
 		}
 
-		for(final AbstractGameObject i:this.objects) {
+		for(final AbstractGameObject i : objects) {
 			if(!i.equals(obj)) {
 				wantedPosition.setBounds(currentPosition.getRoundedX(), currentPosition.getRoundedY() + offsetPosition.getRoundedY(), objectDimension.getRoundedX(), objectDimension.getRoundedY());
 				if(i.getRectangle().intersects(wantedPosition)){

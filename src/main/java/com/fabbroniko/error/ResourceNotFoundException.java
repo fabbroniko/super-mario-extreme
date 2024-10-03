@@ -3,6 +3,6 @@ package com.fabbroniko.error;
 public class ResourceNotFoundException extends RuntimeException {
 
 	public ResourceNotFoundException(final String resourcePath) {
-		super("Unable to find file at " + resourcePath);
+		super("File located %s was not found.".formatted(resourcePath));
 	}
 }

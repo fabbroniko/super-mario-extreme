@@ -1,7 +1,6 @@
 package com.fabbroniko.environment;
 
 import com.fabbroniko.sdi.annotation.Component;
-import com.fabbroniko.ul.Logger;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

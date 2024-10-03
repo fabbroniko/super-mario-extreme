@@ -10,11 +10,11 @@ public class DefaultResourceLoader implements ResourceLoader {
 
     @Override
     public InputStream load(final String path) {
-        final InputStream audioClipStream = getClass().getResourceAsStream(path);
-        if(audioClipStream == null) {
+        final InputStream inputStream = getClass().getResourceAsStream(path);
+        if(inputStream == null) {
             throw new ResourceNotFoundException(path);
         }
 
-        return audioClipStream;
+        return inputStream;
     }
 }
