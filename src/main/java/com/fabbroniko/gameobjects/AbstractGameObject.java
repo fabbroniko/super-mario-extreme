@@ -114,11 +114,6 @@ public abstract class AbstractGameObject implements GameObject {
 	}
 
 	@Override
-	public Vector2D getSpriteDimension() {
-		return spriteDimension;
-	}
-
-	@Override
 	public void update() {
 		double xOffset = 0;
 		double yOffset = 0;

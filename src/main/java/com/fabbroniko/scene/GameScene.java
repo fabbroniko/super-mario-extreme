@@ -160,9 +160,8 @@ public final class GameScene implements Scene, TypedLessKeyListener {
         for (final GameObject i:gameObjects) {
             if (!i.isDead()) {
                 final DrawableResource res = i.getDrawableResource();
-                final Vector2D spriteDimension = i.getSpriteDimension();
 
-                graphics.drawImage(res.image(), res.position().getRoundedX(), res.position().getRoundedY(), spriteDimension.getRoundedX(), spriteDimension.getRoundedY(), null);
+                graphics.drawImage(res.image(), res.position().getRoundedX(), res.position().getRoundedY(), null);
             }
         }
 

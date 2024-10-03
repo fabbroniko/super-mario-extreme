@@ -21,6 +21,4 @@ public interface GameObject extends DynamicDrawable {
     Rectangle getRectangle();
 
     boolean isDead();
-
-    Vector2D getSpriteDimension();
 }
