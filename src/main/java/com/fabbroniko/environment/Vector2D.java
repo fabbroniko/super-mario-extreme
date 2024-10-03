@@ -15,10 +15,12 @@ public class Vector2D implements Cloneable, Position {
 		this(0, 0);
 	}
 
+	@Override
 	public void setVector2D(final Vector2D model) {
 		this.setVector2D(model.getX(), model.getY());
 	}
 
+	@Override
 	public void setVector2D(final double x, final double y) {
 		this.x = x;
 		this.y = y;

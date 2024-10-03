@@ -16,6 +16,26 @@ public class ImmutablePosition implements Position {
     }
 
     @Override
+    public void setVector2D(Vector2D model) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setVector2D(double x, double y) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public double getX() {
+        return x;
+    }
+
+    @Override
+    public double getY() {
+        return y;
+    }
+
+    @Override
     public int getRoundedX() {
         return x;
     }

@@ -1,11 +1,13 @@
 package com.fabbroniko.collision;
 
+import com.fabbroniko.environment.Dimension2D;
+import com.fabbroniko.environment.Position;
 import com.fabbroniko.environment.Vector2D;
+import com.fabbroniko.gameobjects.BoundingBox;
 import com.fabbroniko.gameobjects.GameObject;
 import com.fabbroniko.map.TileMap;
 import com.fabbroniko.sdi.annotation.Component;
 
-import java.awt.Rectangle;
 import java.util.List;
 
 @Component
@@ -19,17 +21,17 @@ public class CollisionManager {
 	
 	public void checkForCollisions(final GameObject gameObject, final Vector2D tmpOffsetPosition, final List<GameObject> objects) {
 		final Vector2D offsetPosition = tmpOffsetPosition.clone();
-		final Vector2D currentPosition = gameObject.getPosition().clone();
-		final Vector2D objectDimension = gameObject.getDimension();
+		final Position currentPosition = gameObject.getBoundingBox().position();
+		final Dimension2D objectDimension = gameObject.getBoundingBox().dimension();
 
-		final Rectangle wantedPosition = new Rectangle();
+		final BoundingBox wantedPosition = new BoundingBox(new Vector2D(), objectDimension);
 		try{
-			wantedPosition.setBounds(currentPosition.getRoundedX(), currentPosition.getRoundedY() + offsetPosition.getRoundedY(), objectDimension.getRoundedX(), objectDimension.getRoundedY());
+			wantedPosition.position().setVector2D(currentPosition.getRoundedX(), currentPosition.getRoundedY() + offsetPosition.getRoundedY());
 			if(this.tileMap.checkForMapCollision(wantedPosition)){
 				gameObject.handleMapCollisions(offsetPosition.getY() > 0 ? CollisionDirection.BOTTOM_COLLISION : CollisionDirection.TOP_COLLISION);
 			}
 
-			wantedPosition.setBounds(currentPosition.getRoundedX() + offsetPosition.getRoundedX(), currentPosition.getRoundedY(), objectDimension.getRoundedX(), objectDimension.getRoundedY());
+			wantedPosition.position().setVector2D(currentPosition.getRoundedX() + offsetPosition.getRoundedX(), currentPosition.getRoundedY());
 			if(this.tileMap.checkForMapCollision(wantedPosition)){
 				gameObject.handleMapCollisions(offsetPosition.getX() > 0 ? CollisionDirection.RIGHT_COLLISION : CollisionDirection.LEFT_COLLISION);
 			}
@@ -39,14 +41,14 @@ public class CollisionManager {
 
 		for(final GameObject i : objects) {
 			if(!i.equals(gameObject)) {
-				wantedPosition.setBounds(currentPosition.getRoundedX(), currentPosition.getRoundedY() + offsetPosition.getRoundedY(), objectDimension.getRoundedX(), objectDimension.getRoundedY());
-				if(i.getRectangle().intersects(wantedPosition)){
+				wantedPosition.position().setVector2D(currentPosition.getRoundedX(), currentPosition.getRoundedY() + offsetPosition.getRoundedY());
+				if(i.getBoundingBox().intersects(wantedPosition)){
 					gameObject.handleObjectCollisions(offsetPosition.getY() > 0 ? CollisionDirection.BOTTOM_COLLISION : CollisionDirection.TOP_COLLISION, i);
 					i.handleObjectCollisions(offsetPosition.getY() > 0 ? CollisionDirection.TOP_COLLISION : CollisionDirection.BOTTOM_COLLISION, gameObject);
 				}
 
-				wantedPosition.setBounds(currentPosition.getRoundedX() + offsetPosition.getRoundedX(), currentPosition.getRoundedY(), objectDimension.getRoundedX(), objectDimension.getRoundedY());
-				if(i.getRectangle().intersects(wantedPosition)) {
+				wantedPosition.position().setVector2D(currentPosition.getRoundedX() + offsetPosition.getRoundedX(), currentPosition.getRoundedY());
+				if(i.getBoundingBox().intersects(wantedPosition)) {
 					gameObject.handleObjectCollisions(offsetPosition.getX() > 0 ? CollisionDirection.RIGHT_COLLISION : CollisionDirection.LEFT_COLLISION, i);
 					i.handleObjectCollisions(offsetPosition.getX() > 0 ? CollisionDirection.LEFT_COLLISION : CollisionDirection.RIGHT_COLLISION, gameObject);
 				}

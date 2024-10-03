@@ -2,6 +2,7 @@ package com.fabbroniko.gameobjects;
 
 import com.fabbroniko.audio.EffectPlayerProvider;
 import com.fabbroniko.collision.CollisionDirection;
+import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.environment.ImmutablePosition;
 import com.fabbroniko.environment.Position;
 import com.fabbroniko.environment.Vector2D;
@@ -12,15 +13,13 @@ import com.fabbroniko.scene.GameScene;
 import com.fabbroniko.ui.DrawableResource;
 import com.fabbroniko.ui.DrawableResourceImpl;
 
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractGameObject implements GameObject {
 
-	protected Vector2D currentPosition;
+	protected BoundingBox boundingBox;
 
-	protected Vector2D spriteDimension;
 	protected Vector2D mapPosition;
 	protected Animation currentAnimation;
 	protected List<Animation> registeredAnimations;
@@ -49,15 +48,14 @@ public abstract class AbstractGameObject implements GameObject {
 								 final ImageLoader imageLoader,
 								 final EffectPlayerProvider effectPlayerProvider,
 								 final Vector2D position,
-								 final Vector2D spriteDimension) {
+								 final Dimension2D dimension) {
 		this.tileMap = tileMap;
 		this.gameScene = gameScene;
 		this.imageLoader = imageLoader;
 		this.effectPlayerProvider = effectPlayerProvider;
 		this.death = false;
 		
-		this.currentPosition = position.clone();
-		this.spriteDimension = spriteDimension;
+		this.boundingBox = new BoundingBox(position, dimension);
 		this.registeredAnimations = new ArrayList<>();
 
 		offset = new Vector2D();
@@ -89,11 +87,6 @@ public abstract class AbstractGameObject implements GameObject {
 		this.currentAnimation = animation;
 	}
 
-	@Override
-	public final Rectangle getRectangle() {
-		return new Rectangle(currentPosition.getRoundedX(), currentPosition.getRoundedY(), spriteDimension.getRoundedX(), spriteDimension.getRoundedY());
-	}
-
 	public boolean isDead() {
 		return death;
 	}
@@ -104,13 +97,8 @@ public abstract class AbstractGameObject implements GameObject {
 	}
 
 	@Override
-	public Vector2D getPosition() {
-		return currentPosition.clone();
-	}
-
-	@Override
-	public Vector2D getDimension() {
-		return spriteDimension;
+	public BoundingBox getBoundingBox() {
+		return boundingBox;
 	}
 
 	@Override
@@ -136,13 +124,13 @@ public abstract class AbstractGameObject implements GameObject {
 			offset.setX(xOffset);
 			offset.setY(yOffset);
 			gameScene.checkForCollisions(this, offset);
-			currentPosition.setVector2D(currentPosition.getX() + offset.getX(), currentPosition.getY() + offset.getY());
+			boundingBox.position().setVector2D(boundingBox.position().getX() + offset.getX(), boundingBox.position().getY() + offset.getY());
 		}
 	}
 	
 	@Override
 	public DrawableResource getDrawableResource() {
-		final Position position = new ImmutablePosition(currentPosition.getX() - mapPosition.getX(), currentPosition.getY() - mapPosition.getY());
+		final Position position = new ImmutablePosition(boundingBox.position().getRoundedX() - mapPosition.getX(), boundingBox.position().getRoundedY() - mapPosition.getY());
 		if(facingRight) {
 			return new DrawableResourceImpl(currentAnimation.getImage(), position);
 		} else {

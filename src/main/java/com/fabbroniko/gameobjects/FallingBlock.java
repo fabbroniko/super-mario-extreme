@@ -2,6 +2,8 @@ package com.fabbroniko.gameobjects;
 
 import com.fabbroniko.audio.EffectPlayerProvider;
 import com.fabbroniko.collision.CollisionDirection;
+import com.fabbroniko.environment.Dimension2D;
+import com.fabbroniko.environment.ImmutableDimension2D;
 import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.map.TileMap;
 import com.fabbroniko.resource.ImageLoader;
@@ -9,7 +11,7 @@ import com.fabbroniko.scene.GameScene;
 
 public class FallingBlock extends AbstractGameObject {
 
-	private static final Vector2D spriteDimension = new Vector2D(360, 120);
+	private static final Dimension2D spriteDimension = new ImmutableDimension2D(360, 120);
 	private static final String spritePath = "/sprites/falling-block.png";
 
 	public static final String FALLING_BLOCK_IDLE_ANIMATION_NAME = "FALL_BLK_IDLE";

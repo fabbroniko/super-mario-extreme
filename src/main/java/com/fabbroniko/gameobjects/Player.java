@@ -3,6 +3,7 @@ package com.fabbroniko.gameobjects;
 import com.fabbroniko.audio.EffectPlayerProvider;
 import com.fabbroniko.collision.CollisionDirection;
 import com.fabbroniko.environment.Dimension2D;
+import com.fabbroniko.environment.ImmutableDimension2D;
 import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.input.TypedLessKeyListener;
 import com.fabbroniko.map.TileMap;
@@ -20,7 +21,7 @@ import java.awt.event.KeyEvent;
 @Log4j2
 public class Player extends AbstractGameObject implements TypedLessKeyListener {
 
-	private static final Vector2D spriteDimension = new Vector2D(112, 104);
+	private static final Dimension2D spriteDimension = new ImmutableDimension2D(112, 104);
 	private static final String spritePath = "/sprites/mario.png";
 
 	public static final String MARIO_IDLE_ANIMATION_NAME = "MARIO_IDLE";
@@ -94,7 +95,7 @@ public class Player extends AbstractGameObject implements TypedLessKeyListener {
 	@Override
 	public void update() {
 		super.update();
-		tileMap.setPosition(currentPosition.getRoundedX() - (baseWindowSize.width() / 2), currentPosition.getRoundedY() - (baseWindowSize.height() / 2));
+		tileMap.setPosition(boundingBox.position().getRoundedX() - (baseWindowSize.width() / 2), boundingBox.position().getRoundedY() - (baseWindowSize.height() / 2));
 
 		if (animationJump) {
 			setAnimation(jumpAnimation);
