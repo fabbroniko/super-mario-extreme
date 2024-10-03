@@ -11,18 +11,15 @@ import com.fabbroniko.resource.ImageLoader;
 import com.fabbroniko.scene.GameScene;
 import com.fabbroniko.ui.DrawableResource;
 import com.fabbroniko.ui.DrawableResourceImpl;
-import com.fabbroniko.ui.DynamicDrawable;
-import lombok.Getter;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractGameObject implements DynamicDrawable {
+public abstract class AbstractGameObject implements GameObject {
 
 	protected Vector2D currentPosition;
 
-	@Getter
 	protected Vector2D spriteDimension;
 	protected Vector2D mapPosition;
 	protected Animation currentAnimation;
@@ -67,6 +64,7 @@ public abstract class AbstractGameObject implements DynamicDrawable {
 		mapPosition = new Vector2D();
 	}
 
+	@Override
 	public void handleMapCollisions(final CollisionDirection direction) {
 		if (direction.equals(CollisionDirection.BOTTOM_COLLISION)) {
 			groundHit = true;
@@ -81,7 +79,8 @@ public abstract class AbstractGameObject implements DynamicDrawable {
 		}
 	}
 
-	public void handleObjectCollisions(final CollisionDirection direction, final AbstractGameObject obj) {
+	@Override
+	public void handleObjectCollisions(final CollisionDirection direction, final GameObject gameObject) {
 		handleMapCollisions(direction);
 	}
 	
@@ -90,6 +89,7 @@ public abstract class AbstractGameObject implements DynamicDrawable {
 		this.currentAnimation = animation;
 	}
 
+	@Override
 	public final Rectangle getRectangle() {
 		return new Rectangle(currentPosition.getRoundedX(), currentPosition.getRoundedY(), spriteDimension.getRoundedX(), spriteDimension.getRoundedY());
 	}
@@ -97,16 +97,24 @@ public abstract class AbstractGameObject implements DynamicDrawable {
 	public boolean isDead() {
 		return death;
 	}
-	
+
+	@Override
 	public void notifyDeath() {
 		this.death = true;
 	}
 
+	@Override
 	public Vector2D getPosition() {
 		return currentPosition.clone();
 	}
 
+	@Override
 	public Vector2D getDimension() {
+		return spriteDimension;
+	}
+
+	@Override
+	public Vector2D getSpriteDimension() {
 		return spriteDimension;
 	}
 

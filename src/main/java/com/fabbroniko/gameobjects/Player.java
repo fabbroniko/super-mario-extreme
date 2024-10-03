@@ -115,18 +115,18 @@ public class Player extends AbstractGameObject implements TypedLessKeyListener {
 	}
 	 
 	@Override
-	public void handleObjectCollisions(final CollisionDirection direction, final AbstractGameObject obj) {
-		if (!(obj instanceof InvisibleBlock) || (obj.currentAnimation.getName().equals(InvisibleBlock.INVISIBLE_BLOCK_VISIBLE_ANIMATION_NAME)) || (direction.equals(CollisionDirection.TOP_COLLISION))) {
-			super.handleObjectCollisions(direction, obj);
+	public void handleObjectCollisions(final CollisionDirection direction, final GameObject gameObject) {
+		if (!(gameObject instanceof InvisibleBlock) || (direction.equals(CollisionDirection.TOP_COLLISION))) {
+			super.handleObjectCollisions(direction, gameObject);
 		}
 		
-		if (obj instanceof Enemy) {
+		if (gameObject instanceof Enemy) {
 			if (direction.equals(CollisionDirection.BOTTOM_COLLISION)) {
 				jumping = true;
 			} else {
 				death = true;
 			}
-		} else if (obj instanceof Castle) {
+		} else if (gameObject instanceof Castle) {
 			this.gameScene.levelFinished();
 		} else {
 			if (direction.equals(CollisionDirection.BOTTOM_COLLISION)) {

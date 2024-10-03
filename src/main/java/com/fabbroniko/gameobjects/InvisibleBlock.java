@@ -42,9 +42,9 @@ public class InvisibleBlock extends AbstractGameObject {
 	}
 	
 	@Override
-	public void handleObjectCollisions(final CollisionDirection direction, final AbstractGameObject obj)
+	public void handleObjectCollisions(final CollisionDirection direction, final GameObject collidedGameObject)
 	{
-		if (obj instanceof Player && direction.equals(CollisionDirection.BOTTOM_COLLISION)) {
+		if (collidedGameObject instanceof Player && direction.equals(CollisionDirection.BOTTOM_COLLISION)) {
 			this.setAnimation(visibleAnimation);
 			effectPlayerProvider.getEffectPlayer().play("hit");
 		}

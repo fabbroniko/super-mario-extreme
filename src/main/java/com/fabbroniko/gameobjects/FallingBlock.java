@@ -31,10 +31,10 @@ public class FallingBlock extends AbstractGameObject {
 	}
 	
 	@Override
-	public void handleObjectCollisions(final CollisionDirection direction, final AbstractGameObject obj) {
-		super.handleObjectCollisions(direction, obj);
+	public void handleObjectCollisions(final CollisionDirection direction, final GameObject collidedGameObject) {
+		super.handleObjectCollisions(direction, collidedGameObject);
 		
-		if (obj instanceof Player && direction.equals(CollisionDirection.TOP_COLLISION)) {
+		if (collidedGameObject instanceof Player && direction.equals(CollisionDirection.TOP_COLLISION)) {
 			falling = true;
 		}
 	}

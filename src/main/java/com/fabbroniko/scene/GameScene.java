@@ -6,6 +6,7 @@ import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.environment.LevelProvider;
 import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.gameobjects.AbstractGameObject;
+import com.fabbroniko.gameobjects.GameObject;
 import com.fabbroniko.gameobjects.GameObjectFactory;
 import com.fabbroniko.gameobjects.Player;
 import com.fabbroniko.input.TypedLessKeyListener;
@@ -36,7 +37,7 @@ public final class GameScene implements Scene, TypedLessKeyListener {
     private static final int FPS_OFFSET = 15;
 
     private DrawableResource background;
-    private List<AbstractGameObject> gameObjects;
+    private List<GameObject> gameObjects;
     private Player player;
 
     private final SceneContextFactory sceneContextFactory;
@@ -114,8 +115,8 @@ public final class GameScene implements Scene, TypedLessKeyListener {
         };
     }
 
-    public void checkForCollisions(final AbstractGameObject obj, final Vector2D offsetPosition) {
-        this.collisionManager.checkForCollisions(obj, offsetPosition, gameObjects);
+    public void checkForCollisions(final GameObject gameObject, final Vector2D offsetPosition) {
+        this.collisionManager.checkForCollisions(gameObject, offsetPosition, gameObjects);
     }
 
     private void addNewObject(final AbstractGameObject gameObject) {
@@ -132,15 +133,15 @@ public final class GameScene implements Scene, TypedLessKeyListener {
             sceneManager.openScene(LostScene.class);
         }
 
-        final List<AbstractGameObject> deadGameObjects = new ArrayList<>();
+        final List<GameObject> deadGameObjects = new ArrayList<>();
 
-        for(final AbstractGameObject go : gameObjects) {
+        for(final GameObject go : gameObjects) {
             go.update();
             if(go.isDead())
                 deadGameObjects.add(go);
         }
 
-        for(final AbstractGameObject go : deadGameObjects) {
+        for(final GameObject go : deadGameObjects) {
             gameObjects.remove(go);
         }
     }
@@ -156,7 +157,7 @@ public final class GameScene implements Scene, TypedLessKeyListener {
                 null
         );
 
-        for (final AbstractGameObject i:gameObjects) {
+        for (final GameObject i:gameObjects) {
             if (!i.isDead()) {
                 final DrawableResource res = i.getDrawableResource();
                 final Vector2D spriteDimension = i.getSpriteDimension();
