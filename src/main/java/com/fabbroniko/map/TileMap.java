@@ -4,6 +4,7 @@ import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.environment.ImmutablePosition;
 import com.fabbroniko.environment.LevelProvider;
 import com.fabbroniko.environment.Vector2D;
+import com.fabbroniko.gameobjects.BoundingBox;
 import com.fabbroniko.resource.ImageLoader;
 import com.fabbroniko.resource.dto.MapDto;
 import com.fabbroniko.resource.dto.TileDto;
@@ -14,7 +15,6 @@ import com.fabbroniko.ui.DrawableResource;
 import com.fabbroniko.ui.DrawableResourceImpl;
 
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,11 +76,11 @@ public class TileMap implements Drawable {
 		}
 	}
 
-	public boolean checkForMapCollision(final Rectangle rect) throws ArrayIndexOutOfBoundsException{
-		double startingX = rect.getLocation().getX();
-		double startingY = rect.getLocation().getY();
-		int width = rect.width;
-		int height = rect.height;
+	public boolean checkForMapCollision(final BoundingBox boundingBox) throws ArrayIndexOutOfBoundsException{
+		double startingX = boundingBox.position().getX();
+		double startingY = boundingBox.position().getY();
+		int width = boundingBox.dimension().width();
+		int height = boundingBox.dimension().height();
 
 		boolean outOfBounds = true;
 		// Checking the top-left corner

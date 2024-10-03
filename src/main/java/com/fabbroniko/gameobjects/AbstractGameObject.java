@@ -2,6 +2,7 @@ package com.fabbroniko.gameobjects;
 
 import com.fabbroniko.audio.EffectPlayerProvider;
 import com.fabbroniko.collision.CollisionDirection;
+import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.environment.ImmutablePosition;
 import com.fabbroniko.environment.Position;
 import com.fabbroniko.environment.Vector2D;
@@ -11,19 +12,14 @@ import com.fabbroniko.resource.ImageLoader;
 import com.fabbroniko.scene.GameScene;
 import com.fabbroniko.ui.DrawableResource;
 import com.fabbroniko.ui.DrawableResourceImpl;
-import com.fabbroniko.ui.DynamicDrawable;
-import lombok.Getter;
 
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractGameObject implements DynamicDrawable {
+public abstract class AbstractGameObject implements GameObject {
 
-	protected Vector2D currentPosition;
+	protected BoundingBox boundingBox;
 
-	@Getter
-	protected Vector2D spriteDimension;
 	protected Vector2D mapPosition;
 	protected Animation currentAnimation;
 	protected List<Animation> registeredAnimations;
@@ -52,21 +48,21 @@ public abstract class AbstractGameObject implements DynamicDrawable {
 								 final ImageLoader imageLoader,
 								 final EffectPlayerProvider effectPlayerProvider,
 								 final Vector2D position,
-								 final Vector2D spriteDimension) {
+								 final Dimension2D dimension) {
 		this.tileMap = tileMap;
 		this.gameScene = gameScene;
 		this.imageLoader = imageLoader;
 		this.effectPlayerProvider = effectPlayerProvider;
 		this.death = false;
 		
-		this.currentPosition = position.clone();
-		this.spriteDimension = spriteDimension;
+		this.boundingBox = new BoundingBox(position, dimension);
 		this.registeredAnimations = new ArrayList<>();
 
 		offset = new Vector2D();
 		mapPosition = new Vector2D();
 	}
 
+	@Override
 	public void handleMapCollisions(final CollisionDirection direction) {
 		if (direction.equals(CollisionDirection.BOTTOM_COLLISION)) {
 			groundHit = true;
@@ -81,7 +77,8 @@ public abstract class AbstractGameObject implements DynamicDrawable {
 		}
 	}
 
-	public void handleObjectCollisions(final CollisionDirection direction, final AbstractGameObject obj) {
+	@Override
+	public void handleObjectCollisions(final CollisionDirection direction, final GameObject gameObject) {
 		handleMapCollisions(direction);
 	}
 	
@@ -90,24 +87,18 @@ public abstract class AbstractGameObject implements DynamicDrawable {
 		this.currentAnimation = animation;
 	}
 
-	public final Rectangle getRectangle() {
-		return new Rectangle(currentPosition.getRoundedX(), currentPosition.getRoundedY(), spriteDimension.getRoundedX(), spriteDimension.getRoundedY());
-	}
-
 	public boolean isDead() {
 		return death;
 	}
-	
+
+	@Override
 	public void notifyDeath() {
 		this.death = true;
 	}
 
-	public Vector2D getPosition() {
-		return currentPosition.clone();
-	}
-
-	public Vector2D getDimension() {
-		return spriteDimension;
+	@Override
+	public BoundingBox getBoundingBox() {
+		return boundingBox;
 	}
 
 	@Override
@@ -133,13 +124,13 @@ public abstract class AbstractGameObject implements DynamicDrawable {
 			offset.setX(xOffset);
 			offset.setY(yOffset);
 			gameScene.checkForCollisions(this, offset);
-			currentPosition.setVector2D(currentPosition.getX() + offset.getX(), currentPosition.getY() + offset.getY());
+			boundingBox.position().setVector2D(boundingBox.position().getX() + offset.getX(), boundingBox.position().getY() + offset.getY());
 		}
 	}
 	
 	@Override
 	public DrawableResource getDrawableResource() {
-		final Position position = new ImmutablePosition(currentPosition.getX() - mapPosition.getX(), currentPosition.getY() - mapPosition.getY());
+		final Position position = new ImmutablePosition(boundingBox.position().getRoundedX() - mapPosition.getX(), boundingBox.position().getRoundedY() - mapPosition.getY());
 		if(facingRight) {
 			return new DrawableResourceImpl(currentAnimation.getImage(), position);
 		} else {

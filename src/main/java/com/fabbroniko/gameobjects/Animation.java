@@ -1,6 +1,6 @@
 package com.fabbroniko.gameobjects;
 
-import com.fabbroniko.environment.Vector2D;
+import com.fabbroniko.environment.Dimension2D;
 import lombok.extern.log4j.Log4j2;
 
 import java.awt.Graphics2D;
@@ -78,7 +78,7 @@ public final class Animation {
 		private long frameDuration = STATIC_ANIMATION;
 		private int nFrames = 1;
 		private int row = 0;
-		private Vector2D spriteDimension = new Vector2D();
+		private Dimension2D spriteDimension;
 		private boolean mirror;
 
 		public Builder() {}
@@ -118,7 +118,7 @@ public final class Animation {
 			return this;
 		}
 
-		public Builder spriteDimension(final Vector2D dimension) {
+		public Builder spriteDimension(final Dimension2D dimension) {
 			this.spriteDimension = dimension;
 			return this;
 		}
@@ -147,13 +147,13 @@ public final class Animation {
 		}
 
 		private List<BufferedImage> generateSprites(){
-			final int yPosition = row * spriteDimension.getRoundedY();
+			final int yPosition = row * spriteDimension.height();
 
 			int xPosition = 0;
 			final List<BufferedImage> sprites = new ArrayList<>();
 			for(int i = 0; i < nFrames; i++){
-				sprites.add(spriteSet.getSubimage(xPosition, yPosition, spriteDimension.getRoundedX(), spriteDimension.getRoundedY()));
-				xPosition += spriteDimension.getRoundedX();
+				sprites.add(spriteSet.getSubimage(xPosition, yPosition, spriteDimension.width(), spriteDimension.height()));
+				xPosition += spriteDimension.width();
 			}
 
 			return sprites;
@@ -163,9 +163,9 @@ public final class Animation {
 			final List<BufferedImage> mirroredFrames = new ArrayList<>();
 
 			frames.forEach(animation -> {
-				final BufferedImage mirroredFrame = new BufferedImage(spriteDimension.getRoundedX(), spriteDimension.getRoundedY(), BufferedImage.TYPE_INT_ARGB);
+				final BufferedImage mirroredFrame = new BufferedImage(spriteDimension.width(), spriteDimension.height(), BufferedImage.TYPE_INT_ARGB);
 				final Graphics2D g = mirroredFrame.createGraphics();
-				g.drawImage(animation, spriteDimension.getRoundedX(), 0, -spriteDimension.getRoundedX(), spriteDimension.getRoundedY(), null);
+				g.drawImage(animation, spriteDimension.width(), 0, -spriteDimension.width(), spriteDimension.height(), null);
 
 				mirroredFrames.add(mirroredFrame);
 			});

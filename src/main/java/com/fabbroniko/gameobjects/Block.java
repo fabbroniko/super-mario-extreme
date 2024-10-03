@@ -2,6 +2,8 @@ package com.fabbroniko.gameobjects;
 
 import com.fabbroniko.audio.EffectPlayerProvider;
 import com.fabbroniko.collision.CollisionDirection;
+import com.fabbroniko.environment.Dimension2D;
+import com.fabbroniko.environment.ImmutableDimension2D;
 import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.map.TileMap;
 import com.fabbroniko.resource.ImageLoader;
@@ -9,7 +11,7 @@ import com.fabbroniko.scene.GameScene;
 
 public class Block extends AbstractGameObject implements AnimationListener {
 
-	private static final Vector2D spriteDimension = new Vector2D(120, 120);
+	private static final Dimension2D spriteDimension = new ImmutableDimension2D(120, 120);
 	private static final String spritePath = "/sprites/block.png";
 
 	public static final String BLOCK_IDLE_ANIMATION_NAME = "BLOCK_IDLE";
@@ -44,10 +46,10 @@ public class Block extends AbstractGameObject implements AnimationListener {
 	}
 	
 	@Override
-	public void handleObjectCollisions(final CollisionDirection direction, final AbstractGameObject obj) {
-		super.handleObjectCollisions(direction, obj);
+	public void handleObjectCollisions(final CollisionDirection direction, final GameObject collidedGameObject) {
+		super.handleObjectCollisions(direction, collidedGameObject);
 		
-		if (obj instanceof Player && direction.equals(CollisionDirection.BOTTOM_COLLISION) && !currentAnimation.getName().equals(BLOCK_BREAKING_ANIMATION_NAME)) {
+		if (collidedGameObject instanceof Player && direction.equals(CollisionDirection.BOTTOM_COLLISION) && !currentAnimation.getName().equals(BLOCK_BREAKING_ANIMATION_NAME)) {
 			this.setAnimation(breakingAnimation);
 			effectPlayerProvider.getEffectPlayer().play("breaking");
 		}
