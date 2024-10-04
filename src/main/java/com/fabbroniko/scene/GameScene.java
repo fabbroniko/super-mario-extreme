@@ -106,8 +106,6 @@ public final class GameScene implements Scene, TypedLessKeyListener {
     private AbstractGameObject createGameObject(final String name, final Vector2D startPosition) {
         return switch (name) {
             case "castle" -> gameObjectFactory.createCastle(this, startPosition, tileMap);
-            case "invisible-block" -> gameObjectFactory.createInvisibleBlock(this, startPosition, tileMap);
-            case "falling-platform" -> gameObjectFactory.createFallingBlock(this, startPosition, tileMap);
             case "ghost-enemy" -> gameObjectFactory.createEnemy(this, startPosition, tileMap);
             case "breakable-block" -> gameObjectFactory.createBlock(this, startPosition, tileMap);
             default ->

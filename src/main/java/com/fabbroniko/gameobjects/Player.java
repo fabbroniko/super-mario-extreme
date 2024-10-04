@@ -117,7 +117,7 @@ public class Player extends AbstractGameObject implements TypedLessKeyListener {
 	 
 	@Override
 	public void handleObjectCollisions(final CollisionDirection direction, final GameObject gameObject) {
-		if (!(gameObject instanceof InvisibleBlock) || (direction.equals(CollisionDirection.TOP_COLLISION))) {
+		if ((direction.equals(CollisionDirection.TOP_COLLISION))) {
 			super.handleObjectCollisions(direction, gameObject);
 		}
 		

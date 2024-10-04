@@ -41,17 +41,7 @@ public class GameObjectFactoryImpl implements GameObjectFactory {
     }
 
     @Override
-    public AbstractGameObject createInvisibleBlock(final GameScene gameScene, final Vector2D position, final TileMap tileMap) {
-        return new InvisibleBlock(tileMap, gameScene, imageLoader, effectPlayerProvider, position);
-    }
-
-    @Override
     public AbstractGameObject createBlock(final GameScene gameScene, final Vector2D position, final TileMap tileMap) {
         return new Block(tileMap, gameScene, imageLoader, effectPlayerProvider, position);
-    }
-
-    @Override
-    public AbstractGameObject createFallingBlock(final GameScene gameScene, final Vector2D position, final TileMap tileMap) {
-        return new FallingBlock(tileMap, gameScene, imageLoader, effectPlayerProvider, position);
     }
 }

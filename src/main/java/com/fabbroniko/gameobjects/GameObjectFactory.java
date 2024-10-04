@@ -13,9 +13,5 @@ public interface GameObjectFactory {
 
     AbstractGameObject createEnemy(final GameScene gameScene, final Vector2D position, final TileMap tileMap);
 
-    AbstractGameObject createInvisibleBlock(final GameScene gameScene, final Vector2D position, final TileMap tileMap);
-
     AbstractGameObject createBlock(final GameScene gameScene, final Vector2D position, final TileMap tileMap);
-
-    AbstractGameObject createFallingBlock(final GameScene gameScene, final Vector2D position, final TileMap tileMap);
 }
