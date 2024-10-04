@@ -2,6 +2,7 @@ package com.fabbroniko.gameobjects;
 
 import com.fabbroniko.audio.EffectPlayerProvider;
 import com.fabbroniko.collision.CollisionDirection;
+import com.fabbroniko.environment.BoundingBox;
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.environment.ImmutableDimension2D;
 import com.fabbroniko.environment.ImmutablePosition;
