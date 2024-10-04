@@ -4,12 +4,17 @@ import com.fabbroniko.audio.EffectPlayerProvider;
 import com.fabbroniko.collision.CollisionDirection;
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.environment.ImmutableDimension2D;
+import com.fabbroniko.environment.ImmutablePosition;
+import com.fabbroniko.environment.Position;
 import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.input.TypedLessKeyListener;
+import com.fabbroniko.main.Time;
 import com.fabbroniko.map.TileMap;
 import com.fabbroniko.resource.ImageLoader;
 import com.fabbroniko.scene.GameScene;
 import com.fabbroniko.settings.SettingsProvider;
+import com.fabbroniko.ui.DrawableResource;
+import com.fabbroniko.ui.DrawableResourceImpl;
 import lombok.extern.log4j.Log4j2;
 
 import java.awt.event.KeyEvent;
@@ -91,51 +96,6 @@ public class Player extends AbstractGameObject implements TypedLessKeyListener {
 
 		setAnimation(jumpAnimation);
 	}
-	
-	@Override
-	public void update() {
-		super.update();
-		tileMap.setPosition(boundingBox.position().getRoundedX() - (baseWindowSize.width() / 2), boundingBox.position().getRoundedY() - (baseWindowSize.height() / 2));
-
-		if (animationJump) {
-			setAnimation(jumpAnimation);
-		} else if (animationMove && !currentAnimation.getName().equals(MARIO_WALK_ANIMATION_NAME)) {
-			setAnimation(walkAnimation);
-		} else if (!animationMove) {
-			setAnimation(idleAnimation);
-		}
-	}
-	
-	@Override
-	public void handleMapCollisions(final CollisionDirection direction) {
-		super.handleMapCollisions(direction);
-		
-		if (direction.equals(CollisionDirection.BOTTOM_COLLISION)) {
-			animationJump = false;
-		}
-	}
-	 
-	@Override
-	public void handleObjectCollisions(final CollisionDirection direction, final GameObject gameObject) {
-		if ((direction.equals(CollisionDirection.TOP_COLLISION))) {
-			super.handleObjectCollisions(direction, gameObject);
-		}
-		
-		if (gameObject instanceof Enemy) {
-			if (direction.equals(CollisionDirection.BOTTOM_COLLISION)) {
-				jumping = true;
-			} else {
-				death = true;
-			}
-		} else if (gameObject instanceof Castle) {
-			this.gameScene.levelFinished();
-		} else {
-			if (direction.equals(CollisionDirection.BOTTOM_COLLISION)) {
-				animationJump = false;
-				groundHit = true;
-			}
-		}
-	}
 
 	@Override
 	public void keyPressed(final KeyEvent e) {
@@ -178,6 +138,104 @@ public class Player extends AbstractGameObject implements TypedLessKeyListener {
 		}
 		if (e.getKeyCode() == settingsProvider.getSettings().getJumpKeyCode()) {
 			jumping = false;
+		}
+	}
+
+	@Override
+	public void update() {
+		double xOffset = 0;
+		double yOffset = 0;
+
+		mapPosition.setVector2D(tileMap.getPosition());
+
+		if (jumping) {
+			yOffset += (jumpSpeed * Time.deltaTime());
+			currentJump += yOffset;
+			if (currentJump < -maxJump) {
+				jumping = false;
+			}
+		}
+
+		yOffset += falling && !jumping ? (gravitySpeed * Time.deltaTime()) : 0;
+		xOffset += left ? (-walkingSpeed * Time.deltaTime()) : 0;
+		xOffset += right ? (walkingSpeed * Time.deltaTime()) : 0;
+
+		if (xOffset != 0 || yOffset != 0) {
+			offset.setX(xOffset);
+			offset.setY(yOffset);
+			gameScene.checkForCollisions(this, offset);
+			boundingBox.position().setVector2D(boundingBox.position().getX() + offset.getX(), boundingBox.position().getY() + offset.getY());
+		}
+
+		tileMap.setPosition(boundingBox.position().getRoundedX() - (baseWindowSize.width() / 2), boundingBox.position().getRoundedY() - (baseWindowSize.height() / 2));
+
+		if (animationJump) {
+			setAnimation(jumpAnimation);
+		} else if (animationMove && !currentAnimation.getName().equals(MARIO_WALK_ANIMATION_NAME)) {
+			setAnimation(walkAnimation);
+		} else if (!animationMove) {
+			setAnimation(idleAnimation);
+		}
+	}
+
+	@Override
+	public DrawableResource getDrawableResource() {
+		final Position position = new ImmutablePosition(boundingBox.position().getRoundedX() - mapPosition.getX(), boundingBox.position().getRoundedY() - mapPosition.getY());
+		if(facingRight) {
+			return new DrawableResourceImpl(currentAnimation.getImage(), position);
+		} else {
+			return new DrawableResourceImpl(currentAnimation.getMirroredImage(), position);
+		}
+	}
+
+	@Override
+	public void notifyDeath() {
+		this.death = true;
+	}
+
+	@Override
+	public BoundingBox getBoundingBox() {
+		return boundingBox;
+	}
+
+	@Override
+	public void handleMapCollisions(final CollisionDirection direction) {
+		if (direction.equals(CollisionDirection.BOTTOM_COLLISION)) {
+			groundHit = true;
+			offset.setY(0);
+		}
+		if (direction.equals(CollisionDirection.TOP_COLLISION)) {
+			jumping = false;
+			offset.setY(0);
+		}
+		if (direction.equals(CollisionDirection.LEFT_COLLISION) || direction.equals(CollisionDirection.RIGHT_COLLISION)) {
+			offset.setX(0);
+		}
+
+		if (direction.equals(CollisionDirection.BOTTOM_COLLISION)) {
+			animationJump = false;
+		}
+	}
+
+	@Override
+	public void handleObjectCollisions(final CollisionDirection direction, final GameObject gameObject) {
+		if ((direction.equals(CollisionDirection.TOP_COLLISION))) {
+			handleMapCollisions(direction);
+		}
+
+		if (gameObject instanceof Enemy) {
+			if (direction.equals(CollisionDirection.BOTTOM_COLLISION)) {
+				jumping = true;
+			} else {
+				death = true;
+			}
+		} else if (gameObject instanceof Castle) {
+			this.gameScene.levelFinished();
+		} else {
+			if (direction.equals(CollisionDirection.BOTTOM_COLLISION)) {
+				animationJump = false;
+				groundHit = true;
+			}
 		}
 	}
 }
