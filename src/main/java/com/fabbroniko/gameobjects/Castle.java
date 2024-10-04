@@ -103,4 +103,14 @@ public class Castle extends AbstractGameObject {
 	public void handleObjectCollisions(final CollisionDirection direction, final GameObject gameObject) {
 		handleMapCollisions(direction);
 	}
+
+	@Override
+	public boolean isDead() {
+		return death;
+	}
+
+	private void setAnimation(final Animation animation) {
+		animation.reset();
+		this.currentAnimation = animation;
+	}
 }

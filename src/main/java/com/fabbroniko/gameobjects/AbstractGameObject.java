@@ -55,13 +55,4 @@ public abstract class AbstractGameObject implements GameObject {
 		offset = new Vector2D();
 		mapPosition = new Vector2D();
 	}
-	
-	protected void setAnimation(final Animation animation) {
-		animation.reset();
-		this.currentAnimation = animation;
-	}
-
-	public boolean isDead() {
-		return death;
-	}
 }

@@ -238,4 +238,14 @@ public class Player extends AbstractGameObject implements TypedLessKeyListener {
 			}
 		}
 	}
+
+	@Override
+	public boolean isDead() {
+		return death;
+	}
+
+	private void setAnimation(final Animation animation) {
+		animation.reset();
+		this.currentAnimation = animation;
+	}
 }

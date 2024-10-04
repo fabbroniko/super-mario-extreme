@@ -126,4 +126,14 @@ public class Block extends AbstractGameObject implements AnimationListener {
 			offset.setX(0);
 		}
 	}
+
+	@Override
+	public boolean isDead() {
+		return death;
+	}
+
+	private void setAnimation(final Animation animation) {
+		animation.reset();
+		this.currentAnimation = animation;
+	}
 }
