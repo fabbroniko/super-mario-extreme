@@ -3,7 +3,7 @@ package com.fabbroniko.collision;
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.environment.Position;
 import com.fabbroniko.environment.Vector2D;
-import com.fabbroniko.gameobjects.BoundingBox;
+import com.fabbroniko.environment.BoundingBox;
 import com.fabbroniko.gameobjects.GameObject;
 import com.fabbroniko.map.TileMap;
 import com.fabbroniko.sdi.annotation.Component;

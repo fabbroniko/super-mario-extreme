@@ -1,7 +1,4 @@
-package com.fabbroniko.gameobjects;
-
-import com.fabbroniko.environment.Dimension2D;
-import com.fabbroniko.environment.Position;
+package com.fabbroniko.environment;
 
 public record BoundingBox(Position position, Dimension2D dimension) {
 

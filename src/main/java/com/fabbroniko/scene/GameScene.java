@@ -5,7 +5,6 @@ import com.fabbroniko.collision.CollisionManager;
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.environment.LevelProvider;
 import com.fabbroniko.environment.Vector2D;
-import com.fabbroniko.gameobjects.AbstractGameObject;
 import com.fabbroniko.gameobjects.GameObject;
 import com.fabbroniko.gameobjects.GameObjectFactory;
 import com.fabbroniko.gameobjects.Player;
@@ -103,11 +102,9 @@ public final class GameScene implements Scene, TypedLessKeyListener {
         musicPlayerProvider.getMusicPlayer().play("theme", true);
     }
 
-    private AbstractGameObject createGameObject(final String name, final Vector2D startPosition) {
+    private GameObject createGameObject(final String name, final Vector2D startPosition) {
         return switch (name) {
             case "castle" -> gameObjectFactory.createCastle(this, startPosition, tileMap);
-            case "invisible-block" -> gameObjectFactory.createInvisibleBlock(this, startPosition, tileMap);
-            case "falling-platform" -> gameObjectFactory.createFallingBlock(this, startPosition, tileMap);
             case "ghost-enemy" -> gameObjectFactory.createEnemy(this, startPosition, tileMap);
             case "breakable-block" -> gameObjectFactory.createBlock(this, startPosition, tileMap);
             default ->
@@ -119,7 +116,7 @@ public final class GameScene implements Scene, TypedLessKeyListener {
         this.collisionManager.checkForCollisions(gameObject, offsetPosition, gameObjects);
     }
 
-    private void addNewObject(final AbstractGameObject gameObject) {
+    private void addNewObject(final GameObject gameObject) {
         gameObjects.add(gameObject);
     }
 

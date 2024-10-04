@@ -31,27 +31,17 @@ public class GameObjectFactoryImpl implements GameObjectFactory {
     }
 
     @Override
-    public AbstractGameObject createCastle(final GameScene gameScene, final Vector2D position, final TileMap tileMap) {
+    public GameObject createCastle(final GameScene gameScene, final Vector2D position, final TileMap tileMap) {
         return new Castle(tileMap, gameScene, imageLoader, effectPlayerProvider, position);
     }
 
     @Override
-    public AbstractGameObject createEnemy(final GameScene gameScene, final Vector2D position, final TileMap tileMap) {
+    public GameObject createEnemy(final GameScene gameScene, final Vector2D position, final TileMap tileMap) {
         return new Enemy(tileMap, gameScene, imageLoader, effectPlayerProvider, position);
     }
 
     @Override
-    public AbstractGameObject createInvisibleBlock(final GameScene gameScene, final Vector2D position, final TileMap tileMap) {
-        return new InvisibleBlock(tileMap, gameScene, imageLoader, effectPlayerProvider, position);
-    }
-
-    @Override
-    public AbstractGameObject createBlock(final GameScene gameScene, final Vector2D position, final TileMap tileMap) {
-        return new Block(tileMap, gameScene, imageLoader, effectPlayerProvider, position);
-    }
-
-    @Override
-    public AbstractGameObject createFallingBlock(final GameScene gameScene, final Vector2D position, final TileMap tileMap) {
-        return new FallingBlock(tileMap, gameScene, imageLoader, effectPlayerProvider, position);
+    public GameObject createBlock(final GameScene gameScene, final Vector2D position, final TileMap tileMap) {
+        return new Block(tileMap, imageLoader, effectPlayerProvider, position);
     }
 }

@@ -4,7 +4,7 @@ import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.environment.ImmutablePosition;
 import com.fabbroniko.environment.LevelProvider;
 import com.fabbroniko.environment.Vector2D;
-import com.fabbroniko.gameobjects.BoundingBox;
+import com.fabbroniko.environment.BoundingBox;
 import com.fabbroniko.resource.ImageLoader;
 import com.fabbroniko.resource.dto.MapDto;
 import com.fabbroniko.resource.dto.TileDto;
