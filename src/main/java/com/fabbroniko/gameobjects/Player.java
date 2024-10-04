@@ -18,13 +18,15 @@ import com.fabbroniko.ui.DrawableResourceImpl;
 import lombok.extern.log4j.Log4j2;
 
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents the player's character.
  * @author com.fabbroniko
  */
 @Log4j2
-public class Player extends AbstractGameObject implements TypedLessKeyListener {
+public class Player implements TypedLessKeyListener, GameObject {
 
 	private static final Dimension2D spriteDimension = new ImmutableDimension2D(112, 104);
 	private static final String spritePath = "/sprites/mario.png";
@@ -35,8 +37,6 @@ public class Player extends AbstractGameObject implements TypedLessKeyListener {
 
 	private boolean animationJump;
 	private boolean animationMove;
-
-	private final GameScene gameScene;
 	
 	private final Dimension2D baseWindowSize;
 	
@@ -45,6 +45,30 @@ public class Player extends AbstractGameObject implements TypedLessKeyListener {
 	private final Animation jumpAnimation;
 
 	private final SettingsProvider settingsProvider;
+	protected BoundingBox boundingBox;
+
+	protected Vector2D mapPosition = new Vector2D();
+	protected Animation currentAnimation;
+	protected List<Animation> registeredAnimations = new ArrayList<>();
+	private final TileMap tileMap;
+	private final GameScene gameScene;
+	private final ImageLoader imageLoader;
+	private final EffectPlayerProvider effectPlayerProvider;
+
+	protected boolean jumping;
+	protected boolean falling;
+	protected boolean left;
+	protected boolean right;
+	protected boolean facingRight;
+	protected boolean groundHit;
+	protected int currentJump;
+	protected boolean death = false;
+	protected int jumpSpeed = -1000;
+	protected int gravitySpeed = 600;
+	protected int walkingSpeed = 600;
+	protected int maxJump = 400;
+
+	protected Vector2D offset = new Vector2D();
 
 	public Player(final TileMap tileMap,
 				  final Dimension2D baseWindowSize,
@@ -53,13 +77,17 @@ public class Player extends AbstractGameObject implements TypedLessKeyListener {
 				  final ImageLoader imageLoader,
 				  final EffectPlayerProvider effectPlayerProvider,
 				  final Vector2D position) {
-		super(tileMap, gameScene, imageLoader, effectPlayerProvider, position, spriteDimension);
+
+		this.tileMap = tileMap;
+		this.gameScene = gameScene;
+		this.imageLoader = imageLoader;
+		this.effectPlayerProvider = effectPlayerProvider;
+		this.boundingBox = new BoundingBox(position, spriteDimension);
 
 		this.settingsProvider = settingsProvider;
 
 		falling = true;
 		animationJump = true;
-		this.gameScene = gameScene;
 		this.baseWindowSize = baseWindowSize;
 
 		idleAnimation = Animation.builder()

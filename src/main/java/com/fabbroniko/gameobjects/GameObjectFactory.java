@@ -9,9 +9,9 @@ public interface GameObjectFactory {
 
     Player createPlayer(final Dimension2D canvasDimension, final GameScene gameScene, final Vector2D position, final TileMap tileMap);
 
-    AbstractGameObject createCastle(final GameScene gameScene, final Vector2D position, final TileMap tileMap);
+    GameObject createCastle(final GameScene gameScene, final Vector2D position, final TileMap tileMap);
 
-    AbstractGameObject createEnemy(final GameScene gameScene, final Vector2D position, final TileMap tileMap);
+    GameObject createEnemy(final GameScene gameScene, final Vector2D position, final TileMap tileMap);
 
-    AbstractGameObject createBlock(final GameScene gameScene, final Vector2D position, final TileMap tileMap);
+    GameObject createBlock(final GameScene gameScene, final Vector2D position, final TileMap tileMap);
 }
