@@ -14,7 +14,7 @@ public class GameObjectFactoryImpl implements GameObjectFactory {
     }
 
     @Override
-    public Player createPlayer(final Position initialPosition) {
+    public GameObject createPlayer(final Position initialPosition) {
         final Player player = applicationContext.getInstance(Player.class);
         player.setInitialPosition(initialPosition);
         return player;

@@ -4,7 +4,7 @@ import com.fabbroniko.environment.Position;
 
 public interface GameObjectFactory {
 
-    Player createPlayer(final Position initialPosition);
+    GameObject createPlayer(final Position initialPosition);
 
     GameObject createCastle(final Position initialPosition);
 

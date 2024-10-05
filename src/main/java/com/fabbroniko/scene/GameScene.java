@@ -7,13 +7,10 @@ import com.fabbroniko.environment.LevelProvider;
 import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.gameobjects.GameObject;
 import com.fabbroniko.gameobjects.GameObjectFactory;
-import com.fabbroniko.gameobjects.Player;
-import com.fabbroniko.input.TypedLessKeyListener;
 import com.fabbroniko.main.Time;
 import com.fabbroniko.map.TileMap;
 import com.fabbroniko.resource.dto.LevelDto;
 import com.fabbroniko.scene.factory.SceneContextFactory;
-import com.fabbroniko.scene.mainmenu.MainMenuScene;
 import com.fabbroniko.sdi.annotation.Component;
 import com.fabbroniko.settings.SettingsProvider;
 import com.fabbroniko.ui.DrawableResource;
@@ -23,21 +20,17 @@ import com.fabbroniko.ui.text.TextFactory;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.awt.event.KeyEvent.VK_ESCAPE;
-
 @Component
-public final class GameScene implements Scene, TypedLessKeyListener {
+public final class GameScene implements Scene {
 
     private static final int FPS_OFFSET = 15;
 
     private DrawableResource background;
     private List<GameObject> gameObjects;
-    private Player player;
 
     private final SceneContextFactory sceneContextFactory;
     private final MusicPlayerProvider musicPlayerProvider;
@@ -91,8 +84,7 @@ public final class GameScene implements Scene, TypedLessKeyListener {
         final LevelDto level = levelProvider.getLevel();
         gameObjects = new ArrayList<>();
 
-        player = gameObjectFactory.createPlayer(level.getStartPosition());
-        this.addNewObject(player);
+        this.addNewObject(gameObjectFactory.createPlayer(level.getStartPosition()));
 
         level.getGameObjects().forEach(gameObject -> this.addNewObject(
                 createGameObject(gameObject.getType(),
@@ -126,10 +118,6 @@ public final class GameScene implements Scene, TypedLessKeyListener {
 
     @Override
     public void update() {
-        if(player.isDead()) {
-            sceneManager.openScene(LostScene.class);
-        }
-
         final List<GameObject> deadGameObjects = new ArrayList<>();
 
         for(final GameObject go : gameObjects) {
@@ -184,23 +172,5 @@ public final class GameScene implements Scene, TypedLessKeyListener {
     @Override
     public void close() {
         musicPlayerProvider.getMusicPlayer().stop();
-    }
-
-    @Override
-    public void keyPressed(KeyEvent event) {
-        if(player != null) {
-            player.keyPressed(event);
-        }
-    }
-
-    @Override
-    public void keyReleased(KeyEvent event) {
-        if(player != null) {
-            player.keyReleased(event);
-        }
-
-        if (VK_ESCAPE == event.getKeyCode()) {
-            sceneManager.openScene(MainMenuScene.class);
-        }
     }
 }

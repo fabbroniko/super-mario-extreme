@@ -3,7 +3,6 @@ package com.fabbroniko.scene;
 import com.fabbroniko.audio.MusicPlayerProvider;
 import com.fabbroniko.environment.DeathCountProvider;
 import com.fabbroniko.environment.Dimension2D;
-import com.fabbroniko.input.ActionLessKeyListener;
 import com.fabbroniko.scene.factory.SceneContextFactory;
 import com.fabbroniko.sdi.annotation.Component;
 import com.fabbroniko.ui.DrawableResource;
@@ -17,7 +16,7 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
 @Component
-public final class LostScene implements Scene, ActionLessKeyListener {
+public final class LostScene implements Scene {
 
 	private static final String GAME_OVER_MAIN_TEXT = "Game Over";
 	private static final String DEATH_COUNT_TEXT = "Death count: ";

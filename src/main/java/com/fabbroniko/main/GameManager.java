@@ -14,18 +14,15 @@ public final class GameManager implements SceneManager, CycleListener {
     private final ApplicationContext applicationContext;
     private final GameRenderer gameRenderer;
 	private final GameCycle gameCycle;
-	private final CustomKeyListener customKeyListener;
 	private Scene currentState = new NullScene();
 
 	public GameManager(final ApplicationContext applicationContext,
 					   final GameRenderer gameRenderer,
-                       final GameCycle gameCycle,
-					   final CustomKeyListener customKeyListener) {
+                       final GameCycle gameCycle) {
 
 		this.applicationContext = applicationContext;
         this.gameRenderer = gameRenderer;
         this.gameCycle = gameCycle;
-        this.customKeyListener = customKeyListener;
     }
 
 	@Override
@@ -38,7 +35,6 @@ public final class GameManager implements SceneManager, CycleListener {
 	public synchronized void openScene(final Class<? extends Scene> scene) {
 		this.currentState.close();
 		this.currentState = applicationContext.getInstance(scene);
-		this.customKeyListener.setKeyListener(currentState);
 		this.currentState.init();
 	}
 
