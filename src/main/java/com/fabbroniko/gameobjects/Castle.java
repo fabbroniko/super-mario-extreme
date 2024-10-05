@@ -1,6 +1,5 @@
 package com.fabbroniko.gameobjects;
 
-import com.fabbroniko.audio.EffectPlayerProvider;
 import com.fabbroniko.collision.CollisionDirection;
 import com.fabbroniko.environment.BoundingBox;
 import com.fabbroniko.environment.Dimension2D;
@@ -12,12 +11,14 @@ import com.fabbroniko.main.Time;
 import com.fabbroniko.map.TileMap;
 import com.fabbroniko.resource.ImageLoader;
 import com.fabbroniko.scene.GameScene;
+import com.fabbroniko.sdi.annotation.Component;
+import com.fabbroniko.sdi.annotation.Prototype;
+import com.fabbroniko.sdi.annotation.Qualifier;
 import com.fabbroniko.ui.DrawableResource;
 import com.fabbroniko.ui.DrawableResourceImpl;
 
-import java.util.ArrayList;
-import java.util.List;
-
+@Prototype
+@Component
 public class Castle implements GameObject {
 
 	private static final Dimension2D spriteDimension = new ImmutableDimension2D(340, 350);
@@ -29,11 +30,8 @@ public class Castle implements GameObject {
 
 	protected Vector2D mapPosition = new Vector2D();
 	protected Animation currentAnimation;
-	protected List<Animation> registeredAnimations = new ArrayList<>();
 	private final TileMap tileMap;
 	private final GameScene gameScene;
-	private final ImageLoader imageLoader;
-	private final EffectPlayerProvider effectPlayerProvider;
 
 	protected boolean jumping;
 	protected boolean falling;
@@ -52,15 +50,10 @@ public class Castle implements GameObject {
 
 	public Castle(final TileMap tileMap,
 				  final GameScene gameScene,
-				  final ImageLoader imageLoader,
-				  final EffectPlayerProvider effectPlayerProvider,
-				  final Vector2D position) {
+				  @Qualifier("cachedImageLoader") final ImageLoader imageLoader) {
 
 		this.tileMap = tileMap;
 		this.gameScene = gameScene;
-		this.imageLoader = imageLoader;
-		this.effectPlayerProvider = effectPlayerProvider;
-		this.boundingBox = new BoundingBox(position, spriteDimension);
 
 		setAnimation(Animation.builder()
 				.spriteSet(imageLoader.findSpritesByName(spritePath))
@@ -76,7 +69,7 @@ public class Castle implements GameObject {
 		double xOffset = 0;
 		double yOffset = 0;
 
-		mapPosition.setVector2D(tileMap.getPosition());
+		mapPosition.setPosition(tileMap.getPosition());
 
 		if (jumping) {
 			yOffset += (jumpSpeed * Time.deltaTime());
@@ -94,7 +87,7 @@ public class Castle implements GameObject {
 			offset.setX(xOffset);
 			offset.setY(yOffset);
 			gameScene.checkForCollisions(this, offset);
-			boundingBox.position().setVector2D(boundingBox.position().getX() + offset.getX(), boundingBox.position().getY() + offset.getY());
+			boundingBox.position().setPosition(boundingBox.position().getX() + offset.getX(), boundingBox.position().getY() + offset.getY());
 		}
 	}
 
@@ -106,6 +99,11 @@ public class Castle implements GameObject {
 		} else {
 			return new DrawableResourceImpl(currentAnimation.getMirroredImage(), position);
 		}
+	}
+
+	@Override
+	public void setInitialPosition(final Position position) {
+		this.boundingBox = new BoundingBox(position, spriteDimension);
 	}
 
 	@Override

@@ -3,7 +3,7 @@ package com.fabbroniko.environment;
 import com.fabbroniko.sdi.annotation.Component;
 
 @Component
-public class CanvasSizeDimension implements Dimension2D {
+public class CanvasSize implements Dimension2D {
 
     private static final int CANVAS_WIDTH = 1280;
     private static final int CANVAS_HEIGHT = 960;

@@ -1,47 +1,43 @@
 package com.fabbroniko.gameobjects;
 
-import com.fabbroniko.audio.EffectPlayerProvider;
-import com.fabbroniko.environment.Dimension2D;
-import com.fabbroniko.environment.Vector2D;
-import com.fabbroniko.map.TileMap;
-import com.fabbroniko.resource.ImageLoader;
-import com.fabbroniko.scene.GameScene;
+import com.fabbroniko.environment.Position;
 import com.fabbroniko.sdi.annotation.Component;
-import com.fabbroniko.sdi.annotation.Qualifier;
-import com.fabbroniko.settings.SettingsProvider;
+import com.fabbroniko.sdi.context.ApplicationContext;
 
 @Component
 public class GameObjectFactoryImpl implements GameObjectFactory {
 
-    private final EffectPlayerProvider effectPlayerProvider;
-    private final ImageLoader imageLoader;
-    private final SettingsProvider settingsProvider;
+    private final ApplicationContext applicationContext;
 
-    public GameObjectFactoryImpl(final EffectPlayerProvider effectPlayerProvider,
-                                 @Qualifier("cachedImageLoader") final ImageLoader imageLoader,
-                                 final SettingsProvider settingsProvider) {
-        this.effectPlayerProvider = effectPlayerProvider;
-        this.imageLoader = imageLoader;
-        this.settingsProvider = settingsProvider;
+    public GameObjectFactoryImpl(final ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
     }
 
     @Override
-    public Player createPlayer(final Dimension2D canvasDimension, final GameScene gameScene, final Vector2D position, final TileMap tileMap) {
-        return new Player(tileMap, canvasDimension, settingsProvider, gameScene, imageLoader, effectPlayerProvider, position);
+    public Player createPlayer(final Position initialPosition) {
+        final Player player = applicationContext.getInstance(Player.class);
+        player.setInitialPosition(initialPosition);
+        return player;
     }
 
     @Override
-    public GameObject createCastle(final GameScene gameScene, final Vector2D position, final TileMap tileMap) {
-        return new Castle(tileMap, gameScene, imageLoader, effectPlayerProvider, position);
+    public GameObject createCastle(final Position initialPosition) {
+        final GameObject gameObject = applicationContext.getInstance(Castle.class);
+        gameObject.setInitialPosition(initialPosition);
+        return gameObject;
     }
 
     @Override
-    public GameObject createEnemy(final GameScene gameScene, final Vector2D position, final TileMap tileMap) {
-        return new Enemy(tileMap, gameScene, imageLoader, effectPlayerProvider, position);
+    public GameObject createEnemy(final Position initialPosition) {
+        final GameObject gameObject = applicationContext.getInstance(Enemy.class);
+        gameObject.setInitialPosition(initialPosition);
+        return gameObject;
     }
 
     @Override
-    public GameObject createBlock(final GameScene gameScene, final Vector2D position, final TileMap tileMap) {
-        return new Block(tileMap, imageLoader, effectPlayerProvider, position);
+    public GameObject createBlock(final Position initialPosition) {
+        final GameObject gameObject = applicationContext.getInstance(Block.class);
+        gameObject.setInitialPosition(initialPosition);
+        return gameObject;
     }
 }

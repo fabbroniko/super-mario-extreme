@@ -91,7 +91,7 @@ public final class GameScene implements Scene, TypedLessKeyListener {
         final LevelDto level = levelProvider.getLevel();
         gameObjects = new ArrayList<>();
 
-        player = gameObjectFactory.createPlayer(canvasDimension, this, level.getStartPosition(), tileMap);
+        player = gameObjectFactory.createPlayer(level.getStartPosition());
         this.addNewObject(player);
 
         level.getGameObjects().forEach(gameObject -> this.addNewObject(
@@ -104,9 +104,9 @@ public final class GameScene implements Scene, TypedLessKeyListener {
 
     private GameObject createGameObject(final String name, final Vector2D startPosition) {
         return switch (name) {
-            case "castle" -> gameObjectFactory.createCastle(this, startPosition, tileMap);
-            case "ghost-enemy" -> gameObjectFactory.createEnemy(this, startPosition, tileMap);
-            case "breakable-block" -> gameObjectFactory.createBlock(this, startPosition, tileMap);
+            case "castle" -> gameObjectFactory.createCastle(startPosition);
+            case "ghost-enemy" -> gameObjectFactory.createEnemy(startPosition);
+            case "breakable-block" -> gameObjectFactory.createBlock(startPosition);
             default ->
                     throw new IllegalArgumentException("The specified game object with name " + name + " doesn't exist.");
         };

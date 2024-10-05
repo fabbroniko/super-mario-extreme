@@ -3,6 +3,7 @@ package com.fabbroniko.scene.factory;
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.scene.SceneContext;
 import com.fabbroniko.sdi.annotation.Component;
+import com.fabbroniko.sdi.annotation.Qualifier;
 
 import java.awt.image.BufferedImage;
 
@@ -11,7 +12,7 @@ public class SceneContextFactoryImpl implements SceneContextFactory {
 
     private final Dimension2D canvasSize;
 
-    public SceneContextFactoryImpl(final Dimension2D canvasSize) {
+    public SceneContextFactoryImpl(@Qualifier("canvasSize") final Dimension2D canvasSize) {
         this.canvasSize = canvasSize;
     }
 
