@@ -175,7 +175,7 @@ public class Player implements TypedLessKeyListener, GameObject {
 		double xOffset = 0;
 		double yOffset = 0;
 
-		mapPosition.setVector2D(tileMap.getPosition());
+		mapPosition.setPosition(tileMap.getPosition());
 
 		if (jumping) {
 			yOffset += (jumpSpeed * Time.deltaTime());
@@ -193,7 +193,7 @@ public class Player implements TypedLessKeyListener, GameObject {
 			offset.setX(xOffset);
 			offset.setY(yOffset);
 			gameScene.checkForCollisions(this, offset);
-			boundingBox.position().setVector2D(boundingBox.position().getX() + offset.getX(), boundingBox.position().getY() + offset.getY());
+			boundingBox.position().setPosition(boundingBox.position().getX() + offset.getX(), boundingBox.position().getY() + offset.getY());
 		}
 
 		tileMap.setPosition(boundingBox.position().getRoundedX() - (baseWindowSize.width() / 2), boundingBox.position().getRoundedY() - (baseWindowSize.height() / 2));

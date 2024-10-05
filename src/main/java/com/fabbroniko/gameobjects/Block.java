@@ -76,7 +76,7 @@ public class Block implements AnimationListener, GameObject {
 
 	@Override
 	public void update() {
-		mapPosition.setVector2D(tileMap.getPosition());
+		mapPosition.setPosition(tileMap.getPosition());
 	}
 
 	@Override

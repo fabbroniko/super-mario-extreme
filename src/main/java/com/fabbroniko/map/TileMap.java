@@ -69,7 +69,7 @@ public class TileMap implements Drawable {
 			cachedTileMap = null;
 		}
 
-		this.mapPosition.setVector2D(adjustedX, adjustedY);
+		this.mapPosition.setPosition(adjustedX, adjustedY);
 	}
 
 	public Vector2D getPosition() {

@@ -2,9 +2,9 @@ package com.fabbroniko.environment;
 
 public interface Position {
 
-    void setVector2D(final Vector2D model);
+    void setPosition(final Position model);
 
-    void setVector2D(final double x, final double y);
+    void setPosition(final double x, final double y);
 
     double getX();
 

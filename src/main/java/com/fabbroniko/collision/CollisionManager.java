@@ -27,12 +27,12 @@ public class CollisionManager {
 
 		final BoundingBox wantedPosition = new BoundingBox(new Vector2D(), objectDimension);
 		try{
-			wantedPosition.position().setVector2D(currentPosition.getRoundedX(), currentPosition.getRoundedY() + offsetPosition.getRoundedY());
+			wantedPosition.position().setPosition(currentPosition.getRoundedX(), currentPosition.getRoundedY() + offsetPosition.getRoundedY());
 			if(checkForMapCollision(wantedPosition)){
 				gameObject.handleMapCollisions(offsetPosition.getY() > 0 ? CollisionDirection.BOTTOM_COLLISION : CollisionDirection.TOP_COLLISION);
 			}
 
-			wantedPosition.position().setVector2D(currentPosition.getRoundedX() + offsetPosition.getRoundedX(), currentPosition.getRoundedY());
+			wantedPosition.position().setPosition(currentPosition.getRoundedX() + offsetPosition.getRoundedX(), currentPosition.getRoundedY());
 			if(checkForMapCollision(wantedPosition)){
 				gameObject.handleMapCollisions(offsetPosition.getX() > 0 ? CollisionDirection.RIGHT_COLLISION : CollisionDirection.LEFT_COLLISION);
 			}
@@ -42,13 +42,13 @@ public class CollisionManager {
 
 		for(final GameObject i : objects) {
 			if(!i.equals(gameObject)) {
-				wantedPosition.position().setVector2D(currentPosition.getRoundedX(), currentPosition.getRoundedY() + offsetPosition.getRoundedY());
+				wantedPosition.position().setPosition(currentPosition.getRoundedX(), currentPosition.getRoundedY() + offsetPosition.getRoundedY());
 				if(i.getBoundingBox().intersects(wantedPosition)){
 					gameObject.handleObjectCollisions(offsetPosition.getY() > 0 ? CollisionDirection.BOTTOM_COLLISION : CollisionDirection.TOP_COLLISION, i);
 					i.handleObjectCollisions(offsetPosition.getY() > 0 ? CollisionDirection.TOP_COLLISION : CollisionDirection.BOTTOM_COLLISION, gameObject);
 				}
 
-				wantedPosition.position().setVector2D(currentPosition.getRoundedX() + offsetPosition.getRoundedX(), currentPosition.getRoundedY());
+				wantedPosition.position().setPosition(currentPosition.getRoundedX() + offsetPosition.getRoundedX(), currentPosition.getRoundedY());
 				if(i.getBoundingBox().intersects(wantedPosition)) {
 					gameObject.handleObjectCollisions(offsetPosition.getX() > 0 ? CollisionDirection.RIGHT_COLLISION : CollisionDirection.LEFT_COLLISION, i);
 					i.handleObjectCollisions(offsetPosition.getX() > 0 ? CollisionDirection.LEFT_COLLISION : CollisionDirection.RIGHT_COLLISION, gameObject);

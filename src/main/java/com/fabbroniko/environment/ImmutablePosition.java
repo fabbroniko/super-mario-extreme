@@ -16,12 +16,12 @@ public class ImmutablePosition implements Position {
     }
 
     @Override
-    public void setVector2D(Vector2D model) {
+    public void setPosition(final Position model) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void setVector2D(double x, double y) {
+    public void setPosition(double x, double y) {
         throw new UnsupportedOperationException();
     }
 

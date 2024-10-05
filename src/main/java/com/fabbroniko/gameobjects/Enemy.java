@@ -98,7 +98,7 @@ public class Enemy implements AnimationListener, GameObject {
 		double xOffset = 0;
 		double yOffset = 0;
 
-		mapPosition.setVector2D(tileMap.getPosition());
+		mapPosition.setPosition(tileMap.getPosition());
 
 		if (jumping) {
 			yOffset += (jumpSpeed * Time.deltaTime());
@@ -116,7 +116,7 @@ public class Enemy implements AnimationListener, GameObject {
 			offset.setX(xOffset);
 			offset.setY(yOffset);
 			gameScene.checkForCollisions(this, offset);
-			boundingBox.position().setVector2D(boundingBox.position().getX() + offset.getX(), boundingBox.position().getY() + offset.getY());
+			boundingBox.position().setPosition(boundingBox.position().getX() + offset.getX(), boundingBox.position().getY() + offset.getY());
 		}
 	}
 
