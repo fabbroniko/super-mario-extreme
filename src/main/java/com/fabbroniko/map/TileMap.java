@@ -76,49 +76,6 @@ public class TileMap implements Drawable {
 		}
 	}
 
-	public boolean checkForMapCollision(final BoundingBox boundingBox) throws ArrayIndexOutOfBoundsException{
-		double startingX = boundingBox.position().getX();
-		double startingY = boundingBox.position().getY();
-		int width = boundingBox.dimension().width();
-		int height = boundingBox.dimension().height();
-
-		boolean outOfBounds = true;
-		// Checking the top-left corner
-		TileType tileType = getTileType((int)startingX, (int)startingY);
-		if(TileType.BLOCKING.equals(tileType)) {
-			return true;
-		} else if (tileType != null) {
-			outOfBounds = false;
-		}
-		
-		// Checking the top-right corner
-		tileType = getTileType((int)startingX + width, (int)startingY);
-		if(TileType.BLOCKING.equals(tileType)) {
-			return true;
-		} else if (tileType != null) {
-			outOfBounds = false;
-		}
-		
-		// Checking the bottom-left corner
-		tileType = getTileType((int)startingX, (int)startingY + height);
-		if(TileType.BLOCKING.equals(tileType)) {
-			return true;
-		} else if (tileType != null) {
-			outOfBounds = false;
-		}
-		
-		// Checking the bottom-right corner
-		tileType = getTileType((int)startingX + width, (int)startingY + height);
-		if (tileType != null) {
-			outOfBounds = false;
-		}
-
-		if(outOfBounds)
-			throw new ArrayIndexOutOfBoundsException();
-
-		return TileType.BLOCKING.equals(tileType);
-	}
-
 	public void setPosition(final int x, final int y) {
 		int adjustedX = x;
 		int adjustedY = y;

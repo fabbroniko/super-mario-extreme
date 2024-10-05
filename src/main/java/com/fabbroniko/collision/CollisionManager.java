@@ -6,6 +6,7 @@ import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.environment.BoundingBox;
 import com.fabbroniko.gameobjects.GameObject;
 import com.fabbroniko.map.TileMap;
+import com.fabbroniko.map.TileType;
 import com.fabbroniko.sdi.annotation.Component;
 
 import java.util.List;
@@ -27,12 +28,12 @@ public class CollisionManager {
 		final BoundingBox wantedPosition = new BoundingBox(new Vector2D(), objectDimension);
 		try{
 			wantedPosition.position().setVector2D(currentPosition.getRoundedX(), currentPosition.getRoundedY() + offsetPosition.getRoundedY());
-			if(this.tileMap.checkForMapCollision(wantedPosition)){
+			if(checkForMapCollision(wantedPosition)){
 				gameObject.handleMapCollisions(offsetPosition.getY() > 0 ? CollisionDirection.BOTTOM_COLLISION : CollisionDirection.TOP_COLLISION);
 			}
 
 			wantedPosition.position().setVector2D(currentPosition.getRoundedX() + offsetPosition.getRoundedX(), currentPosition.getRoundedY());
-			if(this.tileMap.checkForMapCollision(wantedPosition)){
+			if(checkForMapCollision(wantedPosition)){
 				gameObject.handleMapCollisions(offsetPosition.getX() > 0 ? CollisionDirection.RIGHT_COLLISION : CollisionDirection.LEFT_COLLISION);
 			}
 		}catch (Exception e) {
@@ -54,5 +55,48 @@ public class CollisionManager {
 				}
 			}
 		}
+	}
+
+	private boolean checkForMapCollision(final BoundingBox boundingBox) throws ArrayIndexOutOfBoundsException{
+		double startingX = boundingBox.position().getX();
+		double startingY = boundingBox.position().getY();
+		int width = boundingBox.dimension().width();
+		int height = boundingBox.dimension().height();
+
+		boolean outOfBounds = true;
+		// Checking the top-left corner
+		TileType tileType = tileMap.getTileType((int)startingX, (int)startingY);
+		if(TileType.BLOCKING.equals(tileType)) {
+			return true;
+		} else if (tileType != null) {
+			outOfBounds = false;
+		}
+
+		// Checking the top-right corner
+		tileType = tileMap.getTileType((int)startingX + width, (int)startingY);
+		if(TileType.BLOCKING.equals(tileType)) {
+			return true;
+		} else if (tileType != null) {
+			outOfBounds = false;
+		}
+
+		// Checking the bottom-left corner
+		tileType = tileMap.getTileType((int)startingX, (int)startingY + height);
+		if(TileType.BLOCKING.equals(tileType)) {
+			return true;
+		} else if (tileType != null) {
+			outOfBounds = false;
+		}
+
+		// Checking the bottom-right corner
+		tileType = tileMap.getTileType((int)startingX + width, (int)startingY + height);
+		if (tileType != null) {
+			outOfBounds = false;
+		}
+
+		if(outOfBounds)
+			throw new ArrayIndexOutOfBoundsException();
+
+		return TileType.BLOCKING.equals(tileType);
 	}
 }
