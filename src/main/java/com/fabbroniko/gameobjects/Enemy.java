@@ -12,12 +12,14 @@ import com.fabbroniko.main.Time;
 import com.fabbroniko.map.TileMap;
 import com.fabbroniko.resource.ImageLoader;
 import com.fabbroniko.scene.GameScene;
+import com.fabbroniko.sdi.annotation.Component;
+import com.fabbroniko.sdi.annotation.Prototype;
+import com.fabbroniko.sdi.annotation.Qualifier;
 import com.fabbroniko.ui.DrawableResource;
 import com.fabbroniko.ui.DrawableResourceImpl;
 
-import java.util.ArrayList;
-import java.util.List;
-
+@Prototype
+@Component
 public class Enemy implements AnimationListener, GameObject {
 
 	private static final Dimension2D spriteDimension = new ImmutableDimension2D(108, 192);
@@ -30,10 +32,8 @@ public class Enemy implements AnimationListener, GameObject {
 
 	protected Vector2D mapPosition = new Vector2D();
 	protected Animation currentAnimation;
-	protected List<Animation> registeredAnimations = new ArrayList<>();
 	private final TileMap tileMap;
 	private final GameScene gameScene;
-	private final ImageLoader imageLoader;
 	private final EffectPlayerProvider effectPlayerProvider;
 
 	protected boolean jumping;
@@ -53,15 +53,12 @@ public class Enemy implements AnimationListener, GameObject {
 
 	public Enemy(final TileMap tileMap,
 				 final GameScene gameScene,
-				 final ImageLoader imageLoader,
-				 final EffectPlayerProvider effectPlayerProvider,
-				 final Vector2D position) {
+				 @Qualifier("cachedImageLoader") final ImageLoader imageLoader,
+				 final EffectPlayerProvider effectPlayerProvider) {
 
 		this.tileMap = tileMap;
 		this.gameScene = gameScene;
-		this.imageLoader = imageLoader;
 		this.effectPlayerProvider = effectPlayerProvider;
-		this.boundingBox = new BoundingBox(position, spriteDimension);
 
 		falling = true;
 		walkingSpeed = 300;
@@ -128,6 +125,11 @@ public class Enemy implements AnimationListener, GameObject {
 		} else {
 			return new DrawableResourceImpl(currentAnimation.getMirroredImage(), position);
 		}
+	}
+
+	@Override
+	public void setInitialPosition(final Position position) {
+		this.boundingBox = new BoundingBox(position, spriteDimension);
 	}
 
 	@Override

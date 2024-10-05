@@ -13,20 +13,19 @@ import com.fabbroniko.main.Time;
 import com.fabbroniko.map.TileMap;
 import com.fabbroniko.resource.ImageLoader;
 import com.fabbroniko.scene.GameScene;
+import com.fabbroniko.sdi.annotation.Component;
+import com.fabbroniko.sdi.annotation.Prototype;
+import com.fabbroniko.sdi.annotation.Qualifier;
 import com.fabbroniko.settings.SettingsProvider;
 import com.fabbroniko.ui.DrawableResource;
 import com.fabbroniko.ui.DrawableResourceImpl;
-import lombok.extern.log4j.Log4j2;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Represents the player's character.
- * @author com.fabbroniko
- */
-@Log4j2
+@Prototype
+@Component
 public class Player implements TypedLessKeyListener, GameObject {
 
 	private static final Dimension2D spriteDimension = new ImmutableDimension2D(112, 104);
@@ -53,7 +52,6 @@ public class Player implements TypedLessKeyListener, GameObject {
 	protected List<Animation> registeredAnimations = new ArrayList<>();
 	private final TileMap tileMap;
 	private final GameScene gameScene;
-	private final ImageLoader imageLoader;
 	private final EffectPlayerProvider effectPlayerProvider;
 
 	protected boolean jumping;
@@ -72,18 +70,15 @@ public class Player implements TypedLessKeyListener, GameObject {
 	protected Vector2D offset = new Vector2D();
 
 	public Player(final TileMap tileMap,
-				  final Dimension2D baseWindowSize,
+				  @Qualifier("canvasSize") final Dimension2D baseWindowSize,
 				  final SettingsProvider settingsProvider,
 				  final GameScene gameScene,
-				  final ImageLoader imageLoader,
-				  final EffectPlayerProvider effectPlayerProvider,
-				  final Vector2D position) {
+				  @Qualifier("cachedImageLoader") final ImageLoader imageLoader,
+				  final EffectPlayerProvider effectPlayerProvider) {
 
 		this.tileMap = tileMap;
 		this.gameScene = gameScene;
-		this.imageLoader = imageLoader;
 		this.effectPlayerProvider = effectPlayerProvider;
-		this.boundingBox = new BoundingBox(position, spriteDimension);
 
 		this.settingsProvider = settingsProvider;
 
@@ -215,6 +210,11 @@ public class Player implements TypedLessKeyListener, GameObject {
 		} else {
 			return new DrawableResourceImpl(currentAnimation.getMirroredImage(), position);
 		}
+	}
+
+	@Override
+	public void setInitialPosition(final Position position) {
+		this.boundingBox = new BoundingBox(position, spriteDimension);
 	}
 
 	@Override

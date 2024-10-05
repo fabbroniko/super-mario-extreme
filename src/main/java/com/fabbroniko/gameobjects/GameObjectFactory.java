@@ -1,17 +1,14 @@
 package com.fabbroniko.gameobjects;
 
-import com.fabbroniko.environment.Dimension2D;
-import com.fabbroniko.map.TileMap;
-import com.fabbroniko.environment.Vector2D;
-import com.fabbroniko.scene.GameScene;
+import com.fabbroniko.environment.Position;
 
 public interface GameObjectFactory {
 
-    Player createPlayer(final Dimension2D canvasDimension, final GameScene gameScene, final Vector2D position, final TileMap tileMap);
+    Player createPlayer(final Position initialPosition);
 
-    GameObject createCastle(final GameScene gameScene, final Vector2D position, final TileMap tileMap);
+    GameObject createCastle(final Position initialPosition);
 
-    GameObject createEnemy(final GameScene gameScene, final Vector2D position, final TileMap tileMap);
+    GameObject createEnemy(final Position initialPosition);
 
-    GameObject createBlock(final GameScene gameScene, final Vector2D position, final TileMap tileMap);
+    GameObject createBlock(final Position initialPosition);
 }

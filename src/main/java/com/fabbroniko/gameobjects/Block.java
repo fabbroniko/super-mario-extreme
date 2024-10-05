@@ -10,9 +10,14 @@ import com.fabbroniko.environment.Position;
 import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.map.TileMap;
 import com.fabbroniko.resource.ImageLoader;
+import com.fabbroniko.sdi.annotation.Component;
+import com.fabbroniko.sdi.annotation.Prototype;
+import com.fabbroniko.sdi.annotation.Qualifier;
 import com.fabbroniko.ui.DrawableResource;
 import com.fabbroniko.ui.DrawableResourceImpl;
 
+@Prototype
+@Component
 public class Block implements AnimationListener, GameObject {
 
 	private static final Dimension2D spriteDimension = new ImmutableDimension2D(120, 120);
@@ -22,7 +27,7 @@ public class Block implements AnimationListener, GameObject {
 	public static final String BLOCK_BREAKING_ANIMATION_NAME = "BLOCK_BREAKING";
 
 	private final Animation breakingAnimation;
-	private final BoundingBox boundingBox;
+	private BoundingBox boundingBox;
 
 	private Vector2D mapPosition = new Vector2D();
 	private Animation currentAnimation;
@@ -32,13 +37,11 @@ public class Block implements AnimationListener, GameObject {
 	private boolean death = false;
 
 	public Block(final TileMap tileMap,
-				 final ImageLoader imageLoader,
-				 final EffectPlayerProvider effectPlayerProvider,
-				 final Vector2D position) {
+				 @Qualifier("cachedImageLoader") final ImageLoader imageLoader,
+				 final EffectPlayerProvider effectPlayerProvider) {
 
 		this.tileMap = tileMap;
 		this.effectPlayerProvider = effectPlayerProvider;
-		this.boundingBox = new BoundingBox(position, spriteDimension);
 
 		breakingAnimation = Animation.builder()
 				.spriteSet(imageLoader.findSpritesByName(spritePath))
@@ -83,6 +86,11 @@ public class Block implements AnimationListener, GameObject {
 	public DrawableResource getDrawableResource() {
 		final Position position = new ImmutablePosition(boundingBox.position().getRoundedX() - mapPosition.getX(), boundingBox.position().getRoundedY() - mapPosition.getY());
 		return new DrawableResourceImpl(currentAnimation.getImage(), position);
+	}
+
+	@Override
+	public void setInitialPosition(final Position position) {
+		this.boundingBox = new BoundingBox(position, spriteDimension);
 	}
 
 	@Override
