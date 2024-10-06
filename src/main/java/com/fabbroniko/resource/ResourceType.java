@@ -6,7 +6,5 @@ public enum ResourceType {
 
     BACKGROUND,
 
-    TILE_MAP,
-
-    SPRITE
+    GAME_OBJECT
 }

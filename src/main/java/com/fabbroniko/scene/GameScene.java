@@ -23,6 +23,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public final class GameScene implements Scene {
@@ -82,34 +83,16 @@ public final class GameScene implements Scene {
         background = initializableBackground.getDrawableResource();
 
         final LevelDto level = levelProvider.getLevel();
-        gameObjects = new ArrayList<>();
-
-        this.addNewObject(gameObjectFactory.createPlayer(level.getStartPosition()));
-
-        level.getGameObjects().forEach(gameObject -> this.addNewObject(
-                createGameObject(gameObject.getType(),
-                new Vector2D(gameObject.getX(), gameObject.getY())))
-        );
+        gameObjects = level.getGameObjects()
+            .stream()
+            .map(gameObject -> gameObjectFactory.create(gameObject.getType(), new Vector2D(gameObject.getX(), gameObject.getY())))
+            .collect(Collectors.toCollection(ArrayList::new));
 
         musicPlayerProvider.getMusicPlayer().play("theme", true);
     }
 
-    private GameObject createGameObject(final String name, final Vector2D startPosition) {
-        return switch (name) {
-            case "castle" -> gameObjectFactory.createCastle(startPosition);
-            case "ghost-enemy" -> gameObjectFactory.createEnemy(startPosition);
-            case "breakable-block" -> gameObjectFactory.createBlock(startPosition);
-            default ->
-                    throw new IllegalArgumentException("The specified game object with name " + name + " doesn't exist.");
-        };
-    }
-
     public void checkForCollisions(final GameObject gameObject, final Vector2D offsetPosition) {
         this.collisionManager.checkForCollisions(gameObject, offsetPosition, gameObjects);
-    }
-
-    private void addNewObject(final GameObject gameObject) {
-        gameObjects.add(gameObject);
     }
 
     public void levelFinished() {

@@ -1,7 +1,6 @@
 <level required-game-version="1.0">
-  <start-position x="160" y="160" />
-
   <game-objects>
+    <game-object x="160" y="160">player</game-object>
     <game-object x="1000" y="970">castle</game-object>
   </game-objects>
 
