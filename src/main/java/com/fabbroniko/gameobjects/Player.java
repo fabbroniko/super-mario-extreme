@@ -203,7 +203,7 @@ public class Player implements TypedLessKeyListener, GameObject {
 		if (xOffset != 0 || yOffset != 0) {
 			offset.setX(xOffset);
 			offset.setY(yOffset);
-			collisionManager.checkForCollisions(this, offset);
+			collisionManager.calculateMovement(this, offset);
 			boundingBox.position().setPosition(boundingBox.position().getX() + offset.getX(), boundingBox.position().getY() + offset.getY());
 		}
 

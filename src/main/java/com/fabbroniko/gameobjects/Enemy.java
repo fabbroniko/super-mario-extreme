@@ -12,7 +12,6 @@ import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.main.Time;
 import com.fabbroniko.map.TileMap;
 import com.fabbroniko.resource.ImageLoader;
-import com.fabbroniko.scene.DefaultGameScene;
 import com.fabbroniko.sdi.annotation.Component;
 import com.fabbroniko.sdi.annotation.Prototype;
 import com.fabbroniko.sdi.annotation.Qualifier;
@@ -113,7 +112,7 @@ public class Enemy implements AnimationListener, GameObject {
 		if (xOffset != 0 || yOffset != 0) {
 			offset.setX(xOffset);
 			offset.setY(yOffset);
-			collisionManager.checkForCollisions(this, offset);
+			collisionManager.calculateMovement(this, offset);
 			boundingBox.position().setPosition(boundingBox.position().getX() + offset.getX(), boundingBox.position().getY() + offset.getY());
 		}
 	}
