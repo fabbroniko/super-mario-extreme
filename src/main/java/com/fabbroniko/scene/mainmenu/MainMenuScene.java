@@ -3,6 +3,7 @@ package com.fabbroniko.scene.mainmenu;
 import com.fabbroniko.environment.BiDirectionalState;
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.input.UIKeyListener;
+import com.fabbroniko.main.CustomKeyListener;
 import com.fabbroniko.scene.Scene;
 import com.fabbroniko.scene.SceneContext;
 import com.fabbroniko.scene.SceneManager;
@@ -50,6 +51,7 @@ public final class MainMenuScene implements Scene, UIKeyListener {
 	private final TextFactory textFactory;
 	private final OptionFactory optionFactory;
 	private final BackgroundLoader backgroundLoader;
+	private final CustomKeyListener customKeyListener;
 
 	private BufferedImage canvas;
 	private Graphics2D graphics;
@@ -58,9 +60,10 @@ public final class MainMenuScene implements Scene, UIKeyListener {
 	public MainMenuScene(final SceneContextFactory sceneContextFactory,
                          final SceneManager sceneManager,
                          final TextFactory textFactory,
-						 final OptionFactory optionFactory,
-						 final BackgroundLoader backgroundLoader,
-						 final StateFactory<MainMenuState> stateStateFactory) {
+                         final OptionFactory optionFactory,
+                         final BackgroundLoader backgroundLoader,
+                         final StateFactory<MainMenuState> stateStateFactory,
+						 final CustomKeyListener customKeyListener) {
 
 		this.sceneContextFactory = sceneContextFactory;
 		this.sceneManager = sceneManager;
@@ -68,6 +71,7 @@ public final class MainMenuScene implements Scene, UIKeyListener {
         this.optionFactory = optionFactory;
 		this.backgroundLoader = backgroundLoader;
 		this.states = stateStateFactory.create();
+        this.customKeyListener = customKeyListener;
     }
 
 	@Override
@@ -80,6 +84,7 @@ public final class MainMenuScene implements Scene, UIKeyListener {
 		this.canvas = sceneContext.canvas();
 		this.graphics = (Graphics2D) canvas.getGraphics();
 		this.canvasDimension = sceneContext.canvasDimension();
+		this.customKeyListener.setKeyListener(this);
 
 		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 	}

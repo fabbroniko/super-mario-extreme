@@ -2,6 +2,7 @@ package com.fabbroniko.scene;
 
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.input.UIKeyListener;
+import com.fabbroniko.main.CustomKeyListener;
 import com.fabbroniko.scene.factory.SceneContextFactory;
 import com.fabbroniko.scene.mainmenu.MainMenuScene;
 import com.fabbroniko.sdi.annotation.Component;
@@ -53,6 +54,7 @@ public final class SettingsMenuScene implements Scene, UIKeyListener {
 	private final SceneManager sceneManager;
 	private final TextFactory textFactory;
 	private final BackgroundLoader backgroundLoader;
+	private final CustomKeyListener customKeyListener;
 
 	private BufferedImage canvas;
 	private Graphics2D graphics;
@@ -62,13 +64,15 @@ public final class SettingsMenuScene implements Scene, UIKeyListener {
                              final SettingsProvider settingsProvider,
                              final SceneManager sceneManager,
                              final TextFactory textFactory,
-							 final BackgroundLoader backgroundLoader) {
+                             final BackgroundLoader backgroundLoader,
+							 final CustomKeyListener customKeyListener) {
 
 		this.sceneContextFactory = sceneContextFactory;
 		this.settingsProvider = settingsProvider;
 		this.sceneManager = sceneManager;
         this.textFactory = textFactory;
         this.backgroundLoader = backgroundLoader;
+        this.customKeyListener = customKeyListener;
     }
 
 	@Override
@@ -81,6 +85,7 @@ public final class SettingsMenuScene implements Scene, UIKeyListener {
 		this.canvas = sceneContext.canvas();
 		this.graphics = (Graphics2D) canvas.getGraphics();
 		this.canvasDimension = sceneContext.canvasDimension();
+		this.customKeyListener.setKeyListener(this);
 
 		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 	}

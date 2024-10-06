@@ -1,42 +1,36 @@
 package com.fabbroniko.gameobjects;
 
 import com.fabbroniko.environment.Position;
+import com.fabbroniko.error.UndefinedResourceException;
+import com.fabbroniko.resource.ResourceType;
 import com.fabbroniko.sdi.annotation.Component;
 import com.fabbroniko.sdi.context.ApplicationContext;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class GameObjectFactoryImpl implements GameObjectFactory {
 
+    private final Map<String, Class<? extends GameObject>> registry;
     private final ApplicationContext applicationContext;
 
     public GameObjectFactoryImpl(final ApplicationContext applicationContext) {
+        this.registry = new HashMap<>();
+        this.registry.put("castle", Castle.class);
+        this.registry.put("ghost-enemy", Enemy.class);
+        this.registry.put("breakable-block", Block.class);
+        this.registry.put("player", Player.class);
         this.applicationContext = applicationContext;
     }
 
     @Override
-    public Player createPlayer(final Position initialPosition) {
-        final Player player = applicationContext.getInstance(Player.class);
-        player.setInitialPosition(initialPosition);
-        return player;
-    }
+    public GameObject create(final String name, final Position initialPosition) {
+        if (!registry.containsKey(name)) {
+            throw new UndefinedResourceException(name, ResourceType.GAME_OBJECT);
+        }
 
-    @Override
-    public GameObject createCastle(final Position initialPosition) {
-        final GameObject gameObject = applicationContext.getInstance(Castle.class);
-        gameObject.setInitialPosition(initialPosition);
-        return gameObject;
-    }
-
-    @Override
-    public GameObject createEnemy(final Position initialPosition) {
-        final GameObject gameObject = applicationContext.getInstance(Enemy.class);
-        gameObject.setInitialPosition(initialPosition);
-        return gameObject;
-    }
-
-    @Override
-    public GameObject createBlock(final Position initialPosition) {
-        final GameObject gameObject = applicationContext.getInstance(Block.class);
+        final GameObject gameObject = applicationContext.getInstance(registry.get(name));
         gameObject.setInitialPosition(initialPosition);
         return gameObject;
     }

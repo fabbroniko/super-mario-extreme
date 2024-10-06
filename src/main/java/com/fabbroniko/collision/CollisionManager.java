@@ -1,26 +1,27 @@
 package com.fabbroniko.collision;
 
+import com.fabbroniko.environment.BoundingBox;
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.environment.Position;
 import com.fabbroniko.environment.Vector2D;
-import com.fabbroniko.environment.BoundingBox;
 import com.fabbroniko.gameobjects.GameObject;
 import com.fabbroniko.map.TileMap;
 import com.fabbroniko.map.TileType;
+import com.fabbroniko.scene.GameScene;
 import com.fabbroniko.sdi.annotation.Component;
-
-import java.util.List;
 
 @Component
 public class CollisionManager {
 
 	private final TileMap tileMap;
+	private final GameScene gameScene;
 	
-	public CollisionManager(final TileMap tileMap) {
+	public CollisionManager(final TileMap tileMap, final GameScene gameScene) {
 		this.tileMap = tileMap;
-	}
+        this.gameScene = gameScene;
+    }
 	
-	public void checkForCollisions(final GameObject gameObject, final Vector2D tmpOffsetPosition, final List<GameObject> objects) {
+	public void checkForCollisions(final GameObject gameObject, final Vector2D tmpOffsetPosition) {
 		final Vector2D offsetPosition = tmpOffsetPosition.clone();
 		final Position currentPosition = gameObject.getBoundingBox().position();
 		final Dimension2D objectDimension = gameObject.getBoundingBox().dimension();
@@ -40,7 +41,7 @@ public class CollisionManager {
 			gameObject.notifyDeath();
 		}
 
-		for(final GameObject i : objects) {
+		for(final GameObject i : gameScene.gameObjects()) {
 			if(!i.equals(gameObject)) {
 				wantedPosition.position().setPosition(currentPosition.getRoundedX(), currentPosition.getRoundedY() + offsetPosition.getRoundedY());
 				if(i.getBoundingBox().intersects(wantedPosition)){

@@ -1,10 +1,8 @@
 package com.fabbroniko.scene;
 
-import com.fabbroniko.input.ActionLessKeyListener;
-
 import java.awt.image.BufferedImage;
 
-public class NullScene implements Scene, ActionLessKeyListener {
+public class NullScene implements Scene {
 
     @Override
     public void init() {
