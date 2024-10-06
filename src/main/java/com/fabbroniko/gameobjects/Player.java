@@ -2,6 +2,7 @@ package com.fabbroniko.gameobjects;
 
 import com.fabbroniko.audio.EffectPlayerProvider;
 import com.fabbroniko.collision.CollisionDirection;
+import com.fabbroniko.collision.CollisionManager;
 import com.fabbroniko.environment.BoundingBox;
 import com.fabbroniko.environment.Dimension2D;
 import com.fabbroniko.environment.ImmutableDimension2D;
@@ -13,7 +14,6 @@ import com.fabbroniko.main.CustomKeyListener;
 import com.fabbroniko.main.Time;
 import com.fabbroniko.map.TileMap;
 import com.fabbroniko.resource.ImageLoader;
-import com.fabbroniko.scene.GameScene;
 import com.fabbroniko.scene.LostScene;
 import com.fabbroniko.scene.SceneManager;
 import com.fabbroniko.scene.mainmenu.MainMenuScene;
@@ -57,7 +57,7 @@ public class Player implements TypedLessKeyListener, GameObject {
 	protected Animation currentAnimation;
 	protected List<Animation> registeredAnimations = new ArrayList<>();
 	private final TileMap tileMap;
-	private final GameScene gameScene;
+	private final CollisionManager collisionManager;
 	private final SceneManager sceneManager;
 	private final EffectPlayerProvider effectPlayerProvider;
 
@@ -79,14 +79,14 @@ public class Player implements TypedLessKeyListener, GameObject {
 	public Player(final TileMap tileMap,
                   @Qualifier("canvasSize") final Dimension2D baseWindowSize,
                   final SettingsProvider settingsProvider,
-                  final GameScene gameScene,
+                  final CollisionManager collisionManager,
                   @Qualifier("cachedImageLoader") final ImageLoader imageLoader,
                   final SceneManager sceneManager,
                   final EffectPlayerProvider effectPlayerProvider,
 				  final CustomKeyListener customKeyListener) {
 
 		this.tileMap = tileMap;
-		this.gameScene = gameScene;
+		this.collisionManager = collisionManager;
         this.sceneManager = sceneManager;
         this.effectPlayerProvider = effectPlayerProvider;
 
@@ -203,7 +203,7 @@ public class Player implements TypedLessKeyListener, GameObject {
 		if (xOffset != 0 || yOffset != 0) {
 			offset.setX(xOffset);
 			offset.setY(yOffset);
-			gameScene.checkForCollisions(this, offset);
+			collisionManager.checkForCollisions(this, offset);
 			boundingBox.position().setPosition(boundingBox.position().getX() + offset.getX(), boundingBox.position().getY() + offset.getY());
 		}
 

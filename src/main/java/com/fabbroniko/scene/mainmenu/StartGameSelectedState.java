@@ -1,6 +1,6 @@
 package com.fabbroniko.scene.mainmenu;
 
-import com.fabbroniko.scene.GameScene;
+import com.fabbroniko.scene.DefaultGameScene;
 import com.fabbroniko.scene.SceneManager;
 
 import java.util.List;
@@ -15,7 +15,7 @@ public class StartGameSelectedState implements MainMenuState {
 
     @Override
     public void onConfirm() {
-        sceneManager.openScene(GameScene.class);
+        sceneManager.openScene(DefaultGameScene.class);
     }
 
     @Override

@@ -73,7 +73,7 @@ public final class LostScene implements Scene {
 	@Override
 	public void update() {
 		if((System.currentTimeMillis() - initTime) > SCENE_DURATION_MILLISECONDS) {
-			sceneManager.openScene(GameScene.class);
+			sceneManager.openScene(DefaultGameScene.class);
 		}
 	}
 
