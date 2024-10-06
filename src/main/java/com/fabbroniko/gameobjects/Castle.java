@@ -7,10 +7,10 @@ import com.fabbroniko.environment.ImmutableDimension2D;
 import com.fabbroniko.environment.ImmutablePosition;
 import com.fabbroniko.environment.Position;
 import com.fabbroniko.environment.Vector2D;
-import com.fabbroniko.main.Time;
 import com.fabbroniko.map.TileMap;
 import com.fabbroniko.resource.ImageLoader;
-import com.fabbroniko.scene.GameScene;
+import com.fabbroniko.scene.SceneManager;
+import com.fabbroniko.scene.WinScene;
 import com.fabbroniko.sdi.annotation.Component;
 import com.fabbroniko.sdi.annotation.Prototype;
 import com.fabbroniko.sdi.annotation.Qualifier;
@@ -23,37 +23,21 @@ public class Castle implements GameObject {
 
 	private static final Dimension2D spriteDimension = new ImmutableDimension2D(340, 350);
 	private static final String spritePath = "/sprites/castle.png";
+	private static final String CASTLE_IDLE_ANIMATION_NAME = "CASTLE_IDLE";
 
-	public static final String CASTLE_IDLE_ANIMATION_NAME = "CASTLE_IDLE";
-
-	protected BoundingBox boundingBox;
-
-	protected Vector2D mapPosition = new Vector2D();
-	protected Animation currentAnimation;
 	private final TileMap tileMap;
-	private final GameScene gameScene;
+	private final SceneManager sceneManager;
+	private final Vector2D mapPosition = new Vector2D();
 
-	protected boolean jumping;
-	protected boolean falling;
-	protected boolean left;
-	protected boolean right;
-	protected boolean facingRight;
-	protected boolean groundHit;
-	protected int currentJump;
-	protected boolean death = false;
-	protected int jumpSpeed = -1000;
-	protected int gravitySpeed = 600;
-	protected int walkingSpeed = 600;
-	protected int maxJump = 400;
-
-	protected Vector2D offset = new Vector2D();
+	private BoundingBox boundingBox;
+	private Animation currentAnimation;
 
 	public Castle(final TileMap tileMap,
-				  final GameScene gameScene,
+				  final SceneManager sceneManager,
 				  @Qualifier("cachedImageLoader") final ImageLoader imageLoader) {
 
 		this.tileMap = tileMap;
-		this.gameScene = gameScene;
+		this.sceneManager = sceneManager;
 
 		setAnimation(Animation.builder()
 				.spriteSet(imageLoader.findSpritesByName(spritePath))
@@ -66,39 +50,13 @@ public class Castle implements GameObject {
 
 	@Override
 	public void update() {
-		double xOffset = 0;
-		double yOffset = 0;
-
 		mapPosition.setPosition(tileMap.getPosition());
-
-		if (jumping) {
-			yOffset += (jumpSpeed * Time.deltaTime());
-			currentJump += yOffset;
-			if (currentJump < -maxJump) {
-				jumping = false;
-			}
-		}
-
-		yOffset += falling && !jumping ? (gravitySpeed * Time.deltaTime()) : 0;
-		xOffset += left ? (-walkingSpeed * Time.deltaTime()) : 0;
-		xOffset += right ? (walkingSpeed * Time.deltaTime()) : 0;
-
-		if (xOffset != 0 || yOffset != 0) {
-			offset.setX(xOffset);
-			offset.setY(yOffset);
-			gameScene.checkForCollisions(this, offset);
-			boundingBox.position().setPosition(boundingBox.position().getX() + offset.getX(), boundingBox.position().getY() + offset.getY());
-		}
 	}
 
 	@Override
 	public DrawableResource getDrawableResource() {
 		final Position position = new ImmutablePosition(boundingBox.position().getRoundedX() - mapPosition.getX(), boundingBox.position().getRoundedY() - mapPosition.getY());
-		if(facingRight) {
-			return new DrawableResourceImpl(currentAnimation.getImage(), position);
-		} else {
-			return new DrawableResourceImpl(currentAnimation.getMirroredImage(), position);
-		}
+		return new DrawableResourceImpl(currentAnimation.getImage(), position);
 	}
 
 	@Override
@@ -108,7 +66,6 @@ public class Castle implements GameObject {
 
 	@Override
 	public void notifyDeath() {
-		this.death = true;
 	}
 
 	@Override
@@ -118,27 +75,18 @@ public class Castle implements GameObject {
 
 	@Override
 	public void handleMapCollisions(final CollisionDirection direction) {
-		if (direction.equals(CollisionDirection.BOTTOM_COLLISION)) {
-			groundHit = true;
-			offset.setY(0);
-		}
-		if (direction.equals(CollisionDirection.TOP_COLLISION)) {
-			jumping = false;
-			offset.setY(0);
-		}
-		if (direction.equals(CollisionDirection.LEFT_COLLISION) || direction.equals(CollisionDirection.RIGHT_COLLISION)) {
-			offset.setX(0);
-		}
 	}
 
 	@Override
 	public void handleObjectCollisions(final CollisionDirection direction, final GameObject gameObject) {
-		handleMapCollisions(direction);
+		if (gameObject instanceof Player) {
+			sceneManager.openScene(WinScene.class);
+		}
 	}
 
 	@Override
 	public boolean isDead() {
-		return death;
+		return false;
 	}
 
 	private void setAnimation(final Animation animation) {

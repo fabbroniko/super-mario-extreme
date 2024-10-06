@@ -275,8 +275,6 @@ public class Player implements TypedLessKeyListener, GameObject {
 			} else {
 				death = true;
 			}
-		} else if (gameObject instanceof Castle) {
-			this.gameScene.levelFinished();
 		} else {
 			if (direction.equals(CollisionDirection.BOTTOM_COLLISION)) {
 				animationJump = false;

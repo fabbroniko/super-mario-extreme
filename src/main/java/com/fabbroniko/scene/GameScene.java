@@ -36,7 +36,6 @@ public final class GameScene implements Scene {
     private final SceneContextFactory sceneContextFactory;
     private final MusicPlayerProvider musicPlayerProvider;
     private final SettingsProvider settingsProvider;
-    private final SceneManager sceneManager;
     private final GameObjectFactory gameObjectFactory;
     private final TextFactory textFactory;
     private final BackgroundLoader backgroundLoader;
@@ -51,7 +50,6 @@ public final class GameScene implements Scene {
     public GameScene(final SceneContextFactory sceneContextFactory,
                      final SettingsProvider settingsProvider,
                      final MusicPlayerProvider musicPlayerProvider,
-                     final SceneManager sceneManager,
                      final TextFactory textFactory,
                      final BackgroundLoader backgroundLoader,
                      final GameObjectFactory gameObjectFactory,
@@ -63,7 +61,6 @@ public final class GameScene implements Scene {
         this.sceneContextFactory = sceneContextFactory;
         this.settingsProvider = settingsProvider;
         this.musicPlayerProvider = musicPlayerProvider;
-        this.sceneManager = sceneManager;
         this.textFactory = textFactory;
         this.backgroundLoader = backgroundLoader;
         this.levelProvider = levelProvider;
@@ -93,10 +90,6 @@ public final class GameScene implements Scene {
 
     public void checkForCollisions(final GameObject gameObject, final Vector2D offsetPosition) {
         this.collisionManager.checkForCollisions(gameObject, offsetPosition, gameObjects);
-    }
-
-    public void levelFinished() {
-       sceneManager.openScene(WinScene.class);
     }
 
     @Override
