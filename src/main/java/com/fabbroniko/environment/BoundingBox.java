@@ -14,4 +14,15 @@ public record BoundingBox(Position position, Dimension2D dimension) {
 
         return horizontalOverlap && verticalOverlap;
     }
+
+    public boolean within(final BoundingBox boundingBox) {
+        final Position targetPosition = boundingBox.position;
+        final Dimension2D targetDimension = boundingBox.dimension;
+
+        return
+            (position.getX() + dimension.width()) > targetPosition.getX() &&
+            (position.getY() + dimension.height()) > targetPosition.getY() &&
+            position.getX() < (targetPosition.getX() + targetDimension.width()) &&
+            position.getY() < (targetPosition.getY() + targetDimension.height());
+    }
 }

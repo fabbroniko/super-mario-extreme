@@ -1,6 +1,8 @@
 package com.fabbroniko.map;
 
+import com.fabbroniko.environment.BoundingBox;
 import com.fabbroniko.environment.Dimension2D;
+import com.fabbroniko.environment.ImmutableDimension2D;
 import com.fabbroniko.environment.ImmutablePosition;
 import com.fabbroniko.environment.Position;
 import com.fabbroniko.environment.Vector2D;
@@ -28,6 +30,8 @@ public class TileMap implements Drawable {
 	private final Position maxLimits;
 	private final Vector2D mapPosition = new Vector2D();
 	private final Position origin = new Vector2D();
+	private final BoundingBox mapBounds;
+	private final Dimension2D mapSize;
 
 	public TileMap(@Qualifier("canvasSize") final Dimension2D canvasSize,
 				   @Qualifier("tileDimension") final Dimension2D tileSize,
@@ -42,10 +46,14 @@ public class TileMap implements Drawable {
 
 		final int nCols = map.length;
 		final int nRows = map[0].length;
+
+		this.mapSize = new ImmutableDimension2D(nCols * tileSize.width(), nRows * tileSize.height());
 		this.maxLimits = new Vector2D(
-			(nCols * tileSize.width()) - canvasSize.width(),
-			(nRows * tileSize.height()) - canvasSize.height()
+			mapSize.width() - canvasSize.width(),
+			mapSize.height() - canvasSize.height()
 		);
+
+		this.mapBounds = new BoundingBox(new Vector2D(), mapSize);
 	}
 
 	public void setPosition(final int x, final int y) {
@@ -89,6 +97,10 @@ public class TileMap implements Drawable {
 			return TileType.NON_BLOCKING;
 
 		return tiles.get(tileId).type();
+	}
+
+	public boolean isOutsideBounds(final BoundingBox boundingBox) {
+		return !boundingBox.within(mapBounds);
 	}
 
 	@Override

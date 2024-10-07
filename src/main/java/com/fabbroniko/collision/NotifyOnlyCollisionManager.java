@@ -11,34 +11,30 @@ import com.fabbroniko.scene.GameScene;
 import com.fabbroniko.sdi.annotation.Component;
 
 @Component
-public class DefaultCollisionManager implements CollisionManager {
+public class NotifyOnlyCollisionManager implements CollisionManager {
 
 	private final TileMap tileMap;
 	private final GameScene gameScene;
 
-	public DefaultCollisionManager(final TileMap tileMap, final GameScene gameScene) {
+	public NotifyOnlyCollisionManager(final TileMap tileMap, final GameScene gameScene) {
 		this.tileMap = tileMap;
         this.gameScene = gameScene;
     }
 
 	@Override
-	public void calculateMovement(final GameObject subject, final Vector2D offsetPosition) {
+	public Vector2D calculateMovement(final GameObject subject, final Vector2D offsetPosition) {
 		final Position currentPosition = subject.getBoundingBox().position();
 		final Dimension2D objectDimension = subject.getBoundingBox().dimension();
 
 		final BoundingBox wantedPosition = new BoundingBox(new Vector2D(), objectDimension);
-		try{
-			wantedPosition.position().setPosition(currentPosition.getRoundedX(), currentPosition.getRoundedY() + offsetPosition.getRoundedY());
-			if(checkForMapCollision(wantedPosition)){
-				subject.handleMapCollisions(offsetPosition.getY() > 0 ? CollisionDirection.BOTTOM_COLLISION : CollisionDirection.TOP_COLLISION);
-			}
+		wantedPosition.position().setPosition(currentPosition.getRoundedX(), currentPosition.getRoundedY() + offsetPosition.getRoundedY());
+		if(checkForMapCollision(wantedPosition)){
+			subject.handleMapCollisions(offsetPosition.getY() > 0 ? CollisionDirection.BOTTOM_COLLISION : CollisionDirection.TOP_COLLISION);
+		}
 
-			wantedPosition.position().setPosition(currentPosition.getRoundedX() + offsetPosition.getRoundedX(), currentPosition.getRoundedY());
-			if(checkForMapCollision(wantedPosition)){
-				subject.handleMapCollisions(offsetPosition.getX() > 0 ? CollisionDirection.RIGHT_COLLISION : CollisionDirection.LEFT_COLLISION);
-			}
-		}catch (Exception e) {
-			subject.notifyDeath();
+		wantedPosition.position().setPosition(currentPosition.getRoundedX() + offsetPosition.getRoundedX(), currentPosition.getRoundedY());
+		if(checkForMapCollision(wantedPosition)){
+			subject.handleMapCollisions(offsetPosition.getX() > 0 ? CollisionDirection.RIGHT_COLLISION : CollisionDirection.LEFT_COLLISION);
 		}
 
 		for(final GameObject gameObject : gameScene.gameObjects()) {
@@ -56,6 +52,8 @@ public class DefaultCollisionManager implements CollisionManager {
 				}
 			}
 		}
+
+		return offsetPosition;
 	}
 
 	private boolean checkForMapCollision(final BoundingBox boundingBox) throws ArrayIndexOutOfBoundsException{
@@ -64,40 +62,26 @@ public class DefaultCollisionManager implements CollisionManager {
 		int width = boundingBox.dimension().width();
 		int height = boundingBox.dimension().height();
 
-		boolean outOfBounds = true;
 		// Checking the top-left corner
 		TileType tileType = tileMap.getTileType((int)startingX, (int)startingY);
 		if(TileType.BLOCKING.equals(tileType)) {
 			return true;
-		} else if (tileType != null) {
-			outOfBounds = false;
 		}
 
 		// Checking the top-right corner
 		tileType = tileMap.getTileType((int)startingX + width, (int)startingY);
 		if(TileType.BLOCKING.equals(tileType)) {
 			return true;
-		} else if (tileType != null) {
-			outOfBounds = false;
 		}
 
 		// Checking the bottom-left corner
 		tileType = tileMap.getTileType((int)startingX, (int)startingY + height);
 		if(TileType.BLOCKING.equals(tileType)) {
 			return true;
-		} else if (tileType != null) {
-			outOfBounds = false;
 		}
 
 		// Checking the bottom-right corner
 		tileType = tileMap.getTileType((int)startingX + width, (int)startingY + height);
-		if (tileType != null) {
-			outOfBounds = false;
-		}
-
-		if(outOfBounds)
-			throw new ArrayIndexOutOfBoundsException();
-
 		return TileType.BLOCKING.equals(tileType);
 	}
 }

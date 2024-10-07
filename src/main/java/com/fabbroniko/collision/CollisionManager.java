@@ -5,5 +5,5 @@ import com.fabbroniko.gameobjects.GameObject;
 
 public interface CollisionManager {
 
-	void calculateMovement(final GameObject gameObject, final Vector2D offsetPosition);
+	Vector2D calculateMovement(final GameObject gameObject, final Vector2D offsetPosition);
 }

@@ -207,6 +207,10 @@ public class Player implements TypedLessKeyListener, GameObject {
 			boundingBox.position().setPosition(boundingBox.position().getX() + offset.getX(), boundingBox.position().getY() + offset.getY());
 		}
 
+		if(tileMap.isOutsideBounds(boundingBox)) {
+			notifyDeath();
+		}
+
 		tileMap.setPosition(boundingBox.position().getRoundedX() - (baseWindowSize.width() / 2), boundingBox.position().getRoundedY() - (baseWindowSize.height() / 2));
 
 		if (animationJump) {
