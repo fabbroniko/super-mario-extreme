@@ -1,6 +1,6 @@
 <level required-game-version="1.0">
   <game-objects>
-    <game-object x="160" y="160">player</game-object>
+    <game-object x="160" y="160">tester</game-object>
   </game-objects>
 
   <map vertical-blocks="12" horizontal-blocks="12">

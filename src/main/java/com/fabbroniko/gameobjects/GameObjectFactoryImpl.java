@@ -21,6 +21,7 @@ public class GameObjectFactoryImpl implements GameObjectFactory {
         this.registry.put("ghost-enemy", Enemy.class);
         this.registry.put("breakable-block", Block.class);
         this.registry.put("player", Player.class);
+        this.registry.put("tester", Tester.class);
         this.applicationContext = applicationContext;
     }
 
