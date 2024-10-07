@@ -13,10 +13,11 @@
     <tile id="1" vertical-index="6" horizontal-index="0" />
     <tile id="1" vertical-index="7" horizontal-index="0" />
     <tile id="1" vertical-index="8" horizontal-index="0" />
-    <tile id="1" vertical-index="9" horizontal-index="0" />
+    <tile id="0" vertical-index="8" horizontal-index="1" />
+    <tile id="0" vertical-index="8" horizontal-index="2" />
+
 
     <tile id="5" vertical-index="11" horizontal-index="0" />
-    <tile id="1" vertical-index="8" horizontal-index="4" />
 
     <tile id="0" vertical-index="11" horizontal-index="1" />
     <tile id="0" vertical-index="11" horizontal-index="2" />
@@ -26,10 +27,10 @@
     <tile id="0" vertical-index="11" horizontal-index="6" />
     <tile id="0" vertical-index="11" horizontal-index="7" />
 
-    <tile id="0" vertical-index="10" horizontal-index="8" />
+    <tile id="1" vertical-index="10" horizontal-index="8" />
     <tile id="0" vertical-index="9" horizontal-index="8" />
 
-    <tile id="0" vertical-index="11" horizontal-index="8" />
+    <tile id="1" vertical-index="11" horizontal-index="8" />
     <tile id="0" vertical-index="11" horizontal-index="9" />
     <tile id="0" vertical-index="11" horizontal-index="10" />
 

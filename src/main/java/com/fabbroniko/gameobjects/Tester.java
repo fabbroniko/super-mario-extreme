@@ -1,6 +1,5 @@
 package com.fabbroniko.gameobjects;
 
-import com.fabbroniko.audio.EffectPlayerProvider;
 import com.fabbroniko.collision.CollisionDirection;
 import com.fabbroniko.collision.CollisionManager;
 import com.fabbroniko.environment.BoundingBox;
@@ -20,13 +19,16 @@ import com.fabbroniko.scene.mainmenu.MainMenuScene;
 import com.fabbroniko.sdi.annotation.Component;
 import com.fabbroniko.sdi.annotation.Prototype;
 import com.fabbroniko.sdi.annotation.Qualifier;
-import com.fabbroniko.settings.SettingsProvider;
 import com.fabbroniko.ui.DrawableResource;
 import com.fabbroniko.ui.DrawableResourceImpl;
 
 import java.awt.event.KeyEvent;
 
+import static java.awt.event.KeyEvent.VK_DOWN;
 import static java.awt.event.KeyEvent.VK_ESCAPE;
+import static java.awt.event.KeyEvent.VK_LEFT;
+import static java.awt.event.KeyEvent.VK_RIGHT;
+import static java.awt.event.KeyEvent.VK_UP;
 
 @Prototype
 @Component
@@ -34,45 +36,35 @@ public class Tester implements TypedLessKeyListener, GameObject {
 
 	private static final Dimension2D spriteDimension = new ImmutableDimension2D(112, 104);
 	private static final String spritePath = "/sprites/test.png";
+	private static final int HORIZONTAL_SPEED = 800;
+	private static final int VERTICAL_SPEED = 600;
 
 	private final Dimension2D baseWindowSize;
 
-	private final SettingsProvider settingsProvider;
-	protected BoundingBox boundingBox;
+	private BoundingBox boundingBox;
 
-	protected Vector2D mapPosition = new Vector2D();
-	protected Animation currentAnimation;
+	private final Vector2D mapPosition = new Vector2D();
+	private final Animation currentAnimation;
 	private final TileMap tileMap;
 	private final CollisionManager collisionManager;
 	private final SceneManager sceneManager;
-	private final EffectPlayerProvider effectPlayerProvider;
 
 	protected boolean up;
 	protected boolean down;
 	protected boolean left;
 	protected boolean right;
 
-	protected int jumpSpeed = -1000;
-	protected int gravitySpeed = 600;
-	protected int walkingSpeed = 600;
-
 	public Tester(final TileMap tileMap,
 				  @Qualifier("canvasSize") final Dimension2D baseWindowSize,
-				  final SettingsProvider settingsProvider,
 				  final CollisionManager collisionManager,
 				  @Qualifier("cachedImageLoader") final ImageLoader imageLoader,
 				  final SceneManager sceneManager,
-				  final EffectPlayerProvider effectPlayerProvider,
 				  final CustomKeyListener customKeyListener) {
 
 		this.tileMap = tileMap;
 		this.collisionManager = collisionManager;
 		this.sceneManager = sceneManager;
-		this.effectPlayerProvider = effectPlayerProvider;
 
-		this.settingsProvider = settingsProvider;
-
-		down = true;
 		this.baseWindowSize = baseWindowSize;
 
 		this.currentAnimation = Animation.builder()
@@ -89,15 +81,17 @@ public class Tester implements TypedLessKeyListener, GameObject {
 
 	@Override
 	public void keyPressed(final KeyEvent e) {
-		if (e.getKeyCode() == settingsProvider.getSettings().getLeftMovementKeyCode()) {
+		if (e.getKeyCode() == VK_LEFT) {
 			left = true;
 		}
-		if (e.getKeyCode() == settingsProvider.getSettings().getRightMovementKeyCode()) {
+		if (e.getKeyCode() == VK_RIGHT) {
 			right = true;
 		}
-		if (e.getKeyCode() == settingsProvider.getSettings().getJumpKeyCode()) {
+		if (e.getKeyCode() == VK_UP) {
 			up = true;
-			effectPlayerProvider.getEffectPlayer().play("jump");
+		}
+		if (e.getKeyCode() == VK_DOWN) {
+			down = true;
 		}
 	}
 
@@ -107,14 +101,17 @@ public class Tester implements TypedLessKeyListener, GameObject {
 			sceneManager.openScene(MainMenuScene.class);
 		}
 
-		if (e.getKeyCode() == settingsProvider.getSettings().getLeftMovementKeyCode()) {
+		if (e.getKeyCode() == VK_LEFT) {
 			left = false;
 		}
-		if (e.getKeyCode() == settingsProvider.getSettings().getRightMovementKeyCode()) {
+		if (e.getKeyCode() == VK_RIGHT) {
 			right = false;
 		}
-		if (e.getKeyCode() == settingsProvider.getSettings().getJumpKeyCode()) {
+		if (e.getKeyCode() == VK_UP) {
 			up = false;
+		}
+		if (e.getKeyCode() == VK_DOWN) {
+			down = false;
 		}
 	}
 
@@ -125,13 +122,10 @@ public class Tester implements TypedLessKeyListener, GameObject {
 
 		mapPosition.setPosition(tileMap.getPosition());
 
-		if (up) {
-			yOffset += (jumpSpeed * Time.deltaTime());
-		}
-
-		yOffset += down && !up ? (gravitySpeed * Time.deltaTime()) : 0;
-		xOffset += left ? (-walkingSpeed * Time.deltaTime()) : 0;
-		xOffset += right ? (walkingSpeed * Time.deltaTime()) : 0;
+		yOffset += down ? (VERTICAL_SPEED * Time.deltaTime()) : 0;
+		yOffset -= up ? (VERTICAL_SPEED * Time.deltaTime()) : 0;
+		xOffset -= left ? (HORIZONTAL_SPEED * Time.deltaTime()) : 0;
+		xOffset += right ? (HORIZONTAL_SPEED * Time.deltaTime()) : 0;
 
 		if (xOffset != 0 || yOffset != 0) {
 			final Position offset = collisionManager.calculateMovement(this, new Vector2D(xOffset, yOffset));
