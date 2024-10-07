@@ -15,6 +15,7 @@ import com.fabbroniko.ui.DrawableResourceImpl;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class TileMap implements Drawable {
@@ -84,19 +85,22 @@ public class TileMap implements Drawable {
 		return this.mapPosition.clone();
 	}
 
-	public TileType getTileType(final int xPoint, final int yPoint) {
+	public Optional<BoundingBox> getTileBoundingBoxAtPoint(final int xPoint, final int yPoint) {
 		final int yIndex = yPoint / tileSize.height();
 		final int xIndex = xPoint / tileSize.width();
 
 		if(yIndex >= map.length || xIndex >= map[yIndex].length) {
-			return null;
+			return Optional.empty();
 		}
 
 		final int tileId = map[yIndex][xIndex];
 		if(tileId == NO_TILE)
-			return TileType.NON_BLOCKING;
+			return Optional.empty();
 
-		return tiles.get(tileId).type();
+		final int xPosition = xIndex * tileSize.width();
+		final int yPosition = yIndex * tileSize.height();
+
+		return Optional.of(new BoundingBox(new Vector2D(xPosition, yPosition), tileSize));
 	}
 
 	public boolean isOutsideBounds(final BoundingBox boundingBox) {

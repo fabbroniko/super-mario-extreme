@@ -35,7 +35,7 @@ import static java.awt.event.KeyEvent.VK_ESCAPE;
 public class Player implements TypedLessKeyListener, GameObject {
 
 	private static final Dimension2D spriteDimension = new ImmutableDimension2D(112, 104);
-	private static final String spritePath = "/sprites/mario.png";
+	private static final String spritePath = "/sprites/test.png";
 
 	public static final String MARIO_IDLE_ANIMATION_NAME = "MARIO_IDLE";
 	public static final String MARIO_WALK_ANIMATION_NAME = "MARIO_WALK";
@@ -73,8 +73,6 @@ public class Player implements TypedLessKeyListener, GameObject {
 	protected int gravitySpeed = 600;
 	protected int walkingSpeed = 600;
 	protected int maxJump = 400;
-
-	protected Vector2D offset = new Vector2D();
 
 	public Player(final TileMap tileMap,
                   @Qualifier("canvasSize") final Dimension2D baseWindowSize,
@@ -201,9 +199,7 @@ public class Player implements TypedLessKeyListener, GameObject {
 		xOffset += right ? (walkingSpeed * Time.deltaTime()) : 0;
 
 		if (xOffset != 0 || yOffset != 0) {
-			offset.setX(xOffset);
-			offset.setY(yOffset);
-			collisionManager.calculateMovement(this, offset);
+			final Position offset = collisionManager.calculateMovement(this, new Vector2D(xOffset, yOffset));
 			boundingBox.position().setPosition(boundingBox.position().getX() + offset.getX(), boundingBox.position().getY() + offset.getY());
 		}
 
@@ -252,14 +248,9 @@ public class Player implements TypedLessKeyListener, GameObject {
 	public void handleMapCollisions(final CollisionDirection direction) {
 		if (direction.equals(CollisionDirection.BOTTOM_COLLISION)) {
 			groundHit = true;
-			offset.setY(0);
 		}
 		if (direction.equals(CollisionDirection.TOP_COLLISION)) {
 			jumping = false;
-			offset.setY(0);
-		}
-		if (direction.equals(CollisionDirection.LEFT_COLLISION) || direction.equals(CollisionDirection.RIGHT_COLLISION)) {
-			offset.setX(0);
 		}
 
 		if (direction.equals(CollisionDirection.BOTTOM_COLLISION)) {

@@ -1,9 +1,10 @@
 package com.fabbroniko.collision;
 
+import com.fabbroniko.environment.Position;
 import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.gameobjects.GameObject;
 
 public interface CollisionManager {
 
-	Vector2D calculateMovement(final GameObject gameObject, final Vector2D offsetPosition);
+	Position calculateMovement(final GameObject gameObject, final Position offsetPosition);
 }

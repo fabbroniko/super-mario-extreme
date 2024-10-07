@@ -1,7 +1,6 @@
 <level required-game-version="1.0">
   <game-objects>
     <game-object x="160" y="160">player</game-object>
-    <game-object x="1000" y="970">castle</game-object>
   </game-objects>
 
   <map vertical-blocks="12" horizontal-blocks="12">
@@ -15,16 +14,21 @@
     <tile id="1" vertical-index="7" horizontal-index="0" />
     <tile id="1" vertical-index="8" horizontal-index="0" />
     <tile id="1" vertical-index="9" horizontal-index="0" />
-    <tile id="1" vertical-index="10" horizontal-index="0" />
+
     <tile id="5" vertical-index="11" horizontal-index="0" />
+    <tile id="1" vertical-index="8" horizontal-index="4" />
 
     <tile id="0" vertical-index="11" horizontal-index="1" />
     <tile id="0" vertical-index="11" horizontal-index="2" />
     <tile id="0" vertical-index="11" horizontal-index="3" />
     <tile id="0" vertical-index="11" horizontal-index="4" />
     <tile id="0" vertical-index="11" horizontal-index="5" />
-    <tile id="9" vertical-index="11" horizontal-index="6" />
-    <tile id="9" vertical-index="11" horizontal-index="7" />
+    <tile id="0" vertical-index="11" horizontal-index="6" />
+    <tile id="0" vertical-index="11" horizontal-index="7" />
+
+    <tile id="0" vertical-index="10" horizontal-index="8" />
+    <tile id="0" vertical-index="9" horizontal-index="8" />
+
     <tile id="0" vertical-index="11" horizontal-index="8" />
     <tile id="0" vertical-index="11" horizontal-index="9" />
     <tile id="0" vertical-index="11" horizontal-index="10" />

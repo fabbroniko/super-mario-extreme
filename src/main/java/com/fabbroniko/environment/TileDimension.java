@@ -1,7 +1,11 @@
 package com.fabbroniko.environment;
 
 import com.fabbroniko.sdi.annotation.Component;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
+@EqualsAndHashCode
+@ToString
 @Component("tileDimension")
 public class TileDimension implements Dimension2D {
 
