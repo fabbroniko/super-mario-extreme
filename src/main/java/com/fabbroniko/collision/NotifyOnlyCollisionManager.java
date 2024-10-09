@@ -2,15 +2,12 @@ package com.fabbroniko.collision;
 
 import com.fabbroniko.environment.BoundingBox;
 import com.fabbroniko.environment.Dimension2D;
-import com.fabbroniko.environment.ImmutablePosition;
 import com.fabbroniko.environment.Position;
 import com.fabbroniko.environment.Vector2D;
 import com.fabbroniko.gameobjects.GameObject;
 import com.fabbroniko.map.TileMap;
 import com.fabbroniko.sdi.annotation.Component;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -81,26 +78,5 @@ public class NotifyOnlyCollisionManager implements CollisionManager {
 		}
 
 		return tileMap.getTileBoundingBoxAtPoint((int)startingX + width, (int)startingY + height);
-	}
-
-	public List<Position> getCollisionContactPoints(BoundingBox a, BoundingBox b) {
-		// Find overlapping region
-		int overlapXmin = Math.max(a.position().getRoundedX(), b.position().getRoundedX());
-		int overlapXmax = Math.min(a.position().getRoundedX() + a.dimension().width(), b.position().getRoundedX() + b.dimension().width());
-		int overlapYmin = Math.max(a.position().getRoundedY(), b.position().getRoundedY());
-		int overlapYmax = Math.min(a.position().getRoundedY() + a.dimension().height(), b.position().getRoundedY() + b.dimension().height());
-
-		List<Position> contactPoints = new ArrayList<>();
-
-		// Check if there is an overlap
-		if (overlapXmin < overlapXmax && overlapYmin < overlapYmax) {
-			// Possible edge contact points (top-left, top-right, bottom-left, bottom-right)
-			contactPoints.add(new ImmutablePosition(overlapXmin, overlapYmin));  // Top-left point
-			contactPoints.add(new ImmutablePosition(overlapXmax, overlapYmin));  // Top-right point
-			contactPoints.add(new ImmutablePosition(overlapXmin, overlapYmax));  // Bottom-left point
-			contactPoints.add(new ImmutablePosition(overlapXmax, overlapYmax));  // Bottom-right point
-		}
-
-		return contactPoints; // Could return one or multiple points depending on the collision
 	}
 }
