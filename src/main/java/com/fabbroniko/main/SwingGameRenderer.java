@@ -5,7 +5,9 @@ import com.fabbroniko.sdi.annotation.Qualifier;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
@@ -14,14 +16,21 @@ import java.awt.image.BufferedImage;
 public final class SwingGameRenderer implements GameRenderer {
 
 	private final Dimension windowSize;
+	private final Dimension effectiveSize;
 	private final KeyListener keyListener;
 	private JFrame window;
 	private JPanel drawablePanel;
+	private BufferedImage framedCanvas;
+	private Graphics2D framedCanvasGraphics;
+	private int centeredX;
+	private int centeredY;
 
-	public SwingGameRenderer(final WindowSizeResolver windowSizeResolver,
+	public SwingGameRenderer(@Qualifier("screenSizeResolver") final WindowSizeResolver screenSizeResolver,
+							 @Qualifier("effectiveSizeResolver") final WindowSizeResolver effectiveSizeResolver,
 							 @Qualifier("bridgedKeyListener") final KeyListener keyListener) {
 
-		this.windowSize = windowSizeResolver.dimension();
+		this.windowSize = screenSizeResolver.dimension();
+		this.effectiveSize = effectiveSizeResolver.dimension();
 		this.keyListener = keyListener;
 	}
 
@@ -32,6 +41,13 @@ public final class SwingGameRenderer implements GameRenderer {
 		drawablePanel.setFocusable(true);
 		drawablePanel.requestFocus();
 		drawablePanel.addKeyListener(keyListener);
+
+		framedCanvas = new BufferedImage(windowSize.width, windowSize.height, BufferedImage.TYPE_INT_ARGB);
+		framedCanvasGraphics = framedCanvas.createGraphics();
+		framedCanvasGraphics.setColor(Color.BLACK);
+		framedCanvasGraphics.fillRect(0, 0, framedCanvas.getWidth(), framedCanvas.getHeight());
+		centeredX = (windowSize.width - effectiveSize.width) / 2;
+		centeredY = (windowSize.height - effectiveSize.height) / 2;
 
 		window = new JFrame();
 		window.setTitle("Super Mario Bros Extreme Edition");
@@ -46,7 +62,8 @@ public final class SwingGameRenderer implements GameRenderer {
 
 	@Override
 	public void draw(final BufferedImage frame) {
-		drawablePanel.getGraphics().drawImage(frame, 0, 0, (int) windowSize.getWidth(), (int) windowSize.getHeight(), null);
+		framedCanvasGraphics.drawImage(frame, centeredX, centeredY, (int) effectiveSize.getWidth(), (int) effectiveSize.getHeight(), null);
+		drawablePanel.getGraphics().drawImage(framedCanvas, 0, 0, null);
 	}
 
 	@Override

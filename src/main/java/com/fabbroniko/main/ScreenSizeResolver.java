@@ -5,7 +5,7 @@ import com.fabbroniko.sdi.annotation.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
-@Component
+@Component("screenSizeResolver")
 public class ScreenSizeResolver implements WindowSizeResolver {
 
     @Override
